@@ -120,6 +120,9 @@
     "shop_offers":"عروض المتجر",
     "show_all":"عرض الكل",
     "fav":"المفضلة",
-    "branches_with_offer":"الكل"
+    "branches_with_offer":"الكل",
+    "membership_details":"تفاصيل العضوية",
+    "membership_message":"رسالة العضوية",
+    "save_changes":"حفظ التعديل"
     
 }

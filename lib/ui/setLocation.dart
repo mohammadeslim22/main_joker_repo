@@ -62,11 +62,10 @@ class _AutoLocateState extends State<AutoLocate> {
 
   @override
   void dispose() {
-    Provider.of<MyCounter>(context,listen: false).togelocationloading(false);
+  //  Provider.of<MyCounter>(context,listen: false).togelocationloading(false);
 
     super.dispose();
     getPositionSubscription?.cancel();
-    print("what the fuck merry !!");
   }
 
   Future<void> getLocationName(double long, double lat) async {

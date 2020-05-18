@@ -1,166 +1,256 @@
 class Merchant {
-  const Merchant(
-      {this.currentPage,
-      this.data,
-      this.firstPageUrl,
-      this.from,
-      this.lastPage,
-      this.lastPageUrl,
-      this.nextPageUrl,
-      this.path,
-      this.perPage,
-      this.prevPageUrl,
-      this.to,
-      this.total});
-  final int currentPage;
-  final List<Data> data;
-  final String firstPageUrl;
-  final int from;
-  final int lastPage;
-  final String lastPageUrl;
-  final String nextPageUrl;
-  final String path;
-  final int perPage;
-  final String prevPageUrl;
-  final int to;
-  final int total;
+  Merchant({this.mydata, this.links, this.meta});
 
-  static Merchant fromJson(dynamic json) {
-    print(json['data']);
-    return Merchant(
-      currentPage: json['current_page'] as int,
-      data: json['data'] != null
-          ? Data.fromJson(json['data'] as List<dynamic>) 
-          : null,
-      firstPageUrl: json['firstPageUrl'] as String,
-      from: json['from'] as int,
-      lastPage: json['lastPage'] as int,
-      lastPageUrl: json['lastPageUrl'] as String,
-      nextPageUrl: json['nextPageUrl'] as String,
-      path: json['path'] as String,
-      perPage: json['perPage'] as int,
-      prevPageUrl: json['prevPageUrl'] as String,
-      to: json['to'] as int,
-      total: json['total'] as int,
-    );
+  Merchant.fromJson(dynamic json) {
+    mydata = json['data'] != null ? Data.fromJson(json['data']) : null;
+    links = json['links'] != null ? Links.fromJson(json['links']) : null;
+    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
   }
-
+  Data mydata;
+  Links links;
+  Meta meta;
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    // data['cat_note'] = id;
-    // data['cat_todo'] = title;
-    // data['cat_rem'] = image;
-    // data['cat_tag'] = display;
-    // data['cat_urgent'] = startingDate;
-    // data['cat_work'] = endDtae;
-    // data['cat_office'] = desc;
-
+    if (data != null) {
+      data['data'] = mydata.toJson();
+    }
+    if (links != null) {
+      data['links'] = links.toJson();
+    }
+    if (meta != null) {
+      data['meta'] = meta.toJson();
+    }
     return data;
   }
 }
 
 class Data {
-  const Data(
-      {this.id,
-      this.name,
-      this.managerID,
-      this.status,
-      this.datastatus,
-      this.complete,
-      this.logo,
-      this.creatorId,
-      this.updatorId,
-      this.createdAt,
-      this.updatedAt,
-      this.branches});
-  final int id;
-  final String name;
-  final String managerID;
-  final String status;
-  final String datastatus;
-  final String complete;
-  final String logo;
-  final String creatorId;
-  final String updatorId;
-  final String createdAt;
-  final String updatedAt;
-  final List<Branch> branches;
-  static List<Data> fromJson(List<dynamic> json) {
-    return json.map((dynamic merchant) {
-      return Data(
-        id: merchant['id'] as int,
-        name: merchant['name'] as String,
-        managerID: merchant['managerID'] as String,
-        status: merchant['status'] as String,
-        datastatus: merchant['datastatus'] as String,
-        complete: merchant['complete'] as String,
-        logo: merchant['logo'] as String,
-        creatorId: merchant['creatorId'] as String,
-        updatorId: merchant['updatorId'] as String,
-        createdAt: merchant['createdAt'] as String,
-        updatedAt: merchant['updatedAt'] as String,
-        branches: merchant['branches'] != null
-            ? Branch.fromJson(merchant['branches']as List<dynamic>) 
-            : null,
-      );
-    }).toList();
+  Data({this.id, this.name, this.logo, this.branches, this.sales});
+
+  Data.fromJson(dynamic json) {
+    id = json['id'] as int;
+    name = json['name'].toString();
+    logo = json['logo'].toString();
+    if (json['branches'] != null) {
+      branches = <Branches>[];
+      json['branches'].forEach((dynamic v) {
+        branches.add(Branches.fromJson(v));
+      });
+    }
+    if (json['sales'] != null) {
+      sales = <Sales>[];
+      json['sales'].forEach((dynamic v) {
+        sales.add(Sales.fromJson(v));
+      });
+    }
+  }
+  int id;
+  String name;
+  String logo;
+  List<Branches> branches;
+  List<Sales> sales;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['logo'] = logo;
+    if (branches != null) {
+      data['branches'] = branches.map((Branches v) => v.toJson()).toList();
+    }
+    if (sales != null) {
+      data['sales'] = sales.map((Sales v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
-class Branch {
-  const Branch({
-    this.id,
-    this.merchantId,
-    this.userId,
-    this.name,
-    this.country,
-    this.city,
-    this.logo,
-    this.website,
-    this.phone,
-    this.address,
-    this.langitude,
-    this.latitude,
-    this.status,
-    this.apiToken,
-    this.createdAt,
-    this.updatedAt,
-  });
-  final int id;
-  final int merchantId;
-  final int userId;
-  final String name;
-  final String country;
-  final String city;
-  final String logo;
-  final String website;
-  final String phone;
-  final String address;
-  final String langitude;
-  final String latitude;
-  final String status;
-  final String apiToken;
-  final String createdAt;
-  final String updatedAt;
-  static List<Branch> fromJson(List<dynamic> json) {
-    return json.map((dynamic branch) {
-    return Branch(
-      id: branch['id'] as int,
-      merchantId: branch['merchantId'] as int,
-      userId: branch['userId'] as int,
-      name: branch['name'] as String,
-      country: branch['country'] as String,
-      city: branch['city'] as String,
-      logo: branch['logo'] as String,
-      website: branch['website'] as String,
-      phone: branch['phone'] as String,
-      address: branch['address'] as String,
-      langitude: branch['langitude'] as String,
-      status: branch['status'] as String,
-      apiToken: branch['apiToken'] as String,
-      createdAt: branch['createdAt'] as String,
-      updatedAt: branch['updatedAt'] as String,
-    );
-      }).toList();
+class Branches {
+  Branches(
+      {this.id,
+      this.name,
+      this.countryId,
+      this.cityId,
+      this.address,
+      this.phone});
+
+  Branches.fromJson(dynamic json) {
+    id = json['id'] as int;
+    name = json['name'].toString();
+    countryId = json['country_id'] != null
+        ? CountryId.fromJson(json['country_id'])
+        : null;
+    cityId = json['city_id'] != null ? CityId.fromJson(json['city_id']) : null;
+    address = json['address'].toString();
+    phone = json['phone'].toString();
+  }
+  int id;
+  String name;
+  CountryId countryId;
+  CityId cityId;
+  String address;
+  String phone;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    if (countryId != null) {
+      data['country_id'] = countryId.toJson();
+    }
+    if (cityId != null) {
+      data['city_id'] = cityId.toJson();
+    }
+    data['address'] = address;
+    data['phone'] = phone;
+    return data;
+  }
+}
+
+class CountryId {
+  CountryId({this.id, this.name});
+
+  CountryId.fromJson(dynamic json) {
+    id = json['id'] as int;
+    name = json['name'].toString();
+  }
+  int id;
+  String name;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    return data;
+  }
+}
+
+class CityId {
+  CityId({this.id, this.countryId, this.name});
+
+  CityId.fromJson(dynamic json) {
+    id = json['id'] as int;
+    countryId = json['country_id'].toString();
+    name = json['name'].toString();
+  }
+  int id;
+  String countryId;
+  String name;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['country_id'] = countryId;
+    data['name'] = name;
+    return data;
+  }
+}
+
+class Sales {
+  Sales(
+      {this.id,
+      this.name,
+      this.oldPrice,
+      this.price,
+      this.startAt,
+      this.endAt,
+      this.details,
+      this.status,
+      this.mainImage,
+      this.cropedImage});
+
+  Sales.fromJson(dynamic json) {
+    id = json['id'] as int;
+    name = json['name'].toString();
+    oldPrice = json['old_price'].toString();
+    price = json['_price'].toString();
+    startAt = json['start_at'].toString();
+    endAt = json['end_at'].toString();
+    details = json['details'].toString();
+    status = json['status'].toString();
+    mainImage = json['main_image'].toString();
+    cropedImage = json['croped_image'].toString();
+  }
+  int id;
+  String name;
+  String oldPrice;
+  String price;
+  String startAt;
+  String endAt;
+  String details;
+  String status;
+  String mainImage;
+  String cropedImage;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['old_price'] = oldPrice;
+    data['_price'] = price;
+    data['start_at'] = startAt;
+    data['end_at'] = endAt;
+    data['details'] = details;
+    data['status'] = status;
+    data['main_image'] = mainImage;
+    data['croped_image'] = cropedImage;
+    return data;
+  }
+}
+
+class Links {
+  Links({this.first, this.last, this.prev, this.next});
+
+  Links.fromJson(dynamic json) {
+    first = json['first'].toString();
+    last = json['last'].toString();
+    prev = json['prev'].toString();
+    next = json['next'].toString();
+  }
+  String first;
+  String last;
+  String prev;
+  String next;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['first'] = first;
+    data['last'] = last;
+    data['prev'] = prev;
+    data['next'] = next;
+    return data;
+  }
+}
+
+class Meta {
+  Meta(
+      {this.currentPage,
+      this.from,
+      this.lastPage,
+      this.path,
+      this.perPage,
+      this.to,
+      this.total});
+
+  Meta.fromJson(dynamic json) {
+    currentPage = json['current_page'] as int;
+    from = json['from'] as int;
+    lastPage = json['last_page'] as int;
+    path = json['path'].toString();
+    perPage = json['per_page'] as int;
+    to = json['to'] as int;
+    total = json['total'] as int;
+  }
+  int currentPage;
+  int from;
+  int lastPage;
+  String path;
+  int perPage;
+  int to;
+  int total;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['current_page'] = currentPage;
+    data['from'] = from;
+    data['last_page'] = lastPage;
+    data['path'] = path;
+    data['per_page'] = perPage;
+    data['to'] = to;
+    data['total'] = total;
+    return data;
   }
 }

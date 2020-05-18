@@ -4,12 +4,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/models/shop.dart';
+import 'package:joker/models/branches_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:joker/util/dio.dart';
+import 'package:joker/models/merchant.dart';
 
 class MerchantCard extends StatefulWidget {
-  const MerchantCard({Key key, this.context, this.shop}) : super(key: key);
-  final BuildContext context;
-  final Shop shop;
+  const MerchantCard({Key key,  this.branchData}) : super(key: key);
+  final BranchData branchData;
 
   @override
   _MerchantCardState createState() => _MerchantCardState();
@@ -17,7 +19,15 @@ class MerchantCard extends StatefulWidget {
 
 class _MerchantCardState extends State<MerchantCard> {
   bool isliked = false;
- 
+  BranchData branchData;
+    Merchant merchant;
+
+   @override
+  void initState() {
+    super.initState();
+    branchData = widget.branchData;
+  }
+
   @override
   Widget build(BuildContext context) {
  const String text = "4 ";
@@ -28,22 +38,22 @@ class _MerchantCardState extends State<MerchantCard> {
             topLeft: Radius.circular(12), topRight: Radius.circular(12)),
       ),
       child: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, "/MerchantDetails",
-          arguments:<String, dynamic>{"shop":widget.shop,"lovecount":50,"likecount":50});
+        onTap: () async {
+           Navigator.pushNamed(context, "/MerchantDetails",
+           arguments:<String, dynamic>{"merchantId":branchData.merchant.id,"lovecount":50,"likecount":50});
         },
         child: Column(
           children: <Widget>[
             Container(
               height: MediaQuery.of(context).size.height * .2,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
+              decoration:  BoxDecoration(
+                borderRadius:const BorderRadius.only(
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12)),
                 image: DecorationImage(
-                  image: AssetImage(
-                    "assets/images/shoptwo.jpg",
-                  ),
+                       image: CachedNetworkImageProvider(
+                  branchData.merchant.logo,
+                ),
                   fit: BoxFit.cover,
                 ),
               ),

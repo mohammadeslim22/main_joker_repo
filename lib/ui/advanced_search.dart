@@ -37,7 +37,7 @@ class AdvanceSearchscreen extends State<AdvancedSearch>
           )),
       body: ListView(
         shrinkWrap: true,
-        padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
+        padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
         children: <Widget>[
           Text(trans(context, "search_through"), style: styles.mystyle),
           const SizedBox(height: 10),
@@ -65,8 +65,8 @@ class AdvanceSearchscreen extends State<AdvancedSearch>
           ),
           const SizedBox(height: 10),
           GridView.count(
-              scrollDirection: Axis.vertical,
-              physics: const ScrollPhysics(),
+              //  scrollDirection: Axis.vertical,
+              //  physics: const ScrollPhysics(),
               shrinkWrap: true,
               primary: true,
               crossAxisSpacing: 8,
@@ -76,73 +76,50 @@ class AdvanceSearchscreen extends State<AdvancedSearch>
               addRepaintBoundaries: true,
               children: options.map((SearchModel item) {
                 return FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(38.0),
-                    side: BorderSide(
-                      color: selectedOptions.contains(item.id)
-                          ? Colors.red
-                          : Colors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(38.0),
+                      side: BorderSide(
+                        color: selectedOptions.contains(item.id)
+                            ? Colors.orange
+                            : Colors.grey,
+                      ),
                     ),
-                  ),
-                  color: Colors.white,
-                  textColor: selectedOptions.contains(item.id)
-                      ? Colors.red
-                      : Colors.black,
-                  onPressed: () {
-                    setState(() {
-                      if (!selectedOptions.add(item.id)) {
-                        selectedOptions.remove(item.id);
-                      }
-                    });
-                  },
-                  onLongPress: () {
-                    Fluttertoast.showToast(
-                        msg: item.search,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.grey[300],
-                        textColor: Colors.orange,
-                        fontSize: 16.0);
-                  },
-                  child: Text(
-                    item.search,
-                    style: styles.mysmall,
-                  ),
-                );
+                    color: Colors.white,
+                    textColor: selectedOptions.contains(item.id)
+                        ? Colors.orange
+                        : Colors.black,
+                    onPressed: () {
+                      setState(() {
+                        if (!selectedOptions.add(item.id)) {
+                          selectedOptions.remove(item.id);
+                        }
+                      });
+                    },
+                    onLongPress: () {
+                      Fluttertoast.showToast(
+                          msg: item.search,
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.grey[300],
+                          textColor: Colors.orange,
+                          fontSize: 16.0);
+                    },
+                    child: Text(item.search, style: styles.mysmallforgridview));
               }).toList()),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const <Widget>[
               // TODO(isleem): put map here
             ],
           ),
-          const SizedBox(
-            height: 15,
-          ),
-          Text(
-            trans(
-              context,
-              "offer_history",
-            ),
-            style: styles.mystyle,
-          ),
-          const SizedBox(
-            height: 6,
-          ),
-          Text(
-            trans(
-              context,
-              "accourding_offer_start_end_date",
-            ),
-            style: styles.mysmalllight,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 15),
+          Text(trans(context, "offer_history"), style: styles.mystyle),
+          const SizedBox(height: 6),
+          Text(trans(context, "accourding_offer_start_end_date"),
+              style: styles.mysmalllight),
+          const SizedBox(height: 10),
           RaisedButton(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 11),
             shape: RoundedRectangleBorder(
@@ -153,14 +130,9 @@ class AdvanceSearchscreen extends State<AdvancedSearch>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Icon(
-                  Icons.date_range,
-                ),
+                Icon(Icons.date_range),
                 Text(
-                  trans(
-                    context,
-                    "offer_history",
-                  ),
+                  trans(context, "offer_history"),
                   style: styles.mysmalllight,
                 ),
                 Text("${today.toLocal()}".split(' ')[0]),
@@ -173,17 +145,12 @@ class AdvanceSearchscreen extends State<AdvancedSearch>
             ),
             onPressed: () {},
           ),
-          const SizedBox(
-            height: 15,
-          ),
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                trans(
-                  context,
-                  "accourding_to_rating",
-                ),
+                trans(context, "accourding_to_rating"),
                 style: styles.mystyle,
               ),
               RatingBar(
@@ -203,9 +170,7 @@ class AdvanceSearchscreen extends State<AdvancedSearch>
               ),
             ],
           ),
-          const SizedBox(
-            height: 15,
-          ),
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -218,11 +183,7 @@ class AdvanceSearchscreen extends State<AdvancedSearch>
                 onPressed: () {},
                 color: Colors.grey,
                 textColor: Colors.white,
-                child: Text(
-                    trans(
-                      context,
-                      "cancel",
-                    ),
+                child: Text(trans(context, "cancel"),
                     style: styles.notificationNO),
               ),
               RaisedButton(

@@ -3,17 +3,15 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:joker/models/shop.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
-import 'package:joker/ui/main/customcard.dart';
-import 'package:joker/util/dio.dart';
 import 'package:provider/provider.dart';
 import '../constants/colors.dart';
 import '../constants/styles.dart';
 import '../localization/trans.dart';
 import '../ui/widgets/my_inner_drawer.dart';
-import 'main/customcarddiscount.dart';
+import 'main/merchant_list.dart';
+import 'main/sales_list.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -26,7 +24,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   final GlobalKey<InnerDrawerState> key = GlobalKey<InnerDrawerState>();
   int tabIndex = 0;
   AnimationController _hide;
-  
+  GlobalKey<ScaffoldState> _scaffoldkey;
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification.depth == 0) {
       if (notification is UserScrollNotification) {
@@ -49,8 +47,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    dio.get<dynamic>("branshes").then((dynamic result) => print(result.data));
+    _scaffoldkey = GlobalKey<ScaffoldState>();
     _hide = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 350),
@@ -64,6 +61,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return MyInnerDrawer(
       drawerKey: key,
       scaffold: Scaffold(
+        key: _scaffoldkey,
         body: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
@@ -93,26 +91,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 style: styles.saleTitle,
                               ),
                             ),
-                            //     RaisedButton.icon(
-                            //       shape: RoundedRectangleBorder(
-                            //         borderRadius: BorderRadius.circular(100),
-                            //       ),
-                            //       color: colors.grey,
-                            //       icon: Text(
-                            //         "${trans(context, 'filter')}",
-                            //         style: styles.smallButton,
-                            //       ),
-                            //       label: SvgPicture.asset(
-                            //         'assets/images/filter.svg',
-                            //         height: 12,
-                            //       ),
-                            //       onPressed: () {
-                            //         print("hi");
-                            //       },
-                            //     ),
                             Ink(
-                              // padding: const EdgeInsets.all(8),
-
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
                                   color: colors.white,
@@ -143,54 +122,76 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               ),
                             ),
                           ],
-                        )
-                        //     Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: <Widget>[
-                        //     Flexible(
-                        //       child: Text(
-                        //         tabIndex == 0
-                        //             ? '${trans(context, 'sales')}'
-                        //             : '${trans(context, 'merchants')}',
-                        //         style: styles.title,
-                        //       ),
-                        //     ),
-                        //     RaisedButton.icon(
-                        //       shape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(100),
-                        //       ),
-                        //       color: colors.grey,
-                        //       icon: Text(
-                        //         "${trans(context, 'filter')}",
-                        //         style: styles.smallButton,
-                        //       ),
-                        //       label: SvgPicture.asset(
-                        //         'assets/images/filter.svg',
-                        //         height: 12,
-                        //       ),
-                        //       onPressed: () {
-                        //         print("hi");
-                        //       },
-                        //     ),
-                        //     const SizedBox(
-                        //       width: 8,
-                        //     )
-                        //   ],
-                        // ),
-                        ),
+                        )),
                   ),
                   automaticallyImplyLeading: true,
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(Icons.add_location, color: colors.orange),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/AutoLocate',
-                            arguments: <String, double>{
-                              "lat": 59.0,
-                              "long": 9.6
-                            });
-                        Provider.of<MyCounter>(context)
-                            .togelocationloading(false);
+                      onPressed: () async {
+                        _scaffoldkey.currentState.showBottomSheet<
+                            dynamic>((BuildContext context) => Wrap(
+                                direction: Axis.vertical,
+                                spacing: 24,
+                                children: <Widget>[
+                                  Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(.1),
+                                        borderRadius: const BorderRadius.only(
+                                            bottomLeft: Radius.circular(24),
+                                            bottomRight: Radius.circular(24)),
+                                      ),
+                                      child: Text(
+                                        "Location Set",
+                                        textAlign: TextAlign.center,
+                                        style: styles.underHead,
+                                      )),
+                                  FlatButton(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12),
+                                      onPressed: () {},
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          const Text("Use my current Location"),
+                                          Icon(Icons.my_location)
+                                        ],
+                                      )),
+                                  FlatButton(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12),
+                                      onPressed: () {},
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          const Text("my Address list"),
+                                          Icon(Icons.search)
+                                        ],
+                                      )),
+                                  FlatButton(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12),
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            context, '/AutoLocate',
+                                            arguments: <String, double>{
+                                              "lat": 59.0,
+                                              "long": 9.6
+                                            });
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          const Text("Add new address"),
+                                          Icon(Icons.add)
+                                        ],
+                                      )),
+                                  const SizedBox(height: 12),
+                                ]));
                       },
                     ),
                     // IconButton(
@@ -235,7 +236,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   child: Expanded(
                     child: (bolc.bottomNavIndex == 0)
                         ? DiscountsList()
-                        : ShopList(Shop.movieData),
+                        : ShopList(),
                   )),
             )),
         bottomNavigationBar: SizeTransition(

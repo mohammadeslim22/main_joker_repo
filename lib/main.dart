@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:joker/ui/Home.dart';
+import 'package:joker/ui/auth/login_screen.dart';
+
 import 'util/dio.dart';
 import 'package:joker/providers/counter.dart';
-import 'package:joker/ui/registrationscreen.dart';
 import 'package:provider/provider.dart';
 import 'constants/route.dart';
 import 'constants/themes.dart';
 import 'providers/language.dart';
 import 'localization/localization_delegate.dart';
 import 'providers/auth.dart';
+import 'package:joker/util/data.dart';
 
 void main() {
-  dioDefaults();
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -28,6 +30,10 @@ void main() {
       child: MyApp(),
     ),
   );
+  dioDefaults();
+  data.getData('authorization').then<dynamic>((dynamic auth) =>  dio.options.headers.update('authorization',
+      (dynamic value) async =>auth.toString() ));
+ 
 }
 
 class MyApp extends StatelessWidget {
@@ -65,12 +71,12 @@ class MyApp extends StatelessWidget {
           /* SchedulerBinding.instance.addPostFrameCallback(
           (_) => lang.setLanguage(supportedLocales.first),
         ); */
-        
+
           return supportedLocales.first;
         },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home:  Registration()
+        home:  const Home()
         // home: const ShopDetails(likecount: 50,lovecount: 50,shop:    Shop(
         //     image: "assets/images/shopone.jpg"
         //   ),),

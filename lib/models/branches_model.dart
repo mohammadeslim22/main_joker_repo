@@ -1,26 +1,26 @@
+import 'package:joker/models/sales.dart';
+
 class Branches {
-
-
   Branches({this.data, this.links, this.meta});
 
-  Branches.fromJson(Map<String, dynamic> json) {
+  Branches.fromJson( dynamic json) {
     if (json['data'] != null) {
-      data =  <MerchantData>[];
+      data = <BranchData>[];
       json['data'].forEach((dynamic v) {
-        data.add( MerchantData.fromJson( v));
+        data.add(BranchData.fromJson(v));
       });
     }
-    links = json['links'] != null ?  Links.fromJson(json['links']) : null;
-    meta = json['meta'] != null ?  Meta.fromJson(json['meta']) : null;
+    links = json['links'] != null ? Links.fromJson(json['links']) : null;
+    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
   }
-  List<MerchantData> data;
+  List<BranchData> data;
   Links links;
   Meta meta;
-  
+
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (data != null) {
-      data['data'] = this.data.map((MerchantData v) => v.toJson()).toList();
+      data['data'] = this.data.map((BranchData v) => v.toJson()).toList();
     }
     if (links != null) {
       data['links'] = links.toJson();
@@ -32,10 +32,8 @@ class Branches {
   }
 }
 
-class MerchantData {
-
-
-  MerchantData(
+class BranchData {
+  BranchData(
       {this.id,
       this.name,
       this.country,
@@ -45,23 +43,22 @@ class MerchantData {
       this.sales,
       this.merchant});
 
-  MerchantData.fromJson(dynamic json) {
-    id = json['id']as int;
+  BranchData.fromJson(dynamic json) {
+    id = json['id'] as int;
     name = json['name'] as String;
     country =
-        json['country'] != null ?  Country.fromJson(json['country']) : null;
-    city = json['city'] != null ?  City.fromJson(json['city']) : null;
-    address = json['address']as String;
-    phone = json['phone']as String;
+        json['country'] != null ? Country.fromJson(json['country']) : null;
+    city = json['city'] != null ? City.fromJson(json['city']) : null;
+    address = json['address'] as String;
+    phone = json['phone'] as String;
     if (json['sales'] != null) {
-      sales =  <Sales>[];
-      json['sales'].forEach(( dynamic v) {
-        sales.add( Sales.fromJson( v));
+      sales = <Sales>[];
+      json['sales'].forEach((dynamic v) {
+        sales.add(Sales.fromJson(v));
       });
     }
-    merchant = json['merchant'] != null
-        ?  Merchant.fromJson(json['merchant'])
-        : null;
+    merchant =
+         MerchantfromBranch.fromJson(json['merchant'] as Map<String, dynamic>);
   }
   int id;
   String name;
@@ -70,9 +67,9 @@ class MerchantData {
   String address;
   String phone;
   List<Sales> sales;
-  Merchant merchant;
+  MerchantfromBranch merchant;
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     if (country != null) {
@@ -84,28 +81,26 @@ class MerchantData {
     data['address'] = address;
     data['phone'] = phone;
     if (sales != null) {
-      data['sales'] = sales.map((Sales v) => v.toJson()).toList();
+      data['sales'] = sales.map<dynamic>((Sales v) => v.toJson()).toList();
     }
     if (merchant != null) {
-      data['merchant'] =merchant.toJson();
+      data['merchant'] = merchant.toJson();
     }
     return data;
   }
 }
 
 class Country {
-
-
   Country({this.id, this.name});
 
-  Country.fromJson( dynamic json) {
-    id = json['id']as int;
-    name = json['name']as String;
+  Country.fromJson(dynamic json) {
+    id = json['id'] as int;
+    name = json['name'] as String;
   }
   int id;
   String name;
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     return data;
@@ -113,20 +108,18 @@ class Country {
 }
 
 class City {
-
-
   City({this.id, this.countryId, this.name});
 
-  City.fromJson( dynamic json) {
-    id = json['id']as int;
-    countryId = json['country_id']as   String;
-    name = json['name']as   String;
+  City.fromJson(dynamic json) {
+    id = json['id'] as int;
+    countryId = json['country_id'] as String;
+    name = json['name'] as String;
   }
   int id;
   String countryId;
   String name;
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['country_id'] = countryId;
     data['name'] = name;
@@ -134,69 +127,74 @@ class City {
   }
 }
 
-class Sales {
+// class Sales {
+//   Sales({
+//     this.id,
+//     this.name,
+//     this.oldPrice,
+//     this.newPrice,
+//     this.startAt,
+//     this.endAt,
+//     this.details,
+//     this.status,
+//     this.mainImage,
+//     this.cropedImage,
+    
+//   });
 
+//   Sales.fromJson(dynamic json) {
+//     id = json['id'] as int;
+//     name = json['name'] as String;
+//     oldPrice = json['old_price'] as String;
+//     newPrice = json['new_price'] as String;
+//     startAt = json['start_at'] as String;
+//     endAt = json['end_at'] as String;
+//     details = json['details'] as String;
+//     status = json['status'] as String;
+//     mainImage = json['main_image'] as String;
+//     cropedImage = json['croped_image'] as String;
+   
+//   }
+//   int id;
+//   String name;
+//   String oldPrice;
+//   String newPrice;
+//   String startAt;
+//   String endAt;
+//   String details;
+//   String status;
+//   String mainImage;
+//   String cropedImage;
+  
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['id'] = id;
+//     data['name'] = name;
+//     data['old_price'] = oldPrice;
+//     data['new_price'] = newPrice;
+//     data['start_at'] = startAt;
+//     data['end_at'] = endAt;
+//     data['details'] = details;
+//     data['status'] = status;
+//     data['main_image'] = mainImage;
+//     data['croped_image'] = cropedImage;
+//     return data;
+//   }
+// }
 
-  Sales(
-      {this.id,
-      this.name,
-      this.oldPrice,
-      this.newPrice,
-      this.startAt,
-      this.endAt,
-      this.details,
-      this.status,
-      this.mainImage});
-
-  Sales.fromJson( dynamic json) {
-    id = json['id']as int;
-    name = json['name']as String;
-    oldPrice = json['old_price']as String;
-    newPrice = json['new_price']as String;
-    startAt = json['start_at']as String;
-    endAt = json['end_at']as String;
-    details = json['details']as String;
-    status = json['status']as String;
-    mainImage = json['main_image']as String;
+class MerchantfromBranch {
+  MerchantfromBranch({this.id, this.name, this.logo});
+  MerchantfromBranch.fromJson(dynamic json) {
+    id =  json['id'] as int;
+    name = json['name'].toString();
+    logo = json['logo'] as String;
   }
   int id;
-  String name;
-  String oldPrice;
-  String newPrice;
-  String startAt;
-  String endAt;
-  String details;
-  String status;
-  String mainImage;
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
-    data['id'] =id;
-    data['name'] = name;
-    data['old_price'] = oldPrice;
-    data['new_price'] = newPrice;
-    data['start_at'] = startAt;
-    data['end_at'] =endAt;
-    data['details'] = details;
-    data['status'] = status;
-    data['main_image'] = mainImage;
-    return data;
-  }
-}
-
-class Merchant {
-
-  Merchant({this.id, this.name, this.logo});
-  Merchant.fromJson(dynamic json) {
-    id = json['id']as int;
-    name = json['name']as String;
-    logo = json['logo']as String;
-  }
- int id;
   String name;
   String logo;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     data['logo'] = logo;
@@ -205,22 +203,20 @@ class Merchant {
 }
 
 class Links {
-
-
   Links({this.first, this.last, this.prev, this.next});
 
   Links.fromJson(dynamic json) {
     first = json['first'] as String;
-    last = json['last']as String;
-    prev = json['prev']as String;
-    next = json['next']as String;
+    last = json['last'] as String;
+    prev = json['prev'] as String;
+    next = json['next'] as String;
   }
   String first;
   String last;
   String prev;
   String next;
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['first'] = first;
     data['last'] = last;
     data['prev'] = prev;
@@ -230,8 +226,6 @@ class Links {
 }
 
 class Meta {
-
-
   Meta(
       {this.currentPage,
       this.from,
@@ -241,14 +235,14 @@ class Meta {
       this.to,
       this.total});
 
-  Meta.fromJson( dynamic json) {
-    currentPage = json['current_page']as int;
-    from = json['from']as int;
-    lastPage = json['last_page']as int;
-    path = json['path']as String;
-    perPage = json['per_page']as int;
-    to = json['to']as int;
-    total = json['total']as int;
+  Meta.fromJson(dynamic json) {
+    currentPage = json['current_page'] as int;
+    from = json['from'] as int;
+    lastPage = json['last_page'] as int;
+    path = json['path'] as String;
+    perPage = json['per_page'] as int;
+    to = json['to'] as int;
+    total = json['total'] as int;
   }
   int currentPage;
   int from;
@@ -258,7 +252,7 @@ class Meta {
   int to;
   int total;
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['current_page'] = currentPage;
     data['from'] = from;
     data['last_page'] = lastPage;

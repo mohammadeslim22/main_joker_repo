@@ -1,4 +1,3 @@
-import 'package:dio/src/response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,11 +5,13 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/counter.dart';
+import 'package:joker/util/data.dart';
+import '../widgets/textforminput.dart';
 import 'package:joker/util/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
-import 'widgets/buttonTouse.dart';
-import 'widgets/textforminput.dart';
+import '../widgets/buttonTouse.dart';
+import 'package:dio/dio.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -22,18 +23,18 @@ class _MyLoginScreenState extends State<LoginScreen>
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
-          builder: (BuildContext context) =>  AlertDialog(
+          builder: (BuildContext context) => AlertDialog(
             title: const Text('Are you sure?'),
             content: const Text('Do you want to exit the App'),
             actionsOverflowButtonSpacing: 50,
             actions: <Widget>[
-               FlatButton(
+              FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: const Text('Cancel'),
               ),
-               FlatButton(
+              FlatButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child:const  Text('Yes'),
+                child: const Text('Yes'),
               ),
             ],
           ),
@@ -61,9 +62,10 @@ class _MyLoginScreenState extends State<LoginScreen>
                 text: trans(context, 'mobile_no'),
                 cController: usernameController,
                 prefixIcon: Icons.phone,
-                kt: TextInputType.emailAddress,
+                kt: TextInputType.phone,
                 obscureText: false,
                 readOnly: false,
+                onTab: () {},
                 nextfocusNode: focus1,
                 onFieldSubmitted: () {
                   focus1.requestFocus();
@@ -77,6 +79,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                 prefixIcon: Icons.lock_outline,
                 kt: TextInputType.visiblePassword,
                 readOnly: false,
+                onTab: () {},
                 suffixwidget: IconButton(
                   icon: Icon(
                     (_obscureText == false)
@@ -163,19 +166,34 @@ class _MyLoginScreenState extends State<LoginScreen>
                             bolc.togelf(true);
                             await dio
                                 .post<dynamic>("login", data: <String, String>{
-                              "email": usernameController.text.toString(),
+                              "phone": usernameController.text.toString(),
                               "password": passwordController.text.toString()
-                            }).then((Response<dynamic> value) {
+                            }).then((Response<dynamic> value) async {
                               print(value);
                               if (value.statusCode == 200) {
-                                // value.data['user']['token'];
+                               await data.setData("authorization",
+                                    "Bearer ${value.data['api_token']}");
+                                data.getData('authorization').then<dynamic>(
+                                    (dynamic auth) => dio.options.headers
+                                        .update('authorization',
+                                            (dynamic value) async => auth));
+                                // dio.options.headers.update(
+                                //     'Authorization',
+                                //     (dynamic value) async =>
+                                //         await data.getData('token'));
 
+                                print(
+                                    " are u fucken stupid ?${dio.options.headers.entries.last.value}");
+
+                               print(  "are u fucken stupid again?${dio.options.headers.putIfAbsent('Authorization',
+                                    () =>"Bearer ${value.data['api_token']}")}");
+
+                                print(dio.options.headers);
+                                Navigator.pushNamed(
+                                  context,
+                                  '/Home',
+                                );
                               }
-
-                              Navigator.pushNamed(context, '/pin',
-                                  arguments: <String, String>{
-                                    'mobileNo': '0567505238'
-                                  });
                             });
                             bolc.togelf(false);
                           }

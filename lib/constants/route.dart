@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:joker/models/membership.dart';
-import 'package:joker/models/shop.dart';
 import 'package:joker/ui/advanced_search.dart';
 import 'package:joker/ui/my_membership.dart';
-import 'package:joker/ui/pin_code.dart';
+import 'package:joker/ui/auth/pin_code.dart';
+import 'package:joker/ui/profile.dart';
 import 'package:joker/ui/setLocation.dart';
 import 'package:joker/ui/settings.dart';
 import 'package:joker/ui/shop_details.dart';
-import 'package:joker/ui/registrationscreen.dart';
-
+import 'package:joker/ui/auth/registrationscreen.dart';
 import 'package:joker/ui/favorite.dart';
-import '../ui/login_screen.dart';
+import '../ui/auth/login_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import '../ui/home.dart';
+import 'package:joker/models/merchant.dart';
 
 // Generate all application routes with simple transition
 Route<PageController> onGenerateRoute(RouteSettings settings) {
@@ -22,7 +22,6 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
   final Map<String, dynamic> args = settings.arguments as Map<String, dynamic>;
 
   switch (settings.name) {
-    
     case "/Home":
       page = PageTransition<PageController>(
         child: const Home(),
@@ -41,33 +40,39 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/AutoLocate":
+    case "/AutoLocate":
       page = PageTransition<PageController>(
-        child:  AutoLocate(lat: args['lat']as double,long: args['long']as double,),
+        child: AutoLocate(
+          lat: args['lat'] as double,
+          long: args['long'] as double,
+        ),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/AdvancedSearch":
+    case "/AdvancedSearch":
       page = PageTransition<PageController>(
         child: const AdvancedSearch(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/MerchantDetails":
+    case "/MerchantDetails":
       page = PageTransition<PageController>(
-        child:  ShopDetails(shop:args['shop']as Shop,likecount: args['likecount'] as int,lovecount: args['lovecount'] as int,),
+        child: ShopDetails(
+            merchantId: args['merchantId'] as  int,
+            likecount: args['likecount'] as int,
+            lovecount: args['lovecount'] as int),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/Membership":
+    case "/Membership":
       page = PageTransition<PageController>(
-        child:  MyMemberShip(args['membershipsData']as List<MemberShip>),
+        child: MyMemberShip(args['membershipsData'] as List<MemberShip>),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/Fav":
+    case "/Fav":
       page = PageTransition<PageController>(
-        child:  Favorite(),
+        child: Favorite(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
@@ -77,12 +82,13 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/Registration":
+    case "/Registration":
       page = PageTransition<PageController>(
         child: Registration(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
+
   }
   return page;
 }

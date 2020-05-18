@@ -16,6 +16,7 @@ ThemeData mainThemeData() {
     canvasColor: Colors.white,
     cursorColor: colors.orange,
     hintColor: colors.black,
+   // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
     textTheme: TextTheme(
       bodyText2: TextStyle(
         color: colors.black,

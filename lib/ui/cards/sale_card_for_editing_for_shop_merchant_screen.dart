@@ -7,16 +7,16 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
 
-class SalesCard extends StatefulWidget {
-  const SalesCard({Key key, this.context, this.sale}) : super(key: key);
+class SalesCardAfterEditForMerchant extends StatefulWidget {
+  const SalesCardAfterEditForMerchant({Key key, this.context, this.sale}) : super(key: key);
   final BuildContext context;
   final SaleData sale;
 
   @override
-  _SalesCardState createState() => _SalesCardState();
+  _SalesCardAfterEditForMerchantState createState() => _SalesCardAfterEditForMerchantState();
 }
 
-class _SalesCardState extends State<SalesCard> {
+class _SalesCardAfterEditForMerchantState extends State<SalesCardAfterEditForMerchant> {
   bool isliked = false;
   SaleData saledata;
   @override
@@ -45,7 +45,8 @@ class _SalesCardState extends State<SalesCard> {
                 image: DecorationImage(
                     image: CachedNetworkImageProvider(
                   saledata.cropedImage,
-                )),
+                ),
+                fit: BoxFit.cover,),
               ),
               child: isliked
                   ? Stack(children: <Widget>[
@@ -72,11 +73,9 @@ class _SalesCardState extends State<SalesCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            saledata.name,
-                            style: styles.underHead,
-                          ),
+                        Text(
+                          saledata.name,
+                          style: styles.underHead,
                         ),
                         Row(
                           children: <Widget>[
@@ -104,39 +103,36 @@ class _SalesCardState extends State<SalesCard> {
                         color: colors.black,
                       ),
                       const SizedBox(width: 8),
-                      Flexible(
-                          child: Text(saledata.merchant.name,
-                              softWrap: true, style: styles.mystyle)),
+                      Text(saledata.merchant.name,
+                          softWrap: true, style: styles.mystyle),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Flexible(
-                        child: Row(
-                          children: <Widget>[
-                            Text(trans(context, 'branch'),
-                                style: styles.mylight),
-                            const SizedBox(
-                              width: 10,
+                      Row(
+                        children: <Widget>[
+                          Text(trans(context, 'branch'),
+                              style: styles.mylight),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 4),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(12)),
+                              color: Colors.grey[200],
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 4),
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(12)),
-                                color: Colors.grey[200],
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                trans(context, 'branches_with_offer'),
-                                style: styles.mystyle,
-                              ),
-                            )
-                          ],
-                        ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              trans(context, 'branches_with_offer'),
+                              style: styles.mystyle,
+                            ),
+                          )
+                        ],
                       ),
                       Row(
                         children: <Widget>[

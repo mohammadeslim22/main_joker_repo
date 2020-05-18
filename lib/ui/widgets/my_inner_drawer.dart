@@ -5,29 +5,42 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/styles.dart';
+import 'package:joker/util/dio.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
 import 'package:joker/models/membership.dart';
+import 'package:dio/dio.dart';
 
-class MyInnerDrawer extends StatelessWidget {
+class MyInnerDrawer extends StatefulWidget {
   const MyInnerDrawer({this.scaffold, this.drawerKey});
 
   final Widget scaffold;
 
   final GlobalKey<InnerDrawerState>
-      drawerKey; //= GlobalKey<InnerDrawerState>();
+      drawerKey; 
+  @override
+  _MyInnerDrawerState createState() => _MyInnerDrawerState();
+}
 
+class _MyInnerDrawerState extends State<MyInnerDrawer> {
   void toggle() {
-    drawerKey.currentState.toggle(
+    widget.drawerKey.currentState.toggle(
         // direction is optional
         // if not set, the last direction will be used
         //InnerDrawerDirection.start OR InnerDrawerDirection.end
         // direction: InnerDrawerDirection.end,
         );
   }
+@override
+@override
+void initState() { 
+  super.initState();
+}
+
 
   final String imageUrl =
       "https://celebritypets.net/wp-content/uploads/2016/12/Adriana-Lima.jpg";
+
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -206,7 +219,7 @@ class MyInnerDrawer extends StatelessWidget {
       ),
     );
     return InnerDrawer(
-      key: drawerKey,
+      key: widget.drawerKey,
       onTapClose: false, // default false
       swipe: true, // default true
       colorTransition: Colors.black, // default Color.black54
@@ -244,7 +257,7 @@ class MyInnerDrawer extends StatelessWidget {
       // rightChild: Container(), // required if leftChild is not set
 
       // Note: use "automaticallyImplyLeading: false" if you do not personalize "leading" of Bar
-      scaffold: scaffold,
+      scaffold: widget.scaffold,
     );
   }
 }

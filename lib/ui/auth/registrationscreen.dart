@@ -5,7 +5,8 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/counter.dart';
-import 'package:joker/ui/widgets/textforminput.dart';
+import '../widgets/buttonTouse.dart';
+import '../widgets/textforminput.dart';
 import 'package:location/location.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:geocoder/geocoder.dart';
@@ -14,9 +15,10 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 import 'package:joker/constants/colors.dart';
-import 'widgets/buttonTouse.dart';
 import 'package:joker/util/dio.dart';
-import 'package:dio/src/response.dart';
+import 'package:joker/util/data.dart';
+import 'package:joker/util/functions.dart';
+import 'package:dio/dio.dart';
 
 class Registration extends StatefulWidget {
   @override
@@ -25,36 +27,6 @@ class Registration extends StatefulWidget {
 
 class _MyRegistrationState extends State<Registration>
     with TickerProviderStateMixin {
-  Future<List<String>> getLocation() async {
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-    LocationData locationData;
-    final List<String> locaion = <String>[];
-    final Location location = Location();
-
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-
-      if (!serviceEnabled) {
-        return locaion;
-      }
-    }
-
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return locaion;
-      }
-    }
-
-    locationData = await location.getLocation();
-    locaion.add(locationData.latitude.toString());
-    locaion.add(locationData.longitude.toString());
-    return locaion;
-  }
-
   List<String> location2;
   Location location = Location();
   SpinKitRing spinkit = const SpinKitRing(
@@ -107,9 +79,11 @@ class _MyRegistrationState extends State<Registration>
     }
   }
 
+  bool _isButtonEnabled;
   @override
   void initState() {
     super.initState();
+    _isButtonEnabled = true;
   }
 
   bool _obscureText = false;
@@ -199,6 +173,7 @@ class _MyRegistrationState extends State<Registration>
                   obscureText: false,
                   readOnly: false,
                   focusNode: focus,
+                  onTab: () {},
                   onFieldSubmitted: () {
                     focus1.requestFocus();
                   },
@@ -212,6 +187,7 @@ class _MyRegistrationState extends State<Registration>
                   kt: TextInputType.phone,
                   obscureText: false,
                   readOnly: false,
+                  onTab: () {},
                   suffixwidget: CountryCodePicker(
                     onChanged: _onCountryChange,
                     initialSelection: 'SA',
@@ -238,6 +214,7 @@ class _MyRegistrationState extends State<Registration>
                   prefixIcon: Icons.lock_outline,
                   kt: TextInputType.visiblePassword,
                   readOnly: false,
+                  onTab: () {},
                   suffixwidget: IconButton(
                     icon: Icon(
                       (_obscureText == false)
@@ -336,7 +313,7 @@ class _MyRegistrationState extends State<Registration>
                   obscureText: false,
                   focusNode: focus4,
                   validator: () {
-                    return "please specify you Location ";
+                    return "please specify you Location :)";
                   }),
               Container(
                 margin: const EdgeInsets.symmetric(
@@ -359,75 +336,106 @@ class _MyRegistrationState extends State<Registration>
   Widget build(BuildContext context) {
     final MyCounter bolc = Provider.of<MyCounter>(context);
     return Scaffold(
-      appBar: AppBar(),
-      body: ListView(
-        children: <Widget>[
-          const SizedBox(height: 16),
-          Text(trans(context, 'account_creation'),
-              textAlign: TextAlign.center, style: styles.mystyle2),
-          const SizedBox(height: 8),
-          Text(
-            trans(context, 'please_check'),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.values.first,
-              color: const Color(0xFF303030),
-              fontSize: 20,
-            ),
-          ),
-          customcard(context, bolc),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-            child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: const BorderSide(color: Colors.orange)),
-                onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    bolc.togelf(true);
-                    await dio.post<dynamic>("register", data: <String, dynamic>{
-                      "name": usernameController.text,
-                      "password": passwordController.text,
-                      "password_confirmation": passwordController.text,
-                      "email": emailController.text,
-                      "phone": mobileNoController.text,
-                      "country_id": 1,
-                      "city_id": 1,
-                      "address": "address"
-                    }).then((Response<dynamic> value) {
-                      bolc.togelf(false);
-                      
-                    });
-                    
-                  }
-                  Navigator.pushNamed(context, '/login');
-                },
-                color: Colors.deepOrangeAccent,
-                textColor: colors.white,
-                child: bolc.returnchild(trans(context, 'Regisration'))),
-          ),
-          const Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
-              child: Divider(color: Colors.black)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Flexible(
-                child: Text(
-                  trans(context, 'problem_in_regisration'),
-                  style: styles.mystyle,
-                ),
-              ),
-              ButtonToUse(
-                trans(context, 'tech_support'),
-                fw: FontWeight.bold,
-                fc: Colors.green,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+        appBar: AppBar(),
+        body: Builder(
+            builder: (BuildContext context) => GestureDetector(
+                  onTap: () {
+                    SystemChannels.textInput
+                        .invokeMethod<String>('TextInput.hide');
+                  },
+                  child: ListView(
+                    children: <Widget>[
+                      const SizedBox(height: 16),
+                      Text(trans(context, 'account_creation'),
+                          textAlign: TextAlign.center, style: styles.mystyle2),
+                      const SizedBox(height: 8),
+                      Text(
+                        trans(context, 'please_check'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.values.first,
+                          color: const Color(0xFF303030),
+                          fontSize: 20,
+                        ),
+                      ),
+                      customcard(context, bolc),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+                        child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: const BorderSide(color: Colors.orange)),
+                            onPressed: () async {
+                              if (_isButtonEnabled) {
+                                if (_formKey.currentState.validate()) {
+                                  bolc.togelf(true);
+                                  setState(() {
+                                    _isButtonEnabled = false;
+                                  });
+                                  await dio.post<dynamic>("register",
+                                      data: <String, dynamic>{
+                                        "name": usernameController.text,
+                                        "password": passwordController.text,
+                                        "password_confirmation":
+                                            passwordController.text,
+                                        "email": emailController.text,
+                                        "phone": mobileNoController.text,
+                                        "country_id": 1,
+                                        "city_id": 1,
+                                        "address":
+                                            config.locationController.text,
+                                        "longitude": config.long,
+                                        "latitude": config.lat
+                                      }).then((Response<dynamic> value) {
+                                    final Data dataa = Data();
+                                    print(value.statusCode);
+                                    print(value);
+                                    if (value.statusCode == 201) {
+                                      Navigator.pushNamed(context, '/pin',
+                                          arguments: <String, String>{
+                                            'mobileNo': mobileNoController.text
+                                          });
+                                      dataa.setData(
+                                          "email", emailController.text);
+                                      dataa.setData(
+                                          "username", usernameController.text);
+                                      dataa.setData(
+                                          "password", passwordController.text);
+                                      dataa.setData(
+                                          "mobile", mobileNoController.text);
+                                    }
+                                    bolc.togelf(false);
+                                  });
+                                }
+                              }
+                            },
+                            color: Colors.deepOrangeAccent,
+                            textColor: colors.white,
+                            child: bolc
+                                .returnchild(trans(context, 'Regisration'))),
+                      ),
+                      const Padding(
+                          padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
+                          child: Divider(color: Colors.black)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              trans(context, 'problem_in_regisration'),
+                              style: styles.mystyle,
+                            ),
+                          ),
+                          ButtonToUse(
+                            trans(context, 'tech_support'),
+                            fw: FontWeight.bold,
+                            fc: Colors.green,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )));
   }
 
   void _onCountryChange(CountryCode countryCode) {

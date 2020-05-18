@@ -118,5 +118,8 @@
     "shop_offers":"عروض المتجر",
     "show_all":"Show All",
     "fav":"Favorite",
-    "branches_with_offer":"All"
+    "branches_with_offer":"All",
+    "membership_details":"MemberShip Details",
+    "membership_message":"Member Ship Message",
+    "save_changes":"Save Changes"
 }

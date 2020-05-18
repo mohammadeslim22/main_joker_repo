@@ -42,9 +42,7 @@ class TextFormInput extends StatelessWidget {
       child: TextFormField(
         readOnly: readOnly,
         keyboardType: kt,
-        onTap: ()=>
-          onTab()
-        ,
+        onTap: () => onTab(),
         controller: cController,
         style: const TextStyle(
           color: Colors.black,
@@ -80,7 +78,9 @@ class TextFormInput extends StatelessWidget {
         onFieldSubmitted: (String v) {
           onFieldSubmitted();
         },
-        validator: (String t,) {
+        validator: (
+          String t,
+        ) {
           if (t.isEmpty) {
             return validator();
           }
