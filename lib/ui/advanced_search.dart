@@ -6,7 +6,7 @@ import 'package:rating_bar/rating_bar.dart';
 import '../models/search_model.dart';
 import '../localization/trans.dart';
 import '../constants/styles.dart';
-import 'widgets/textforminput.dart';
+import 'widgets/text_form_input.dart';
 
 class AdvancedSearch extends StatefulWidget {
   const AdvancedSearch({Key key}) : super(key: key);

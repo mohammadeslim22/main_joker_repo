@@ -6,7 +6,6 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:joker/util/dio.dart';
 import 'package:joker/models/merchant.dart';
 
 class MerchantCard extends StatefulWidget {

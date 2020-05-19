@@ -1,4 +1,3 @@
-import 'package:joker/models/sales.dart';
 
 class Branches {
   Branches({this.data, this.links, this.meta});
@@ -127,60 +126,60 @@ class City {
   }
 }
 
-// class Sales {
-//   Sales({
-//     this.id,
-//     this.name,
-//     this.oldPrice,
-//     this.newPrice,
-//     this.startAt,
-//     this.endAt,
-//     this.details,
-//     this.status,
-//     this.mainImage,
-//     this.cropedImage,
+class Sales {
+  Sales({
+    this.id,
+    this.name,
+    this.oldPrice,
+    this.newPrice,
+    this.startAt,
+    this.endAt,
+    this.details,
+    this.status,
+    this.mainImage,
+    this.cropedImage,
     
-//   });
+  });
 
-//   Sales.fromJson(dynamic json) {
-//     id = json['id'] as int;
-//     name = json['name'] as String;
-//     oldPrice = json['old_price'] as String;
-//     newPrice = json['new_price'] as String;
-//     startAt = json['start_at'] as String;
-//     endAt = json['end_at'] as String;
-//     details = json['details'] as String;
-//     status = json['status'] as String;
-//     mainImage = json['main_image'] as String;
-//     cropedImage = json['croped_image'] as String;
+  Sales.fromJson(dynamic json) {
+    id = json['id'] as int;
+    name = json['name'] as String;
+    oldPrice = json['old_price'] as String;
+    newPrice = json['new_price'] as String;
+    startAt = json['start_at'] as String;
+    endAt = json['end_at'] as String;
+    details = json['details'] as String;
+    status = json['status'] as String;
+    mainImage = json['main_image'] as String;
+    cropedImage = json['croped_image'] as String;
    
-//   }
-//   int id;
-//   String name;
-//   String oldPrice;
-//   String newPrice;
-//   String startAt;
-//   String endAt;
-//   String details;
-//   String status;
-//   String mainImage;
-//   String cropedImage;
+  }
+  int id;
+  String name;
+  String oldPrice;
+  String newPrice;
+  String startAt;
+  String endAt;
+  String details;
+  String status;
+  String mainImage;
+  String cropedImage;
   
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = <String, dynamic>{};
-//     data['id'] = id;
-//     data['name'] = name;
-//     data['old_price'] = oldPrice;
-//     data['new_price'] = newPrice;
-//     data['start_at'] = startAt;
-//     data['end_at'] = endAt;
-//     data['details'] = details;
-//     data['status'] = status;
-//     data['main_image'] = mainImage;
-//     data['croped_image'] = cropedImage;
-//     return data;
-//   }
-// }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['old_price'] = oldPrice;
+    data['new_price'] = newPrice;
+    data['start_at'] = startAt;
+    data['end_at'] = endAt;
+    data['details'] = details;
+    data['status'] = status;
+    data['main_image'] = mainImage;
+    data['croped_image'] = cropedImage;
+    return data;
+  }
+}
 
 class MerchantfromBranch {
   MerchantfromBranch({this.id, this.name, this.logo});

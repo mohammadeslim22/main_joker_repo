@@ -6,7 +6,7 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/counter.dart';
 import '../widgets/buttonTouse.dart';
-import '../widgets/textforminput.dart';
+import '../widgets/text_form_input.dart';
 import 'package:location/location.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:geocoder/geocoder.dart';
@@ -92,7 +92,6 @@ class _MyRegistrationState extends State<Registration>
   final TextEditingController mobileNoController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
-
   static DateTime today = DateTime.now();
 
   DateTime firstDate = DateTime(today.year - 90, today.month, today.day);
@@ -163,6 +162,8 @@ class _MyRegistrationState extends State<Registration>
                   },
                   onTab: () {},
                   validator: () {
+                    if(usernameController.text.length<3)
+                      return "username must be more than 3 letters";
                     return "please enter your name ";
                   }),
               TextFormInput(
@@ -178,7 +179,7 @@ class _MyRegistrationState extends State<Registration>
                     focus1.requestFocus();
                   },
                   validator: () {
-                    return "please enter your email ";
+                    return "please enter a valid email ";
                   }),
               TextFormInput(
                   text: trans(context, 'mobile_no'),
@@ -188,7 +189,7 @@ class _MyRegistrationState extends State<Registration>
                   obscureText: false,
                   readOnly: false,
                   onTab: () {},
-                  suffixwidget: CountryCodePicker(
+                  suffixicon: CountryCodePicker(
                     onChanged: _onCountryChange,
                     initialSelection: 'SA',
                     favorite: const <String>['+966', 'SA'],
@@ -215,7 +216,7 @@ class _MyRegistrationState extends State<Registration>
                   kt: TextInputType.visiblePassword,
                   readOnly: false,
                   onTab: () {},
-                  suffixwidget: IconButton(
+                  suffixicon: IconButton(
                     icon: Icon(
                       (_obscureText == false)
                           ? Icons.visibility
@@ -230,6 +231,9 @@ class _MyRegistrationState extends State<Registration>
                   obscureText: _obscureText,
                   focusNode: focus2,
                   validator: () {
+                    if (passwordController.text.length < 6) {
+                      return "password must be more than 6 letters";
+                    }
                     return "please enter your password ";
                   }),
               TextFormInput(
@@ -242,7 +246,7 @@ class _MyRegistrationState extends State<Registration>
                   onTab: () {
                     _selectDate(context);
                   },
-                  suffixwidget: Row(
+                  suffixicon: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text("${today.toLocal()}".split(' ')[0]),
@@ -298,7 +302,7 @@ class _MyRegistrationState extends State<Registration>
                       });
                     }
                   },
-                  suffixwidget: IconButton(
+                  suffixicon: IconButton(
                     icon: Icon(Icons.add_location),
                     onPressed: () {
                       Navigator.pushNamed(context, '/AutoLocate',
@@ -387,21 +391,24 @@ class _MyRegistrationState extends State<Registration>
                                         "longitude": config.long,
                                         "latitude": config.lat
                                       }).then((Response<dynamic> value) {
-                                    final Data dataa = Data();
-                                    print(value.statusCode);
+                                    setState(() {
+                                      _isButtonEnabled = true;
+                                    });
+                                  
                                     print(value);
                                     if (value.statusCode == 201) {
                                       Navigator.pushNamed(context, '/pin',
                                           arguments: <String, String>{
                                             'mobileNo': mobileNoController.text
                                           });
-                                      dataa.setData(
+                                      config.locationController.clear();
+                                      data.setData(
                                           "email", emailController.text);
-                                      dataa.setData(
+                                      data.setData(
                                           "username", usernameController.text);
-                                      dataa.setData(
+                                      data.setData(
                                           "password", passwordController.text);
-                                      dataa.setData(
+                                      data.setData(
                                           "mobile", mobileNoController.text);
                                     }
                                     bolc.togelf(false);

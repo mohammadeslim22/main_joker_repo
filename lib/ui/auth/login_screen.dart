@@ -6,7 +6,7 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:joker/util/data.dart';
-import '../widgets/textforminput.dart';
+import '../widgets/text_form_input.dart';
 import 'package:joker/util/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
@@ -80,7 +80,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                 kt: TextInputType.visiblePassword,
                 readOnly: false,
                 onTab: () {},
-                suffixwidget: IconButton(
+                suffixicon: IconButton(
                   icon: Icon(
                     (_obscureText == false)
                         ? Icons.visibility
@@ -177,11 +177,6 @@ class _MyLoginScreenState extends State<LoginScreen>
                                     (dynamic auth) => dio.options.headers
                                         .update('authorization',
                                             (dynamic value) async => auth));
-                                // dio.options.headers.update(
-                                //     'Authorization',
-                                //     (dynamic value) async =>
-                                //         await data.getData('token'));
-
                                 print(
                                     " are u fucken stupid ?${dio.options.headers.entries.last.value}");
 

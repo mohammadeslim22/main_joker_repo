@@ -9,7 +9,6 @@ import 'package:like_button/like_button.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'main/merchant_sales_list.dart';
 
-
 class ShopDetails extends StatefulWidget {
   const ShopDetails({Key key, this.likecount, this.lovecount, this.merchantId})
       : super(key: key);
@@ -39,19 +38,15 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
   }
 
   Future<Merchant> getMerchantData(int id) async {
-    final dynamic response = await dio.get<dynamic>(
-      "merchants/$id",
-    );
+    final dynamic response = await dio.get<dynamic>("merchants/$id");
 
     merchant = Merchant.fromJson(response.data);
-
     return merchant;
   }
 
   @override
   void initState() {
     super.initState();
-
     likecount = widget.likecount;
     lovecount = widget.lovecount;
   }
@@ -60,9 +55,7 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(trans(context, "shop_details")),
-        centerTitle: true,
-      ),
+          title: Text(trans(context, "shop_details")), centerTitle: true),
       body: FutureBuilder<Merchant>(
         future: getMerchantData(widget.merchantId),
         builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
@@ -223,9 +216,9 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
                           indicatorColor: colors.trans,
                           isScrollable: true,
                           onTap: (int i) {
-                            // setState(() {
-                            //   index = i;
-                            // });
+                            setState(() {
+                              index = i;
+                            });
                           },
                           controller: _tabController,
                           tabs: merchant.mydata.branches.map((Branches tab) {
@@ -235,7 +228,7 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
                                       Radius.circular(8)),
                                   color: _tabController.index != tab.id
                                       ? tabBackgroundColor
-                                      : Colors.orange[100],
+                                      : colors.orange,
                                 ),
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 5, vertical: 8),
@@ -245,7 +238,7 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
                                   style: TextStyle(
                                     color: _tabController.index != tab.id
                                         ? Colors.black
-                                        : Colors.orange,
+                                        : colors.orange,
                                   ),
                                 ));
                           }).toList()),
@@ -310,11 +303,7 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
                                         InkWell(
                                           child: Row(
                                             children: <Widget>[
-                                              Text(
-                                                  trans(
-                                                    context,
-                                                    "rate_shop",
-                                                  ),
+                                              Text(trans(context, "rate_shop"),
                                                   style: styles.mystyle),
                                               Icon(
                                                 Icons.arrow_forward,
@@ -344,22 +333,19 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
                       Text(trans(context, "shop_offers") +
                           "   ( ${merchant.mydata.branches.length} )"),
                       InkWell(
-                        child: Text(
-                          trans(context, "show_all"),
-                        ),
+                        child: Text(trans(context, "show_all")),
                         onTap: () {},
                       ),
                     ],
                   ),
                 ),
-                 Container(child: MerchantSalesList())
+                Container(child: MerchantSalesList())
               ],
             );
           } else {
             return const Center(
                 child: CircularProgressIndicator(
-              backgroundColor: Colors.transparent,
-            ));
+                    backgroundColor: Colors.transparent));
           }
         },
       ),

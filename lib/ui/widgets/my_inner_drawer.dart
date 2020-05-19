@@ -5,11 +5,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/styles.dart';
-import 'package:joker/util/dio.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
 import 'package:joker/models/membership.dart';
-import 'package:dio/dio.dart';
 
 class MyInnerDrawer extends StatefulWidget {
   const MyInnerDrawer({this.scaffold, this.drawerKey});
@@ -149,6 +147,7 @@ void initState() {
                 title: Text("${trans(context, 'account')}"),
                 leading: SvgPicture.asset("assets/images/account.svg"),
                 onTap: () {
+                    Navigator.pushNamed(context, "/Profile");
                   toggle();
                 },
               ),

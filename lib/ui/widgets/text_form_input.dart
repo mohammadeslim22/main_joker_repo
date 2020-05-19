@@ -12,9 +12,9 @@ class TextFormInput extends StatelessWidget {
       this.cController,
       this.prefixIcon,
       this.kt,
-      this.y,
+      this.postfixIcon,
       this.obscureText,
-      this.suffixwidget,
+      this.suffixicon,
       this.readOnly,
       this.onTab,
       this.focusNode,
@@ -26,9 +26,9 @@ class TextFormInput extends StatelessWidget {
   final TextEditingController cController;
   final IconData prefixIcon;
   final TextInputType kt;
-  final IconData y;
+  final IconData postfixIcon;
   final bool obscureText;
-  final Widget suffixwidget;
+  final Widget suffixicon;
   final bool readOnly;
   final void Function() onTab;
   final FocusNode focusNode;
@@ -73,7 +73,7 @@ class TextFormInput extends StatelessWidget {
             ),
             contentPadding: const EdgeInsets.symmetric(vertical: 0),
             prefixIcon: Icon(prefixIcon),
-            suffixIcon: suffixwidget),
+            suffixIcon: suffixicon),
         focusNode: focusNode,
         onFieldSubmitted: (String v) {
           onFieldSubmitted();

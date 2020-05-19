@@ -21,17 +21,17 @@ class Profile {
       this.updatedAt,
       this.apiToken});
 
-  Profile.fromJson(Map<String, dynamic> json) {
+  Profile.fromJson( dynamic json) {
     id = json['id'] as int;
     name = json['name'].toString();
     username = json['username'].toString();
     email = json['email'].toString();
     emailVerifiedAt = json['email_verified_at'].toString();
-    countryId = json['country_id']as int;
-    cityId = json['city_id']as int;
+    countryId = json['country_id'].toString();
+    cityId = json['city_id'].toString();
     address = json['address'].toString();
-    longitude = json['longitude']as double;
-    latitude = json['latitude']as double;
+    longitude = json['longitude'].toString();
+    latitude = json['latitude'].toString();
     phone = json['phone'].toString();
     status = json['status'].toString();
     userType = json['user_type'].toString();
@@ -46,11 +46,11 @@ class Profile {
   String username;
   String email;
   String emailVerifiedAt;
-  int countryId;
-  int cityId;
+  String countryId;
+  String cityId;
   String address;
-  double longitude;
-  double latitude;
+  String longitude;
+  String latitude;
   String phone;
   String status;
   String userType;

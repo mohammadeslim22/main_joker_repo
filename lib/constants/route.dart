@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:joker/models/membership.dart';
 import 'package:joker/ui/advanced_search.dart';
+import 'package:joker/ui/membership_details.dart';
 import 'package:joker/ui/my_membership.dart';
 import 'package:joker/ui/auth/pin_code.dart';
 import 'package:joker/ui/profile.dart';
@@ -12,7 +13,6 @@ import 'package:joker/ui/favorite.dart';
 import '../ui/auth/login_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import '../ui/home.dart';
-import 'package:joker/models/merchant.dart';
 
 // Generate all application routes with simple transition
 Route<PageController> onGenerateRoute(RouteSettings settings) {
@@ -70,6 +70,12 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
+          case "/MembershipDetails":
+      page = PageTransition<PageController>(
+        child: MemberShipDetails(),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
     case "/Fav":
       page = PageTransition<PageController>(
         child: Favorite(),
@@ -85,6 +91,12 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     case "/Registration":
       page = PageTransition<PageController>(
         child: Registration(),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
+          case "/Profile":
+      page = PageTransition<PageController>(
+        child: MyAccount(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;

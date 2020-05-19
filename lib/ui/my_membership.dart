@@ -58,64 +58,67 @@ void initState() {
         shape:const RoundedRectangleBorder(
           borderRadius:  BorderRadius.all(Radius.circular(12)),
         ),
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Flexible(
-                child: Column(
+        child: InkWell(
+          onTap: (){  Navigator.pushNamed(context, "/MembershipDetails");},
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(
+                  child: Column(
+                    children: <Widget>[
+                      FloatingActionButton(
+                          mini: true,
+                          heroTag: memberShip.shopName,
+                          elevation: 0,
+                          backgroundColor: colors.trans,
+                          onPressed: () {},
+                          child:  SvgPicture.asset("assets/images/vip.svg"),),
+                      Text(
+                        memberShip.type,
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  child: const VerticalDivider(
+                    color: Colors.grey,
+                    thickness: 1,
+                  ),
+                  height: 45,
+                ),
+                Column(
                   children: <Widget>[
-                    FloatingActionButton(
-                        mini: true,
-                        heroTag: memberShip.shopName,
-                        elevation: 0,
-                        backgroundColor: colors.trans,
-                        onPressed: () {},
-                        child:  SvgPicture.asset("assets/images/vip.svg"),),
                     Text(
-                      memberShip.type,
-                      textAlign: TextAlign.center,
+                      trans(context, 'shop_name'),
+                      style: styles.underHead,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          "${memberShip.startingDate}".split(' ')[0],
+                          style: styles.mysmall,
+                        ),
+                        Icon(Icons.arrow_forward, color: Colors.orange, size: 12),
+                        Text("${memberShip.endDtae}".split(' ')[0],
+                            style: styles.mysmall),
+                      ],
                     )
                   ],
                 ),
-              ),
-              Container(
-                child: const VerticalDivider(
-                  color: Colors.grey,
-                  thickness: 1,
-                ),
-                height: 45,
-              ),
-              Column(
-                children: <Widget>[
-                  Text(
-                    trans(context, 'shop_name'),
-                    style: styles.underHead,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        "${memberShip.startingDate}".split(' ')[0],
-                        style: styles.mysmall,
-                      ),
-                      Icon(Icons.arrow_forward, color: Colors.orange, size: 12),
-                      Text("${memberShip.endDtae}".split(' ')[0],
-                          style: styles.mysmall),
-                    ],
-                  )
-                ],
-              ),
-              Flexible(
-                  child: Image.asset(
-                memberShip.image,
-                scale: 2,
-              ))
-            ],
+                Flexible(
+                    child: Image.asset(
+                  memberShip.image,
+                  scale: 2,
+                ))
+              ],
+            ),
           ),
         ));
   }

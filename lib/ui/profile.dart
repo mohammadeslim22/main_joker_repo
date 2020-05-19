@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,11 +11,14 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:joker/models/profile.dart';
 import 'package:joker/providers/counter.dart';
+import 'package:joker/util/data.dart';
+import 'package:joker/util/dio.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
-import 'widgets/textforminput.dart';
+import 'widgets/text_form_input.dart';
 import 'package:joker/util/functions.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
@@ -48,7 +50,7 @@ class MyAccountPage extends State<MyAccount> {
   final TextEditingController birthDateController = TextEditingController();
 
   static DateTime today = DateTime.now();
-
+  Profile profile;
   DateTime firstDate = DateTime(today.year - 90, today.month, today.day);
   DateTime lastDate = DateTime(today.year - 18, today.month, today.day);
   final FocusNode focus = FocusNode();
@@ -76,6 +78,13 @@ class MyAccountPage extends State<MyAccount> {
     return res;
   }
 
+  Future<Profile> getProfileData() async {
+    print(await data.getData("authorization"));
+    final dynamic response = await dio.get<dynamic>("user");
+
+    profile = Profile.fromJson(response.data);
+    return profile;
+  }
   Future<void> getLocationName() async {
     try {
       config.coordinates = Coordinates(config.lat, config.long);
@@ -111,8 +120,23 @@ class MyAccountPage extends State<MyAccount> {
   }
 
   bool showImageOptions = false;
-
-
+@override
+void initState() {
+    super.initState();
+    
+    getProfileData().then((Profile value) {
+      setState(() {
+        usernameController.text=value.name;
+        emailController.text=value.email;
+        mobileNoController.text=value.phone;
+        birthDateController.text=value.updatedAt;
+        config.locationController.text="${value.address}";
+        passwordController.text="***********";
+        
+      });
+      
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -127,11 +151,10 @@ class MyAccountPage extends State<MyAccount> {
                 onTap: () {
                   SystemChannels.textInput
                       .invokeMethod<String>('TextInput.hide');
-                      if(showImageOptions)
-                      setState(() {
-                        showImageOptions=false;
-                      });
-                        
+                  if (showImageOptions)
+                    setState(() {
+                      showImageOptions = false;
+                    });
                 },
                 child: Stack(
                   fit: StackFit.expand,
@@ -171,14 +194,6 @@ class MyAccountPage extends State<MyAccount> {
                               ),
                             ),
                           ),
-
-                          // child: const CircleAvatar(
-                          //   radius: 80,
-                          //   backgroundColor: Colors.white,
-                          //   backgroundImage: NetworkImage(
-                          //       "https://celebritypets.net/wp-content/uploads/2016/12/Adriana-Lima.jpg"),
-                          // ),
-                          //  ),
                           Positioned(
                             top: 100,
                             left: MediaQuery.of(context).size.width / 2 + 52,
@@ -260,7 +275,7 @@ class MyAccountPage extends State<MyAccount> {
                                 obscureText: false,
                                 readOnly: false,
                                 onTab: () {},
-                                suffixwidget: CountryCodePicker(
+                                suffixicon: CountryCodePicker(
                                   onChanged: _onCountryChange,
                                   initialSelection: 'SA',
                                   favorite: const <String>['+966', 'SA'],
@@ -290,7 +305,7 @@ class MyAccountPage extends State<MyAccount> {
                                 onTab: () {
                                   _selectDate(context);
                                 },
-                                suffixwidget: Row(
+                                suffixicon: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Text("${today.toLocal()}".split(' ')[0]),
@@ -347,7 +362,7 @@ class MyAccountPage extends State<MyAccount> {
                                     });
                                   }
                                 },
-                                suffixwidget: IconButton(
+                                suffixicon: IconButton(
                                   icon: Icon(Icons.add_location),
                                   onPressed: () {
                                     Navigator.pushNamed(context, '/AutoLocate',
@@ -371,7 +386,7 @@ class MyAccountPage extends State<MyAccount> {
                                 kt: TextInputType.visiblePassword,
                                 readOnly: false,
                                 onTab: () {},
-                                suffixwidget: IconButton(
+                                suffixicon: IconButton(
                                   icon: Icon(
                                     (_obscureText == false)
                                         ? Icons.visibility

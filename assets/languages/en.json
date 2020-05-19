@@ -121,5 +121,12 @@
     "branches_with_offer":"All",
     "membership_details":"MemberShip Details",
     "membership_message":"Member Ship Message",
-    "save_changes":"Save Changes"
+    "save_changes":"Save Changes",
+    "set_location_method":"Set Location",
+    "use_current_location":"Use Current Location",
+    "add_location":"Add Location",
+    "my_address_list":"My Address List",
+    "happy_to_recieve_message":"We'r Happy to hear form you"
+
+
 }

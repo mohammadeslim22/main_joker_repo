@@ -22,7 +22,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   final GlobalKey<InnerDrawerState> key = GlobalKey<InnerDrawerState>();
-  int tabIndex = 0;
   AnimationController _hide;
   GlobalKey<ScaffoldState> _scaffoldkey;
   bool _handleScrollNotification(ScrollNotification notification) {
@@ -69,6 +68,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 SliverAppBar(
                   floating: true,
                   pinned: false,
+                  forceElevated: true,
                   snap: true,
                   expandedHeight: 100.0,
                   flexibleSpace: FlexibleSpaceBar(
@@ -129,67 +129,58 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     IconButton(
                       icon: Icon(Icons.add_location, color: colors.orange),
                       onPressed: () async {
-                        _scaffoldkey.currentState.showBottomSheet<
-                            dynamic>((BuildContext context) => Wrap(
-                                direction: Axis.vertical,
-                                spacing: 24,
-                                children: <Widget>[
-                                  Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(.1),
-                                        borderRadius: const BorderRadius.only(
+                       _scaffoldkey.currentState.showBottomSheet<dynamic>(
+                            (BuildContext context) =>
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                  ClipPath(
+                                      clipper: const ShapeBorderClipper(
+                                          shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
                                             bottomLeft: Radius.circular(24),
                                             bottomRight: Radius.circular(24)),
-                                      ),
-                                      child: Text(
-                                        "Location Set",
-                                        textAlign: TextAlign.center,
-                                        style: styles.underHead,
                                       )),
-                                  FlatButton(
-                                      padding: const EdgeInsets.symmetric(
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                            color: Colors.black.withOpacity(.1),
+                                            border: const Border(
+                                                top: BorderSide(
+                                                    color: Colors.orange,
+                                                    width: 7.0))),
+                                        child: Text(
+                                         "${trans(context, 'use_current_location')}",
+                                          textAlign: TextAlign.center,
+                                          style: styles.underHead,
+                                        ),
+                                      )),
+                                  ListTile(
+                                    contentPadding:
+                                       const EdgeInsets.symmetric(
                                           horizontal: 12),
-                                      onPressed: () {},
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          const Text("Use my current Location"),
-                                          Icon(Icons.my_location)
-                                        ],
-                                      )),
-                                  FlatButton(
-                                      padding: const EdgeInsets.symmetric(
+                                    title: Text("${trans(context, 'my_address_list')}"),
+                                    trailing: Icon(Icons.search,color: Colors.black,),
+                                    onTap: () {},
+                                  ),
+                                         ListTile(
+                                    contentPadding:
+                                      const EdgeInsets.symmetric(
                                           horizontal: 12),
-                                      onPressed: () {},
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          const Text("my Address list"),
-                                          Icon(Icons.search)
-                                        ],
-                                      )),
-                                  FlatButton(
-                                      padding: const EdgeInsets.symmetric(
+                                    title: Text("${trans(context, 'use_current_location')}"),
+                                 trailing: Icon(Icons.my_location,color: Colors.black,),
+                                    onTap: () {},
+                                  ),
+                                         ListTile(
+                                    contentPadding:
+                                        const EdgeInsets.symmetric(
                                           horizontal: 12),
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, '/AutoLocate',
-                                            arguments: <String, double>{
-                                              "lat": 59.0,
-                                              "long": 9.6
-                                            });
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          const Text("Add new address"),
-                                          Icon(Icons.add)
-                                        ],
-                                      )),
+                                    title: Text("${trans(context, 'add_location')}"),
+
+                                    trailing: Icon(Icons.add,color: Colors.black,),
+                                    onTap: () {},
+                                  ),
                                   const SizedBox(height: 12),
                                 ]));
                       },
