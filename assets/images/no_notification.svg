@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="216" height="139.616" viewBox="0 0 216 139.616">
+  <g id="Group_11" data-name="Group 11" transform="translate(-80 -258.275)">
+    <path id="BG" d="M202,63a7,7,0,1,1,7,7A7,7,0,0,1,202,63ZM46,70a7,7,0,1,1,0-14H7A7,7,0,1,1,7,42H47a7,7,0,0,0,0-14H22a7,7,0,0,1,0-14H62A7,7,0,1,1,62,0h57a7,7,0,0,1,0,14h64a7,7,0,1,1,0,14h22a7,7,0,1,1,0,14H186a7,7,0,1,0,0,14h6a7,7,0,0,1,0,14Z" transform="translate(80 290)" fill="#fbfbfb"/>
+    <path id="Shape" d="M46.994,96.468a38.806,38.806,0,0,1-7.42-.714l9.813.63C48.627,96.44,47.822,96.468,46.994,96.468ZM53.7,96h0L35.555,94.7A47.526,47.526,0,0,1,18.1,85.85,48.461,48.461,0,0,1,4.032,67.523,47.975,47.975,0,0,1,0,48.168,48.5,48.5,0,0,1,1.642,35.631a47.995,47.995,0,0,1,92.97.987,48.789,48.789,0,0,1,.736,19.51A47.945,47.945,0,0,1,53.7,96Z" transform="matrix(0.719, -0.695, 0.695, 0.719, 124.89, 326.73)" fill="#fff" stroke="#d6d6d6" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2.5"/>
+    <g id="bling" transform="translate(229 271)">
+      <path id="Line" d="M.5,0V6" transform="translate(10)" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5"/>
+      <path id="Line-2" data-name="Line" d="M.5,0V6" transform="translate(10 14)" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5"/>
+      <path id="Line-3" data-name="Line" d="M.5,0V6" transform="translate(0.5 10.5) rotate(-90)" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5"/>
+      <path id="Line-4" data-name="Line" d="M.5,0V6" transform="translate(14.5 10.5) rotate(-90)" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5"/>
+    </g>
+    <g id="bling-2" data-name="bling" transform="translate(148 374)">
+      <path id="Line-5" data-name="Line" d="M.5,0V4" transform="translate(8)" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5"/>
+      <path id="Line-6" data-name="Line" d="M.5,0V4" transform="translate(8 12)" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5"/>
+      <path id="Line-7" data-name="Line" d="M.5,0V4" transform="translate(0.5 8.5) rotate(-90)" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5"/>
+      <path id="Line-8" data-name="Line" d="M.5,0V4" transform="translate(12.5 8.5) rotate(-90)" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5"/>
+    </g>
+    <g id="notification" transform="translate(130.818 303.563)">
+      <g id="Group_2" data-name="Group 2" transform="translate(42.657 6.788)">
+        <g id="Group_1" data-name="Group 1">
+          <path id="Path_11" data-name="Path 11" d="M81.307,107.137l-3.332-5.55A16.5,16.5,0,0,1,75.627,93.1V88.242a13.575,13.575,0,0,0-27.15,0V93.1a16.5,16.5,0,0,1-2.349,8.483l-3.332,5.55a.969.969,0,0,0,.832,1.468H80.475a.969.969,0,0,0,.832-1.468Zm-35.967-.471,2.449-4.082A18.42,18.42,0,0,0,50.415,93.1V88.242a11.636,11.636,0,0,1,23.272,0V93.1a18.437,18.437,0,0,0,2.624,9.479l2.451,4.082Z" transform="translate(-42.657 -74.667)" fill="#d6d6d6"/>
+        </g>
+      </g>
+      <g id="Group_4" data-name="Group 4" transform="translate(58.173)">
+        <g id="Group_3" data-name="Group 3">
+          <path id="Path_12" data-name="Path 12" d="M217.212,0a3.883,3.883,0,0,0-3.879,3.879V7.757a.97.97,0,0,0,1.939,0V3.879a1.939,1.939,0,1,1,3.879,0V7.757a.97.97,0,0,0,1.939,0V3.879A3.883,3.883,0,0,0,217.212,0Z" transform="translate(-213.333)" fill="#d6d6d6"/>
+        </g>
+      </g>
+      <g id="Group_6" data-name="Group 6" transform="translate(57.203 38.788)">
+        <g id="Group_5" data-name="Group 5">
+          <path id="Path_13" data-name="Path 13" d="M211.711,427.157a.971.971,0,0,0-1.676.981,2.909,2.909,0,1,1-5.038,0,.971.971,0,0,0-1.676-.981,4.85,4.85,0,1,0,8.39,0Z" transform="translate(-202.666 -426.68)" fill="#d6d6d6"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

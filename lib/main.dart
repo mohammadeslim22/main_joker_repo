@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:joker/ui/notifications_screen.dart';
+import 'package:joker/ui/home.dart';
 import 'package:joker/ui/auth/login_screen.dart';
 import 'package:joker/ui/contact_us.dart';
 import 'util/dio.dart';
@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
         },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home:   Notifcations()
+        home:   const Home()
         // home: const ShopDetails(likecount: 50,lovecount: 50,shop:    Shop(
         //     image: "assets/images/shopone.jpg"
         //   ),),

@@ -53,9 +53,7 @@ class ContactUs extends StatelessWidget {
                 children: <Widget>[
                   Text(trans(context, 'hello'), style: styles.mystyle2),
                   const SizedBox(height: 10),
-                  Text(
-                    trans(context, 'happy_to_recieve_message'),
-                  )
+                  Text(trans(context, 'happy_to_recieve_message'))
                 ],
               ),
               Flexible(
@@ -64,17 +62,9 @@ class ContactUs extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 36),
-          simpleForm(
-            1,
-            3,
-            "Name",
-          ),
+          simpleForm(1, 3, "Name"),
           const SizedBox(height: 16),
-          simpleForm(
-            1,
-            3,
-            "Emai",
-          ),
+          simpleForm(1, 3, "Emai"),
           const SizedBox(height: 16),
           simpleForm(
             1,
@@ -95,19 +85,11 @@ class ContactUs extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          simpleForm(
-            1,
-            3,
-            "Address",
-          ),
+          simpleForm(1, 3, "Address"),
           const SizedBox(height: 12),
-          simpleForm(
-            3,
-            5,
-            "Message",
-          ),
+          simpleForm(3, 5, "Message"),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             child: RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
@@ -120,10 +102,11 @@ class ContactUs extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              techSupport("للتواصل المباشر","+9956878529"),
-              techSupport("البريد الإلكتروني","+joker@gmail.com")
+              techSupport("للتواصل المباشر", "+9956878529"),
+              techSupport("البريد الإلكتروني", "+joker@gmail.com")
             ],
-          ),const SizedBox(height: 12)
+          ),
+          const SizedBox(height: 12)
         ],
       ),
     );
@@ -132,9 +115,9 @@ class ContactUs extends StatelessWidget {
   Widget techSupport(String one, String two) {
     return Column(
       children: <Widget>[
-        Text(one,style: styles.mysmalllight),
+        Text(one, style: styles.mysmalllight),
         const SizedBox(height: 5),
-        Text(two,style: styles.mysmall),
+        Text(two, style: styles.mysmall),
       ],
     );
   }
