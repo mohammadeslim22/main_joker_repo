@@ -79,10 +79,10 @@ class Styles {
     decoration: TextDecoration.none,
   );
   TextStyle underHeadwhite = const TextStyle(
-    fontWeight: FontWeight.w100,
+    fontWeight: FontWeight.w300,
     color: Colors.white,
     fontSize: 20,
-    height: 1.5,
+    //height: 1.5,
     decoration: TextDecoration.none,
   );
     TextStyle memberShipBottomSheet = const TextStyle(

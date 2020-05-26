@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:joker/ui/home.dart';
 import 'package:joker/ui/auth/login_screen.dart';
 import 'package:joker/ui/contact_us.dart';
+import 'ui/address_list.dart';
 import 'util/dio.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:provider/provider.dart';
@@ -76,7 +77,7 @@ class MyApp extends StatelessWidget {
         },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home:   const Home()
+        home:   const AddressList()
         // home: const ShopDetails(likecount: 50,lovecount: 50,shop:    Shop(
         //     image: "assets/images/shopone.jpg"
         //   ),),

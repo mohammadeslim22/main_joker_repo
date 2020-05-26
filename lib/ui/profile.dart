@@ -85,6 +85,7 @@ class MyAccountPage extends State<MyAccount> {
     profile = Profile.fromJson(response.data);
     return profile;
   }
+
   Future<void> getLocationName() async {
     try {
       config.coordinates = Coordinates(config.lat, config.long);
@@ -120,23 +121,23 @@ class MyAccountPage extends State<MyAccount> {
   }
 
   bool showImageOptions = false;
-@override
-void initState() {
+  @override
+  void initState() {
     super.initState();
-    
+
     getProfileData().then((Profile value) {
       setState(() {
-        usernameController.text=value.name;
-        emailController.text=value.email;
-        mobileNoController.text=value.phone;
-        birthDateController.text=value.updatedAt;
-        config.locationController.text="${value.address}";
-        passwordController.text="***********";
-        
+        usernameController.text = value.name;
+        emailController.text = value.email;
+        mobileNoController.text = value.phone;
+        birthDateController.text = value.updatedAt;
+        config.locationController.text = "${value.address}";
+        passwordController.text = "***********";
       });
-      
     });
   }
+
+  String dropdownValue = 'One';
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -215,22 +216,51 @@ void initState() {
                         ],
                       ),
                       if (showImageOptions)
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: Column(
-                            children: <Widget>[
-                              FlatButton(
-                                  child: Text('Take A Photo',
-                                      style: styles.mysmall),
-                                  onPressed: () {}),
-                              FlatButton(
-                                child:
-                                    Text('Open Gallery', style: styles.mysmall),
-                                onPressed: () {},
-                              )
-                            ],
-                          ),
-                        )
+                        // Align(
+                        //     alignment: Alignment.topCenter,
+                        //     child: DropdownButton<String>(
+                        //       value: dropdownValue,
+                        //       icon: Icon(Icons.arrow_downward),
+                        //       iconSize: 24,
+                        //       elevation: 16,
+                        //       style: TextStyle(color: Colors.deepPurple),
+                        //       underline: Container(
+                        //         height: 2,
+                        //         color: Colors.deepPurpleAccent,
+                        //       ),
+                        //       onChanged: (String newValue) {
+                        //         setState(() {
+                        //           dropdownValue = newValue;
+                        //         });
+                        //       },
+                        //       items: <String>[
+                        //         'One',
+                        //         'Two',
+                        //         'Free',
+                        //         'Four'
+                        //       ].map<DropdownMenuItem<String>>((String value) {
+                        //         return DropdownMenuItem<String>(
+                        //           value: value,
+                        //           child: Text(value),
+                        //         );
+                        //       }).toList(),
+                        //     ))
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Column(
+                          children: <Widget>[
+                            FlatButton(
+                                child: Text('Take A Photo',
+                                    style: styles.mysmall),
+                                onPressed: () {}),
+                            FlatButton(
+                              child:
+                                  Text('Open Gallery', style: styles.mysmall),
+                              onPressed: () {},
+                            )
+                          ],
+                        ),
+                      )
                       else
                         Container(),
                       const SizedBox(height: 24),
