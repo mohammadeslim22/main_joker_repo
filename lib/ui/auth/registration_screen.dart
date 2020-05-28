@@ -57,7 +57,6 @@ class _MyRegistrationState extends State<Registration>
         res = true;
       });
     }
-
     return res;
   }
 
@@ -80,6 +79,18 @@ class _MyRegistrationState extends State<Registration>
   }
 
   bool _isButtonEnabled;
+  static List<String> validators = <String>[null, null, null, null, null, null];
+  static List<String> keys = <String>[
+    'name',
+    'email',
+    'phone',
+    'password',
+    'birthdate',
+    'location'
+  ];
+  Map<String, String> validationMap =
+      Map<String, String>.fromIterables(keys, validators);
+
   @override
   void initState() {
     super.initState();
@@ -87,6 +98,7 @@ class _MyRegistrationState extends State<Registration>
   }
 
   bool _obscureText = false;
+  bool loading = false;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileNoController = TextEditingController();
@@ -161,10 +173,11 @@ class _MyRegistrationState extends State<Registration>
                     focus.requestFocus();
                   },
                   onTab: () {},
-                  validator: () {
-                    if(usernameController.text.length<3)
+                  validator: (String value) {
+                    if (value.length < 3) {
                       return "username must be more than 3 letters";
-                    return "please enter your name ";
+                    }
+                    return validationMap['name'];
                   }),
               TextFormInput(
                   text: trans(context, 'email'),
@@ -178,8 +191,11 @@ class _MyRegistrationState extends State<Registration>
                   onFieldSubmitted: () {
                     focus1.requestFocus();
                   },
-                  validator: () {
-                    return "please enter a valid email ";
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return "please enter a valid email ";
+                    }
+                    return validationMap['email'];
                   }),
               TextFormInput(
                   text: trans(context, 'mobile_no'),
@@ -206,8 +222,11 @@ class _MyRegistrationState extends State<Registration>
                   onFieldSubmitted: () {
                     focus2.requestFocus();
                   },
-                  validator: () {
-                    return "please enter your mobile Number  ";
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return "please enter your mobile Number  ";
+                    }
+                    return validationMap['phone'];
                   }),
               TextFormInput(
                   text: trans(context, 'password'),
@@ -230,11 +249,11 @@ class _MyRegistrationState extends State<Registration>
                   ),
                   obscureText: _obscureText,
                   focusNode: focus2,
-                  validator: () {
+                  validator: (String value) {
                     if (passwordController.text.length < 6) {
                       return "password must be more than 6 letters";
                     }
-                    return "please enter your password ";
+                    return validationMap['password'];
                   }),
               TextFormInput(
                   text: trans(context, 'birth_date'),
@@ -265,8 +284,11 @@ class _MyRegistrationState extends State<Registration>
                     ],
                   ),
                   focusNode: focus3,
-                  validator: () {
-                    return "please enter your Birth Date ";
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return "please enter your Birth Date ";
+                    }
+                    return validationMap['birthdate'];
                   }),
               TextFormInput(
                   text: trans(context, 'get_location'),
@@ -276,8 +298,9 @@ class _MyRegistrationState extends State<Registration>
                   readOnly: true,
                   onTab: () async {
                     try {
-                      bolc.togelocationloading(true);
+                      print("fuck");
 
+                      bolc.togelocationloading(true);
                       if (await updateLocation) {
                         await getLocationName();
                         bolc.togelocationloading(false);
@@ -310,14 +333,15 @@ class _MyRegistrationState extends State<Registration>
                             "lat": 51.0,
                             "long": 9.6
                           });
-                      Provider.of<MyCounter>(context)
-                          .togelocationloading(false);
                     },
                   ),
                   obscureText: false,
                   focusNode: focus4,
-                  validator: () {
-                    return "please specify you Location :)";
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return "please specify you Location :)";
+                    }
+                    return validationMap['location'];
                   }),
               Container(
                 margin: const EdgeInsets.symmetric(
@@ -392,10 +416,26 @@ class _MyRegistrationState extends State<Registration>
                                         "latitude": config.lat
                                       }).then((Response<dynamic> value) {
                                     setState(() {
+                                      print("am i under arrest?");
                                       _isButtonEnabled = true;
                                     });
-                                  
-                                    print(value);
+
+                                    print(value.data);
+                                    if (value.statusCode == 422) {
+                                      value.data['errors']
+                                          .forEach((String k, dynamic vv) {
+                                        setState(() {
+                                          validationMap[k] = vv[0].toString();
+
+                                        });
+                                        print(validationMap);
+                                      });
+                                      _formKey.currentState.validate();
+                                      validationMap.updateAll((String key,String  value){
+                                        return null;
+                                      });
+                                      print(validationMap);
+                                    }
                                     if (value.statusCode == 201) {
                                       Navigator.pushNamed(context, '/pin',
                                           arguments: <String, String>{

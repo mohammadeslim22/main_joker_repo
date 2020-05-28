@@ -14,7 +14,6 @@ import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
 
-
 class AutoLocate extends StatefulWidget {
   const AutoLocate({Key key, this.long, this.lat}) : super(key: key);
   final double long;
@@ -62,8 +61,6 @@ class _AutoLocateState extends State<AutoLocate> {
 
   @override
   void dispose() {
-  //  Provider.of<MyCounter>(context,listen: false).togelocationloading(false);
-
     super.dispose();
     getPositionSubscription?.cancel();
   }
@@ -81,173 +78,179 @@ class _AutoLocateState extends State<AutoLocate> {
     }
   }
 
+  Future<bool> _willPopCallback() async {
+
+    Provider.of<MyCounter>(context,listen: false).togelocationloading(false);
+    Navigator.pop(context);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: <Widget>[
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            padding: const EdgeInsets.only(bottom: 60),
-            mapType: MapType.normal,
-            markers: Set<Marker>.of(markers.values),
-            initialCameraPosition: CameraPosition(
-              target: LatLng(lat, long),
-              zoom: 5,
-            ),
-            onCameraMove: (CameraPosition pos) {
-              setState(() {
-                lat = pos.target.latitude;
-                long = pos.target.longitude;
-              });
-            },
-            onCameraIdle: () {
-              setState(() {
-                getLocationName(long, lat);
-              });
-            },
-          ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              height: 170,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: const <Color>[
-                    Color.fromARGB(1023, 249, 249, 249),
-                    Color.fromARGB(0, 255, 255, 255)
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+    return WillPopScope(
+        onWillPop: _willPopCallback,
+        child: Scaffold(
+          appBar: AppBar(title: Text(trans(context, 'set_ur_location'))),
+          key: _scaffoldKey,
+          resizeToAvoidBottomInset: false,
+          body: Stack(
+            children: <Widget>[
+              GoogleMap(
+                onMapCreated: _onMapCreated,
+                padding: const EdgeInsets.only(bottom: 60),
+                mapType: MapType.normal,
+                markers: Set<Marker>.of(markers.values),
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat, long),
+                  zoom: 5,
+                ),
+                onCameraMove: (CameraPosition pos) {
+                  setState(() {
+                    lat = pos.target.latitude;
+                    long = pos.target.longitude;
+                  });
+                },
+                onCameraIdle: () {
+                  setState(() {
+                    getLocationName(long, lat);
+                  });
+                },
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  height: 170,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: const <Color>[
+                        Color.fromARGB(1023, 249, 249, 249),
+                        Color.fromARGB(0, 255, 255, 255)
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Card(
+                          elevation: 8,
+                          margin: const EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: ListTile(
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  address == null
+                                      ? 'Loading'
+                                      : address.addressLine ?? '',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 11),
+                                ),
+                                Text(
+                                  address == null
+                                      ? 'Loading'
+                                      : address.adminArea ?? 'Unknown',
+                                  style: const TextStyle(fontSize: 9),
+                                ),
+                              ],
+                            ),
+                            leading: IconButton(
+                              onPressed: null,
+                              icon: Icon(Icons.search),
+                            ),
+                            trailing: IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.bookmark),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              child: Column(
-                children: <Widget>[
-                  AppBar(
-                    iconTheme: const IconThemeData(color: Colors.black),
-                    title: Text(
-                      trans(context, 'set_ur_location'),
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                    elevation: 0,
-                    backgroundColor: colors.trans,
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  child: Icon(
+                    FontAwesomeIcons.mapMarkerAlt,
+                    color: colors.blue,
+                    size: 32,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Card(
-                      elevation: 8,
-                      margin: const EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
-                      child: ListTile(
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              address == null
-                                  ? 'Loading'
-                                  : address.addressLine ?? '',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 11),
-                            ),
-                            Text(
-                              address == null
-                                  ? 'Loading'
-                                  : address.adminArea ?? 'Unknown',
-                              style: const TextStyle(fontSize: 9),
-                            ),
-                          ],
-                        ),
-                        leading: IconButton(
-                          onPressed: null,
-                          icon: Icon(Icons.search),
-                        ),
-                        trailing: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.bookmark),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              child: Icon(
-                FontAwesomeIcons.mapMarkerAlt,
-                color: colors.blue,
-                size: 32,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, bottom: 69),
-            child: Align(
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                width: 40,
-                height: 40,
-                child: Material(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(6),
-                    onTap: () {},
-                    child: GestureDetector(
-                      child: Center(
-                        child: Icon(
-                          Icons.my_location,
-                          color: const Color.fromARGB(1023, 150, 150, 150),
-                        ),
-                      ),
-                      onTap: () async {
-                        
-                        serviceEnabled = await location.serviceEnabled();
-                        if (!serviceEnabled) {
-                          serviceEnabled = await location.requestService();
-                          if (!serviceEnabled) {
-                          } else {
-                            permissionGranted = await location.hasPermission();
-                            if (permissionGranted == PermissionStatus.denied) {
-                              permissionGranted =
-                                  await location.requestPermission();
-                              if (permissionGranted ==
-                                  PermissionStatus.granted) {
-                                _animateToUser();
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, bottom: 69),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Material(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(6),
+                        onTap: () {},
+                        child: GestureDetector(
+                          child: Center(
+                            child: Icon(
+                              Icons.my_location,
+                              color: const Color.fromARGB(1023, 150, 150, 150),
+                            ),
+                          ),
+                          onTap: () async {
+                            serviceEnabled = await location.serviceEnabled();
+                            if (!serviceEnabled) {
+                              serviceEnabled = await location.requestService();
+                              if (!serviceEnabled) {
+                              } else {
+                                permissionGranted =
+                                    await location.hasPermission();
+                                if (permissionGranted ==
+                                    PermissionStatus.denied) {
+                                  permissionGranted =
+                                      await location.requestPermission();
+                                  if (permissionGranted ==
+                                      PermissionStatus.granted) {
+                                    _animateToUser();
+                                  }
+                                } else {
+                                  _animateToUser();
+                                }
                               }
                             } else {
-                              _animateToUser();
+                              permissionGranted =
+                                  await location.hasPermission();
+                              if (permissionGranted ==
+                                  PermissionStatus.denied) {
+                                permissionGranted =
+                                    await location.requestPermission();
+                                if (permissionGranted ==
+                                    PermissionStatus.granted) {
+                                  _animateToUser();
+                                }
+                              } else {
+                                print("iam fucked up");
+                                _animateToUser();
+                              }
                             }
-                          }
-                        } else {
-                          permissionGranted = await location.hasPermission();
-                          if (permissionGranted == PermissionStatus.denied) {
-                            permissionGranted =
-                                await location.requestPermission();
-                            if (permissionGranted == PermissionStatus.granted) {
-                              _animateToUser();
-                            }
-                          } else {
-                            print("iam fucked up");
-                            _animateToUser();
-                          }
-                        }
-                      },
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+              accesptDeclineButtons(),
+            ],
           ),
-          accesptDeclineButtons(),
-        ],
-      ),
-    );
+        ));
   }
 
   void _addMarker(Marker marker) {
@@ -259,10 +262,9 @@ class _AutoLocateState extends State<AutoLocate> {
   }
 
   Future<void> _animateToUser() async {
-   
     try {
-     final Uint8List markerIcon =
-         await getBytesFromAsset('assets/images/logo.jpg', 100);
+      final Uint8List markerIcon =
+          await getBytesFromAsset('assets/images/logo.jpg', 100);
       await location.getLocation().then((LocationData value) {
         mapController
             .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -313,8 +315,11 @@ class _AutoLocateState extends State<AutoLocate> {
                     borderRadius: BorderRadius.circular(18.0),
                     side: const BorderSide(color: Colors.orange)),
                 onPressed: () {
+                  config.locationController.text =
+                      "Tap to get your Location...";
                   Navigator.pop(context);
-                  Provider.of<MyCounter>(context,listen: false).togelocationloading(false);
+                  Provider.of<MyCounter>(context, listen: false)
+                      .togelocationloading(false);
                   Scaffold.of(context).hideCurrentSnackBar();
                 },
                 color: Colors.red,
@@ -337,7 +342,8 @@ class _AutoLocateState extends State<AutoLocate> {
                   });
                   print("${config.lat},${config.long}");
                   Navigator.pop(context);
-                  Provider.of<MyCounter>(context,listen: false).togelocationloading(false);
+                  Provider.of<MyCounter>(context, listen: false)
+                      .togelocationloading(false);
                   Scaffold.of(context).hideCurrentSnackBar();
                 },
                 color: Colors.blue,

@@ -272,8 +272,8 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 SvgPicture.asset("assets/images/vip.svg"),
-                                Text(
-                                  "تعديل بيانات العضوية",
+                                Text(trans(context, "membership_details_edit")
+                                  ,
                                   style: styles.memberShipBottomSheet,
                                 ),
                               ],

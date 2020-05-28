@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:joker/ui/auth/pin_code.dart';
 import 'package:joker/ui/home.dart';
-import 'package:joker/ui/auth/login_screen.dart';
+import 'package:joker/ui/auth/registration_screen.dart';
 import 'package:joker/ui/contact_us.dart';
 import 'ui/address_list.dart';
+import 'ui/auth/forget_password.dart';
+import 'ui/advanced_search.dart';
 import 'util/dio.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:provider/provider.dart';
@@ -32,9 +35,9 @@ void main() {
     ),
   );
   dioDefaults();
-  data.getData('authorization').then<dynamic>((dynamic auth) =>  dio.options.headers.update('authorization',
-      (dynamic value) async =>auth.toString() ));
- 
+  data.getData('authorization').then<dynamic>((dynamic auth) => dio
+      .options.headers
+      .update('authorization', (dynamic value) async => auth.toString()));
 }
 
 class MyApp extends StatelessWidget {
@@ -77,7 +80,8 @@ class MyApp extends StatelessWidget {
         },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home:   const AddressList()
+        //  home:const ShopDetails(merchantId: 24,lovecount: 50,likecount: 50)
+        home: const  PinCode()
         // home: const ShopDetails(likecount: 50,lovecount: 50,shop:    Shop(
         //     image: "assets/images/shopone.jpg"
         //   ),),

@@ -34,7 +34,7 @@ class TextFormInput extends StatelessWidget {
   final FocusNode focusNode;
   final FocusNode nextfocusNode;
   final Function onFieldSubmitted;
-  final String Function() validator;
+  final String Function(String error) validator;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -79,12 +79,9 @@ class TextFormInput extends StatelessWidget {
           onFieldSubmitted();
         },
         validator: (
-          String t,
+          String error
         ) {
-          if (t.isEmpty) {
-            return validator();
-          }
-          return null;
+         return  validator( error);
         },
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Data {
+class Storage {
   
   Future<String> getData(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -14,4 +14,4 @@ class Data {
   }
 }
 
-final Data data = Data();
+final Storage data = Storage();

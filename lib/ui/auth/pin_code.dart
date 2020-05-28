@@ -35,7 +35,6 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
   }
 
   Future<bool> getPinCode(String code) async {
-    final Data data = Data();
     String email;
     email = await data.getData("email");
 
@@ -145,6 +144,17 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                       },
                       seconds: 30)),
               const SizedBox(height: 15),
+                  Padding(
+                  padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
+                  child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: const BorderSide(color: Colors.orange)),
+                      onPressed: () {},
+                      color: Colors.deepOrangeAccent,
+                      textColor: Colors.white,
+                      child: bolc.returnchild(trans(context, 'aprove')))),
+                      const SizedBox(height: 15),
               Text(trans(context, 'code_not_recieved'),
                   textAlign: TextAlign.center, style: styles.underHead),
               Padding(
@@ -163,16 +173,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: const BorderSide(color: Colors.orange)),
-                      onPressed: () {},
-                      color: Colors.deepOrangeAccent,
-                      textColor: Colors.white,
-                      child: bolc.returnchild(trans(context, 'aprove')))),
+          
               const Padding(
                   padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
                   child: Divider(color: Colors.black)),
@@ -185,12 +186,11 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                       style: styles.mystyle,
                     ),
                   ),
-                  Flexible(
-                    child: ButtonToUse(
-                      trans(context, 'tech_support'),
-                      fw: FontWeight.bold,
-                      fc: Colors.green,
-                    ),
+                  ButtonToUse(
+                    trans(context, 'tech_support'),
+                    fw: FontWeight.bold,
+                    fc: Colors.green,
+                    myfunc: (){},
                   ),
                 ],
               ),

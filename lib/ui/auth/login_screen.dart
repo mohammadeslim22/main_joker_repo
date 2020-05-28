@@ -70,7 +70,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                 onFieldSubmitted: () {
                   focus1.requestFocus();
                 },
-                validator: () {
+                validator: (String value) {
                   return "please enter a mobile number ";
                 }),
             TextFormInput(
@@ -97,7 +97,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                 },
                 obscureText: _obscureText,
                 focusNode: focus1,
-                validator: () {
+                validator: (String value) {
                   return "please enter your password ";
                 }),
           ],
@@ -134,25 +134,31 @@ class _MyLoginScreenState extends State<LoginScreen>
                   Text(trans(context, 'all_you_need'),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: colors.orange,
-                        fontSize: 20,
-                      )),
+                          fontWeight: FontWeight.w300,
+                          color: colors.orange,
+                          fontSize: 20)),
                   const SizedBox(height: 50),
                   Text(trans(context, 'hello'), style: styles.mystyle2),
                   const SizedBox(height: 10),
                   Text(trans(context, 'enter_login_information'),
                       style: styles.mystyle),
                   customcard(context),
-                  Padding(
+                  Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10.0,
                     ),
-                    child: Container(
-                      alignment:
-                          isRTL ? Alignment.centerLeft : Alignment.centerRight,
-                      child: ButtonToUse(trans(context, 'forget_password'),
-                          fw: FontWeight.w500, fc: colors.black),
+                    alignment:
+                        isRTL ? Alignment.centerLeft : Alignment.centerRight,
+                    child: ButtonToUse(
+                      trans(context, 'forget_password'),
+                      fw: FontWeight.w500,
+                      fc: colors.black,
+                      myfunc: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/forget_pass',
+                        );
+                      },
                     ),
                   ),
                   Padding(
@@ -171,17 +177,14 @@ class _MyLoginScreenState extends State<LoginScreen>
                             }).then((Response<dynamic> value) async {
                               print(value);
                               if (value.statusCode == 200) {
-                               await data.setData("authorization",
+                                await data.setData("authorization",
                                     "Bearer ${value.data['api_token']}");
                                 data.getData('authorization').then<dynamic>(
                                     (dynamic auth) => dio.options.headers
                                         .update('authorization',
                                             (dynamic value) async => auth));
                                 print(
-                                    " are u fucken stupid ?${dio.options.headers.entries.last.value}");
-
-                               print(  "are u fucken stupid again?${dio.options.headers.putIfAbsent('Authorization',
-                                    () =>"Bearer ${value.data['api_token']}")}");
+                                    "are u fucken stupid again?${dio.options.headers.putIfAbsent('Authorization', () => "Bearer ${value.data['api_token']}")}");
 
                                 print(dio.options.headers);
                                 Navigator.pushNamed(

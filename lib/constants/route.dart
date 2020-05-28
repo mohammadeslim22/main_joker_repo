@@ -4,11 +4,13 @@ import 'package:joker/ui/advanced_search.dart';
 import 'package:joker/ui/membership_details.dart';
 import 'package:joker/ui/my_membership.dart';
 import 'package:joker/ui/auth/pin_code.dart';
+import 'package:joker/ui/auth/reset_pass.dart';
+import 'package:joker/ui/auth/forget_password.dart';
 import 'package:joker/ui/profile.dart';
 import 'package:joker/ui/setLocation.dart';
 import 'package:joker/ui/settings.dart';
 import 'package:joker/ui/shop_details.dart';
-import 'package:joker/ui/auth/registrationscreen.dart';
+import 'package:joker/ui/auth/registration_screen.dart';
 import 'package:joker/ui/favorite.dart';
 import '../ui/auth/login_screen.dart';
 import 'package:page_transition/page_transition.dart';
@@ -58,7 +60,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     case "/MerchantDetails":
       page = PageTransition<PageController>(
         child: ShopDetails(
-            merchantId: args['merchantId'] as  int,
+            merchantId: args['merchantId'] as int,
             likecount: args['likecount'] as int,
             lovecount: args['lovecount'] as int),
         type: PageTransitionType.rightToLeftWithFade,
@@ -70,7 +72,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/MembershipDetails":
+    case "/MembershipDetails":
       page = PageTransition<PageController>(
         child: MemberShipDetails(),
         type: PageTransitionType.rightToLeftWithFade,
@@ -94,13 +96,24 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/Profile":
+    case "/Profile":
       page = PageTransition<PageController>(
         child: MyAccount(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-
+    case "/forget_pass":
+      page = PageTransition<PageController>(
+        child: ForgetPassword(),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
+    case "/Reset_pass":
+      page = PageTransition<PageController>(
+        child: ResetPassword(),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
   }
   return page;
 }

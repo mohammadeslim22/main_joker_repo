@@ -216,35 +216,6 @@ class MyAccountPage extends State<MyAccount> {
                         ],
                       ),
                       if (showImageOptions)
-                        // Align(
-                        //     alignment: Alignment.topCenter,
-                        //     child: DropdownButton<String>(
-                        //       value: dropdownValue,
-                        //       icon: Icon(Icons.arrow_downward),
-                        //       iconSize: 24,
-                        //       elevation: 16,
-                        //       style: TextStyle(color: Colors.deepPurple),
-                        //       underline: Container(
-                        //         height: 2,
-                        //         color: Colors.deepPurpleAccent,
-                        //       ),
-                        //       onChanged: (String newValue) {
-                        //         setState(() {
-                        //           dropdownValue = newValue;
-                        //         });
-                        //       },
-                        //       items: <String>[
-                        //         'One',
-                        //         'Two',
-                        //         'Free',
-                        //         'Four'
-                        //       ].map<DropdownMenuItem<String>>((String value) {
-                        //         return DropdownMenuItem<String>(
-                        //           value: value,
-                        //           child: Text(value),
-                        //         );
-                        //       }).toList(),
-                        //     ))
                       Align(
                         alignment: Alignment.topCenter,
                         child: Column(
@@ -279,7 +250,7 @@ class MyAccountPage extends State<MyAccount> {
                                   focus.requestFocus();
                                 },
                                 onTab: () {},
-                                validator: () {
+                                validator: (String value) {
                                   return "please enter your name ";
                                 }),
                             TextFormInput(
@@ -294,7 +265,7 @@ class MyAccountPage extends State<MyAccount> {
                                 onFieldSubmitted: () {
                                   focus1.requestFocus();
                                 },
-                                validator: () {
+                                validator: (String value) {
                                   return "please enter your email ";
                                 }),
                             TextFormInput(
@@ -322,7 +293,7 @@ class MyAccountPage extends State<MyAccount> {
                                 onFieldSubmitted: () {
                                   focus2.requestFocus();
                                 },
-                                validator: () {
+                                validator: (String value) {
                                   return "please enter your mobile Number  ";
                                 }),
                             TextFormInput(
@@ -354,7 +325,7 @@ class MyAccountPage extends State<MyAccount> {
                                   ],
                                 ),
                                 focusNode: focus3,
-                                validator: () {
+                                validator: (String value) {
                                   return "please enter your Birth Date ";
                                 }),
                             TextFormInput(
@@ -406,7 +377,7 @@ class MyAccountPage extends State<MyAccount> {
                                 ),
                                 obscureText: false,
                                 focusNode: focus4,
-                                validator: () {
+                                validator: (String value) {
                                   return "please specify you Location :)";
                                 }),
                             TextFormInput(
@@ -430,7 +401,7 @@ class MyAccountPage extends State<MyAccount> {
                                 ),
                                 obscureText: _obscureText,
                                 focusNode: focus2,
-                                validator: () {
+                                validator: (String value) {
                                   return "please enter your password ";
                                 }),
                             Container(

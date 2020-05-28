@@ -126,7 +126,9 @@
     "use_current_location":"Use Current Location",
     "add_location":"Add Location",
     "my_address_list":"My Address List",
-    "happy_to_recieve_message":"We'r Happy to hear form you"
+    "happy_to_recieve_message":"We'r Happy to hear form you",
+    "enter_mobile_no":"Enter Mobile Number",
+    "reset_password":"Reset Password"
 
 
 }
