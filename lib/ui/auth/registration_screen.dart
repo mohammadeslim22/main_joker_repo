@@ -9,7 +9,6 @@ import '../widgets/buttonTouse.dart';
 import '../widgets/text_form_input.dart';
 import 'package:location/location.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -29,54 +28,54 @@ class _MyRegistrationState extends State<Registration>
     with TickerProviderStateMixin {
   List<String> location2;
   Location location = Location();
-  SpinKitRing spinkit = const SpinKitRing(
-    color: Colors.orange,
-    size: 30.0,
-    lineWidth: 3,
-  );
-  SnackBar snackBar = SnackBar(
-    content: const Text("Location Service was not aloowed  !"),
-    action: SnackBarAction(
-      label: 'Ok !',
-      onPressed: () {},
-    ),
-  );
-  Future<bool> get updateLocation async {
-    bool res;
-    setState(() {
-      config.locationController.text = "getting your location...";
-    });
-    final List<String> loglat = await getLocation();
-    if (loglat.isEmpty) {
-      res = false;
-    } else {
-      setState(() {
-        location2 = loglat;
-        config.lat = double.parse(location2.elementAt(0));
-        config.long = double.parse(location2.elementAt(1));
-        res = true;
-      });
-    }
-    return res;
-  }
+  // SpinKitRing spinkit = const SpinKitRing(
+  //   color: Colors.orange,
+  //   size: 30.0,
+  //   lineWidth: 3,
+  // );
+  // SnackBar snackBar = SnackBar(
+  //   content: const Text("Location Service was not aloowed  !"),
+  //   action: SnackBarAction(
+  //     label: 'Ok !',
+  //     onPressed: () {},
+  //   ),
+  // );
+  // Future<bool> get updateLocation async {
+  //   bool res;
+  //   setState(() {
+  //     config.locationController.text = "getting your location...";
+  //   });
+  //   final List<String> loglat = await getLocation();
+  //   if (loglat.isEmpty) {
+  //     res = false;
+  //   } else {
+  //     setState(() {
+  //       location2 = loglat;
+  //       config.lat = double.parse(location2.elementAt(0));
+  //       config.long = double.parse(location2.elementAt(1));
+  //       res = true;
+  //     });
+  //   }
+  //   return res;
+  // }
 
-  Future<void> getLocationName() async {
-    try {
-      config.coordinates = Coordinates(config.lat, config.long);
-      config.addresses =
-          await Geocoder.local.findAddressesFromCoordinates(config.coordinates);
-      config.first = config.addresses.first;
-      setState(() {
-        config.first = config.addresses.first;
-        config.locationController.text = (config.first == null)
-            ? "loading"
-            : config.first.addressLine ?? "loading";
-      });
-    } catch (e) {
-      config.locationController.text =
-          "Unkown latitude: ${config.lat.round().toString()} , longitud: ${config.long.round().toString()}";
-    }
-  }
+  // Future<void> getLocationName() async {
+  //   try {
+  //     config.coordinates = Coordinates(config.lat, config.long);
+  //     config.addresses =
+  //         await Geocoder.local.findAddressesFromCoordinates(config.coordinates);
+  //     config.first = config.addresses.first;
+  //     setState(() {
+  //       config.first = config.addresses.first;
+  //       config.locationController.text = (config.first == null)
+  //           ? "loading"
+  //           : config.first.addressLine ?? "loading";
+  //     });
+  //   } catch (e) {
+  //     config.locationController.text =
+  //         "Unkown latitude: ${config.lat.round().toString()} , longitud: ${config.long.round().toString()}";
+  //   }
+  // }
 
   bool _isButtonEnabled;
   static List<String> validators = <String>[null, null, null, null, null, null];
@@ -146,7 +145,7 @@ class _MyRegistrationState extends State<Registration>
         )) ??
         false;
   }
-
+   
   Widget customcard(BuildContext context, MyCounter bolc) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     final FocusNode focus = FocusNode();
@@ -298,8 +297,6 @@ class _MyRegistrationState extends State<Registration>
                   readOnly: true,
                   onTab: () async {
                     try {
-                      print("fuck");
-
                       bolc.togelocationloading(true);
                       if (await updateLocation) {
                         await getLocationName();

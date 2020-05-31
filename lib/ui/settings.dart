@@ -7,7 +7,6 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:joker/providers/language.dart';
 import 'package:provider/provider.dart';
-
 import 'widgets/setting_bottombar.dart';
 
 class Settings extends StatelessWidget {
@@ -42,12 +41,9 @@ class MySettingState extends State<SettingsScreen>
         children: <Widget>[
           SvgPicture.asset(
             'assets/images/settingsvg.svg',
-
-            // const AssetImage('assets/images/setting.png'),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * .35,
           ),
-          // without sperating line
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               color: Colors.white,
@@ -66,7 +62,6 @@ class MySettingState extends State<SettingsScreen>
                   )
                 ],
               )),
-
           const SizedBox(
             height: 10,
           ),
@@ -140,6 +135,11 @@ class MySettingState extends State<SettingsScreen>
           const SizedBox(
             height: 10,
           ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 12),
+              child: FlatButton(
+                  onPressed: () {},
+                  child: Text(trans(context, "change_password"))))
         ],
       ),
       bottomNavigationBar: SettingBottom(),
@@ -150,7 +150,7 @@ class MySettingState extends State<SettingsScreen>
 }
 
 Widget fontBarChoice(BuildContext context, String choice, int index,
-    List<bool> list, String category,Function func) {
+    List<bool> list, String category, Function func) {
   final MyCounter bolc = Provider.of<MyCounter>(context);
   return Flexible(
       fit: FlexFit.tight,
@@ -163,10 +163,11 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
           onPressed: () {
             if (category == "font")
               bolc.changefontindex(index);
-            else{
+            else {
               bolc.changelanguageindex(index);
               func();
-          }},
+            }
+          },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -196,15 +197,15 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
 
 Widget fontBar(BuildContext context) {
   final MyCounter bolc = Provider.of<MyCounter>(context);
-  
+
   return Container(
     child: Row(
       children: <Widget>[
-        fontBarChoice(context, "large", 0, bolc.fontlist, "font",(){}),
+        fontBarChoice(context, "large", 0, bolc.fontlist, "font", () {}),
         verticalDiv(),
-        fontBarChoice(context, "meduim", 1, bolc.fontlist, "font",(){}),
+        fontBarChoice(context, "meduim", 1, bolc.fontlist, "font", () {}),
         verticalDiv(),
-        fontBarChoice(context, "small", 2, bolc.fontlist, "font",(){}),
+        fontBarChoice(context, "small", 2, bolc.fontlist, "font", () {}),
       ],
     ),
   );
@@ -218,11 +219,15 @@ Widget languagBar(BuildContext context) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        fontBarChoice(context, "arabic", 0, bolc.language, "language",(){lang.setLanguage(const Locale('ar'));}),
+        fontBarChoice(context, "arabic", 0, bolc.language, "language", () {
+          lang.setLanguage(const Locale('ar'));
+        }),
         verticalDiv(),
-        fontBarChoice(context, "english", 1, bolc.language, "language",(){lang.setLanguage(const Locale('en'));}),
+        fontBarChoice(context, "english", 1, bolc.language, "language", () {
+          lang.setLanguage(const Locale('en'));
+        }),
         verticalDiv(),
-        fontBarChoice(context, "turkish", 2, bolc.language, "language",(){}),
+        fontBarChoice(context, "turkish", 2, bolc.language, "language", () {}),
       ],
     ),
   );

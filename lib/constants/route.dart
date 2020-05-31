@@ -6,7 +6,7 @@ import 'package:joker/ui/my_membership.dart';
 import 'package:joker/ui/auth/pin_code.dart';
 import 'package:joker/ui/auth/reset_pass.dart';
 import 'package:joker/ui/auth/forget_password.dart';
-import 'package:joker/ui/profile.dart';
+import 'package:joker/ui/auth//profile.dart';
 import 'package:joker/ui/setLocation.dart';
 import 'package:joker/ui/settings.dart';
 import 'package:joker/ui/shop_details.dart';

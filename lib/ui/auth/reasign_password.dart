@@ -54,7 +54,7 @@ class _MyResetPasswordState extends State<ResetPassword>
         child: Column(
           children: <Widget>[
             TextFormInput(
-                text: trans(context, 'new_password'),
+                text: trans(context, 'old_password'),
                 cController: usernameController,
                 prefixIcon: Icons.lock_outline,
                 kt: TextInputType.emailAddress,
@@ -69,6 +69,33 @@ class _MyResetPasswordState extends State<ResetPassword>
                   return "please enter a mobile number ";
                 }),
             TextFormInput(
+                text: trans(context, 'new_password'),
+                cController: passwordController,
+                prefixIcon: Icons.lock_outline,
+                kt: TextInputType.visiblePassword,
+                readOnly: false,
+                onTab: () {},
+                suffixicon: IconButton(
+                  icon: Icon(
+                    (_obscureText == false)
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                ),
+                onFieldSubmitted: () {
+                  focus2.requestFocus();
+                },
+                obscureText: _obscureText,
+                focusNode: focus1,
+                validator: (String value) {
+                  return "please enter your password ";
+                }),
+                   TextFormInput(
                 text: trans(context, 'new_password'),
                 cController: passwordController,
                 prefixIcon: Icons.lock_outline,

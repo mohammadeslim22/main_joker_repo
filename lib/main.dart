@@ -6,7 +6,7 @@ import 'package:joker/ui/auth/registration_screen.dart';
 import 'package:joker/ui/contact_us.dart';
 import 'ui/address_list.dart';
 import 'ui/auth/forget_password.dart';
-import 'ui/advanced_search.dart';
+import 'ui/settings.dart';
 import 'util/dio.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:provider/provider.dart';
@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
         //  home:const ShopDetails(merchantId: 24,lovecount: 50,likecount: 50)
-        home: const  PinCode()
+        home: const Home()
         // home: const ShopDetails(likecount: 50,lovecount: 50,shop:    Shop(
         //     image: "assets/images/shopone.jpg"
         //   ),),

@@ -12,6 +12,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="joker"
         android:icon="@mipmap/lunch">
+        
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
@@ -18,7 +17,7 @@ import 'package:joker/util/dio.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
-import 'widgets/text_form_input.dart';
+import 'package:joker/ui/widgets/text_form_input.dart';
 import 'package:joker/util/functions.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
@@ -42,7 +41,6 @@ class MyAccountPage extends State<MyAccount> {
     size: 30.0,
     lineWidth: 3,
   );
-  bool _obscureText = false;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileNoController = TextEditingController();
@@ -58,25 +56,6 @@ class MyAccountPage extends State<MyAccount> {
   final FocusNode focus2 = FocusNode();
   final FocusNode focus3 = FocusNode();
   final FocusNode focus4 = FocusNode();
-  Future<bool> get updateLocation async {
-    bool res;
-    setState(() {
-      config.locationController.text = "getting your location...";
-    });
-    final List<String> loglat = await getLocation();
-    if (loglat.isEmpty) {
-      res = false;
-    } else {
-      setState(() {
-        location2 = loglat;
-        config.lat = double.parse(location2.elementAt(0));
-        config.long = double.parse(location2.elementAt(1));
-        res = true;
-      });
-    }
-
-    return res;
-  }
 
   Future<Profile> getProfileData() async {
     print(await data.getData("authorization"));
@@ -84,24 +63,6 @@ class MyAccountPage extends State<MyAccount> {
 
     profile = Profile.fromJson(response.data);
     return profile;
-  }
-
-  Future<void> getLocationName() async {
-    try {
-      config.coordinates = Coordinates(config.lat, config.long);
-      config.addresses =
-          await Geocoder.local.findAddressesFromCoordinates(config.coordinates);
-      config.first = config.addresses.first;
-      setState(() {
-        config.first = config.addresses.first;
-        config.locationController.text = (config.first == null)
-            ? "loading"
-            : config.first.addressLine ?? "loading";
-      });
-    } catch (e) {
-      config.locationController.text =
-          "Unkown latitude: ${config.lat.round().toString()} , longitud: ${config.long.round().toString()}";
-    }
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -216,22 +177,22 @@ class MyAccountPage extends State<MyAccount> {
                         ],
                       ),
                       if (showImageOptions)
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Column(
-                          children: <Widget>[
-                            FlatButton(
-                                child: Text('Take A Photo',
-                                    style: styles.mysmall),
-                                onPressed: () {}),
-                            FlatButton(
-                              child:
-                                  Text('Open Gallery', style: styles.mysmall),
-                              onPressed: () {},
-                            )
-                          ],
-                        ),
-                      )
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Column(
+                            children: <Widget>[
+                              FlatButton(
+                                  child: Text('Take A Photo',
+                                      style: styles.mysmall),
+                                  onPressed: () {}),
+                              FlatButton(
+                                child:
+                                    Text('Open Gallery', style: styles.mysmall),
+                                onPressed: () {},
+                              )
+                            ],
+                          ),
+                        )
                       else
                         Container(),
                       const SizedBox(height: 24),
@@ -347,7 +308,6 @@ class MyAccountPage extends State<MyAccount> {
 
                                       Scaffold.of(context)
                                           .showSnackBar(snackBar);
-                                      //  Scaffold.of(context).hideCurrentSnackBar();
                                       setState(() {
                                         config.locationController.text =
                                             "Tap to set my location";
@@ -371,38 +331,12 @@ class MyAccountPage extends State<MyAccount> {
                                           "lat": 51.0,
                                           "long": 9.6
                                         });
-                                    Provider.of<MyCounter>(context)
-                                        .togelocationloading(false);
                                   },
                                 ),
                                 obscureText: false,
                                 focusNode: focus4,
                                 validator: (String value) {
                                   return "please specify you Location :)";
-                                }),
-                            TextFormInput(
-                                text: trans(context, 'password'),
-                                cController: passwordController,
-                                prefixIcon: Icons.lock_outline,
-                                kt: TextInputType.visiblePassword,
-                                readOnly: false,
-                                onTab: () {},
-                                suffixicon: IconButton(
-                                  icon: Icon(
-                                    (_obscureText == false)
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscureText = !_obscureText;
-                                    });
-                                  },
-                                ),
-                                obscureText: _obscureText,
-                                focusNode: focus2,
-                                validator: (String value) {
-                                  return "please enter your password ";
                                 }),
                             Container(
                               margin: const EdgeInsets.symmetric(
