@@ -136,9 +136,12 @@ class MySettingState extends State<SettingsScreen>
             height: 10,
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
               child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                Navigator.pushNamed(context, "/ChangePassword");
+
+                  },
                   child: Text(trans(context, "change_password"))))
         ],
       ),

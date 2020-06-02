@@ -1,33 +1,59 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:flutter/material.dart';
-import 'package:joker/ui/cards/sale_card_for_editing_for_shop_merchant_screen.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../ui/cards/sale_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
-
+import 'package:intl/intl.dart';
 class DiscountsList extends StatefulWidget {
+  const DiscountsList({Key key, this.saleDataFilter, this.filterData})
+      : super(key: key);
+  final bool saleDataFilter;
+  final FilterData filterData;
   @override
   _DiscountsListState createState() => _DiscountsListState();
 }
 
 class _DiscountsListState extends State<DiscountsList> {
-  List<SaleData> salesData;
   Sales sale;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   MyCounter bolc;
+
   Future<List<SaleData>> getSalesData(int pageIndex) async {
+    print("am getting default sales ");
     final Response<dynamic> response = await dio.get<dynamic>("sales",
         queryParameters: <String, dynamic>{'page': pageIndex + 1});
-
     sale = Sales.fromJson(response.data);
+    return sale.data;
+  }
 
+  Future<List<SaleData>> getSalesDataFilterd(
+      int pageIndex, FilterData filterData) async {
+        final DateFormat formatter =  DateFormat('yyyy-MM-dd');
+  final String startDate = formatter.format(filterData.startingdate);
+    final String endDate = formatter.format(filterData.endingdate);
+
+        print(filterData.toString());
+        print("$startDate   + $endDate");
+    final Response<dynamic> response =
+        await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'merchant_name': filterData.merchantNameOrPartOfit,
+      'name': filterData.saleNameOrPartOfit,
+      'from_date': startDate,
+      'to_date': endDate,
+      'rate': filterData.rating,
+      'specifications': filterData.specifications
+    });
+    print(response.data);
+    sale = Sales.fromJson(response.data);
     return sale.data;
   }
 
@@ -42,6 +68,11 @@ class _DiscountsListState extends State<DiscountsList> {
       setState(() {});
       _refreshController.loadComplete();
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -88,10 +119,12 @@ class _DiscountsListState extends State<DiscountsList> {
           padding: const EdgeInsets.all(15.0),
           itemBuilder: (BuildContext context, dynamic entry, int index) {
             return FadeIn(
-                child: SalesCardAfterEditForMerchant(context: context, sale: entry as SaleData));
+                child: SalesCard(context: context, sale: entry as SaleData));
           },
           pageFuture: (int pageIndex) {
-            return getSalesData(pageIndex);
+            return widget.saleDataFilter
+                ? getSalesDataFilterd(pageIndex, widget.filterData)
+                : getSalesData(pageIndex);
           }),
     );
 

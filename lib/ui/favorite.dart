@@ -32,7 +32,7 @@ class _MyHomePageState extends State<Favorite>
             child: FavoritBar(),
           )),
       body: (bolc.favocurrentIndex == 0)
-          ? DiscountsList()
+          ?const DiscountsList()
           : ShopList(),
     );
   }

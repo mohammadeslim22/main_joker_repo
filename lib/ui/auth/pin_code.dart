@@ -35,12 +35,12 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
   }
 
   Future<bool> getPinCode(String code) async {
-    String email;
-    email = await data.getData("email");
-
+    String phone;
+    phone = await data.getData("phone");
+    print(phone);
     final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
-        data: <String, dynamic>{"email": email, "verfiy_code": code});
-    print("$code  $email");
+        data: <String, dynamic>{"phone": "400400", "verfiy_code": code});
+     print("$code  $phone");
     print(correct.data);
     if (correct.data == "false") {
       print(correct.data);
@@ -83,11 +83,8 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                 fieldWidth: 30,
                 onCompleted: (String v) async {
                   bolc.togelf(true);
-                  if (await getPinCode(v)) {
-                    Navigator.pushNamed(
-                      context,
-                      '/login',
-                    );
+                  if (await getPinCode(v.trim())) {
+                    Navigator.pushNamed(context, '/login');
                   }
                   bolc.togelf(false);
                 },
@@ -144,7 +141,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                       },
                       seconds: 30)),
               const SizedBox(height: 15),
-                  Padding(
+              Padding(
                   padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
@@ -154,7 +151,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                       color: Colors.deepOrangeAccent,
                       textColor: Colors.white,
                       child: bolc.returnchild(trans(context, 'aprove')))),
-                      const SizedBox(height: 15),
+              const SizedBox(height: 15),
               Text(trans(context, 'code_not_recieved'),
                   textAlign: TextAlign.center, style: styles.underHead),
               Padding(
@@ -173,7 +170,6 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-          
               const Padding(
                   padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
                   child: Divider(color: Colors.black)),
@@ -190,7 +186,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                     trans(context, 'tech_support'),
                     fw: FontWeight.bold,
                     fc: Colors.green,
-                    myfunc: (){},
+                    myfunc: () {},
                   ),
                 ],
               ),

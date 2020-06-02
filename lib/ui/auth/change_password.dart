@@ -10,12 +10,12 @@ import 'package:joker/util/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
 
-class ResetPassword extends StatefulWidget {
+class ChangePassword extends StatefulWidget {
   @override
-  _MyResetPasswordState createState() => _MyResetPasswordState();
+  _MyChangePasswordState createState() => _MyChangePasswordState();
 }
 
-class _MyResetPasswordState extends State<ResetPassword>
+class _MyChangePasswordState extends State<ChangePassword>
     with TickerProviderStateMixin {
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -37,9 +37,19 @@ class _MyResetPasswordState extends State<ResetPassword>
         false;
   }
 
+  static List<String> validators = <String>[null, null, null];
+  static List<String> keys = <String>[
+    'oldpasswoed',
+    'newpassword',
+    'newpassword2'
+  ];
+  Map<String, String> validationMap =
+      Map<String, String>.fromIterables(keys, validators);
+
   bool _obscureText = false;
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController oldpasswordController = TextEditingController();
+  final TextEditingController newpasswordController = TextEditingController();
+  final TextEditingController newpassword2Controller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
@@ -55,7 +65,7 @@ class _MyResetPasswordState extends State<ResetPassword>
           children: <Widget>[
             TextFormInput(
                 text: trans(context, 'old_password'),
-                cController: usernameController,
+                cController: oldpasswordController,
                 prefixIcon: Icons.lock_outline,
                 kt: TextInputType.emailAddress,
                 obscureText: false,
@@ -66,11 +76,11 @@ class _MyResetPasswordState extends State<ResetPassword>
                   focus1.requestFocus();
                 },
                 validator: (String value) {
-                  return "please enter a mobile number ";
+                  return validationMap['oldpasswoed'];
                 }),
             TextFormInput(
                 text: trans(context, 'new_password'),
-                cController: passwordController,
+                cController: newpasswordController,
                 prefixIcon: Icons.lock_outline,
                 kt: TextInputType.visiblePassword,
                 readOnly: false,
@@ -93,11 +103,14 @@ class _MyResetPasswordState extends State<ResetPassword>
                 obscureText: _obscureText,
                 focusNode: focus1,
                 validator: (String value) {
-                  return "please enter your password ";
+                  if (value.length < 6) {
+                    return "password must be more than 5 letters";
+                  }
+                  return validationMap['newpassword'];
                 }),
-                   TextFormInput(
+            TextFormInput(
                 text: trans(context, 'new_password'),
-                cController: passwordController,
+                cController: newpassword2Controller,
                 prefixIcon: Icons.lock_outline,
                 kt: TextInputType.visiblePassword,
                 readOnly: false,
@@ -114,18 +127,29 @@ class _MyResetPasswordState extends State<ResetPassword>
                     });
                   },
                 ),
+                focusNode: focus2,
                 onFieldSubmitted: () {
-                  focus2.requestFocus();
+                
                 },
                 obscureText: _obscureText,
-                focusNode: focus1,
+                
                 validator: (String value) {
-                  return "please enter your password ";
+                  if (value.length < 6) {
+                    return "password must be more than 5 letters";
+                  }
+                  return validationMap['newpassword2'];
                 }),
           ],
         ),
       ),
     );
+  }
+
+  bool _isButtonEnabled;
+  @override
+  void initState() {
+    super.initState();
+    _isButtonEnabled = true;
   }
 
   @override
@@ -138,7 +162,7 @@ class _MyResetPasswordState extends State<ResetPassword>
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
           },
-          child: ListView(shrinkWrap: true, children: <Widget>[
+          child: ListView(children: <Widget>[
             Column(
               children: <Widget>[
                 Text(trans(context, 'hello'), style: styles.mystyle2),
@@ -146,6 +170,7 @@ class _MyResetPasswordState extends State<ResetPassword>
                 Text(trans(context, 'enter old & new password'),
                     style: styles.mystyle),
                 customcard(context),
+                const Divider(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                   child: RaisedButton(
@@ -153,33 +178,49 @@ class _MyResetPasswordState extends State<ResetPassword>
                           borderRadius: BorderRadius.circular(18.0),
                           side: BorderSide(color: colors.orange)),
                       onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          bolc.togelf(true);
-                          await dio
-                              .post<dynamic>("login", data: <String, String>{
-                            "phone": usernameController.text.toString(),
-                            "password": passwordController.text.toString()
-                          }).then((Response<dynamic> value) async {
-                            print(value);
-                            if (value.statusCode == 200) {
-                              await data.setData("authorization",
-                                  "Bearer ${value.data['api_token']}");
-                              data.getData('authorization').then<dynamic>(
-                                  (dynamic auth) => dio.options.headers.update(
-                                      'authorization',
-                                      (dynamic value) async => auth));
-                              Navigator.pushNamed(
-                                context,
-                                '/login',
-                              );
-                            }
-                          });
-                          bolc.togelf(false);
+                        if (_isButtonEnabled) {
+                          if (_formKey.currentState.validate()) {
+                            bolc.togelf(true);
+                            setState(() {
+                              _isButtonEnabled = false;
+                            });
+                            await dio.post<dynamic>("changepassword",
+                                data: <String, dynamic>{  
+                                  'old_password':
+                                      oldpasswordController.text.trim(),
+                                  'new_password':
+                                      newpasswordController.text.trim()
+                                }).then((Response<dynamic> value) async {
+                              print("${value.data}  is it null change pass ? ");
+                              if (value.statusCode == 422) {
+                                value.data['errors']
+                                    .forEach((String k, dynamic vv) {
+                                  setState(() {
+                                    validationMap[k] = vv[0].toString();
+                                  });
+                                  
+                                });
+                                _formKey.currentState.validate();
+                                validationMap
+                                    .updateAll((String key, String value) {
+                                  return null;
+                                });
+                                print(validationMap);
+                              }
+                              if (value.statusCode == 200) {
+                                data.setData("password",
+                                    newpasswordController.text.trim());
+                                Navigator.pushNamed(context, '/login');
+                              }
+                            });
+                            bolc.togelf(false);
+                          }
                         }
                       },
                       color: Colors.deepOrangeAccent,
                       textColor: Colors.white,
-                      child: bolc.returnchild(trans(context, 'restore'))),
+                      child: bolc
+                          .returnchild(trans(context, 'change_my_password'))),
                 ),
               ],
             ),

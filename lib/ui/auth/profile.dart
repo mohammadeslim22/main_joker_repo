@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
@@ -56,7 +59,7 @@ class MyAccountPage extends State<MyAccount> {
   final FocusNode focus2 = FocusNode();
   final FocusNode focus3 = FocusNode();
   final FocusNode focus4 = FocusNode();
-
+  File myimage;
   Future<Profile> getProfileData() async {
     print(await data.getData("authorization"));
     final dynamic response = await dio.get<dynamic>("user");
@@ -64,6 +67,15 @@ class MyAccountPage extends State<MyAccount> {
     profile = Profile.fromJson(response.data);
     return profile;
   }
+
+  // Future<void> getImage() async {
+  //   final File image =
+  //       await ImagePicker.getImage(source: ImageSource.gallery) as File;
+
+  //   setState(() {
+  //     myimage = image;
+  //   });
+  // }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -184,12 +196,32 @@ class MyAccountPage extends State<MyAccount> {
                               FlatButton(
                                   child: Text('Take A Photo',
                                       style: styles.mysmall),
-                                  onPressed: () {}),
+                                  onPressed: () async {
+                                    final File image =
+                                        await ImagePicker.pickImage(
+                                            source: ImageSource.gallery);
+
+                                    setState(() {
+                                      myimage = image;
+                                    });
+                                  }),
                               FlatButton(
                                 child:
                                     Text('Open Gallery', style: styles.mysmall),
-                                onPressed: () {},
-                              )
+                                onPressed: () async {
+                                  final File image =
+                                      await ImagePicker.pickImage(
+                                          source: ImageSource.gallery);
+
+                                  setState(() {
+                                    myimage = image;
+                                  });
+                                },
+                              ),
+                              if (myimage == null)
+                                const Text('No image selected.')
+                              else
+                                Image.file(myimage),
                             ],
                           ),
                         )

@@ -32,6 +32,7 @@ class _MerchantCardState extends State<MerchantCard> {
  const String text = "4 ";
     const String text2 = "5";
     return Card(
+      margin: const EdgeInsets.fromLTRB(24,0,24,8),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(12), topRight: Radius.circular(12)),

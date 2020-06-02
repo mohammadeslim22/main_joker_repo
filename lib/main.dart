@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:joker/ui/auth/pin_code.dart';
+import 'package:joker/ui/auth/login_screen.dart';
+import 'package:joker/ui/auth/change_password.dart';
 import 'package:joker/ui/home.dart';
 import 'package:joker/ui/auth/registration_screen.dart';
 import 'package:joker/ui/contact_us.dart';
-import 'ui/address_list.dart';
+import 'constants/config.dart';
+import 'ui/advanced_search.dart';
 import 'ui/auth/forget_password.dart';
 import 'ui/settings.dart';
 import 'util/dio.dart';
@@ -35,9 +38,18 @@ void main() {
     ),
   );
   dioDefaults();
-  data.getData('authorization').then<dynamic>((dynamic auth) => dio
-      .options.headers
-      .update('authorization', (dynamic value) async => auth.toString()));
+  data.getData('authorization').then<dynamic>((dynamic auth) {
+    print(auth);
+    dio.options.headers
+        .update('authorization', (dynamic value) async => auth.toString());
+  });
+
+  data.getData("lat").then((String value) {
+    config.lat = value as double;
+  });
+  data.getData("long").then((String value) {
+    config.long = value as double;
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -81,7 +93,7 @@ class MyApp extends StatelessWidget {
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
         //  home:const ShopDetails(merchantId: 24,lovecount: 50,likecount: 50)
-        home: const Home()
+        home: LoginScreen()
         // home: const ShopDetails(likecount: 50,lovecount: 50,shop:    Shop(
         //     image: "assets/images/shopone.jpg"
         //   ),),

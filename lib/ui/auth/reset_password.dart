@@ -4,7 +4,6 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/counter.dart';
-import 'package:joker/util/data.dart';
 import '../widgets/text_form_input.dart';
 import 'package:joker/util/dio.dart';
 import 'package:provider/provider.dart';
@@ -38,8 +37,8 @@ class _MyResetPasswordState extends State<ResetPassword>
   }
 
   bool _obscureText = false;
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController newpasswordController = TextEditingController();
+  final TextEditingController newpasswordController2 = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
@@ -55,22 +54,34 @@ class _MyResetPasswordState extends State<ResetPassword>
           children: <Widget>[
             TextFormInput(
                 text: trans(context, 'new_password'),
-                cController: usernameController,
+                cController: newpasswordController,
                 prefixIcon: Icons.lock_outline,
-                kt: TextInputType.emailAddress,
-                obscureText: false,
+                kt: TextInputType.visiblePassword,
                 readOnly: false,
                 onTab: () {},
-                nextfocusNode: focus1,
+                suffixicon: IconButton(
+                  icon: Icon(
+                    (_obscureText == false)
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                ),
                 onFieldSubmitted: () {
-                  focus1.requestFocus();
+                  focus2.requestFocus();
                 },
+                obscureText: _obscureText,
+                focusNode: focus1,
                 validator: (String value) {
-                  return "please enter a mobile number ";
+                  return "please enter your password ";
                 }),
             TextFormInput(
                 text: trans(context, 'new_password'),
-                cController: passwordController,
+                cController: newpasswordController2,
                 prefixIcon: Icons.lock_outline,
                 kt: TextInputType.visiblePassword,
                 readOnly: false,
@@ -128,23 +139,13 @@ class _MyResetPasswordState extends State<ResetPassword>
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           bolc.togelf(true);
-                          await dio
-                              .post<dynamic>("login", data: <String, String>{
-                            "phone": usernameController.text.toString(),
-                            "password": passwordController.text.toString()
-                          }).then((Response<dynamic> value) async {
+                          await dio.post<dynamic>("something",
+                              data: <String, String>{
+                    
+                              }).then((Response<dynamic> value) async {
                             print(value);
                             if (value.statusCode == 200) {
-                              await data.setData("authorization",
-                                  "Bearer ${value.data['api_token']}");
-                              data.getData('authorization').then<dynamic>(
-                                  (dynamic auth) => dio.options.headers.update(
-                                      'authorization',
-                                      (dynamic value) async => auth));
-                              Navigator.pushNamed(
-                                context,
-                                '/login',
-                              );
+                              Navigator.pushNamed(context, '/login');
                             }
                           });
                           bolc.togelf(false);

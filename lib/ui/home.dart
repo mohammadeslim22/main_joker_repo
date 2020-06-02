@@ -3,8 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
+import 'package:joker/util/data.dart';
 import 'package:provider/provider.dart';
 import '../constants/colors.dart';
 import '../constants/styles.dart';
@@ -14,8 +16,9 @@ import 'main/merchant_list.dart';
 import 'main/sales_list.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
-
+  const Home({Key key, this.salesDataFilter, this.filterData}) : super(key: key);
+final bool salesDataFilter;
+final FilterData filterData;
   @override
   _HomeState createState() => _HomeState();
 }
@@ -24,6 +27,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   final GlobalKey<InnerDrawerState> key = GlobalKey<InnerDrawerState>();
   AnimationController _hide;
   GlobalKey<ScaffoldState> _scaffoldkey;
+  PersistentBottomSheetController<dynamic> _errorController;
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification.depth == 0) {
       if (notification is UserScrollNotification) {
@@ -79,112 +83,178 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width - 50,
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            Flexible(
-                              child: Text(
-                                bolc.bottomNavIndex == 0
-                                    ? '${trans(context, 'sales')}'
-                                    : '${trans(context, 'merchants')}',
-                                style: styles.saleTitle,
+                        child: InkWell(
+                          splashColor: colors.trans,
+                          highlightColor: colors.trans,
+                          onTap: () {
+                            try {
+                              _errorController.close();
+                            } catch (e) {
+                              print("hi");
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  bolc.bottomNavIndex == 0
+                                      ? '${trans(context, 'sales')}'
+                                      : '${trans(context, 'merchants')}',
+                                  style: styles.saleTitle,
+                                ),
                               ),
-                            ),
-                            Ink(
-                              decoration: BoxDecoration(
+                              Ink(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: colors.white,
+                                    border: Border.all(color: colors.ggrey)),
+                                child: InkWell(
                                   borderRadius: BorderRadius.circular(100),
-                                  color: colors.white,
-                                  border: Border.all(color: colors.ggrey)),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(100),
-                                splashColor: colors.white,
-                                onTap: () {},
-                                child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text(
-                                        "${trans(context, 'filter')}",
-                                        style: styles.smallButton,
-                                      ),
-                                      const SizedBox(
-                                        width: 4,
-                                      ),
-                                      SvgPicture.asset(
-                                        'assets/images/filter.svg',
-                                        height: 10,
-                                        width: 10,
-                                      )
-                                    ],
+                                  splashColor: colors.white,
+                                  onTap: () {
+                                    _errorController = _scaffoldkey.currentState
+                                        .showBottomSheet<dynamic>((BuildContext
+                                                context) =>
+                                            Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  ClipPath(
+                                                      clipper:
+                                                          const ShapeBorderClipper(
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        24),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            24)),
+                                                      )),
+                                                      child: Container(
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    .1),
+                                                            border: const Border(
+                                                                top: BorderSide(
+                                                                    color: Colors
+                                                                        .orange,
+                                                                    width:
+                                                                        7.0))),
+                                                        child: Text(
+                                                          "${trans(context, 'use_current_location')}",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              styles.underHead,
+                                                        ),
+                                                      )),
+                                                  ListTile(
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 12),
+                                                    title: Text(
+                                                        "${trans(context, 'my_address_list')}"),
+                                                    trailing: Icon(
+                                                      Icons.search,
+                                                      color: Colors.black,
+                                                    ),
+                                                    onTap: () {},
+                                                  ),
+                                                  ListTile(
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 12),
+                                                    title: Text(
+                                                        "${trans(context, 'use_current_location')}"),
+                                                    trailing: Icon(
+                                                      Icons.my_location,
+                                                      color: Colors.black,
+                                                    ),
+                                                    onTap: () {},
+                                                  ),
+                                                  ListTile(
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 12),
+                                                    title: Text(
+                                                        "${trans(context, 'add_location')}"),
+                                                    trailing: Icon(
+                                                      Icons.add,
+                                                      color: Colors.black,
+                                                    ),
+                                                    onTap: () {
+                                                      double lat;
+                                                      double long;
+                                                      data
+                                                          .getData("lat")
+                                                          .then((String value) {
+                                                        lat = value as double;
+                                                      });
+                                                      data
+                                                          .getData("long")
+                                                          .then((String value) {
+                                                        long = value as double;
+                                                      });
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          '/AutoLocate',
+                                                          arguments: <String,
+                                                              double>{
+                                                            "lat": lat,
+                                                            "long": long
+                                                          });
+                                                    },
+                                                  ),
+                                                  const SizedBox(height: 12),
+                                                ]));
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text(
+                                          "${trans(context, 'filter')}",
+                                          style: styles.smallButton,
+                                        ),
+                                        const SizedBox(
+                                          width: 4,
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/images/location.svg',
+                                          height: 16,
+                                          width: 16,
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         )),
                   ),
                   automaticallyImplyLeading: true,
                   actions: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.add_location, color: colors.orange),
-                      onPressed: () async {
-                       _scaffoldkey.currentState.showBottomSheet<dynamic>(
-                            (BuildContext context) =>
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                  ClipPath(
-                                      clipper: const ShapeBorderClipper(
-                                          shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(24),
-                                            bottomRight: Radius.circular(24)),
-                                      )),
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        decoration: BoxDecoration(
-                                            color: Colors.black.withOpacity(.1),
-                                            border: const Border(
-                                                top: BorderSide(
-                                                    color: Colors.orange,
-                                                    width: 7.0))),
-                                        child: Text(
-                                         "${trans(context, 'use_current_location')}",
-                                          textAlign: TextAlign.center,
-                                          style: styles.underHead,
-                                        ),
-                                      )),
-                                  ListTile(
-                                    contentPadding:
-                                       const EdgeInsets.symmetric(
-                                          horizontal: 12),
-                                    title: Text("${trans(context, 'my_address_list')}"),
-                                    trailing: Icon(Icons.search,color: Colors.black,),
-                                    onTap: () {},
-                                  ),
-                                         ListTile(
-                                    contentPadding:
-                                      const EdgeInsets.symmetric(
-                                          horizontal: 12),
-                                    title: Text("${trans(context, 'use_current_location')}"),
-                                 trailing: Icon(Icons.my_location,color: Colors.black,),
-                                    onTap: () {},
-                                  ),
-                                         ListTile(
-                                    contentPadding:
-                                        const EdgeInsets.symmetric(
-                                          horizontal: 12),
-                                    title: Text("${trans(context, 'add_location')}"),
-
-                                    trailing: Icon(Icons.add,color: Colors.black,),
-                                    onTap: () {},
-                                  ),
-                                  const SizedBox(height: 12),
-                                ]));
-                      },
+                    SvgPicture.asset(
+                      'assets/images/filter.svg',
+                      height: 16,
+                      width: 16,
                     ),
+
                     // IconButton(
                     //   icon: const Icon(Icons.g_translate),
                     //   onPressed: () {
@@ -207,7 +277,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       child: IconButton(
                         icon: Icon(Icons.notifications_none,
                             color: colors.orange),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/Notifications");
+                        },
                       ),
                     ),
                   ],
@@ -224,11 +296,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               onNotification: _handleScrollNotification,
               child: Container(
                   color: colors.grey,
-                  child: Expanded(
-                    child: (bolc.bottomNavIndex == 0)
-                        ? DiscountsList()
-                        : ShopList(),
-                  )),
+                  child: (bolc.bottomNavIndex == 0)
+                      ? DiscountsList(saleDataFilter: widget.salesDataFilter,filterData: widget.filterData)
+                      : ShopList()),
             )),
         bottomNavigationBar: SizeTransition(
           sizeFactor: _hide,

@@ -20,6 +20,15 @@ class LoginScreen extends StatefulWidget {
 
 class _MyLoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
+  bool _isButtonEnabled = true;
+  static List<String> validators = <String>[null, null];
+  static List<String> keys = <String>[
+    'phone',
+    'password',
+  ];
+  Map<String, String> validationMap =
+      Map<String, String>.fromIterables(keys, validators);
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -71,7 +80,10 @@ class _MyLoginScreenState extends State<LoginScreen>
                   focus1.requestFocus();
                 },
                 validator: (String value) {
-                  return "please enter a mobile number ";
+                  if (value.isEmpty) {
+                    return "please enter a mobile number ";
+                  }
+                  return validationMap['phone'];
                 }),
             TextFormInput(
                 text: trans(context, 'password'),
@@ -98,7 +110,11 @@ class _MyLoginScreenState extends State<LoginScreen>
                 obscureText: _obscureText,
                 focusNode: focus1,
                 validator: (String value) {
-                  return "please enter your password ";
+                  if (value.isEmpty) {
+                    return "please enter your password ";
+                  }
+                  return validationMap['password'];
+                  ;
                 }),
           ],
         ),
@@ -111,127 +127,133 @@ class _MyLoginScreenState extends State<LoginScreen>
     final MyCounter bolc = Provider.of<MyCounter>(context);
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     return Scaffold(
-        appBar: AppBar(),
         body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: Center(
-            child: ListView(shrinkWrap: true, children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
-                child: SvgPicture.asset(
-                  'assets/images/logo.svg',
-                  width: 120.0,
-                  height: 120.0,
-                ),
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: ListView(shrinkWrap: true, children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          child: SvgPicture.asset(
+            'assets/images/logo.svg',
+            width: 120.0,
+            height: 120.0,
+          ),
+        ),
+        Column(
+          children: <Widget>[
+            Text(trans(context, 'joker'),
+                textAlign: TextAlign.center, style: styles.mystyle2),
+            const SizedBox(height: 5),
+            Text(trans(context, 'all_you_need'),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: colors.orange,
+                    fontSize: 20)),
+            const SizedBox(height: 50),
+            Text(trans(context, 'hello'), style: styles.mystyle2),
+            const SizedBox(height: 10),
+            Text(trans(context, 'enter_login_information'),
+                style: styles.mystyle),
+            customcard(context),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              alignment: isRTL ? Alignment.centerLeft : Alignment.centerRight,
+              child: ButtonToUse(
+                trans(context, 'forget_password'),
+                fw: FontWeight.w500,
+                fc: colors.black,
+                myfunc: () {
+                  Navigator.pushNamed(context, '/forget_pass');
+                },
               ),
-              Column(
-                children: <Widget>[
-                  Text(trans(context, 'joker'),
-                      textAlign: TextAlign.center, style: styles.mystyle2),
-                  const SizedBox(height: 5),
-                  Text(trans(context, 'all_you_need'),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          color: colors.orange,
-                          fontSize: 20)),
-                  const SizedBox(height: 50),
-                  Text(trans(context, 'hello'), style: styles.mystyle2),
-                  const SizedBox(height: 10),
-                  Text(trans(context, 'enter_login_information'),
-                      style: styles.mystyle),
-                  customcard(context),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                    ),
-                    alignment:
-                        isRTL ? Alignment.centerLeft : Alignment.centerRight,
-                    child: ButtonToUse(
-                      trans(context, 'forget_password'),
-                      fw: FontWeight.w500,
-                      fc: colors.black,
-                      myfunc: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/forget_pass',
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                    child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: colors.orange)),
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
-                            bolc.togelf(true);
-                            await dio
-                                .post<dynamic>("login", data: <String, String>{
-                              "phone": usernameController.text.toString(),
-                              "password": passwordController.text.toString()
-                            }).then((Response<dynamic> value) async {
-                              print(value);
-                              if (value.statusCode == 200) {
-                                await data.setData("authorization",
-                                    "Bearer ${value.data['api_token']}");
-                                data.getData('authorization').then<dynamic>(
-                                    (dynamic auth) => dio.options.headers
-                                        .update('authorization',
-                                            (dynamic value) async => auth));
-                                print(
-                                    "are u fucken stupid again?${dio.options.headers.putIfAbsent('Authorization', () => "Bearer ${value.data['api_token']}")}");
-
-                                print(dio.options.headers);
-                                Navigator.pushNamed(
-                                  context,
-                                  '/Home',
-                                );
-                              }
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+              child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: colors.orange)),
+                  onPressed: () async {
+                    if (_isButtonEnabled) {
+                      if (_formKey.currentState.validate()) {
+                        bolc.togelf(true);
+                        setState(() {
+                          _isButtonEnabled = false;
+                        });
+                        await dio
+                            .post<dynamic>("login", data: <String, dynamic>{
+                          "phone": usernameController.text.toString().trim(),
+                          "password": passwordController.text.toString()
+                        }).then((Response<dynamic> value) async {
+                          print(value.data);
+                          setState(() {
+                            _isButtonEnabled = true;
+                          });
+                          if (value.statusCode == 422) {
+                            value.data['errors']
+                                .forEach((String k, dynamic vv) {
+                              setState(() {
+                                validationMap[k] = vv[0].toString();
+                              });
+                              print(validationMap);
                             });
-                            bolc.togelf(false);
+                            _formKey.currentState.validate();
+                            validationMap.updateAll((String key, String value) {
+                              return null;
+                            });
+                            print(validationMap);
                           }
-                        },
-                        color: Colors.deepOrangeAccent,
-                        textColor: Colors.white,
-                        child: bolc.returnchild(trans(context, 'login'))),
-                  ),
-                  const SizedBox(height: 80),
-                  Text(
-                    trans(context, 'dont_have_account'),
-                    style: styles.mystyle,
-                  ),
-                  ButtonToUse(trans(context, 'create_account'),
-                      fw: FontWeight.bold,
-                      fc: Colors.black,
-                      width: MediaQuery.of(context).size.width,
-                      myfunc: () =>
-                          Navigator.pushNamed(context, '/Registration')),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          trans(context, 'you_have_shop_'),
-                          style: styles.mystyle,
-                        ),
-                        ButtonToUse(
-                          trans(context, 'click_here'),
-                          fw: FontWeight.bold,
-                          fc: Colors.green,
-                        ),
-                      ],
-                    ),
+
+                          if (value.statusCode == 200) {
+                            await data.setData("authorization",
+                                "Bearer ${value.data['api_token']}");
+                            data.getData('authorization').then<dynamic>(
+                                (dynamic auth) => dio.options.headers.update(
+                                    'authorization',
+                                    (dynamic value) async => auth));
+
+                            print(dio.options.headers);
+                            Navigator.pushNamed(context, '/Home',
+                                arguments: <String, dynamic>{
+                                  "salesDataFilter": false,
+                                  "FilterData": null
+                                });
+                          }
+                        });
+                        bolc.togelf(false);
+                      }
+                    }
+                  },
+                  color: Colors.deepOrangeAccent,
+                  textColor: Colors.white,
+                  child: bolc.returnchild(trans(context, 'login'))),
+            ),
+            const SizedBox(height: 80),
+            Text(trans(context, 'dont_have_account'), style: styles.mystyle),
+            ButtonToUse(trans(context, 'create_account'),
+                fw: FontWeight.bold,
+                fc: Colors.black,
+                width: MediaQuery.of(context).size.width,
+                myfunc: () => Navigator.pushNamed(context, '/Registration')),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(trans(context, 'you_have_shop_'), style: styles.mystyle),
+                  ButtonToUse(
+                    trans(context, 'click_here'),
+                    fw: FontWeight.bold,
+                    fc: Colors.green,
                   ),
                 ],
               ),
-            ]),
-          ),
-        ));
+            ),
+          ],
+        ),
+      ]),
+    ));
   }
 }

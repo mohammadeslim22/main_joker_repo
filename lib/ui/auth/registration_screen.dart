@@ -9,7 +9,6 @@ import '../widgets/buttonTouse.dart';
 import '../widgets/text_form_input.dart';
 import 'package:location/location.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
@@ -28,55 +27,6 @@ class _MyRegistrationState extends State<Registration>
     with TickerProviderStateMixin {
   List<String> location2;
   Location location = Location();
-  // SpinKitRing spinkit = const SpinKitRing(
-  //   color: Colors.orange,
-  //   size: 30.0,
-  //   lineWidth: 3,
-  // );
-  // SnackBar snackBar = SnackBar(
-  //   content: const Text("Location Service was not aloowed  !"),
-  //   action: SnackBarAction(
-  //     label: 'Ok !',
-  //     onPressed: () {},
-  //   ),
-  // );
-  // Future<bool> get updateLocation async {
-  //   bool res;
-  //   setState(() {
-  //     config.locationController.text = "getting your location...";
-  //   });
-  //   final List<String> loglat = await getLocation();
-  //   if (loglat.isEmpty) {
-  //     res = false;
-  //   } else {
-  //     setState(() {
-  //       location2 = loglat;
-  //       config.lat = double.parse(location2.elementAt(0));
-  //       config.long = double.parse(location2.elementAt(1));
-  //       res = true;
-  //     });
-  //   }
-  //   return res;
-  // }
-
-  // Future<void> getLocationName() async {
-  //   try {
-  //     config.coordinates = Coordinates(config.lat, config.long);
-  //     config.addresses =
-  //         await Geocoder.local.findAddressesFromCoordinates(config.coordinates);
-  //     config.first = config.addresses.first;
-  //     setState(() {
-  //       config.first = config.addresses.first;
-  //       config.locationController.text = (config.first == null)
-  //           ? "loading"
-  //           : config.first.addressLine ?? "loading";
-  //     });
-  //   } catch (e) {
-  //     config.locationController.text =
-  //         "Unkown latitude: ${config.lat.round().toString()} , longitud: ${config.long.round().toString()}";
-  //   }
-  // }
-
   bool _isButtonEnabled;
   static List<String> validators = <String>[null, null, null, null, null, null];
   static List<String> keys = <String>[
@@ -145,7 +95,7 @@ class _MyRegistrationState extends State<Registration>
         )) ??
         false;
   }
-   
+
   Widget customcard(BuildContext context, MyCounter bolc) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     final FocusNode focus = FocusNode();
@@ -385,7 +335,8 @@ class _MyRegistrationState extends State<Registration>
                       ),
                       customcard(context, bolc),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 16),
                         child: RaisedButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
@@ -413,7 +364,6 @@ class _MyRegistrationState extends State<Registration>
                                         "latitude": config.lat
                                       }).then((Response<dynamic> value) {
                                     setState(() {
-                                      print("am i under arrest?");
                                       _isButtonEnabled = true;
                                     });
 
@@ -423,12 +373,12 @@ class _MyRegistrationState extends State<Registration>
                                           .forEach((String k, dynamic vv) {
                                         setState(() {
                                           validationMap[k] = vv[0].toString();
-
                                         });
                                         print(validationMap);
                                       });
                                       _formKey.currentState.validate();
-                                      validationMap.updateAll((String key,String  value){
+                                      validationMap.updateAll(
+                                          (String key, String value) {
                                         return null;
                                       });
                                       print(validationMap);
@@ -446,7 +396,11 @@ class _MyRegistrationState extends State<Registration>
                                       data.setData(
                                           "password", passwordController.text);
                                       data.setData(
-                                          "mobile", mobileNoController.text);
+                                          "phone", mobileNoController.text);
+                                      data.setData(
+                                          "lat", config.lat.toString());
+                                      data.setData(
+                                          "long", config.long.toString());
                                     }
                                     bolc.togelf(false);
                                   });
