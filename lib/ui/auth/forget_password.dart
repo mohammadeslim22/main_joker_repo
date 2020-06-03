@@ -7,6 +7,9 @@ import 'package:joker/providers/counter.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../widgets/text_form_input.dart';
 import 'package:provider/provider.dart';
+import 'package:joker/util/dio.dart';
+import 'package:dio/dio.dart';
+import 'package:joker/util/data.dart';
 
 class ForgetPassword extends StatefulWidget {
   @override
@@ -15,6 +18,20 @@ class ForgetPassword extends StatefulWidget {
 
 class _MyForgetPassState extends State<ForgetPassword>
     with TickerProviderStateMixin {
+  String gotCode;
+  Future<void> sendCode() async {
+    final String phone = await data.getData("phone");
+    final Response<dynamic> correct = await dio.get<dynamic>("resend",
+        queryParameters: <String, dynamic>{"phone": phone});
+    print(correct.data);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    sendCode();
+  }
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -81,7 +98,10 @@ class _MyForgetPassState extends State<ForgetPassword>
                             focus1.requestFocus();
                           },
                           validator: (String value) {
-                            return "please enter your email ";
+                            if (value.length < 3) {
+                              return "username must be more than 3 letters";
+                            }
+                            return null;
                           }),
                       SafeArea(
                         child: Container(
@@ -112,7 +132,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                                   fieldWidth: 30,
                                   onCompleted: (String v) async {
                                     bolc.togelf(true);
-                                    if (true) {
+                                    if (gotCode.toString() == v) {
                                       Navigator.pushNamed(
                                           context, '/Reset_pass');
                                     }
@@ -137,15 +157,16 @@ class _MyForgetPassState extends State<ForgetPassword>
                                 borderRadius: BorderRadius.circular(18.0),
                                 side: BorderSide(color: colors.orange)),
                             onPressed: () async {
+                               Navigator.pushNamed(context, '/Reset_pass');
                               if (_formKey.currentState.validate()) {
                                 bolc.togelf(true);
-
+                               
                                 bolc.togelf(false);
                               }
                             },
                             color: Colors.deepOrangeAccent,
                             textColor: Colors.white,
-                            child: bolc.returnchild(trans(context, 'restore'))),
+                            child: bolc.returnchild(trans(context, 'reset'))),
                       ),
                     ],
                   ),

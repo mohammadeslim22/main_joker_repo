@@ -114,7 +114,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                     return "please enter your password ";
                   }
                   return validationMap['password'];
-                  ;
+                  
                 }),
           ],
         ),

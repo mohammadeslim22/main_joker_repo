@@ -128,7 +128,14 @@
     "my_address_list":"My Address List",
     "happy_to_recieve_message":"We'r Happy to hear form you",
     "enter_mobile_no":"Enter Mobile Number",
-    "reset_password":"Reset Password"
+    "reset_password":"Reset Password",
+    "membership_to":"Member Ship to",
+    "gender":"Gender",
+    "age":"Age",
+    "consruction_date":"Construction Date",
+    "affiliation_date":"Affiliation Date",
+    "membership_status":"Status",
+    "associate_members_count":"The number of associate members"
 
 
 }

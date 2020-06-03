@@ -8,6 +8,8 @@ import '../widgets/text_form_input.dart';
 import 'package:joker/util/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
+import 'package:joker/util/data.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class ResetPassword extends StatefulWidget {
   @override
@@ -77,7 +79,10 @@ class _MyResetPasswordState extends State<ResetPassword>
                 obscureText: _obscureText,
                 focusNode: focus1,
                 validator: (String value) {
-                  return "please enter your password ";
+                  if (value.length < 3) {
+                    return "username must be more than 3 letters";
+                  }
+                  return null;
                 }),
             TextFormInput(
                 text: trans(context, 'new_password'),
@@ -104,7 +109,10 @@ class _MyResetPasswordState extends State<ResetPassword>
                 obscureText: _obscureText,
                 focusNode: focus1,
                 validator: (String value) {
-                  return "please enter your password ";
+                  if (value.length < 3) {
+                    return "username must be more than 3 letters";
+                  }
+                  return null;
                 }),
           ],
         ),
@@ -137,14 +145,84 @@ class _MyResetPasswordState extends State<ResetPassword>
                           borderRadius: BorderRadius.circular(18.0),
                           side: BorderSide(color: colors.orange)),
                       onPressed: () async {
+                        AwesomeDialog(
+                            context: context,
+                            animType: AnimType.TOPSLIDE,
+                            headerAnimationLoop: false,
+                            dialogType: DialogType.SUCCES,
+                            title: 'Succes',
+                            desc:
+                                'Dialog description here..................................................',
+                            btnOkOnPress: () {
+                              debugPrint('OnClcik');
+                            },
+                            btnOkIcon: Icons.check_circle,
+                            onDissmissCallback: () {
+                              debugPrint('Dialog Dissmiss from callback');
+                            }).show();
                         if (_formKey.currentState.validate()) {
+                          final String phone = await data.getData('phone');
                           bolc.togelf(true);
-                          await dio.post<dynamic>("something",
-                              data: <String, String>{
-                    
+                          await dio.post<dynamic>("resetpassword",
+                              data: <String, dynamic>{
+                                'phone': phone,
+                                'password': newpasswordController.text.trim()
                               }).then((Response<dynamic> value) async {
                             print(value);
                             if (value.statusCode == 200) {
+                              // showGeneralDialog<dynamic>(
+                              //   barrierLabel: "Label",
+                              //   barrierDismissible: true,
+                              //   barrierColor: Colors.black.withOpacity(0.73),
+                              //   transitionDuration:
+                              //       const Duration(milliseconds: 350),
+                              //   context: context,
+                              //   pageBuilder: (BuildContext context,
+                              //       Animation<double> anim1,
+                              //       Animation<double> anim2) {
+                              //     return Align(
+                              //       alignment: Alignment.bottomCenter,
+                              //       child: Container(
+                              //         height: 400,
+                              //         margin: const EdgeInsets.only(
+                              //             bottom: 160, left: 12, right: 12),
+                              //         decoration: BoxDecoration(
+                              //           color: Colors.white,
+                              //           borderRadius: BorderRadius.circular(40),
+                              //         ),
+                              //         child: Material(
+                              //           type: MaterialType.transparency,
+                              //           child: SizedBox.expand(
+                              //             child: Column(
+                              //               children: <Widget>[
+                              //                 SvgPicture.asset(
+                              //                     'assets/images/checkdone.svg'),
+                              //                 const SizedBox(height: 15),
+                              //                 Text(
+                              //                   trans(context,
+                              //                       "password_edited_successfully"),
+                              //                   style: styles.underHeadblack,
+                              //                 )
+                              //               ],
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     );
+                              //   },
+                              //   transitionBuilder: (BuildContext context,
+                              //       Animation<double> anim1,
+                              //       Animation<double> anim2,
+                              //       Widget child) {
+                              //     return SlideTransition(
+                              //       position: Tween<Offset>(
+                              //               begin: const Offset(0, 1),
+                              //               end: const Offset(0, 0))
+                              //           .animate(anim1),
+                              //       child: child,
+                              //     );
+                              //   },
+                              // );
                               Navigator.pushNamed(context, '/login');
                             }
                           });

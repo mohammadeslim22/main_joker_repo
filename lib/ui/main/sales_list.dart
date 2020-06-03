@@ -12,9 +12,9 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 class DiscountsList extends StatefulWidget {
-  const DiscountsList({Key key, this.saleDataFilter, this.filterData})
+  const DiscountsList({Key key, this.filterData})
       : super(key: key);
-  final bool saleDataFilter;
+ // final bool saleDataFilter;
   final FilterData filterData;
   @override
   _DiscountsListState createState() => _DiscountsListState();
@@ -26,13 +26,13 @@ class _DiscountsListState extends State<DiscountsList> {
       RefreshController(initialRefresh: false);
   MyCounter bolc;
 
-  Future<List<SaleData>> getSalesData(int pageIndex) async {
-    print("am getting default sales ");
-    final Response<dynamic> response = await dio.get<dynamic>("sales",
-        queryParameters: <String, dynamic>{'page': pageIndex + 1});
-    sale = Sales.fromJson(response.data);
-    return sale.data;
-  }
+  // Future<List<SaleData>> getSalesData(int pageIndex) async {
+  //   print("am getting default sales ");
+  //   final Response<dynamic> response = await dio.get<dynamic>("sales",
+  //       queryParameters: <String, dynamic>{'page': pageIndex + 1});
+  //   sale = Sales.fromJson(response.data);
+  //   return sale.data;
+  // }
 
   Future<List<SaleData>> getSalesDataFilterd(
       int pageIndex, FilterData filterData) async {
@@ -122,9 +122,10 @@ class _DiscountsListState extends State<DiscountsList> {
                 child: SalesCard(context: context, sale: entry as SaleData));
           },
           pageFuture: (int pageIndex) {
-            return widget.saleDataFilter
-                ? getSalesDataFilterd(pageIndex, widget.filterData)
-                : getSalesData(pageIndex);
+            // return widget.saleDataFilter
+            //     ? getSalesDataFilterd(pageIndex, widget.filterData)
+            //     : getSalesData(pageIndex);
+           return  getSalesDataFilterd(pageIndex, widget.filterData);
           }),
     );
 

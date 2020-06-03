@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:vibration/vibration.dart';
-import '../models/search_model.dart';
 import '../localization/trans.dart';
 import '../constants/styles.dart';
 import 'widgets/text_form_input.dart';

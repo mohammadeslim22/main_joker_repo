@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:joker/models/membership.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/ui/advanced_search.dart';
+import 'package:joker/ui/sale_screen.dart';
 import 'package:joker/ui/auth/registration_screen.dart';
 import 'package:joker/ui/membership_details.dart';
 import 'package:joker/ui/my_membership.dart';
@@ -13,7 +14,7 @@ import 'package:joker/ui/auth//profile.dart';
 import 'package:joker/ui/notifications_screen.dart';
 import 'package:joker/ui/setLocation.dart';
 import 'package:joker/ui/settings.dart';
-import 'package:joker/ui/shop_details.dart';
+import 'package:joker/ui/merchant_details.dart';
 import 'package:joker/ui/favorite.dart';
 import '../ui/auth/login_screen.dart';
 import 'package:page_transition/page_transition.dart';
@@ -42,6 +43,12 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     case "/settings":
       page = PageTransition<PageController>(
         child: const Settings(),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
+          case "/SaleDetails":
+      page = PageTransition<PageController>(
+        child: const SaleDetails(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;

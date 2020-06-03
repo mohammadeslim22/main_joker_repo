@@ -55,9 +55,7 @@ class _SalesCardState extends State<SalesCard> {
                         child: CircleAvatar(
                           backgroundColor: colors.white,
                           radius: 12,
-                          child: SvgPicture.asset(
-                            'assets/images/loveicon.svg',
-                          ),
+                          child: SvgPicture.asset('assets/images/loveicon.svg'),
                         ),
                       ),
                     ])
@@ -73,20 +71,12 @@ class _SalesCardState extends State<SalesCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Expanded(
-                          child: Text(
-                            saledata.name,
-                            style: styles.underHead,
-                          ),
+                          child: Text(saledata.name, style: styles.underHead),
                         ),
                         Row(
                           children: <Widget>[
-                            Text(
-                              saledata.status,
-                              style: styles.mylight,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
+                            Text(saledata.status, style: styles.mylight),
+                            const SizedBox(width: 5),
                             CircleAvatar(
                               backgroundColor: Colors.green,
                               radius: 6,

@@ -41,7 +41,8 @@ class Styles {
       fontWeight: FontWeight.w100,
       color: Colors.black,
       fontSize: 15,
-      height: 1.7);
+      height: 1.7
+      );
   TextStyle mystyle2 = const TextStyle(
     fontWeight: FontWeight.bold,
     color: Colors.black,

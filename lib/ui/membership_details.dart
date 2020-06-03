@@ -83,7 +83,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            "${trans(context, 'account')}",
+                            "${trans(context, 'membership_to')}",
                             style: styles.smallButton,
                           ),
                           Text(
@@ -99,40 +99,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            "${trans(context, 'account')}",
-                            style: styles.smallButton,
-                          ),
-                          Text(
-                            "${trans(context, 'account')}",
-                            style: styles.smallButton,
-                          ),
-                        ],
-                      )),
-                  Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      height: hight,
-                      color: colors.grey,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "${trans(context, 'account')}",
-                            style: styles.smallButton,
-                          ),
-                          Text(
-                            "${trans(context, 'account')}",
-                            style: styles.smallButton,
-                          ),
-                        ],
-                      )),
-                  Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      height: hight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "${trans(context, 'account')}",
+                            "${trans(context, 'gender')}",
                             style: styles.smallButton,
                           ),
                           Text(
@@ -149,7 +116,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            "${trans(context, 'account')}",
+                            "${trans(context, 'age')}",
                             style: styles.smallButton,
                           ),
                           Text(
@@ -165,7 +132,40 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
+                            "${trans(context, 'consruction_date')}",
+                            style: styles.smallButton,
+                          ),
+                          Text(
                             "${trans(context, 'account')}",
+                            style: styles.smallButton,
+                          ),
+                        ],
+                      )),
+                  Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      height: hight,
+                      color: colors.grey,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            "${trans(context, 'affiliation_date')}",
+                            style: styles.smallButton,
+                          ),
+                          Text(
+                            "${trans(context, 'account')}",
+                            style: styles.smallButton,
+                          ),
+                        ],
+                      )),
+                  Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      height: hight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            "${trans(context, 'membership_status')}",
                             style: styles.smallButton,
                           ),
                           Text(
@@ -182,42 +182,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            "${trans(context, 'account')}",
-                            style: styles.smallButton,
-                          ),
-                          Text(
-                            "${trans(context, 'account')}",
-                            style: styles.smallButton,
-                          ),
-                        ],
-                      )),
-                  Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      height: hight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "${trans(context, 'account')}",
-                            style: styles.smallButton,
-                          ),
-                          Text(
-                            "${trans(context, 'account')}",
-                            style: isactivated
-                                ? styles.smallButtonactivated
-                                : styles.smallButton,
-                          ),
-                        ],
-                      )),
-                  Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      height: hight,
-                      color: colors.grey,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "${trans(context, 'account')}",
+                            "${trans(context, 'associate_members_count')}",
                             style: styles.smallButton,
                           ),
                           Text(
@@ -254,12 +219,11 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                   _errorController =
                       _scaffoldkey.currentState.showBottomSheet<dynamic>(
                     (BuildContext context) => Container(
-                      
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
-                      decoration:  BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Colors.black.withOpacity(.6),
-                        borderRadius:const  BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             topRight: Radius.circular(12)),
                       ),
@@ -272,8 +236,8 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 SvgPicture.asset("assets/images/vip.svg"),
-                                Text(trans(context, "membership_details_edit")
-                                  ,
+                                Text(
+                                  trans(context, "membership_details_edit"),
                                   style: styles.memberShipBottomSheet,
                                 ),
                               ],

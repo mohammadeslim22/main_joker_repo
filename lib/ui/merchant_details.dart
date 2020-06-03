@@ -26,7 +26,6 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
 
   Future<Merchant> getMerchantData(int id) async {
     final dynamic response = await dio.get<dynamic>("merchants/$id");
-
     merchant = Merchant.fromJson(response.data);
     return merchant;
   }

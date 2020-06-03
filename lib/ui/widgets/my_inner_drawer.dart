@@ -14,8 +14,7 @@ class MyInnerDrawer extends StatefulWidget {
 
   final Widget scaffold;
 
-  final GlobalKey<InnerDrawerState>
-      drawerKey; 
+  final GlobalKey<InnerDrawerState> drawerKey;
   @override
   _MyInnerDrawerState createState() => _MyInnerDrawerState();
 }
@@ -29,12 +28,12 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
         // direction: InnerDrawerDirection.end,
         );
   }
-@override
-@override
-void initState() { 
-  super.initState();
-}
 
+  @override
+  @override
+  void initState() {
+    super.initState();
+  }
 
   final String imageUrl =
       "https://celebritypets.net/wp-content/uploads/2016/12/Adriana-Lima.jpg";
@@ -147,7 +146,7 @@ void initState() {
                 title: Text("${trans(context, 'account')}"),
                 leading: SvgPicture.asset("assets/images/account.svg"),
                 onTap: () {
-                    Navigator.pushNamed(context, "/Profile");
+                  Navigator.pushNamed(context, "/Profile");
                   toggle();
                 },
               ),
@@ -156,7 +155,10 @@ void initState() {
                 title: Text("${trans(context, 'membership')}"),
                 leading: SvgPicture.asset("assets/images/vip.svg"),
                 onTap: () {
-                     Navigator.pushNamed(context, "/Membership",arguments: <String,List<MemberShip>>{"membershipsData":MemberShip.membershipsData});
+                  Navigator.pushNamed(context, "/Membership",
+                      arguments: <String, List<MemberShip>>{
+                        "membershipsData": MemberShip.membershipsData
+                      });
                   toggle();
                 },
               ),
@@ -204,14 +206,13 @@ void initState() {
               ),
             ],
           ),
-           
           const SizedBox(height: 36.0),
           ListTile(
             contentPadding: const EdgeInsets.only(left: 0),
             title: Text("${trans(context, 'logout')}"),
             leading: SvgPicture.asset("assets/images/logout.svg"),
             onTap: () {
-              toggle();
+              Navigator.pushNamed(context, '/login');
             },
           ),
         ],

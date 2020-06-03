@@ -254,17 +254,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       height: 16,
                       width: 16,
                     ),
-
-                    // IconButton(
-                    //   icon: const Icon(Icons.g_translate),
-                    //   onPressed: () {
-                    //     if (lang.currentLanguage == const Locale('ar')) {
-                    //       lang.setLanguage(const Locale('en'));
-                    //     } else {
-                    //       lang.setLanguage(const Locale('ar'));
-                    //     }
-                    //   },
-                    // ),
                     IconButton(
                       icon: Icon(Icons.search, color: colors.orange),
                       onPressed: () {
@@ -297,7 +286,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               child: Container(
                   color: colors.grey,
                   child: (bolc.bottomNavIndex == 0)
-                      ? DiscountsList(saleDataFilter: widget.salesDataFilter,filterData: widget.filterData)
+                      ? DiscountsList(filterData: widget.filterData)
                       : ShopList()),
             )),
         bottomNavigationBar: SizeTransition(

@@ -35,11 +35,10 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
   }
 
   Future<bool> getPinCode(String code) async {
-    String phone;
-    phone = await data.getData("phone");
+   final String phone = await data.getData("phone");
     print(phone);
     final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
-        data: <String, dynamic>{"phone": "400400", "verfiy_code": code});
+        data: <String, dynamic>{"phone": phone, "verfiy_code": code});
      print("$code  $phone");
     print(correct.data);
     if (correct.data == "false") {
