@@ -48,8 +48,9 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       break;
           case "/SaleDetails":
       page = PageTransition<PageController>(
-        child: const SaleDetails(),
+        child:  SaleDetailPage(merchantId: args['merchant_id'] as int,),
         type: PageTransitionType.rightToLeftWithFade,
+
       );
       break;
     case "/AutoLocate":

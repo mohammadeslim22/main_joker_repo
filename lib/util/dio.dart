@@ -28,8 +28,8 @@ void dioDefaults() {
   dio.interceptors
       .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
     // Do something before request is sent
-    // options.queryParameters.addAll(
-    //     <String, String>{'latitude': config.lat.toString(), 'longitude': config.long.toString()});
+    options.queryParameters.addAll(
+        <String, String>{'latitude': config.lat.toString(), 'longitude': config.long.toString()});
     return options;
     // If you want to resolve the request with some custom data，
     // you can return a `Response` object or return `dio.resolve(data)`.

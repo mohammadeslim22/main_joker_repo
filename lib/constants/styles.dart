@@ -31,6 +31,7 @@ class Styles {
     fontWeight: FontWeight.w100,
     color: Colors.black,
     fontSize: 13,
+    height: 1.7
   );
     TextStyle mysmallforgridview = const TextStyle(
     fontWeight: FontWeight.w100,
@@ -40,6 +41,12 @@ class Styles {
   TextStyle mystyle = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.black,
+      fontSize: 15,
+      height: 1.7
+      );
+        TextStyle myredstyle = const TextStyle(
+      fontWeight: FontWeight.w100,
+      color: Colors.red,
       fontSize: 15,
       height: 1.7
       );

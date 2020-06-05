@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/counter.dart';
@@ -11,10 +12,9 @@ import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+
 class DiscountsList extends StatefulWidget {
-  const DiscountsList({Key key, this.filterData})
-      : super(key: key);
- // final bool saleDataFilter;
+  const DiscountsList({Key key, this.filterData}) : super(key: key);
   final FilterData filterData;
   @override
   _DiscountsListState createState() => _DiscountsListState();
@@ -26,22 +26,19 @@ class _DiscountsListState extends State<DiscountsList> {
       RefreshController(initialRefresh: false);
   MyCounter bolc;
 
-  // Future<List<SaleData>> getSalesData(int pageIndex) async {
-  //   print("am getting default sales ");
-  //   final Response<dynamic> response = await dio.get<dynamic>("sales",
-  //       queryParameters: <String, dynamic>{'page': pageIndex + 1});
-  //   sale = Sales.fromJson(response.data);
-  //   return sale.data;
-  // }
+  Future<List<SaleData>> getSalesData(int pageIndex) async {
+    print("am getting default sales ");
+    final Response<dynamic> response = await dio.get<dynamic>("sales",
+        queryParameters: <String, dynamic>{'page': pageIndex + 1});
+    sale = Sales.fromJson(response.data);
+    return sale.data;
+  }
 
   Future<List<SaleData>> getSalesDataFilterd(
       int pageIndex, FilterData filterData) async {
-        final DateFormat formatter =  DateFormat('yyyy-MM-dd');
-  final String startDate = formatter.format(filterData.startingdate);
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String startDate = formatter.format(filterData.startingdate);
     final String endDate = formatter.format(filterData.endingdate);
-
-        print(filterData.toString());
-        print("$startDate   + $endDate");
     final Response<dynamic> response =
         await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
@@ -51,8 +48,10 @@ class _DiscountsListState extends State<DiscountsList> {
       'to_date': endDate,
       'rate': filterData.rating,
       'specifications': filterData.specifications
+
     });
     print(response.data);
+    print("merchant_name ${filterData.merchantNameOrPartOfit} + name + ${filterData.saleNameOrPartOfit} + startDate $startDate + $endDate  + ${filterData.rating} + ${filterData.specifications}");
     sale = Sales.fromJson(response.data);
     return sale.data;
   }
@@ -121,11 +120,14 @@ class _DiscountsListState extends State<DiscountsList> {
             return FadeIn(
                 child: SalesCard(context: context, sale: entry as SaleData));
           },
+          noItemsFoundBuilder: (BuildContext context) {
+            return Text(trans(context, "noting_to_show"));
+          },
           pageFuture: (int pageIndex) {
-            // return widget.saleDataFilter
-            //     ? getSalesDataFilterd(pageIndex, widget.filterData)
-            //     : getSalesData(pageIndex);
-           return  getSalesDataFilterd(pageIndex, widget.filterData);
+          //  return getSalesDataFilterd(pageIndex, widget.filterData);
+            return (widget.filterData != null)
+                ? getSalesDataFilterd(pageIndex, widget.filterData)
+                : getSalesData(pageIndex);
           }),
     );
 

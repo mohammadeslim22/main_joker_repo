@@ -33,7 +33,10 @@ class _SalesCardState extends State<SalesCard> {
             topLeft: Radius.circular(12), topRight: Radius.circular(12)),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+           Navigator.pushNamed(context, "/SaleDetails",
+           arguments:<String, dynamic>{"merchant_id":saledata.merchant.id});
+        },
         child: Column(
           children: <Widget>[
             Container(

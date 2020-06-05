@@ -426,8 +426,6 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                           saleName.text,
                           starttoday,
                           endtoday,
-                          config.lat,
-                          config.long,
                           _ratingStar,
                           List<int>.from(selectedOptions) 
                           )

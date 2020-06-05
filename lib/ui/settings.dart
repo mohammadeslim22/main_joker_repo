@@ -49,13 +49,8 @@ class MySettingState extends State<SettingsScreen>
               color: Colors.white,
               child: Row(
                 children: <Widget>[
-                  Text(
-                    trans(context, "font"),
-                    style: styles.mystyle,
-                  ),
-                  const SizedBox(
-                    width: 3,
-                  ),
+                  Text(trans(context, "font"), style: styles.mystyle),
+                  const SizedBox(width: 3),
                   Flexible(
                     fit: FlexFit.tight,
                     child: Container(child: fontBar(context)),
@@ -95,9 +90,7 @@ class MySettingState extends State<SettingsScreen>
               ],
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             color: Colors.white,
@@ -124,23 +117,17 @@ class MySettingState extends State<SettingsScreen>
             color: Colors.white,
             child: Row(
               children: <Widget>[
-                Text(
-                  trans(context, "language"),
-                  style: styles.mystyle,
-                ),
+                Text(trans(context, "language"), style: styles.mystyle),
                 Flexible(child: Container(child: languagBar(context)))
               ],
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
               child: FlatButton(
                   onPressed: () {
-                Navigator.pushNamed(context, "/ChangePassword");
-
+                    Navigator.pushNamed(context, "/ChangePassword");
                   },
                   child: Text(trans(context, "change_password"))))
         ],
@@ -178,9 +165,7 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
                 trans(context, choice),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(
-                height: 3,
-              ),
+              const SizedBox(height: 3),
               AnimatedOpacity(
                   opacity: list[index] ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 800),
@@ -238,10 +223,9 @@ Widget languagBar(BuildContext context) {
 
 Widget verticalDiv() {
   return Container(
-    child: const VerticalDivider(
-      color: Colors.grey,
-      thickness: 1,
-    ),
-    height: 18,
-  );
+      child: const VerticalDivider(
+        color: Colors.grey,
+        thickness: 1,
+      ),
+      height: 18);
 }
