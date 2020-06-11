@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:joker/constants/config.dart';
+import 'package:joker/util/dio.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 
@@ -70,15 +71,31 @@ Future<void> getLocationName() async {
         "Unkown latitude: ${config.lat.round().toString()} , longitud: ${config.long.round().toString()}";
   }
 }
-  SnackBar snackBar = SnackBar(
-    content: const Text("Location Service was not aloowed  !"),
-    action: SnackBarAction(
-      label: 'Ok !',
-      onPressed: () {},
-    ),
-  );
-    SpinKitRing spinkit = const SpinKitRing(
-    color: Colors.orange,
-    size: 30.0,
-    lineWidth: 3,
-  );
+
+SnackBar snackBar = SnackBar(
+  content: const Text("Location Service was not aloowed  !"),
+  action: SnackBarAction(
+    label: 'Ok !',
+    onPressed: () {},
+  ),
+);
+SpinKitRing spinkit = const SpinKitRing(
+  color: Colors.orange,
+  size: 30.0,
+  lineWidth: 3,
+);
+
+Future<dynamic> likeFunction(String phone, String model, int likeId) async {
+ return  await dio.post<dynamic>("likes", data: <String, dynamic>{
+    'phone': phone,
+    'model': model,
+    'like_id': likeId
+  });
+}
+Future<dynamic> favFunction(String phone, String model, int favoriteId) async {
+ return  await dio.post<dynamic>("favorites", data: <String, dynamic>{
+    'phone': phone,
+    'model': model,
+    'favorite_id': favoriteId
+  });
+}

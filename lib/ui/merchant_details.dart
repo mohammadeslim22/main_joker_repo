@@ -4,17 +4,16 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/merchant.dart';
+import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
+import 'package:joker/util/functions.dart';
 import 'package:like_button/like_button.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'main/merchant_sales_list.dart';
 
 class ShopDetails extends StatefulWidget {
-  const ShopDetails({Key key, this.likecount, this.lovecount, this.merchantId})
-      : super(key: key);
+  const ShopDetails({Key key, this.merchantId}) : super(key: key);
 
-  final int likecount;
-  final int lovecount;
   final int merchantId;
 
   @override
@@ -39,10 +38,7 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
         future: getMerchantData(widget.merchantId),
         builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Page(
-                likecount: widget.likecount,
-                lovecount: widget.lovecount,
-                merchant: merchant);
+            return Page(merchant: merchant);
           } else {
             return const Center(
                 child: CircularProgressIndicator(
@@ -72,14 +68,15 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
   Merchant merchant;
   int likecount;
   int lovecount;
-  Future<bool> onLikeButtonTapped(bool isLiked) async {
-    return !isLiked;
-  }
+  int salesNo;
+
 
   @override
   void initState() {
     super.initState();
     merchant = widget.merchant;
+    salesNo = merchant.mydata.salesCount;
+
     _tabController =
         TabController(vsync: this, length: merchant.mydata.branches.length);
     _tabController.addListener(() {
@@ -87,8 +84,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
       } else if (_tabController.index != _tabController.previousIndex) {}
     });
 
-    likecount = widget.likecount;
-    lovecount = widget.lovecount;
+    likecount = merchant.mydata.likesCount;
   }
 
   @override
@@ -152,12 +148,14 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                               style: const TextStyle(color: Colors.black),
                             );
                           },
-                          likeCount: lovecount,
+                          likeCount: likecount,
                           countPostion: CountPostion.bottom,
                           circleColor: CircleColor(
                               start: Colors.white, end: Colors.purple),
-                          onTap: (bool loved) {
-                            return onLikeButtonTapped(loved);
+                          onTap: (bool loved) async {
+                            final String phone = await data.getData('phone');
+                              likeFunction(phone,"App\\Merchant",merchant.mydata.id) ;
+                              return true;
                           },
                         ),
                         const SizedBox(width: 8),
@@ -175,17 +173,19 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                   style: const TextStyle(color: Colors.black),
                                 );
                               },
-                              likeCount: lovecount,
+                              
                               countPostion: CountPostion.bottom,
                               circleColor: CircleColor(
                                   start: Colors.blue, end: Colors.purple),
-                              onTap: (bool loved) {
-                                return onLikeButtonTapped(loved);
+                              onTap: (bool loved) async {
+                               final String phone = await data.getData('phone');
+                              likeFunction(phone,"App\\Merchant",merchant.mydata.id) ;
+                              return true;
                               },
                               likeCountPadding:
                                   const EdgeInsets.symmetric(vertical: 0),
                             ),
-                            const SizedBox(height: 6)
+                            const SizedBox(height: 20)
                           ],
                         ),
                       ],
@@ -290,11 +290,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                               onPressed: () {},
                               color: Colors.grey[300],
                               textColor: Colors.black,
-                              child: Text(
-                                  trans(
-                                    context,
-                                    "send_complaint",
-                                  ),
+                              child: Text(trans(context, "send_complaint"),
                                   style: styles.mystyle),
                             ),
                             Column(
@@ -341,8 +337,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(trans(context, "shop_offers") +
-                  "   ( ${merchant.mydata.branches.length} )"),
+              Text(trans(context, "shop_offers") + "( $salesNo )"),
               InkWell(
                 child: Text(trans(context, "show_all")),
                 onTap: () {},
@@ -350,7 +345,8 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
             ],
           ),
         ),
-        Container(child: MerchantSalesList())
+        Container(
+            child: MerchantSalesList(merchantId: widget.merchant.mydata.id))
       ],
     );
   }

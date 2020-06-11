@@ -10,8 +10,11 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
 
 class MerchantSalesList extends StatefulWidget {
+  const MerchantSalesList({Key key, this.merchantId}) : super(key: key);
+
   @override
   _MerchantSalesListState createState() => _MerchantSalesListState();
+  final int merchantId;
 }
 
 class _MerchantSalesListState extends State<MerchantSalesList> {
@@ -20,7 +23,7 @@ class _MerchantSalesListState extends State<MerchantSalesList> {
 
   MyCounter bolc;
   Future<List<SaleData>> getSalesData(int pageIndex) async {
-    final Response<dynamic> response = await dio.get<dynamic>("sales", queryParameters:<String, dynamic> {'page': pageIndex+1});
+    final Response<dynamic> response = await dio.get<dynamic>("sales?merchant_id=${widget.merchantId}", queryParameters:<String, dynamic> {'page': pageIndex+1});
 
     sale = Sales.fromJson(response.data);
 

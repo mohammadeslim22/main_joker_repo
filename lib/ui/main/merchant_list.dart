@@ -92,32 +92,6 @@ class _ShopListState extends State<ShopList> {
           pageFuture: (int pageIndex) {
             return getBranchesData(pageIndex);
           }),
-          
-        //  FutureBuilder<List<Shop>>(
-        //     // future: shops,
-        //     builder: (BuildContext ctx, AsyncSnapshot<List<Shop>> snapshot) {
-        //   //   shops.then((List<Shop> onValue){
-        //   //  //   templList= onValue;
-        //   //   });
-        //   if (snapshot.connectionState == ConnectionState.done) {
-        //     return ListView.builder(
-        //       padding: const EdgeInsets.all(20),
-        //       itemCount: movieData.length,
-        //       addRepaintBoundaries: true,
-        //       itemBuilder: (BuildContext context, int index) {
-        //         // return FadeIn(
-        //         //     child: MerchantCard(
-        //         //         context: context, branchData: movieData.elementAt(index)));
-        //       },
-        //     );
-        //   } else {
-        //     return const Center(
-        //         child: CircularProgressIndicator(
-        //       backgroundColor: Colors.transparent,
-        //     ));
-        //   }
-        // })
-        
         );
   }
 }

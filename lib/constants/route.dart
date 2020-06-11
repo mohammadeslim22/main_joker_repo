@@ -15,7 +15,7 @@ import 'package:joker/ui/notifications_screen.dart';
 import 'package:joker/ui/setLocation.dart';
 import 'package:joker/ui/settings.dart';
 import 'package:joker/ui/merchant_details.dart';
-import 'package:joker/ui/favorite.dart';
+import 'package:joker/ui/favorite_screen.dart';
 import '../ui/auth/login_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import '../ui/home.dart';
@@ -48,7 +48,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       break;
           case "/SaleDetails":
       page = PageTransition<PageController>(
-        child:  SaleDetailPage(merchantId: args['merchant_id'] as int,),
+        child:  SaleDetailPage(merchantId: args['merchant_id'] as int, saleId: args['sale_id'] as int,),
         type: PageTransitionType.rightToLeftWithFade,
 
       );
@@ -72,8 +72,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       page = PageTransition<PageController>(
         child: ShopDetails(
             merchantId: args['merchantId'] as int,
-            likecount: args['likecount'] as int,
-            lovecount: args['lovecount'] as int),
+          ),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;

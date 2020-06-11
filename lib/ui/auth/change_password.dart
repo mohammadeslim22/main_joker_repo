@@ -37,11 +37,10 @@ class _MyChangePasswordState extends State<ChangePassword>
         false;
   }
 
-  static List<String> validators = <String>[null, null, null];
+  static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
-    'oldpasswoed',
-    'newpassword',
-    'newpassword2'
+    'old_passwoed',
+    'new_password'
   ];
   Map<String, String> validationMap =
       Map<String, String>.fromIterables(keys, validators);
@@ -76,7 +75,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                   focus1.requestFocus();
                 },
                 validator: (String value) {
-                  return validationMap['oldpasswoed'];
+                  return validationMap['old_passwoed'];
                 }),
             TextFormInput(
                 text: trans(context, 'new_password'),
@@ -106,7 +105,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                   if (value.length < 6) {
                     return "password must be more than 5 letters";
                   }
-                  return validationMap['newpassword'];
+                  return validationMap['new_password'];
                 }),
             TextFormInput(
                 text: trans(context, 'new_password'),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
 import '../widgets/buttonTouse.dart';
 import 'package:dio/dio.dart';
+import '../widgets/custom_toast_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -114,7 +116,6 @@ class _MyLoginScreenState extends State<LoginScreen>
                     return "please enter your password ";
                   }
                   return validationMap['password'];
-                  
                 }),
           ],
         ),
@@ -207,19 +208,32 @@ class _MyLoginScreenState extends State<LoginScreen>
                           }
 
                           if (value.statusCode == 200) {
-                            await data.setData("authorization",
-                                "Bearer ${value.data['api_token']}");
-                            data.getData('authorization').then<dynamic>(
-                                (dynamic auth) => dio.options.headers.update(
-                                    'authorization',
-                                    (dynamic value) async => auth));
+                            if (value.data != "fail") {
+                              await data.setData("authorization",
+                                  "Bearer ${value.data['api_token']}");
+                              data.getData('authorization').then<dynamic>(
+                                  (dynamic auth) => dio.options.headers.update(
+                                      'authorization',
+                                      (dynamic value) async => auth));
 
-                            print(dio.options.headers);
-                            Navigator.pushNamed(context, '/Home',
-                                arguments: <String, dynamic>{
-                                  "salesDataFilter": false,
-                                  "FilterData": null
-                                });
+                              print(dio.options.headers);
+                              Navigator.pushNamed(context, '/Home',
+                                  arguments: <String, dynamic>{
+                                    "salesDataFilter": false,
+                                    "FilterData": null
+                                  });
+                            } else {
+                              showToastWidget(
+                                  IconToastWidget.fail(msg: 'Wrong password'),
+                                  context: context,
+                                  position: StyledToastPosition.center,
+                                  animation: StyledToastAnimation.scale,
+                                  reverseAnimation: StyledToastAnimation.fade,
+                                  duration: const Duration(seconds: 4),
+                                  animDuration: const Duration(seconds: 1),
+                                  curve: Curves.elasticOut,
+                                  reverseCurve: Curves.linear);
+                            }
                           }
                         });
                         bolc.togelf(false);

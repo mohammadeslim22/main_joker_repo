@@ -9,23 +9,10 @@ class Merchant {
   Data mydata;
   Links links;
   Meta meta;
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (data != null) {
-      data['data'] = mydata.toJson();
-    }
-    if (links != null) {
-      data['links'] = links.toJson();
-    }
-    if (meta != null) {
-      data['meta'] = meta.toJson();
-    }
-    return data;
-  }
 }
 
 class Data {
-  Data({this.id, this.name, this.logo, this.branches, this.sales});
+  Data({this.id, this.name, this.logo, this.branches, this.salesCount,this.likesCount});
 
   Data.fromJson(dynamic json) {
     id = json['id'] as int;
@@ -37,31 +24,23 @@ class Data {
         branches.add(Branches.fromJson(v));
       });
     }
-    if (json['sales'] != null) {
-      sales = <Sales>[];
-      json['sales'].forEach((dynamic v) {
-        sales.add(Sales.fromJson(v));
-      });
+    if (json['sales_count'] != null) {
+      salesCount = json['sales_count'] as int;
+    } else {
+      salesCount = 0;
+    }
+       if (json['likes_count'] != null) {
+      likesCount = json['likes_count'] as int;
+    } else {
+      likesCount = 0;
     }
   }
   int id;
   String name;
   String logo;
   List<Branches> branches;
-  List<Sales> sales;
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['logo'] = logo;
-    if (branches != null) {
-      data['branches'] = branches.map((Branches v) => v.toJson()).toList();
-    }
-    if (sales != null) {
-      data['sales'] = sales.map((Sales v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  int salesCount;
+  int likesCount;
 }
 
 class Branches {
@@ -138,57 +117,6 @@ class CityId {
     data['id'] = id;
     data['country_id'] = countryId;
     data['name'] = name;
-    return data;
-  }
-}
-
-class Sales {
-  Sales(
-      {this.id,
-      this.name,
-      this.oldPrice,
-      this.price,
-      this.startAt,
-      this.endAt,
-      this.details,
-      this.status,
-      this.mainImage,
-      this.cropedImage});
-
-  Sales.fromJson(dynamic json) {
-    id = json['id'] as int;
-    name = json['name'].toString();
-    oldPrice = json['old_price'].toString();
-    price = json['_price'].toString();
-    startAt = json['start_at'].toString();
-    endAt = json['end_at'].toString();
-    details = json['details'].toString();
-    status = json['status'].toString();
-    mainImage = json['main_image'].toString();
-    cropedImage = json['croped_image'].toString();
-  }
-  int id;
-  String name;
-  String oldPrice;
-  String price;
-  String startAt;
-  String endAt;
-  String details;
-  String status;
-  String mainImage;
-  String cropedImage;
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['old_price'] = oldPrice;
-    data['_price'] = price;
-    data['start_at'] = startAt;
-    data['end_at'] = endAt;
-    data['details'] = details;
-    data['status'] = status;
-    data['main_image'] = mainImage;
-    data['croped_image'] = cropedImage;
     return data;
   }
 }

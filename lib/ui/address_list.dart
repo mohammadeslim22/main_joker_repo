@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/constants/styles.dart';
-import 'package:joker/models/sales.dart';
+import 'package:joker/models/merchant.dart';
 import 'package:joker/util/dio.dart';
 
 class AddressList extends StatefulWidget {

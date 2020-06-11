@@ -79,8 +79,7 @@ class _AutoLocateState extends State<AutoLocate> {
   }
 
   Future<bool> _willPopCallback() async {
-
-    Provider.of<MyCounter>(context,listen: false).togelocationloading(false);
+    Provider.of<MyCounter>(context, listen: false).togelocationloading(false);
     Navigator.pop(context);
     return true;
   }
@@ -89,167 +88,195 @@ class _AutoLocateState extends State<AutoLocate> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: _willPopCallback,
-        child: Scaffold(
-          appBar: AppBar(title: Text(trans(context, 'set_ur_location'))),
-          key: _scaffoldKey,
-          resizeToAvoidBottomInset: false,
-          body: Stack(
-            children: <Widget>[
-              GoogleMap(
-                onMapCreated: _onMapCreated,
-                padding: const EdgeInsets.only(bottom: 60),
-                mapType: MapType.normal,
-                markers: Set<Marker>.of(markers.values),
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(lat, long),
-                  zoom: 5,
-                ),
-                onCameraMove: (CameraPosition pos) {
-                  setState(() {
-                    lat = pos.target.latitude;
-                    long = pos.target.longitude;
-                  });
-                },
-                onCameraIdle: () {
-                  setState(() {
-                    getLocationName(long, lat);
-                  });
-                },
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  height: 170,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: const <Color>[
-                        Color.fromARGB(1023, 249, 249, 249),
-                        Color.fromARGB(0, 255, 255, 255)
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+        child: Stack(
+          children: <Widget>[
+            Scaffold(
+              appBar: AppBar(title: Text(trans(context, 'set_ur_location'))),
+              key: _scaffoldKey,
+              resizeToAvoidBottomInset: false,
+              body: Stack(
+                children: <Widget>[
+                  GoogleMap(
+                    circles: <Circle>{
+                      Circle(
+                          circleId: CircleId("id"),
+                          center: LatLng(lat, long),
+                          fillColor: Colors.blue.withOpacity(.3),
+                          radius: 40000,
+                          strokeColor: Colors.transparent,
+                          zIndex: 20,
+                          strokeWidth: 2)
+                    },
+                    onMapCreated: _onMapCreated,
+                    padding: const EdgeInsets.only(bottom: 60),
+                    mapType: MapType.normal,
+                    markers: Set<Marker>.of(markers.values),
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(lat, long),
+                      zoom: 5,
                     ),
+                    onCameraMove: (CameraPosition pos) {
+                      setState(() {
+                        lat = pos.target.latitude;
+                        long = pos.target.longitude;
+                      });
+                    },
+                    onCameraIdle: () {
+                      setState(() {
+                        getLocationName(long, lat);
+                      });
+                    },
                   ),
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Card(
-                          elevation: 8,
-                          margin: const EdgeInsets.all(0),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: ListTile(
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  address == null
-                                      ? 'Loading'
-                                      : address.addressLine ?? '',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11),
-                                ),
-                                Text(
-                                  address == null
-                                      ? 'Loading'
-                                      : address.adminArea ?? 'Unknown',
-                                  style: const TextStyle(fontSize: 9),
-                                ),
-                              ],
-                            ),
-                            leading: IconButton(
-                              onPressed: null,
-                              icon: Icon(Icons.search),
-                            ),
-                            trailing: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.bookmark),
-                            ),
-                          ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      height: 170,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: const <Color>[
+                            Color.fromARGB(1023, 249, 249, 249),
+                            Color.fromARGB(0, 255, 255, 255)
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  child: Icon(
-                    FontAwesomeIcons.mapMarkerAlt,
-                    color: colors.blue,
-                    size: 32,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, bottom: 69),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    child: Material(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(6),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(6),
-                        onTap: () {},
-                        child: GestureDetector(
-                          child: Center(
-                            child: Icon(
-                              Icons.my_location,
-                              color: const Color.fromARGB(1023, 150, 150, 150),
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Card(
+                              elevation: 8,
+                              margin: const EdgeInsets.all(0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: ListTile(
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      address == null
+                                          ? 'Loading'
+                                          : address.addressLine ?? '',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11),
+                                    ),
+                                    Text(
+                                      address == null
+                                          ? 'Loading'
+                                          : address.adminArea ?? 'Unknown',
+                                      style: const TextStyle(fontSize: 9),
+                                    ),
+                                  ],
+                                ),
+                                leading: IconButton(
+                                  onPressed: null,
+                                  icon: Icon(Icons.search),
+                                ),
+                                trailing: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.bookmark),
+                                ),
+                              ),
                             ),
                           ),
-                          onTap: () async {
-                            serviceEnabled = await location.serviceEnabled();
-                            if (!serviceEnabled) {
-                              serviceEnabled = await location.requestService();
-                              if (!serviceEnabled) {
-                              } else {
-                                permissionGranted =
-                                    await location.hasPermission();
-                                if (permissionGranted ==
-                                    PermissionStatus.denied) {
-                                  permissionGranted =
-                                      await location.requestPermission();
-                                  if (permissionGranted ==
-                                      PermissionStatus.granted) {
-                                    _animateToUser();
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Align(
+                  //   alignment: Alignment.center,
+                  //   child: Container(
+                  //     child: Icon(
+                  //       FontAwesomeIcons.mapMarkerAlt,
+                  //       color: colors.blue,
+                  //       size: 32,
+                  //     ),
+                  //   ),
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, bottom: 69),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        child: Material(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(6),
+                            onTap: () {},
+                            child: GestureDetector(
+                              child: Center(
+                                child: Icon(
+                                  Icons.my_location,
+                                  color:
+                                      const Color.fromARGB(1023, 150, 150, 150),
+                                ),
+                              ),
+                              onTap: () async {
+                                serviceEnabled =
+                                    await location.serviceEnabled();
+                                if (!serviceEnabled) {
+                                  serviceEnabled =
+                                      await location.requestService();
+                                  if (!serviceEnabled) {
+                                  } else {
+                                    permissionGranted =
+                                        await location.hasPermission();
+                                    if (permissionGranted ==
+                                        PermissionStatus.denied) {
+                                      permissionGranted =
+                                          await location.requestPermission();
+                                      if (permissionGranted ==
+                                          PermissionStatus.granted) {
+                                        _animateToUser();
+                                      }
+                                    } else {
+                                      _animateToUser();
+                                    }
                                   }
                                 } else {
-                                  _animateToUser();
+                                  permissionGranted =
+                                      await location.hasPermission();
+                                  if (permissionGranted ==
+                                      PermissionStatus.denied) {
+                                    permissionGranted =
+                                        await location.requestPermission();
+                                    if (permissionGranted ==
+                                        PermissionStatus.granted) {
+                                      _animateToUser();
+                                    }
+                                  } else {
+                                    print("iam fucked up");
+                                    _animateToUser();
+                                  }
                                 }
-                              }
-                            } else {
-                              permissionGranted =
-                                  await location.hasPermission();
-                              if (permissionGranted ==
-                                  PermissionStatus.denied) {
-                                permissionGranted =
-                                    await location.requestPermission();
-                                if (permissionGranted ==
-                                    PermissionStatus.granted) {
-                                  _animateToUser();
-                                }
-                              } else {
-                                print("iam fucked up");
-                                _animateToUser();
-                              }
-                            }
-                          },
+                              },
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                  accesptDeclineButtons(),
+                ],
               ),
-              accesptDeclineButtons(),
-            ],
-          ),
+            ),
+                Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      child: Icon(
+                        FontAwesomeIcons.mapMarkerAlt,
+                        color: colors.blue,
+                        size: 32,
+                      ),
+                    ),
+                  ),
+          ],
         ));
   }
 
@@ -286,7 +313,6 @@ class _AutoLocateState extends State<AutoLocate> {
         });
       });
     } catch (e) {
-      print("what the fuck u moran ?$e ");
       return;
     }
   }

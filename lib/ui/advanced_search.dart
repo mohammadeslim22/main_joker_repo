@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/models/search_filter_data.dart';
@@ -32,7 +33,6 @@ class AdvanceSearchscreen extends State<AdvancedSearch>
     final dynamic response = await dio.get<dynamic>("specializations");
     specializations.clear();
     response.data.forEach((dynamic element) {
-      
       specializations.add(Specializations.fromJson(element));
     });
     return specializations;
@@ -96,7 +96,8 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
   Widget t;
   Widget tt;
   Widget ttt;
-
+  double startingPrive = 50.0;
+  double endingPrive = 450.0;
   @override
   void initState() {
     super.initState();
@@ -280,6 +281,41 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                 )
               : Container(),
         ),
+        Row(
+          children: <Widget>[
+            Text(startingPrive.toString()),
+            const SizedBox(width: 10),
+            Expanded(
+              child: FlutterSlider(
+                handlerAnimation: const FlutterSliderHandlerAnimation(
+                    curve: Curves.elasticOut,
+                    reverseCurve: null,
+                    duration: Duration(milliseconds: 700),
+                    scale: 1.4),
+                values: <double>[startingPrive, endingPrive],
+                rangeSlider: true,
+                max: 500,
+                trackBar: FlutterSliderTrackBar(
+                  activeTrackBar: BoxDecoration(color: colors.orange),
+                  activeTrackBarDraggable: true,
+                  inactiveTrackBarHeight: 2,
+                  activeTrackBarHeight: 3,
+                ),
+                jump: true,
+                min: 0,
+                selectByTap: true,
+                onDragging:
+                    (int handlerIndex, dynamic lowerValue, dynamic upperValue) {
+                  startingPrive = lowerValue as double;
+                  endingPrive = upperValue as double;
+                  setState(() {});
+                },
+              ),
+            ),
+            const SizedBox(width: 10),
+            Text(endingPrive.toString()),
+          ],
+        ),
         Text(trans(context, "offer_history"), style: styles.mystyle),
         const SizedBox(height: 6),
         Text(trans(context, "accourding_offer_start_end_date"),
@@ -405,7 +441,9 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                   side: const BorderSide(color: Colors.grey)),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               color: colors.ggrey,
               textColor: colors.white,
               child:
@@ -417,18 +455,19 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(18.0),
                   side: const BorderSide(color: Colors.red)),
               onPressed: () {
-                
                 Navigator.pushNamed(context, "/Home",
                     arguments: <String, dynamic>{
                       "salesDataFilter": true,
                       "FilterData": FilterData(
-                          merchantName.text,
-                          saleName.text,
-                          starttoday,
-                          endtoday,
-                          _ratingStar,
-                          List<int>.from(selectedOptions) 
-                          )
+                        merchantName.text,
+                        saleName.text,
+                        starttoday,
+                        endtoday,
+                        _ratingStar,
+                        List<int>.from(selectedOptions),
+                        startingPrive,
+                        endingPrive,
+                      )
                     });
               },
               color: Colors.red,

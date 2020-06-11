@@ -35,7 +35,7 @@ class _SalesCardState extends State<SalesCard> {
       child: InkWell(
         onTap: () {
            Navigator.pushNamed(context, "/SaleDetails",
-           arguments:<String, dynamic>{"merchant_id":saledata.merchant.id});
+           arguments:<String, dynamic>{"merchant_id":saledata.merchant.id,"sale_id":saledata.id});
         },
         child: Column(
           children: <Widget>[

@@ -54,7 +54,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
     return SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.fromLTRB(15, 30, 15, 30),
+        margin: const EdgeInsets.symmetric(horizontal: 15,vertical: 30),
         decoration: BoxDecoration(
           color: colors.white,
           border: Border.all(

@@ -70,6 +70,11 @@ class Styles {
     color: Colors.white,
     fontSize: 20,
   );
+    TextStyle saleScreenBottomBar = const TextStyle(
+    fontWeight: FontWeight.w600,
+    color: Colors.orangeAccent,
+    fontSize: 20,
+  );
   TextStyle resend = const TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.orange,

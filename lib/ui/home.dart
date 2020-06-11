@@ -14,11 +14,13 @@ import '../localization/trans.dart';
 import '../ui/widgets/my_inner_drawer.dart';
 import 'main/merchant_list.dart';
 import 'main/sales_list.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key, this.salesDataFilter, this.filterData}) : super(key: key);
-final bool salesDataFilter;
-final FilterData filterData;
+  const Home({Key key, this.salesDataFilter, this.filterData})
+      : super(key: key);
+  final bool salesDataFilter;
+  final FilterData filterData;
   @override
   _HomeState createState() => _HomeState();
 }
@@ -47,6 +49,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return false;
   }
 
+  FilterData filterData;
   @override
   void initState() {
     super.initState();
@@ -56,6 +59,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 350),
     );
     _hide.forward();
+    filterData = widget.filterData;
   }
 
   @override
@@ -249,10 +253,26 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                   automaticallyImplyLeading: true,
                   actions: <Widget>[
-                    SvgPicture.asset(
-                      'assets/images/filter.svg',
-                      height: 16,
-                      width: 16,
+                    IconButton(
+                      icon: SvgPicture.asset(
+                        'assets/images/filter.svg',
+                        height: 16,
+                        width: 16,
+                      ),
+                      onPressed: () {
+                        AwesomeDialog(
+                          context: context,
+                          headerAnimationLoop: false,
+                          dialogType: DialogType.INFO,
+                          animType: AnimType.BOTTOMSLIDE,
+                          title: trans(context, 'clear_filter'),
+                          desc: 'Clearing Filter Data',
+                          btnCancelOnPress: () {},
+                          btnOkOnPress: () {
+                            filterData = null;
+                          },
+                        ).show();
+                      },
                     ),
                     IconButton(
                       icon: Icon(Icons.search, color: colors.orange),
@@ -286,7 +306,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               child: Container(
                   color: colors.grey,
                   child: (bolc.bottomNavIndex == 0)
-                      ? DiscountsList(filterData: widget.filterData)
+                      ? DiscountsList(filterData: filterData)
                       : ShopList()),
             )),
         bottomNavigationBar: SizeTransition(

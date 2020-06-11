@@ -26,7 +26,7 @@ class FavoritBar extends StatelessWidget {
                   onPressed: () {
                     bolc.changeTabBarIndex(1);
 
-                    print("what the fuck ");
+                
                   },
                   child: Column(
                     children: <Widget>[

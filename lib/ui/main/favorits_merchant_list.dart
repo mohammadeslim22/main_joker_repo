@@ -1,60 +1,43 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/models/sales.dart';
-import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../ui/cards/sale_card.dart';
+import '../../ui/cards/merchant_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
-import 'package:intl/intl.dart';
+import 'package:joker/util/data.dart';
+import 'package:joker/models/branches_model.dart';
 
-class DiscountsList extends StatefulWidget {
-  const DiscountsList({Key key, this.filterData}) : super(key: key);
-  final FilterData filterData;
+class FavoritMerchantsList extends StatefulWidget {
+  const FavoritMerchantsList({Key key}) : super(key: key);
+
   @override
-  _DiscountsListState createState() => _DiscountsListState();
+  _MerchantsListState createState() => _MerchantsListState();
 }
 
-class _DiscountsListState extends State<DiscountsList> {
-  Sales sale;
+class _MerchantsListState extends State<FavoritMerchantsList> {
+    List<BranchData> branchesData;
+  Branches branches;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   MyCounter bolc;
 
-  Future<List<SaleData>> getSalesData(int pageIndex) async {
-    print("am getting default sales ");
-    final Response<dynamic> response = await dio.get<dynamic>("sales",
-        queryParameters: <String, dynamic>{'page': pageIndex + 1});
-        print(response.data);
-    sale = Sales.fromJson(response.data);
-    return sale.data;
-  }
-
-  Future<List<SaleData>> getSalesDataFilterd(
-      int pageIndex, FilterData filterData) async {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String startDate = formatter.format(filterData.startingdate);
-    final String endDate = formatter.format(filterData.endingdate);
-    final Response<dynamic> response =
-        await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
-      'page': pageIndex + 1,
-      'merchant_name': filterData.merchantNameOrPartOfit,
-      'name': filterData.saleNameOrPartOfit,
-      // 'from_date': ,
-      // 'to_date': null,
-     // 'rate': filterData.rating,
-      'specifications': filterData.specifications
-
-    });
-    print(response.data);
-    print("merchant_name ${filterData.merchantNameOrPartOfit} + name + ${filterData.saleNameOrPartOfit} + startDate $startDate + $endDate  + ${filterData.rating} + ${filterData.specifications}");
-    sale = Sales.fromJson(response.data);
-    return sale.data;
+  Future<List<BranchData>> getFavoritData(int pageIndex) async {
+    final String phone = await data.getData('phone');
+    print("$phone");
+    final Response<dynamic> response = await dio.get<dynamic>("favorites",
+        queryParameters: <String, dynamic>{
+          'page': pageIndex + 1,
+          'phone': phone.trim()??"",
+          //'model':"App\Merchant"
+        });
+    print("${response.data} + merchants");
+    branches = Branches.fromJson(response.data);
+    return branches.data;
   }
 
   Future<void> _onRefresh() async {
@@ -78,7 +61,7 @@ class _DiscountsListState extends State<DiscountsList> {
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
-      enablePullDown: true,
+      enablePullDown: false,
       enablePullUp: true,
       header: const WaterDropHeader(
         waterDropColor: Colors.orange,
@@ -119,16 +102,14 @@ class _DiscountsListState extends State<DiscountsList> {
           padding: const EdgeInsets.all(15.0),
           itemBuilder: (BuildContext context, dynamic entry, int index) {
             return FadeIn(
-                child: SalesCard(context: context, sale: entry as SaleData));
+                child: MerchantCard(branchData:entry as BranchData ));
           },
           noItemsFoundBuilder: (BuildContext context) {
-            return Text(trans(context, "noting_to_show"));
+            return Text(trans(context, "noting_to_show_rn"));
           },
           pageFuture: (int pageIndex) {
-          //  return getSalesDataFilterd(pageIndex, widget.filterData);
-            return (widget.filterData != null)
-                ? getSalesDataFilterd(pageIndex, widget.filterData)
-                : getSalesData(pageIndex);
+            //  return getSalesDataFilterd(pageIndex, widget.filterData);
+            return getFavoritData(pageIndex);
           }),
     );
   }

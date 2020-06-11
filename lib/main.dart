@@ -1,8 +1,7 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:joker/ui/auth/login_screen.dart';
 import 'package:joker/ui/home.dart';
-import 'package:joker/ui/sale_screen.dart';
 import 'constants/config.dart';
 import 'util/dio.dart';
 import 'package:joker/providers/counter.dart';
@@ -87,10 +86,55 @@ class MyApp extends StatelessWidget {
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
         //  home:const ShopDetails(merchantId: 24,lovecount: 50,likecount: 50)
-        home:const Home()
+        home:
+
+            // SplashScreen.navigate(
+            //   name: 'assets/images/loading.flr',
+            //   next: (_) => Home(),
+            //   until: () => Future<dynamic>.delayed(const Duration(seconds: 5)),
+            //   startAnimation: '1',
+            // ),
+
+            SplashScreen()
         // home: const ShopDetails(likecount: 50,lovecount: 50,shop:    Shop(
         //     image: "assets/images/shopone.jpg"
         //   ),),
         );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  static Future<T> pushReplacement<T extends Object, TO extends Object>(
+      BuildContext context, Route<T> newRoute,
+      {TO result}) {
+    return Navigator.of(context)
+        .pushReplacement<T, TO>(newRoute, result: result);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future<void>.delayed(const Duration(seconds: 5), () {
+      pushReplacement<dynamic, dynamic>(
+          context,
+          MaterialPageRoute<dynamic>(
+            builder: (BuildContext context) => const Home(),
+          ));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      extendBody: true,
+      body: const FlareActor("assets/images/loading.flr",
+          alignment: Alignment.center, fit: BoxFit.cover, animation: "Alarm"),
+    );
   }
 }

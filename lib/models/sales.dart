@@ -54,7 +54,7 @@ class SaleData {
     status = json['status'] as String;
     mainImage = json['main_image'] as String;
     cropedImage = json['croped_image'] as String;
-    merchant = Merchant.fromJson(json['merchant']);
+    merchant = MerchantForSale.fromJson(json['merchant']);
   }
   int id;
   String name;
@@ -66,7 +66,7 @@ class SaleData {
   String status;
   String mainImage;
   String cropedImage;
-  Merchant merchant;
+  MerchantForSale merchant;
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
@@ -84,10 +84,10 @@ class SaleData {
   }
 }
 
-class Merchant {
-  Merchant({this.id, this.name, this.logo});
+class MerchantForSale {
+  MerchantForSale({this.id, this.name, this.logo});
 
-  Merchant.fromJson(dynamic json) {
+  MerchantForSale.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'] as String;
     logo = json['logo'] as String;
