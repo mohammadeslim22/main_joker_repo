@@ -8,6 +8,9 @@ import 'package:joker/providers/counter.dart';
 import 'package:joker/providers/language.dart';
 import 'package:provider/provider.dart';
 import 'widgets/setting_bottombar.dart';
+import 'package:joker/util/data.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+import 'package:after_layout/after_layout.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key key}) : super(key: key);
@@ -25,10 +28,44 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class MySettingState extends State<SettingsScreen>
-    with SingleTickerProviderStateMixin {
-  String dropdownValue = 'كتم';
+    with AfterLayoutMixin<SettingsScreen> {
+  bool doOnce = true;
+  int sountState = 0;
+  Future<void> setStartingLang(MyCounter bolc) async {
+    await data.getData("lang").then<dynamic>((String value) {
+      if (value == 'en') {
+        bolc.changelanguageindex(1);
+      } else if (value == 'ar') {
+        bolc.changelanguageindex(0);
+      } else {
+        bolc.changelanguageindex(2);
+      }
+    });
+  }
+
+  Future<void> setNotifcationSound(MyCounter bolc) async {
+    data.getData("notification_sound").then<dynamic>((String value) {
+      if (value == "true") {
+        print("buddy are u in there ? ");
+
+        bolc.changenotificationSit(0);
+      } else {
+        print("buddy or ware  r u ? ");
+        bolc.changenotificationSit(1);
+      }
+      print("${bolc.notificationSit}  hasbona allay ");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final MyCounter bolc = Provider.of<MyCounter>(context);
+    if (doOnce) {
+      setStartingLang(bolc);
+      setNotifcationSound(bolc);
+      print("i did it once sir");
+      doOnce = false;
+    }
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
@@ -57,9 +94,7 @@ class MySettingState extends State<SettingsScreen>
                   )
                 ],
               )),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             color: Colors.white,
@@ -70,23 +105,34 @@ class MySettingState extends State<SettingsScreen>
                   trans(context, "notification_sound"),
                   style: styles.mystyle,
                 ),
-                DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  style: const TextStyle(color: Colors.black),
-                  items: <String>['كتم', 'صوت']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String newValue) {
-                    setState(() {
-                      dropdownValue = newValue;
-                    });
-                  },
+                Container(
+                  height: 46,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ToggleButtons(
+                    color: Colors.grey,
+                    fillColor: Colors.orange[100],
+                    selectedColor: Colors.orange,
+                    children: <Widget>[
+                      Icon(
+                        Icons.notifications_active,
+                      ),
+                      Icon(Icons.notifications_paused),
+                    ],
+                    onPressed: (int index) async {
+                      if (index == 0) {
+                        bolc.changenotificationSit(0);
+                        await data.setData("notification_sound", "true");
+                        print("أنا سيفت الداتا ");
+                      } else {
+                        bolc.changenotificationSit(1);
+                        await data.setData("notification_sound", "false");
+                        print("أنا سيفت الداتا ");
+                      }
+                    },
+                    isSelected: bolc.notificationSit,
+                  ),
                 ),
+ 
               ],
             ),
           ),
@@ -109,9 +155,7 @@ class MySettingState extends State<SettingsScreen>
               ],
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             color: Colors.white,
@@ -136,6 +180,12 @@ class MySettingState extends State<SettingsScreen>
     );
   }
 
+  @override
+  void afterFirstLayout(BuildContext context) {
+    // final MyCounter bolc = Provider.of<MyCounter>(context);
+    //      setStartingLang(bolc);
+    //   setNotifcationSound(bolc);
+  }
   void switchChanged(bool value) {}
 }
 
@@ -154,6 +204,14 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
             if (category == "font")
               bolc.changefontindex(index);
             else {
+              if (choice == "arabic") {
+                data.setData("lang", "ar");
+              } else if (choice == 'english') {
+                data.setData("lang", "en");
+              } else {
+                data.setData("lang", "tr");
+              }
+
               bolc.changelanguageindex(index);
               func();
             }
@@ -202,7 +260,6 @@ Widget fontBar(BuildContext context) {
 Widget languagBar(BuildContext context) {
   final MyCounter bolc = Provider.of<MyCounter>(context);
   final Language lang = Provider.of<Language>(context);
-  print("${lang.currentLanguage}");
   return Container(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,

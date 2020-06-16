@@ -24,9 +24,10 @@ class FavoritBar extends StatelessWidget {
                   splashColor: colors.trans,
                   highlightColor: colors.trans,
                   onPressed: () {
-                    bolc.changeTabBarIndex(1);
-
-                
+                    if(bolc.favocurrentIndex==1){
+                      bolc.changeTabBarIndex(0);
+                    }
+                    
                   },
                   child: Column(
                     children: <Widget>[
@@ -65,7 +66,9 @@ class FavoritBar extends StatelessWidget {
                   splashColor: colors.trans,
                   highlightColor: colors.trans,
                   onPressed: () {
-                    bolc.changeTabBarIndex(0);
+                        if(bolc.favocurrentIndex==0){
+                      bolc.changeTabBarIndex(1);
+                    }
                   },
                   child: Column(
                     children: <Widget>[

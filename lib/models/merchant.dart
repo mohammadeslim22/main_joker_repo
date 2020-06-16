@@ -12,7 +12,7 @@ class Merchant {
 }
 
 class Data {
-  Data({this.id, this.name, this.logo, this.branches, this.salesCount,this.likesCount});
+  Data({this.id, this.name, this.logo, this.branches, this.salesCount,this.likesCount,this.ratesCount,this.ratesAverage});
 
   Data.fromJson(dynamic json) {
     id = json['id'] as int;
@@ -34,6 +34,16 @@ class Data {
     } else {
       likesCount = 0;
     }
+           if (json['ratesCount'] != null) {
+      ratesCount = json['ratesCount'] as int;
+    } else {
+      ratesCount = 0;
+    }
+           if (json['ratesAverage'] != null) {
+      ratesAverage = json['ratesAverage'] as double;
+    } else {
+      ratesAverage = 0;
+    }
   }
   int id;
   String name;
@@ -41,6 +51,8 @@ class Data {
   List<Branches> branches;
   int salesCount;
   int likesCount;
+  int ratesCount;
+  double ratesAverage;
 }
 
 class Branches {

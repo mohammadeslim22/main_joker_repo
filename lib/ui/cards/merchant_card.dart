@@ -6,10 +6,9 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:joker/models/merchant.dart';
 
 class MerchantCard extends StatefulWidget {
-  const MerchantCard({Key key,  this.branchData}) : super(key: key);
+  const MerchantCard({Key key, this.branchData}) : super(key: key);
   final BranchData branchData;
 
   @override
@@ -19,9 +18,8 @@ class MerchantCard extends StatefulWidget {
 class _MerchantCardState extends State<MerchantCard> {
   bool isliked = false;
   BranchData branchData;
-    Merchant merchant;
 
-   @override
+  @override
   void initState() {
     super.initState();
     branchData = widget.branchData;
@@ -29,31 +27,33 @@ class _MerchantCardState extends State<MerchantCard> {
 
   @override
   Widget build(BuildContext context) {
- const String text = "4 ";
+    const String text = "4 ";
     const String text2 = "5";
     return Card(
-      margin: const EdgeInsets.fromLTRB(24,0,24,8),
+      margin: const EdgeInsets.fromLTRB(24, 0, 24, 8),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(12), topRight: Radius.circular(12)),
       ),
       child: InkWell(
         onTap: () async {
-           Navigator.pushNamed(context, "/MerchantDetails",
-           arguments:<String, dynamic>{"merchantId":branchData.merchant.id,"lovecount":50,"likecount":50});
+          Navigator.pushNamed(context, "/MerchantDetails",
+              arguments: <String, dynamic>{
+                "merchantId": branchData.merchant.id
+              });
         },
         child: Column(
           children: <Widget>[
             Container(
               height: MediaQuery.of(context).size.height * .2,
-              decoration:  BoxDecoration(
-                borderRadius:const BorderRadius.only(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12)),
                 image: DecorationImage(
-                       image: CachedNetworkImageProvider(
-                  branchData.merchant.logo,
-                ),
+                  image: CachedNetworkImageProvider(
+                    branchData.merchant.logo,
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -62,25 +62,39 @@ class _MerchantCardState extends State<MerchantCard> {
                   left: 8.0,
                   top: 8.0,
                   child: CircleAvatar(
-                          backgroundColor: colors.white,
-                          radius: 12,
-                          child: SvgPicture.asset(
-                            'assets/images/loveicon.svg',
-                          ),
-                        ),
+                    backgroundColor: colors.white,
+                    radius: 12,
+                    child: SvgPicture.asset('assets/images/loveicon.svg'),
+                  ),
                 ),
               ]),
             ),
             Container(
-          
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    '${trans(context, 'shop_name')}',
-                    softWrap: true,
-                    style: styles.underHead,
+                  Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          branchData.merchant.name+"محمدمحدشفاهم عربي يا ريت تخف علينا",
+                          softWrap: true,
+                          style: styles.underHead,
+                        ),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.star_border,
+                            color: colors.yellow,
+                          ),
+                          Text("df")
+                        ],
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -123,7 +137,7 @@ class _MerchantCardState extends State<MerchantCard> {
                               style: styles.mylight,
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 7),
+                            const SizedBox(height: 4),
                             Text(
                               text2,
                               style: styles.mystyle,

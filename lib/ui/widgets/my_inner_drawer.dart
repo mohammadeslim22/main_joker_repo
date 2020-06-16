@@ -35,6 +35,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
     super.initState();
   }
 
+
   final String imageUrl =
       "https://celebritypets.net/wp-content/uploads/2016/12/Adriana-Lima.jpg";
 
@@ -95,6 +96,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                         maxRadius: 40,
                         minRadius: 30,
                         child: CachedNetworkImage(
+                          placeholderFadeInDuration:const Duration(milliseconds: 300),
                           imageUrl: imageUrl,
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
@@ -201,6 +203,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 title: Text("${trans(context, 'support')}"),
                 leading: SvgPicture.asset("assets/images/support.svg"),
                 onTap: () {
+                    Navigator.pushNamed(context, '/ContactUs');
                   toggle();
                 },
               ),

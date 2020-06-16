@@ -7,7 +7,6 @@ String token ;
 BaseOptions options = BaseOptions(
   
   baseUrl: config.baseUrl,
-  
   // connectTimeout: 10000,
   // receiveTimeout: 300000,
   headers:<String, String> {

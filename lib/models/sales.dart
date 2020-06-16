@@ -47,7 +47,7 @@ class SaleData {
     id = json['id'] as int;
     name = json['name'] as String;
     oldPrice = json['old_price'] as String;
-    price = json[' _price'] as String;
+    price = json[' price'] as String;
     startAt = json['start_at'] as String;
     endAt = json['end_at'] as String;
     details = json['details'] as String;

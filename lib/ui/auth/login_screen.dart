@@ -211,10 +211,12 @@ class _MyLoginScreenState extends State<LoginScreen>
                             if (value.data != "fail") {
                               await data.setData("authorization",
                                   "Bearer ${value.data['api_token']}");
-                              data.getData('authorization').then<dynamic>(
-                                  (dynamic auth) => dio.options.headers.update(
-                                      'authorization',
-                                      (dynamic value) async => auth));
+                                  dio.options.headers['authorization'] = 'Bearer ${value.data['api_token']}';
+                                    
+                            // await  data.getData('authorization').then<dynamic>(
+                            //       (dynamic auth) => dio.options.headers.update(
+                            //           'authorization',
+                            //           (dynamic value) async => auth));
 
                               print(dio.options.headers);
                               Navigator.pushNamed(context, '/Home',

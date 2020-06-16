@@ -39,7 +39,7 @@ class BranchData {
       this.city,
       this.address,
       this.phone,
-      this.sales,
+      this.salesCount,
       this.merchant});
 
   BranchData.fromJson(dynamic json) {
@@ -50,12 +50,7 @@ class BranchData {
     city = json['city'] != null ? City.fromJson(json['city']) : null;
     address = json['address'] as String;
     phone = json['phone'] as String;
-    if (json['sales'] != null) {
-      sales = <Sales>[];
-      json['sales'].forEach((dynamic v) {
-        sales.add(Sales.fromJson(v));
-      });
-    }
+salesCount = json['sales'] as int;
     merchant =
          MerchantfromBranch.fromJson(json['merchant'] as Map<String, dynamic>);
   }
@@ -65,7 +60,7 @@ class BranchData {
   City city;
   String address;
   String phone;
-  List<Sales> sales;
+  int  salesCount;
   MerchantfromBranch merchant;
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -79,9 +74,7 @@ class BranchData {
     }
     data['address'] = address;
     data['phone'] = phone;
-    if (sales != null) {
-      data['sales'] = sales.map<dynamic>((Sales v) => v.toJson()).toList();
-    }
+    data['sales'] = salesCount;
     if (merchant != null) {
       data['merchant'] = merchant.toJson();
     }

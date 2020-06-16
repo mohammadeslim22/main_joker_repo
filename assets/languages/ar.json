@@ -124,6 +124,9 @@
     "membership_details":"تفاصيل العضوية",
     "membership_message":"رسالة العضوية",
     "save_changes":"حفظ التعديل",
-    "happy_to_recieve_message":"يسعدنا تواصلك معنا"
+    "happy_to_recieve_message":"يسعدنا تواصلك معنا",
+    "discount_details":"تفاصيل العرض",
+    "notification_off":"كتم",
+    "notification_on":"صوت"
     
 }

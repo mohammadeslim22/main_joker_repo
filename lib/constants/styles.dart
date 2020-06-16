@@ -85,6 +85,11 @@ class Styles {
     color: Colors.red,
     fontSize: 12,
   );
+    TextStyle redstyleForSaleScreen = const TextStyle(
+    fontWeight: FontWeight.w900,
+    color: Colors.red,
+    fontSize:24,
+  );
   TextStyle mywhitestyle = const TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.white,
@@ -95,7 +100,7 @@ class Styles {
     fontWeight: FontWeight.w300,
     color: Colors.white,
     fontSize: 20,
-    //height: 1.5,
+    height: 1.5,
     decoration: TextDecoration.none,
   );
     TextStyle memberShipBottomSheet = const TextStyle(

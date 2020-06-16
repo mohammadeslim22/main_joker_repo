@@ -30,7 +30,6 @@ class _DiscountsListState extends State<DiscountsList> {
     print("am getting default sales ");
     final Response<dynamic> response = await dio.get<dynamic>("sales",
         queryParameters: <String, dynamic>{'page': pageIndex + 1});
-        print(response.data);
     sale = Sales.fromJson(response.data);
     return sale.data;
   }

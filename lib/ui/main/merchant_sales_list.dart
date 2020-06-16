@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/ui/cards/sale_card.dart';
 import '../../ui/cards/sale_card_for_editing_for_shop_merchant_screen.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:joker/util/dio.dart';
@@ -45,7 +46,7 @@ class _MerchantSalesListState extends State<MerchantSalesList> {
         padding: const EdgeInsets.all(15.0),
         itemBuilder: (BuildContext context, dynamic entry, int index) {
           return FadeIn(
-              child: SalesCardAfterEditForMerchant(context: context, sale: entry as SaleData));
+              child: SalesCard(context: context, sale: entry as SaleData));
         },
         pageFuture: (int pageIndex) {
           return getSalesData(pageIndex);

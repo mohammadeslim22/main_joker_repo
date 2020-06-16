@@ -16,6 +16,8 @@ class SalesCard extends StatefulWidget {
   _SalesCardState createState() => _SalesCardState();
 }
 
+Color saleStatus;
+
 class _SalesCardState extends State<SalesCard> {
   bool isliked = false;
   SaleData saledata;
@@ -23,6 +25,13 @@ class _SalesCardState extends State<SalesCard> {
   void initState() {
     super.initState();
     saledata = widget.sale;
+    if (saledata.status == "active") {
+      saleStatus = Colors.green;
+    } else if (saledata.status == "coming") {
+      saleStatus = Colors.yellow;
+    } else {
+      saleStatus = Colors.red;
+    }
   }
 
   @override
@@ -34,8 +43,11 @@ class _SalesCardState extends State<SalesCard> {
       ),
       child: InkWell(
         onTap: () {
-           Navigator.pushNamed(context, "/SaleDetails",
-           arguments:<String, dynamic>{"merchant_id":saledata.merchant.id,"sale_id":saledata.id});
+          Navigator.pushNamed(context, "/SaleDetails",
+              arguments: <String, dynamic>{
+                "merchant_id": saledata.merchant.id,
+                "sale_id": saledata.id
+              });
         },
         child: Column(
           children: <Widget>[
@@ -65,7 +77,7 @@ class _SalesCardState extends State<SalesCard> {
                   : Container(),
             ),
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -74,7 +86,8 @@ class _SalesCardState extends State<SalesCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Expanded(
-                          child: Text(saledata.name, style: styles.underHead),
+                          child:
+                              Text(saledata.name, style: styles.underHeadblack),
                         ),
                         Row(
                           children: <Widget>[
@@ -88,7 +101,30 @@ class _SalesCardState extends State<SalesCard> {
                         )
                       ]),
                   const SizedBox(height: 8),
-                  Text(trans(context, 'discount_type'), style: styles.mylight),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+
+                      Text(trans(context, 'discount_type'),
+                          style: styles.mylight),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            widget.sale.price ?? "30",
+                            style: styles.redstyleForSaleScreen,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            widget.sale.oldPrice,
+                            style: TextStyle(
+                              fontSize: 16,
+                                decoration: TextDecoration.lineThrough),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 8),
                   Row(
                     children: <Widget>[

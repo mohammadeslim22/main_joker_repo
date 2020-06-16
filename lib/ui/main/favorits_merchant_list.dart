@@ -9,7 +9,6 @@ import 'package:joker/ui/widgets/fadein.dart';
 import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
-import 'package:joker/util/data.dart';
 import 'package:joker/models/branches_model.dart';
 
 class FavoritMerchantsList extends StatefulWidget {
@@ -20,22 +19,18 @@ class FavoritMerchantsList extends StatefulWidget {
 }
 
 class _MerchantsListState extends State<FavoritMerchantsList> {
-    List<BranchData> branchesData;
+  List<BranchData> branchesData;
   Branches branches;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   MyCounter bolc;
 
   Future<List<BranchData>> getFavoritData(int pageIndex) async {
-    final String phone = await data.getData('phone');
-    print("$phone");
     final Response<dynamic> response = await dio.get<dynamic>("favorites",
         queryParameters: <String, dynamic>{
           'page': pageIndex + 1,
-          'phone': phone.trim()??"",
-          //'model':"App\Merchant"
+          'model': "App\\Branch"
         });
-    print("${response.data} + merchants");
     branches = Branches.fromJson(response.data);
     return branches.data;
   }
@@ -101,14 +96,12 @@ class _MerchantsListState extends State<FavoritMerchantsList> {
           pageSize: 10,
           padding: const EdgeInsets.all(15.0),
           itemBuilder: (BuildContext context, dynamic entry, int index) {
-            return FadeIn(
-                child: MerchantCard(branchData:entry as BranchData ));
+            return FadeIn(child: MerchantCard(branchData: entry as BranchData));
           },
           noItemsFoundBuilder: (BuildContext context) {
             return Text(trans(context, "noting_to_show_rn"));
           },
           pageFuture: (int pageIndex) {
-            //  return getSalesDataFilterd(pageIndex, widget.filterData);
             return getFavoritData(pageIndex);
           }),
     );

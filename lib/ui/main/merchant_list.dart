@@ -10,20 +10,20 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
 
 class ShopList extends StatefulWidget {
-  
   @override
   _ShopListState createState() => _ShopListState();
 }
 
 class _ShopListState extends State<ShopList> {
-   List<BranchData> branchesData;
+ 
   Branches branches;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   MyCounter bolc;
   Future<List<BranchData>> getBranchesData(int pageIndex) async {
-    final Response<dynamic> response = await dio.get<dynamic>("branches", queryParameters: <String, dynamic>{'page': pageIndex+1});
-
+    final Response<dynamic> response = await dio.get<dynamic>("branches",
+        queryParameters: <String, dynamic>{'page': pageIndex + 1});
+    print(response.data);
     branches = Branches.fromJson(response.data);
     return branches.data;
   }
@@ -44,37 +44,37 @@ class _ShopListState extends State<ShopList> {
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: true,
-        header: const WaterDropMaterialHeader(
-          color: Colors.white,
-          offset: 00,
-        ),
-        // WaterDropHeader(waterDropColor: Colors.orange,),
-        footer: CustomFooter(
-          builder: (BuildContext context, LoadStatus mode) {
-            Widget body;
-            if (mode == LoadStatus.idle) {
-              body = const Text("pull up load");
-            } else if (mode == LoadStatus.loading) {
-              body = const CupertinoActivityIndicator();
-            } else if (mode == LoadStatus.failed) {
-              body = const Text("Load Failed!Click retry!");
-            } else if (mode == LoadStatus.canLoading) {
-              body = const Text("release to load more");
-            } else {
-              body = const Text("No more Data");
-            }
-            return Container(
-              height: 55.0,
-              child: Center(child: body),
-            );
-          },
-        ),
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child:PagewiseListView<dynamic>(
+      enablePullDown: true,
+      enablePullUp: true,
+      header: const WaterDropMaterialHeader(
+        color: Colors.white,
+        offset: 00,
+      ),
+      // WaterDropHeader(waterDropColor: Colors.orange,),
+      footer: CustomFooter(
+        builder: (BuildContext context, LoadStatus mode) {
+          Widget body;
+          if (mode == LoadStatus.idle) {
+            body = const Text("pull up load");
+          } else if (mode == LoadStatus.loading) {
+            body = const CupertinoActivityIndicator();
+          } else if (mode == LoadStatus.failed) {
+            body = const Text("Load Failed!Click retry!");
+          } else if (mode == LoadStatus.canLoading) {
+            body = const Text("release to load more");
+          } else {
+            body = const Text("No more Data");
+          }
+          return Container(
+            height: 55.0,
+            child: Center(child: body),
+          );
+        },
+      ),
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      onLoading: _onLoading,
+      child: PagewiseListView<dynamic>(
           physics: const ScrollPhysics(),
           shrinkWrap: true,
           loadingBuilder: (BuildContext context) {
@@ -84,14 +84,13 @@ class _ShopListState extends State<ShopList> {
             ));
           },
           pageSize: 10,
-         
           itemBuilder: (BuildContext context, dynamic entry, int index) {
-            return FadeIn(
-                child: MerchantCard( branchData: entry as BranchData));
+            return FadeIn(child: MerchantCard(branchData: entry as BranchData));
           },
           pageFuture: (int pageIndex) {
+            print(pageIndex);
             return getBranchesData(pageIndex);
           }),
-        );
+    );
   }
 }

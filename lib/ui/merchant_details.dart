@@ -4,7 +4,6 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/merchant.dart';
-import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/functions.dart';
 import 'package:like_button/like_button.dart';
@@ -64,24 +63,25 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
   TabController _tabController;
   int index = 2;
   double ratingStar = 0;
-  Color tabBackgroundColor = colors.trans;
+  Color tabBackgroundColor = colors.ggrey;
   Merchant merchant;
   int likecount;
   int lovecount;
   int salesNo;
-
 
   @override
   void initState() {
     super.initState();
     merchant = widget.merchant;
     salesNo = merchant.mydata.salesCount;
-
+      index +=merchant.mydata.branches[0].id;
     _tabController =
         TabController(vsync: this, length: merchant.mydata.branches.length);
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
-      } else if (_tabController.index != _tabController.previousIndex) {}
+
+      } else if (_tabController.index != _tabController.previousIndex) {     
+      }
     });
 
     likecount = merchant.mydata.likesCount;
@@ -132,11 +132,8 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                 color: !isLiked ? Colors.grey : Colors.blue,
                                 borderRadius: BorderRadius.circular(70),
                               ),
-                              child: Image.asset(
-                                "assets/images/like.png",
-                                width: 10,
-                                height: 10,
-                              ),
+                              child: Image.asset("assets/images/like.png",
+                                  width: 10, height: 10),
                             );
                           },
                           likeCountPadding:
@@ -153,9 +150,8 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                           circleColor: CircleColor(
                               start: Colors.white, end: Colors.purple),
                           onTap: (bool loved) async {
-                            final String phone = await data.getData('phone');
-                              likeFunction(phone,"App\\Merchant",merchant.mydata.id) ;
-                              return true;
+                            likeFunction("App\\Merchant", merchant.mydata.id);
+                            return true;
                           },
                         ),
                         const SizedBox(width: 8),
@@ -173,14 +169,13 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                   style: const TextStyle(color: Colors.black),
                                 );
                               },
-                              
                               countPostion: CountPostion.bottom,
                               circleColor: CircleColor(
                                   start: Colors.blue, end: Colors.purple),
                               onTap: (bool loved) async {
-                               final String phone = await data.getData('phone');
-                              likeFunction(phone,"App\\Merchant",merchant.mydata.id) ;
-                              return true;
+                                likeFunction(
+                                    "App\\Merchant", merchant.mydata.id);
+                                return true;
                               },
                               likeCountPadding:
                                   const EdgeInsets.symmetric(vertical: 0),
@@ -214,10 +209,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                 ),
               ),
               const Expanded(
-                child: Divider(
-                  color: Colors.grey,
-                  thickness: 1,
-                ),
+                child: Divider(color: Colors.grey, thickness: 1),
               ),
             ],
           ),
@@ -232,16 +224,18 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                   isScrollable: true,
                   onTap: (int i) {
                     setState(() {
-                      index = i;
+                      print(i+merchant.mydata.branches[0].id);
+                      index = i+merchant.mydata.branches[0].id;
                     });
                   },
                   controller: _tabController,
                   tabs: merchant.mydata.branches.map((Branches tab) {
+                    print(tab.id);
                     return Container(
                         decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(8)),
-                          color: _tabController.index != tab.id
+                          color: index != tab.id
                               ? tabBackgroundColor
                               : colors.orange,
                         ),
@@ -251,9 +245,9 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                           tab.name,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: _tabController.index != tab.id
-                                ? Colors.black
-                                : colors.orange,
+                            color: index == tab.id
+                                ? Colors.white
+                                : colors.white,
                           ),
                         ));
                   }).toList()),

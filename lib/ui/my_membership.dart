@@ -18,7 +18,7 @@ class MyMemberShip extends StatefulWidget {
 class MyMemberShipState extends State<MyMemberShip>
     with SingleTickerProviderStateMixin {
 
-  List<MemberShip> membershipsData;
+List<MemberShip> membershipsData;
   @override
 void initState() {
    

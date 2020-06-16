@@ -10,7 +10,6 @@ import 'package:joker/ui/widgets/fadein.dart';
 import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
-import 'package:joker/util/data.dart';
 
 class FavoritDiscountsList extends StatefulWidget {
   const FavoritDiscountsList({Key key}) : super(key: key);
@@ -26,15 +25,12 @@ class _DiscountsListState extends State<FavoritDiscountsList> {
   MyCounter bolc;
 
   Future<List<SaleData>> getFavoritData(int pageIndex) async {
-    final String phone = await data.getData('phone');
-    final Response<dynamic> response = await dio.get<dynamic>("favorites",
-        queryParameters: <String, dynamic>{
-          'page': pageIndex + 1,
-          'phone': phone,
-          // 'model':"App\Sale"
-        });
-    print("${response.data} + sales");
-     sale = Sales.fromJson(response.data);
+    final Response<dynamic> response =
+        await dio.get<dynamic>("favorites", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'model': 'App\\Sale',
+    });
+    sale = Sales.fromJson(response.data);
     return sale.data;
   }
 

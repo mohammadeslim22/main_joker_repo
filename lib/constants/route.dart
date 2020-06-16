@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:joker/models/membership.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/ui/advanced_search.dart';
+import 'package:joker/ui/contact_us.dart';
 import 'package:joker/ui/sale_screen.dart';
 import 'package:joker/ui/auth/registration_screen.dart';
 import 'package:joker/ui/membership_details.dart';
@@ -30,7 +31,9 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case "/Home":
       page = PageTransition<PageController>(
-        child:  Home(salesDataFilter: args['salesDataFilter'] as bool, filterData: args['FilterData'] as FilterData),
+        child: Home(
+            salesDataFilter: args['salesDataFilter'] as bool,
+            filterData: args['FilterData'] as FilterData),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
@@ -46,11 +49,13 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/SaleDetails":
+    case "/SaleDetails":
       page = PageTransition<PageController>(
-        child:  SaleDetailPage(merchantId: args['merchant_id'] as int, saleId: args['sale_id'] as int,),
+        child: SaleDetailPage(
+          merchantId: args['merchant_id'] as int,
+          saleId: args['sale_id'] as int,
+        ),
         type: PageTransitionType.rightToLeftWithFade,
-
       );
       break;
     case "/AutoLocate":
@@ -71,8 +76,8 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     case "/MerchantDetails":
       page = PageTransition<PageController>(
         child: ShopDetails(
-            merchantId: args['merchantId'] as int,
-          ),
+          merchantId: args['merchantId'] as int,
+        ),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
@@ -124,15 +129,21 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-         case "/ChangePassword":
+    case "/ChangePassword":
       page = PageTransition<PageController>(
         child: ChangePassword(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/Notifications":
+    case "/Notifications":
       page = PageTransition<PageController>(
         child: const Notifcations(),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
+    case "/ContactUs":
+      page = PageTransition<PageController>(
+        child:  ContactUs(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;

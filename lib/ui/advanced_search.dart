@@ -348,62 +348,59 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
             _errorController = widget.scaffoldkey.currentState
                 .showBottomSheet<dynamic>((BuildContext context) {
               SystemChannels.textInput.invokeMethod<String>('TextInput.hide');
-              return Container(
-                  height: 395,
-                  child: Column(
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              color: !showingStartingDateCalendar
-                                  ? colors.grey
-                                  : colors.trans,
-                              child: FlatButton(
-                                autofocus: true,
-                                onPressed: () {
-                                  _errorController.setState(() {
-                                    showingStartingDateCalendar = true;
-                                    t = tt;
-                                  });
-                                },
-                                child:
-                                    Text(trans(context, "offer_starting_date")),
-                              ),
-                            ),
+                      Expanded(
+                        child: Container(
+                          color: !showingStartingDateCalendar
+                              ? colors.grey
+                              : colors.trans,
+                          child: FlatButton(
+                            autofocus: true,
+                            onPressed: () {
+                              _errorController.setState(() {
+                                showingStartingDateCalendar = true;
+                                t = tt;
+                              });
+                            },
+                            child: Text(trans(context, "offer_starting_date")),
                           ),
-                          Expanded(
-                            child: Container(
-                              color: showingStartingDateCalendar
-                                  ? colors.grey
-                                  : colors.trans,
-                              child: FlatButton(
-                                onPressed: () {
-                                  _errorController.setState(() {
-                                    showingStartingDateCalendar = false;
-                                    t = ttt;
-                                  });
-                                },
-                                child:
-                                    Text(trans(context, "offer_ending_date")),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      const Divider(thickness: 2),
-                      AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 430),
-                          transitionBuilder:
-                              (Widget child, Animation<double> animation) {
-                            return ScaleTransition(
-                                child: child, scale: animation);
-                          },
-                          child: t),
+                      Expanded(
+                        child: Container(
+                          color: showingStartingDateCalendar
+                              ? colors.grey
+                              : colors.trans,
+                          child: FlatButton(
+                            onPressed: () {
+                              _errorController.setState(() {
+                                showingStartingDateCalendar = false;
+                                t = ttt;
+                              });
+                            },
+                            child: Text(trans(context, "offer_ending_date")),
+                          ),
+                        ),
+                      ),
                     ],
-                  ));
+                  ),
+                  const Divider(thickness: 2),
+                  AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 430),
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                        return ScaleTransition(child: child, scale: animation);
+                      },
+                      child: t),
+                ],
+              );
             });
           },
         ),
