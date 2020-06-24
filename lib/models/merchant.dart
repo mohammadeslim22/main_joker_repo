@@ -12,7 +12,17 @@ class Merchant {
 }
 
 class Data {
-  Data({this.id, this.name, this.logo, this.branches, this.salesCount,this.likesCount,this.ratesCount,this.ratesAverage});
+  Data(
+      {this.id,
+      this.name,
+      this.logo,
+      this.branches,
+      this.salesCount,
+      this.likesCount,
+      this.ratesCount,
+      this.ratesAverage,
+      this.isfavorite,
+      this.isliked});
 
   Data.fromJson(dynamic json) {
     id = json['id'] as int;
@@ -29,21 +39,23 @@ class Data {
     } else {
       salesCount = 0;
     }
-       if (json['likes_count'] != null) {
+    if (json['likes_count'] != null) {
       likesCount = json['likes_count'] as int;
     } else {
       likesCount = 0;
     }
-           if (json['ratesCount'] != null) {
+    if (json['ratesCount'] != null) {
       ratesCount = json['ratesCount'] as int;
     } else {
       ratesCount = 0;
     }
-           if (json['ratesAverage'] != null) {
+    if (json['ratesAverage'] != null) {
       ratesAverage = json['ratesAverage'] as double;
     } else {
       ratesAverage = 0;
     }
+        isliked=json['isliked'] as int;
+    isfavorite=json['isfavorite'] as int;
   }
   int id;
   String name;
@@ -53,6 +65,8 @@ class Data {
   int likesCount;
   int ratesCount;
   double ratesAverage;
+  int isliked;
+  int isfavorite;
 }
 
 class Branches {
@@ -73,6 +87,7 @@ class Branches {
     cityId = json['city_id'] != null ? CityId.fromJson(json['city_id']) : null;
     address = json['address'].toString();
     phone = json['phone'].toString();
+
   }
   int id;
   String name;
@@ -80,6 +95,7 @@ class Branches {
   CityId cityId;
   String address;
   String phone;
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;

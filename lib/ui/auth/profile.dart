@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,6 +22,7 @@ import 'package:vibration/vibration.dart';
 import 'package:joker/ui/widgets/text_form_input.dart';
 import 'package:joker/util/functions.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+import 'package:dio/dio.dart';
 
 class MyAccount extends StatefulWidget {
   @override
@@ -47,7 +47,6 @@ class MyAccountPage extends State<MyAccount> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileNoController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
 
   static DateTime today = DateTime.now();
@@ -94,10 +93,11 @@ class MyAccountPage extends State<MyAccount> {
   }
 
   bool showImageOptions = false;
+  bool _isButtonEnabled;
   @override
   void initState() {
     super.initState();
-
+    _isButtonEnabled = true;
     getProfileData().then((Profile value) {
       setState(() {
         usernameController.text = value.name;
@@ -105,12 +105,23 @@ class MyAccountPage extends State<MyAccount> {
         mobileNoController.text = value.phone;
         birthDateController.text = value.updatedAt;
         config.locationController.text = "${value.address}";
-        passwordController.text = "***********";
       });
     });
   }
 
-  String dropdownValue = 'One';
+  static List<String> validators = <String>[null, null, null, null, null, null];
+  static List<String> keys = <String>[
+    'name',
+    'email',
+    'phone',
+    'password',
+    'birthdate',
+    'location'
+  ];
+  Map<String, String> validationMap =
+      Map<String, String>.fromIterables(keys, validators);
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -230,114 +241,139 @@ class MyAccountPage extends State<MyAccount> {
                       const SizedBox(height: 24),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 34),
-                        child: Column(
-                          children: <Widget>[
-                            TextFormInput(
-                                text: trans(context, 'name'),
-                                cController: usernameController,
-                                prefixIcon: Icons.person_outline,
-                                kt: TextInputType.visiblePassword,
-                                obscureText: false,
-                                readOnly: false,
-                                onFieldSubmitted: () {
-                                  focus.requestFocus();
-                                },
-                                onTab: () {},
-                                validator: (String value) {
-                                  return "please enter your name ";
-                                }),
-                            TextFormInput(
-                                text: trans(context, 'email'),
-                                cController: emailController,
-                                prefixIcon: Icons.mail_outline,
-                                kt: TextInputType.emailAddress,
-                                obscureText: false,
-                                readOnly: false,
-                                focusNode: focus,
-                                onTab: () {},
-                                onFieldSubmitted: () {
-                                  focus1.requestFocus();
-                                },
-                                validator: (String value) {
-                                  return "please enter your email ";
-                                }),
-                            TextFormInput(
-                                text: trans(context, 'mobile_no'),
-                                cController: mobileNoController,
-                                prefixIcon: Icons.phone,
-                                kt: TextInputType.phone,
-                                obscureText: false,
-                                readOnly: false,
-                                onTab: () {},
-                                suffixicon: CountryCodePicker(
-                                  onChanged: _onCountryChange,
-                                  initialSelection: 'SA',
-                                  favorite: const <String>['+966', 'SA'],
-                                  showFlagDialog: true,
-                                  showFlag: false,
-                                  showCountryOnly: false,
-                                  showOnlyCountryWhenClosed: false,
-                                  alignLeft: false,
-                                  padding: isRTL == true
-                                      ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                                      : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                                ),
-                                focusNode: focus1,
-                                onFieldSubmitted: () {
-                                  focus2.requestFocus();
-                                },
-                                validator: (String value) {
-                                  return "please enter your mobile Number  ";
-                                }),
-                            TextFormInput(
-                                text: trans(context, 'birth_date'),
-                                cController: birthDateController,
-                                prefixIcon: Icons.date_range,
-                                kt: TextInputType.visiblePassword,
-                                obscureText: false,
-                                readOnly: true,
-                                onTab: () {
-                                  _selectDate(context);
-                                },
-                                suffixicon: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Text("${today.toLocal()}".split(' ')[0]),
-                                    const SizedBox(
-                                      height: 20.0,
-                                    ),
-                                    IconButton(
-                                      color: Colors.orange,
-                                      icon: Icon(
-                                        Icons.calendar_today,
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: <Widget>[
+                              TextFormInput(
+                                  text: trans(context, 'name'),
+                                  cController: usernameController,
+                                  prefixIcon: Icons.person_outline,
+                                  kt: TextInputType.visiblePassword,
+                                  obscureText: false,
+                                  readOnly: false,
+                                  onFieldSubmitted: () {
+                                    focus.requestFocus();
+                                  },
+                                  onTab: () {},
+                                  validator: (String value) {
+                                    if (value.length < 3) {
+                                      return "username must be more than 3 letters";
+                                    }
+                                    return validationMap['name'];
+                                  }),
+                              TextFormInput(
+                                  text: trans(context, 'email'),
+                                  cController: emailController,
+                                  prefixIcon: Icons.mail_outline,
+                                  kt: TextInputType.emailAddress,
+                                  obscureText: false,
+                                  readOnly: false,
+                                  focusNode: focus,
+                                  onTab: () {},
+                                  onFieldSubmitted: () {
+                                    focus1.requestFocus();
+                                  },
+                                  validator: (String value) {
+                                    if (value.isEmpty) {
+                                      return "please enter a valid email ";
+                                    }
+                                    return validationMap['email'];
+                                  }),
+                              TextFormInput(
+                                  text: trans(context, 'mobile_no'),
+                                  cController: mobileNoController,
+                                  prefixIcon: Icons.phone,
+                                  kt: TextInputType.phone,
+                                  obscureText: false,
+                                  readOnly: false,
+                                  onTab: () {},
+                                  suffixicon: CountryCodePicker(
+                                    onChanged: _onCountryChange,
+                                    initialSelection: 'SA',
+                                    favorite: const <String>['+966', 'SA'],
+                                    showFlagDialog: true,
+                                    showFlag: false,
+                                    showCountryOnly: false,
+                                    showOnlyCountryWhenClosed: false,
+                                    alignLeft: false,
+                                    padding: isRTL == true
+                                        ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+                                        : const EdgeInsets.fromLTRB(
+                                            32, 0, 0, 0),
+                                  ),
+                                  focusNode: focus1,
+                                  onFieldSubmitted: () {
+                                    focus2.requestFocus();
+                                  },
+                                  validator: (String value) {
+                                    if (value.isEmpty) {
+                                      return "please enter your mobile Number  ";
+                                    }
+                                    return validationMap['phone'];
+                                  }),
+                              TextFormInput(
+                                  text: trans(context, 'birth_date'),
+                                  cController: birthDateController,
+                                  prefixIcon: Icons.date_range,
+                                  kt: TextInputType.visiblePassword,
+                                  obscureText: false,
+                                  readOnly: true,
+                                  onTab: () {
+                                    _selectDate(context);
+                                  },
+                                  suffixicon: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text("${today.toLocal()}".split(' ')[0]),
+                                      const SizedBox(
+                                        height: 20.0,
                                       ),
-                                      onPressed: () {
-                                        _selectDate(context);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                focusNode: focus3,
-                                validator: (String value) {
-                                  return "please enter your Birth Date ";
-                                }),
-                            TextFormInput(
-                                text: trans(context, 'get_location'),
-                                cController: config.locationController,
-                                prefixIcon: Icons.my_location,
-                                kt: TextInputType.visiblePassword,
-                                readOnly: true,
-                                onTab: () async {
-                                  try {
-                                    bolc.togelocationloading(true);
+                                      IconButton(
+                                        color: Colors.orange,
+                                        icon: Icon(
+                                          Icons.calendar_today,
+                                        ),
+                                        onPressed: () {
+                                          _selectDate(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  focusNode: focus3,
+                                  validator: (String value) {
+                                    if (value.isEmpty) {
+                                      return "please enter your Birth Date ";
+                                    }
+                                    return validationMap['birthdate'];
+                                  }),
+                              TextFormInput(
+                                  text: trans(context, 'get_location'),
+                                  cController: config.locationController,
+                                  prefixIcon: Icons.my_location,
+                                  kt: TextInputType.visiblePassword,
+                                  readOnly: true,
+                                  onTab: () async {
+                                    try {
+                                      bolc.togelocationloading(true);
 
-                                    if (await updateLocation) {
-                                      await getLocationName();
-                                      bolc.togelocationloading(false);
-                                    } else {
+                                      if (await updateLocation) {
+                                        await getLocationName();
+                                        bolc.togelocationloading(false);
+                                      } else {
+                                        Vibration.vibrate(duration: 400);
+                                        bolc.togelocationloading(false);
+
+                                        Scaffold.of(context)
+                                            .showSnackBar(snackBar);
+                                        setState(() {
+                                          config.locationController.text =
+                                              "Tap to set my location";
+                                        });
+                                      }
+                                    } catch (e) {
                                       Vibration.vibrate(duration: 400);
                                       bolc.togelocationloading(false);
-
                                       Scaffold.of(context)
                                           .showSnackBar(snackBar);
                                       setState(() {
@@ -345,46 +381,42 @@ class MyAccountPage extends State<MyAccount> {
                                             "Tap to set my location";
                                       });
                                     }
-                                  } catch (e) {
-                                    Vibration.vibrate(duration: 400);
-                                    bolc.togelocationloading(false);
-                                    Scaffold.of(context).showSnackBar(snackBar);
-                                    setState(() {
-                                      config.locationController.text =
-                                          "Tap to set my location";
-                                    });
-                                  }
-                                },
-                                suffixicon: IconButton(
-                                  icon: Icon(Icons.add_location),
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/AutoLocate',
-                                        arguments: <String, double>{
-                                          "lat": 51.0,
-                                          "long": 9.6
-                                        });
                                   },
+                                  suffixicon: IconButton(
+                                    icon: Icon(Icons.add_location),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, '/AutoLocate',
+                                          arguments: <String, double>{
+                                            "lat": 51.0,
+                                            "long": 9.6
+                                          });
+                                    },
+                                  ),
+                                  obscureText: false,
+                                  focusNode: focus4,
+                                  validator: (String value) {
+                                    if (value.isEmpty) {
+                                      return "please specify you Location :)";
+                                    }
+                                    return validationMap['location'];
+                                  }),
+                              Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 16,
                                 ),
-                                obscureText: false,
-                                focusNode: focus4,
-                                validator: (String value) {
-                                  return "please specify you Location :)";
-                                }),
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 16,
+                                child: bolc.visibilityObs
+                                    ? Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: spinkit,
+                                          ),
+                                        ],
+                                      )
+                                    : Container(),
                               ),
-                              child: bolc.visibilityObs
-                                  ? Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: spinkit,
-                                        ),
-                                      ],
-                                    )
-                                  : Container(),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       Padding(
@@ -393,7 +425,72 @@ class MyAccountPage extends State<MyAccount> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                                 side: BorderSide(color: colors.orange)),
-                            onPressed: () async {},
+                            onPressed: () async {
+                              if (_isButtonEnabled) {
+                                if (_formKey.currentState.validate()) {
+                                  bolc.togelf(true);
+                                  setState(() {
+                                    _isButtonEnabled = false;
+                                  });
+                                  await dio.post<dynamic>("update",
+                                      data: <String, dynamic>{
+                                        "name": usernameController.text,
+                               
+                                        "email": emailController.text,
+                                        "phone": mobileNoController.text,
+                                        "country_id": 1,
+                                        "city_id": 1,
+                                        "address":
+                                            config.locationController.text,
+                                        "longitude": config.long,
+                                        "latitude": config.lat
+                                      }).then((Response<dynamic> value) {
+                                    setState(() {
+                                      _isButtonEnabled = true;
+                                    });
+
+                                    print(value.data);
+                                    if (value.statusCode == 422) {
+                                      value.data['errors']
+                                          .forEach((String k, dynamic vv) {
+                                        setState(() {
+                                          validationMap[k] = vv[0].toString();
+                                        });
+                                        print(validationMap);
+                                      });
+                                      _formKey.currentState.validate();
+                                      validationMap.updateAll(
+                                          (String key, String value) {
+                                        return null;
+                                      });
+                                      print(validationMap);
+                                    }
+                                    if (value.statusCode == 201) {
+                                      Navigator.pushNamed(context, '/pin',
+                                          arguments: <String, String>{
+                                            'mobileNo': mobileNoController.text
+                                          });
+                                      config.locationController.clear();
+                                      data.setData(
+                                          "email", emailController.text);
+                                      data.setData(
+                                          "username", usernameController.text);
+                                      data.setData(
+                                          "phone", mobileNoController.text);
+                                      data.setData(
+                                          "lat", config.lat.toString());
+                                      data.setData(
+                                          "long", config.long.toString());
+                                      data.setData(
+                                          "address",
+                                          config.locationController.text
+                                              .toString());
+                                    }
+                                    bolc.togelf(false);
+                                  });
+                                }
+                              }
+                            },
                             color: Colors.deepOrangeAccent,
                             textColor: Colors.white,
                             child: Text(

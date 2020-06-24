@@ -12,7 +12,7 @@ import 'localization/localization_delegate.dart';
 import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
 
-void main() {
+Future<void> main() async {
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -30,12 +30,12 @@ void main() {
     ),
   );
   dioDefaults();
-  data.getData('authorization').then<dynamic>((dynamic auth) {
+ await data.getData('authorization').then<dynamic>((dynamic auth)  {
     print(auth);
+    if(auth==null){
+            
+    }
     dio.options.headers['authorization'] = '$auth';
-
-    // dio.options.headers
-    //     .update('authorization', (dynamic value) async => auth.toString());
   });
 
   data.getData("lat").then((String value) {
@@ -43,6 +43,9 @@ void main() {
   });
   data.getData("long").then((String value) {
     config.long = value as double;
+  });
+  dio.get<dynamic>("user").then((dynamic value) {
+    print(value.data);
   });
 }
 

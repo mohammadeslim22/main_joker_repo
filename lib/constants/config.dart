@@ -27,6 +27,7 @@ List<Address> addresses;
 double lat=0.0;
 double long=0.0;
 String token= "";
+bool amIcomingFromHome=false;
 }
 
 final Config config = Config();

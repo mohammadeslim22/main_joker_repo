@@ -6,6 +6,7 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:rating_bar/rating_bar.dart';
 
 class MerchantCard extends StatefulWidget {
   const MerchantCard({Key key, this.branchData}) : super(key: key);
@@ -27,8 +28,7 @@ class _MerchantCardState extends State<MerchantCard> {
 
   @override
   Widget build(BuildContext context) {
-    const String text = "4 ";
-    const String text2 = "5";
+
     return Card(
       margin: const EdgeInsets.fromLTRB(24, 0, 24, 8),
       shape: const RoundedRectangleBorder(
@@ -57,7 +57,8 @@ class _MerchantCardState extends State<MerchantCard> {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: Stack(children: <Widget>[
+              child: branchData.isfavorite!=0
+                  ? Stack(children: <Widget>[
                 Positioned(
                   left: 8.0,
                   top: 8.0,
@@ -67,32 +68,36 @@ class _MerchantCardState extends State<MerchantCard> {
                     child: SvgPicture.asset('assets/images/loveicon.svg'),
                   ),
                 ),
-              ]),
+              ]):Container(),
             ),
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.fromLTRB(10,0,10,10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Expanded(
                         child: Text(
-                          branchData.merchant.name+"محمدمحدشفاهم عربي يا ريت تخف علينا",
+                          branchData.merchant.name,
                           softWrap: true,
                           style: styles.underHead,
                         ),
                       ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.star_border,
-                            color: colors.yellow,
-                          ),
-                          Text("df")
-                        ],
+                      RatingBar(
+                        initialRating: double.parse(
+                            branchData.merchant.rateAverage.toString()),
+                        filledIcon: Icons.star,
+                        emptyIcon: Icons.star_border,
+                        halfFilledIcon: Icons.star_half,
+                        isHalfAllowed: true,
+                        filledColor: Colors.amberAccent,
+                        emptyColor: Colors.grey,
+                        halfFilledColor: Colors.orange[300],
+                        size: 10,
+                        onRatingChanged: (double rating) {},
                       ),
                     ],
                   ),
@@ -120,7 +125,7 @@ class _MerchantCardState extends State<MerchantCard> {
                                     color: Colors.grey[300]),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  text,
+                                  branchData.id.toString(),
                                   softWrap: true,
                                   style: styles.mystyle,
                                 ),
@@ -139,7 +144,7 @@ class _MerchantCardState extends State<MerchantCard> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              text2,
+                              branchData.salesCount.toString(),
                               style: styles.mystyle,
                             )
                           ],

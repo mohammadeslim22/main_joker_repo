@@ -85,17 +85,36 @@ SpinKitRing spinkit = const SpinKitRing(
   lineWidth: 3,
 );
 
-Future<dynamic> likeFunction( String model, int likeId) async {
- return  await dio.post<dynamic>("likes", data: <String, dynamic>{
-    
+Future<bool> likeFunction(String model, int likeId) async {
+  bool res;
+ await dio.post<dynamic>("likes", data: <String, dynamic>{
     'likable_type': model,
     'likable_id': likeId
-  });
-}
-Future<dynamic> favFunction(String model, int favoriteId) async {
- return  await dio.post<dynamic>("favorites", data: <String, dynamic>{
+  }).then((dynamic value) {
+    if (value.data == "true") {
+      res = true;
+    } else {
     
+      res = false;
+    }
+  });
+
+  return res;
+}
+
+Future<bool> favFunction(String model, int favoriteId) async {
+  bool res;
+  await dio.post<dynamic>("favorites", data: <String, dynamic>{
     'favoritable_type': model,
     'favoritable_id': favoriteId
+  }).then((dynamic value) {
+    if (value.data == "true") {
+      res = true;
+      
+    } else {
+      res = false;
+    }
   });
+
+  return res;
 }

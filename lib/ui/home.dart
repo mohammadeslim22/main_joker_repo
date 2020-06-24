@@ -4,6 +4,7 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/models/search_filter_data.dart';
+import 'package:joker/models/user.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
 import 'package:joker/util/data.dart';
@@ -15,6 +16,9 @@ import '../ui/widgets/my_inner_drawer.dart';
 import 'main/merchant_list.dart';
 import 'main/sales_list.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:joker/constants/config.dart';
+import 'package:joker/util/dio.dart';
+import 'package:dio/dio.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key, this.salesDataFilter, this.filterData})
@@ -60,6 +64,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
     _hide.forward();
     filterData = widget.filterData;
+    checkUserData();
+  }
+
+  User user;
+  void checkUserData() {
+    dio.get<dynamic>("user").then((Response<dynamic> value) {
+      user = User.fromJson(value.data);
+      if (value.statusCode == 401) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
+      }
+    });
   }
 
   @override
@@ -173,7 +188,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                                       Icons.search,
                                                       color: Colors.black,
                                                     ),
-                                                    onTap: () {},
+                                                    onTap: () {
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          "/AddressList");
+                                                    },
                                                   ),
                                                   ListTile(
                                                     contentPadding:
@@ -199,26 +218,28 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                                       Icons.add,
                                                       color: Colors.black,
                                                     ),
-                                                    onTap: () {
-                                                      double lat;
-                                                      double long;
-                                                      data
-                                                          .getData("lat")
-                                                          .then((String value) {
-                                                        lat = value as double;
-                                                      });
-                                                      data
-                                                          .getData("long")
-                                                          .then((String value) {
-                                                        long = value as double;
-                                                      });
-                                                      Navigator.pushNamed(
+                                                    onTap: () async {
+                                                      config.amIcomingFromHome =
+                                                          true;
+                                                      String lat;
+                                                      String long;
+                                                      lat = await data
+                                                          .getData("lat");
+                                                      long = await data
+                                                          .getData("long");
+
+                                                      await Navigator.pushNamed(
                                                           context,
                                                           '/AutoLocate',
                                                           arguments: <String,
                                                               double>{
-                                                            "lat": lat,
-                                                            "long": long
+                                                            "lat": double.parse(
+                                                                    lat) ??
+                                                                10.176,
+                                                            "long":
+                                                                double.parse(
+                                                                        long) ??
+                                                                    51.6565
                                                           });
                                                     },
                                                   ),

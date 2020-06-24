@@ -123,6 +123,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
         formatButtonDecoration: BoxDecoration(
           color: Colors.deepOrange[400],
           borderRadius: BorderRadius.circular(16.0),
+          
         ),
       ),
       onDaySelected: _onDaySelected,

@@ -27,7 +27,6 @@ class _DiscountsListState extends State<DiscountsList> {
   MyCounter bolc;
 
   Future<List<SaleData>> getSalesData(int pageIndex) async {
-    print("am getting default sales ");
     final Response<dynamic> response = await dio.get<dynamic>("sales",
         queryParameters: <String, dynamic>{'page': pageIndex + 1});
     sale = Sales.fromJson(response.data);
@@ -44,14 +43,11 @@ class _DiscountsListState extends State<DiscountsList> {
       'page': pageIndex + 1,
       'merchant_name': filterData.merchantNameOrPartOfit,
       'name': filterData.saleNameOrPartOfit,
-      // 'from_date': ,
-      // 'to_date': null,
-     // 'rate': filterData.rating,
+      'from_date': startDate,
+      'to_date': endDate,
+      'rate': filterData.rating,
       'specifications': filterData.specifications
-
     });
-    print(response.data);
-    print("merchant_name ${filterData.merchantNameOrPartOfit} + name + ${filterData.saleNameOrPartOfit} + startDate $startDate + $endDate  + ${filterData.rating} + ${filterData.specifications}");
     sale = Sales.fromJson(response.data);
     return sale.data;
   }
@@ -67,11 +63,6 @@ class _DiscountsListState extends State<DiscountsList> {
       setState(() {});
       _refreshController.loadComplete();
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -124,7 +115,7 @@ class _DiscountsListState extends State<DiscountsList> {
             return Text(trans(context, "noting_to_show"));
           },
           pageFuture: (int pageIndex) {
-          //  return getSalesDataFilterd(pageIndex, widget.filterData);
+            //  return getSalesDataFilterd(pageIndex, widget.filterData);
             return (widget.filterData != null)
                 ? getSalesDataFilterd(pageIndex, widget.filterData)
                 : getSalesData(pageIndex);

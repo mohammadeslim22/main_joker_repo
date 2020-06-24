@@ -14,19 +14,6 @@ class Sales {
   List<SaleData> data;
   Links links;
   Meta meta;
-  dynamic toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.data != null) {
-      data['data'] = this.data.map((SaleData v) => v.toJson()).toList();
-    }
-    if (links != null) {
-      data['links'] = links.toJson();
-    }
-    if (meta != null) {
-      data['meta'] = meta.toJson();
-    }
-    return data;
-  }
 }
 
 class SaleData {
@@ -41,7 +28,10 @@ class SaleData {
       this.status,
       this.mainImage,
       this.cropedImage,
-      this.merchant});
+      this.images,
+      this.merchant,
+      this.isfavorite,
+      this.isliked});
 
   SaleData.fromJson(dynamic json) {
     id = json['id'] as int;
@@ -54,7 +44,15 @@ class SaleData {
     status = json['status'] as String;
     mainImage = json['main_image'] as String;
     cropedImage = json['croped_image'] as String;
+    if (json['images'] != null) {
+      images = <Images>[];
+      json['images'].forEach((dynamic v) {
+        images.add(Images.fromJson(v));
+      });
+    }
     merchant = MerchantForSale.fromJson(json['merchant']);
+    isliked = json['isliked'] as int;
+    isfavorite = json['isfavorite'] as int;
   }
   int id;
   String name;
@@ -66,22 +64,10 @@ class SaleData {
   String status;
   String mainImage;
   String cropedImage;
+  List<Images> images;
   MerchantForSale merchant;
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['old_price'] = oldPrice;
-    data[' _price'] = price;
-    data['start_at'] = startAt;
-    data['end_at'] = endAt;
-    data['details'] = details;
-    data['status'] = status;
-    data['main_image'] = mainImage;
-    data['croped_image']=cropedImage;
-    data['merchant']=cropedImage;
-    return data;
-  }
+  int isliked;
+  int isfavorite;
 }
 
 class MerchantForSale {
@@ -164,6 +150,41 @@ class Meta {
     data['per_page'] = perPage;
     data['to'] = to;
     data['total'] = total;
+    return data;
+  }
+}
+
+class Images {
+  Images(
+      {this.id,
+      this.saleId,
+      this.imageTitle,
+      this.details,
+      this.updatedAt,
+      this.createdAt});
+
+  Images.fromJson(dynamic json) {
+    id = json['id'] as int;
+    saleId = json['sale_id'].toString();
+    imageTitle = json['image_title'].toString();
+    details = json['details'].toString();
+    updatedAt = json['updated_at'].toString();
+    createdAt = json['created_at'].toString();
+  }
+  int id;
+  String saleId;
+  String imageTitle;
+  String details;
+  String updatedAt;
+  String createdAt;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['sale_id'] = saleId;
+    data['image_title'] = imageTitle;
+    data['details'] = details;
+    data['updated_at'] = updatedAt;
+    data['created_at'] = createdAt;
     return data;
   }
 }

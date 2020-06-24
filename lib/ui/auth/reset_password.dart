@@ -120,7 +120,6 @@ class _MyResetPasswordState extends State<ResetPassword>
                     return "username must be more than 3 letters";
                   }
                   return validationMap['password'];
-                  
                 }),
           ],
         ),
@@ -198,24 +197,22 @@ class _MyResetPasswordState extends State<ResetPassword>
                                   if (value.data == "true") {
                                     print(value.data);
                                     AwesomeDialog(
-                                            context: context,
-                                            animType: AnimType.TOPSLIDE,
-                                            headerAnimationLoop: false,
-                                            dialogType: DialogType.SUCCES,
-                                            title: trans(context, 'success'),
-                                            desc: trans(context,
-                                                'password_has_changed_successfully'),
-                                            btnOkOnPress: () {
-                                              Navigator.pushNamed(
-                                                  context, '/login');
-                                            },
-                                      
-                                            btnOkIcon: Icons.check_circle,
-                                            onDissmissCallback: () {
-                                                    Navigator.pushNamed(
-                                                  context, '/login');
-                                            })
-                                        .show();
+                                        context: context,
+                                        animType: AnimType.TOPSLIDE,
+                                        headerAnimationLoop: false,
+                                        dialogType: DialogType.SUCCES,
+                                        title: trans(context, 'success'),
+                                        desc: trans(context,
+                                            'password_has_changed_successfully'),
+                                        btnOkOnPress: () {
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context, '/login', (_) => false);
+                                        },
+                                        btnOkIcon: Icons.check_circle,
+                                        onDissmissCallback: () {
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context, '/login', (_) => false);
+                                        }).show();
                                   } else {
                                     print(value.data);
                                   }

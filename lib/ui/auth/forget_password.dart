@@ -158,8 +158,8 @@ class _MyForgetPassState extends State<ForgetPassword>
                                           backgroundColor: colors.white,
                                           reverseCurve: Curves.decelerate);
                                     } else {
-                                      Navigator.pushNamed(
-                                          context, '/Reset_pass');
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, '/Reset_pass', (_) => false);
                                     }
                                   },
                                   onChanged: (String value) {

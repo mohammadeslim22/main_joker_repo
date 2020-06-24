@@ -62,7 +62,7 @@ class _SalesCardState extends State<SalesCard> {
                   saledata.cropedImage,
                 )),
               ),
-              child: isliked
+              child: saledata.isfavorite != 0
                   ? Stack(children: <Widget>[
                       Positioned(
                         left: 8.0,
@@ -77,9 +77,8 @@ class _SalesCardState extends State<SalesCard> {
                   : Container(),
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 6),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,53 +88,52 @@ class _SalesCardState extends State<SalesCard> {
                           child:
                               Text(saledata.name, style: styles.underHeadblack),
                         ),
-                        Row(
+                        Column(
                           children: <Widget>[
-                            Text(saledata.status, style: styles.mylight),
-                            const SizedBox(width: 5),
-                            CircleAvatar(
-                              backgroundColor: Colors.green,
-                              radius: 6,
-                            )
+                            Row(
+                              children: <Widget>[
+                                Text(saledata.status, style: styles.mylight),
+                                const SizedBox(width: 5),
+                                CircleAvatar(
+                                    backgroundColor: Colors.green, radius: 6)
+                              ],
+                            ),
+                            const SizedBox(height: 8),
                           ],
                         )
                       ]),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-
-                      Text(trans(context, 'discount_type'),
-                          style: styles.mylight),
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            SvgPicture.asset("assets/images/merchants.svg",
+                                color: colors.black),
+                            const SizedBox(width: 8),
+                            Flexible(
+                                child: Text(saledata.merchant.name,
+                                    softWrap: true, style: styles.mystyle)),
+                          ],
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            widget.sale.price ?? "30",
+                            widget.sale.price ?? "35",
                             style: styles.redstyleForSaleScreen,
                           ),
                           const SizedBox(width: 8),
                           Text(
                             widget.sale.oldPrice,
                             style: TextStyle(
-                              fontSize: 16,
+                                fontSize: 16,
                                 decoration: TextDecoration.lineThrough),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: <Widget>[
-                      SvgPicture.asset(
-                        "assets/images/merchants.svg",
-                        color: colors.black,
-                      ),
-                      const SizedBox(width: 8),
-                      Flexible(
-                          child: Text(saledata.merchant.name,
-                              softWrap: true, style: styles.mystyle)),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -176,10 +174,7 @@ class _SalesCardState extends State<SalesCard> {
                                 style: styles.mysmalllight,
                               ),
                               const SizedBox(height: 7),
-                              Text(
-                                saledata.startAt,
-                                style: styles.mystyle,
-                              )
+                              Text(saledata.startAt, style: styles.mystyle)
                             ],
                           ),
                           const SizedBox(
@@ -193,10 +188,7 @@ class _SalesCardState extends State<SalesCard> {
                                 style: styles.mysmalllight,
                               ),
                               const SizedBox(height: 7),
-                              Text(
-                                saledata.endAt,
-                                style: styles.mystyle,
-                              )
+                              Text(saledata.endAt, style: styles.mystyle)
                             ],
                           ),
                         ],

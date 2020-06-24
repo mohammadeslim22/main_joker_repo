@@ -27,7 +27,7 @@ class _MyRegistrationState extends State<Registration>
     with TickerProviderStateMixin {
   List<String> location2;
   Location location = Location();
-  bool _isButtonEnabled;
+  
   static List<String> validators = <String>[null, null, null, null, null, null];
   static List<String> keys = <String>[
     'name',
@@ -39,7 +39,7 @@ class _MyRegistrationState extends State<Registration>
   ];
   Map<String, String> validationMap =
       Map<String, String>.fromIterables(keys, validators);
-
+bool _isButtonEnabled;
   @override
   void initState() {
     super.initState();
@@ -401,6 +401,10 @@ class _MyRegistrationState extends State<Registration>
                                           "lat", config.lat.toString());
                                       data.setData(
                                           "long", config.long.toString());
+                                      data.setData(
+                                          "address",
+                                          config.locationController.text
+                                              .toString());
                                     }
                                     bolc.togelf(false);
                                   });

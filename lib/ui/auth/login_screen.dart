@@ -211,12 +211,13 @@ class _MyLoginScreenState extends State<LoginScreen>
                             if (value.data != "fail") {
                               await data.setData("authorization",
                                   "Bearer ${value.data['api_token']}");
-                                  dio.options.headers['authorization'] = 'Bearer ${value.data['api_token']}';
-                                    
-                            // await  data.getData('authorization').then<dynamic>(
-                            //       (dynamic auth) => dio.options.headers.update(
-                            //           'authorization',
-                            //           (dynamic value) async => auth));
+                              dio.options.headers['authorization'] =
+                                  'Bearer ${value.data['api_token']}';
+
+                              // await  data.getData('authorization').then<dynamic>(
+                              //       (dynamic auth) => dio.options.headers.update(
+                              //           'authorization',
+                              //           (dynamic value) async => auth));
 
                               print(dio.options.headers);
                               Navigator.pushNamed(context, '/Home',
@@ -251,8 +252,11 @@ class _MyLoginScreenState extends State<LoginScreen>
             ButtonToUse(trans(context, 'create_account'),
                 fw: FontWeight.bold,
                 fc: Colors.black,
-                width: MediaQuery.of(context).size.width,
-                myfunc: () => Navigator.pushNamed(context, '/Registration')),
+                width: MediaQuery.of(context).size.width, myfunc: () {
+                  
+              Navigator.pushNamedAndRemoveUntil(context, '/Registration', (_) => false);
+              
+            }),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Row(

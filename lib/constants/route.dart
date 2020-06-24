@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:joker/models/membership.dart';
 import 'package:joker/models/search_filter_data.dart';
+import 'package:joker/ui/about_us.dart';
+import 'package:joker/ui/address_list.dart';
 import 'package:joker/ui/advanced_search.dart';
 import 'package:joker/ui/contact_us.dart';
 import 'package:joker/ui/sale_screen.dart';
@@ -147,6 +149,20 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
+    case "/AddressList":
+      page = PageTransition<PageController>(
+        child:  const AddressList(),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
+          case "/AboutUs":
+      page = PageTransition<PageController>(
+        child:  AboutUs(),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
   }
+
+  
   return page;
 }

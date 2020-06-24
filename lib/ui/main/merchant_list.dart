@@ -50,7 +50,6 @@ class _ShopListState extends State<ShopList> {
         color: Colors.white,
         offset: 00,
       ),
-      // WaterDropHeader(waterDropColor: Colors.orange,),
       footer: CustomFooter(
         builder: (BuildContext context, LoadStatus mode) {
           Widget body;

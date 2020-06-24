@@ -8,6 +8,7 @@ import 'package:joker/constants/styles.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
 import 'package:joker/models/membership.dart';
+import 'package:joker/util/data.dart';
 
 class MyInnerDrawer extends StatefulWidget {
   const MyInnerDrawer({this.scaffold, this.drawerKey});
@@ -29,16 +30,19 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
         );
   }
 
-  @override
+  String username = " gg";
   @override
   void initState() {
     super.initState();
+    data.getData("usernamr").then((String value) {
+      setState(() {
+     //   username = value;
+      });
+    });
   }
-
 
   final String imageUrl =
       "https://celebritypets.net/wp-content/uploads/2016/12/Adriana-Lima.jpg";
-
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -73,8 +77,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
-                                  Text('رامي هاني الشاعر الشاعر',
-                                      style: styles.underHead),
+                                  Text(username, style: styles.underHead),
                                   const SizedBox(height: 10),
                                   Text('الرياض', style: styles.mylight),
                                 ],
@@ -96,7 +99,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                         maxRadius: 40,
                         minRadius: 30,
                         child: CachedNetworkImage(
-                          placeholderFadeInDuration:const Duration(milliseconds: 300),
+                          placeholderFadeInDuration:
+                              const Duration(milliseconds: 300),
                           imageUrl: imageUrl,
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
@@ -195,6 +199,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 title: Text("${trans(context, 'privacy')}"),
                 leading: SvgPicture.asset("assets/images/privacy.svg"),
                 onTap: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                  context, '/AboutUs', (_) => false);
                   toggle();
                 },
               ),
@@ -203,7 +209,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 title: Text("${trans(context, 'support')}"),
                 leading: SvgPicture.asset("assets/images/support.svg"),
                 onTap: () {
-                    Navigator.pushNamed(context, '/ContactUs');
+                  Navigator.pushNamed(context, '/ContactUs');
                   toggle();
                 },
               ),
@@ -215,7 +221,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
             title: Text("${trans(context, 'logout')}"),
             leading: SvgPicture.asset("assets/images/logout.svg"),
             onTap: () {
-              Navigator.pushNamed(context, '/login');
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/login', (_) => false);
             },
           ),
         ],

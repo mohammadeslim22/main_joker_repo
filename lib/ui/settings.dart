@@ -9,8 +9,7 @@ import 'package:joker/providers/language.dart';
 import 'package:provider/provider.dart';
 import 'widgets/setting_bottombar.dart';
 import 'package:joker/util/data.dart';
-import 'package:toggle_switch/toggle_switch.dart';
-import 'package:after_layout/after_layout.dart';
+import 'package:joker/util/dio.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key key}) : super(key: key);
@@ -27,10 +26,10 @@ class SettingsScreen extends StatefulWidget {
   MySettingState createState() => MySettingState();
 }
 
-class MySettingState extends State<SettingsScreen>
-    with AfterLayoutMixin<SettingsScreen> {
+class MySettingState extends State<SettingsScreen> {
   bool doOnce = true;
   int sountState = 0;
+
   Future<void> setStartingLang(MyCounter bolc) async {
     await data.getData("lang").then<dynamic>((String value) {
       if (value == 'en') {
@@ -46,14 +45,8 @@ class MySettingState extends State<SettingsScreen>
   Future<void> setNotifcationSound(MyCounter bolc) async {
     data.getData("notification_sound").then<dynamic>((String value) {
       if (value == "true") {
-        print("buddy are u in there ? ");
-
         bolc.changenotificationSit(0);
-      } else {
-        print("buddy or ware  r u ? ");
-        bolc.changenotificationSit(1);
-      }
-      print("${bolc.notificationSit}  hasbona allay ");
+      } else {}
     });
   }
 
@@ -63,7 +56,6 @@ class MySettingState extends State<SettingsScreen>
     if (doOnce) {
       setStartingLang(bolc);
       setNotifcationSound(bolc);
-      print("i did it once sir");
       doOnce = false;
     }
     return Scaffold(
@@ -101,10 +93,8 @@ class MySettingState extends State<SettingsScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  trans(context, "notification_sound"),
-                  style: styles.mystyle,
-                ),
+                Text(trans(context, "notification_sound"),
+                    style: styles.mystyle),
                 Container(
                   height: 46,
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -113,26 +103,24 @@ class MySettingState extends State<SettingsScreen>
                     fillColor: Colors.orange[100],
                     selectedColor: Colors.orange,
                     children: <Widget>[
-                      Icon(
-                        Icons.notifications_active,
-                      ),
+                      Icon(Icons.notifications_active),
                       Icon(Icons.notifications_paused),
                     ],
                     onPressed: (int index) async {
+                      dio.post<dynamic>("settings", data: <String, dynamic>{
+                        'notify_sound': index == 0 ? "on" : "off"
+                      });
                       if (index == 0) {
                         bolc.changenotificationSit(0);
                         await data.setData("notification_sound", "true");
-                        print("أنا سيفت الداتا ");
                       } else {
                         bolc.changenotificationSit(1);
                         await data.setData("notification_sound", "false");
-                        print("أنا سيفت الداتا ");
                       }
                     },
                     isSelected: bolc.notificationSit,
                   ),
                 ),
- 
               ],
             ),
           ),
@@ -149,7 +137,11 @@ class MySettingState extends State<SettingsScreen>
                 ),
                 Switch(
                   activeColor: Colors.orange,
-                  onChanged: switchChanged,
+                  onChanged: (bool value) {
+                    dio.post<dynamic>("settings", data: <String, dynamic>{
+                      'recieve_notify': value ? "on" : "off"
+                    });
+                  },
                   value: true,
                 ),
               ],
@@ -179,14 +171,6 @@ class MySettingState extends State<SettingsScreen>
       bottomNavigationBar: SettingBottom(),
     );
   }
-
-  @override
-  void afterFirstLayout(BuildContext context) {
-    // final MyCounter bolc = Provider.of<MyCounter>(context);
-    //      setStartingLang(bolc);
-    //   setNotifcationSound(bolc);
-  }
-  void switchChanged(bool value) {}
 }
 
 Widget fontBarChoice(BuildContext context, String choice, int index,
@@ -285,4 +269,10 @@ Widget verticalDiv() {
         thickness: 1,
       ),
       height: 18);
+}
+Future<void> sendtoAPI({int index,String voice,String lang}){
+return          dio.post<dynamic>("settings", data: <String, dynamic>{
+                      'recieve_notify': voice != null ? "on" : "off",
+                      'notify_sound ':index==0?"on":"off"
+                    });
 }

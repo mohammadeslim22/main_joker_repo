@@ -13,6 +13,8 @@ import 'package:joker/providers/counter.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
+import 'package:joker/util/dio.dart';
+import 'package:joker/util/data.dart';
 
 class AutoLocate extends StatefulWidget {
   const AutoLocate({Key key, this.long, this.lat}) : super(key: key);
@@ -176,7 +178,16 @@ class _AutoLocateState extends State<AutoLocate> {
                                   icon: Icon(Icons.search),
                                 ),
                                 trailing: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    dio.post<dynamic>("locations",
+                                        data: <String, dynamic>{
+                                          'address':
+                                              address.addressLine.toString() ??
+                                                  "Unknown",
+                                          'latitude': lat,
+                                          'longitude': long
+                                        });
+                                  },
                                   icon: Icon(Icons.bookmark),
                                 ),
                               ),
@@ -266,16 +277,16 @@ class _AutoLocateState extends State<AutoLocate> {
                 ],
               ),
             ),
-                Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      child: Icon(
-                        FontAwesomeIcons.mapMarkerAlt,
-                        color: colors.blue,
-                        size: 32,
-                      ),
-                    ),
-                  ),
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                child: Icon(
+                  FontAwesomeIcons.mapMarkerAlt,
+                  color: colors.blue,
+                  size: 32,
+                ),
+              ),
+            ),
           ],
         ));
   }
@@ -359,6 +370,10 @@ class _AutoLocateState extends State<AutoLocate> {
                     borderRadius: BorderRadius.circular(18.0),
                     side: BorderSide(color: colors.blue)),
                 onPressed: () {
+                  if (config.amIcomingFromHome) {
+                    data.setData("lat", lat.toString());
+                    data.setData("long", long.toString());
+                  }
                   setState(() {
                     config.lat = lat;
                     config.long = long;
@@ -370,7 +385,7 @@ class _AutoLocateState extends State<AutoLocate> {
                   Navigator.pop(context);
                   Provider.of<MyCounter>(context, listen: false)
                       .togelocationloading(false);
-                  Scaffold.of(context).hideCurrentSnackBar();
+                //  Scaffold.of(context).hideCurrentSnackBar();
                 },
                 color: Colors.blue,
                 textColor: Colors.white,

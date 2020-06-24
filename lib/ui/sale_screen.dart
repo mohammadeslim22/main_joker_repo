@@ -14,6 +14,7 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/models/sales.dart';
 import 'package:after_layout/after_layout.dart';
+import 'package:joker/constants/config.dart';
 
 class SaleDetailPage extends StatefulWidget {
   const SaleDetailPage({Key key, this.merchantId, this.saleId})
@@ -33,9 +34,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
 
   Future<Merchant> getMerchantData(int merchentid, int saleid) async {
     final dynamic saleResult = await dio.get<dynamic>("sales/$saleid");
-    print(saleResult.data);
     sale = SaleData.fromJson(saleResult.data['data']);
-
     final dynamic mercantResult =
         await dio.get<dynamic>("merchants/$merchentid");
     merchant = Merchant.fromJson(mercantResult.data);
@@ -99,7 +98,12 @@ class SaleDetailsPage extends State<SaleDetails>
   int index = 0;
   String mytext;
   double extededPlus = 0.0;
-  final GlobalKey<BottomWidgetForSliverState> key = GlobalKey<BottomWidgetForSliverState>();
+  bool isliked;
+  bool isloved;
+  final GlobalKey<BottomWidgetForSliverState> key =
+      GlobalKey<BottomWidgetForSliverState>();
+
+  List<Widget> items = <Widget>[];
   @override
   void initState() {
     super.initState();
@@ -111,13 +115,13 @@ class SaleDetailsPage extends State<SaleDetails>
 
     merchant = widget.merchant;
     sale = widget.sale;
-    mytext = sale.details ;
-    //+"TextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltrTextDirection.ltr";
+    mytext = sale.details;
     index += merchant.mydata.branches[0].id;
+    isliked = sale.isliked != 0;
+    isloved = sale.isfavorite != 0;
   }
 
   void getHeight() {
-    
     final State state = key.currentState;
     final RenderBox box = state.context.findRenderObject() as RenderBox;
     setState(() {
@@ -170,22 +174,18 @@ class SaleDetailsPage extends State<SaleDetails>
                               pageViewKey: const PageStorageKey<dynamic>(
                                   'carousel_slider'),
                             ),
-                            items: <String>[
-                              "logo",
-                              "logo",
-                              "logo",
-                              "logo",
-                              "logo"
-                            ].map((dynamic i) {
+                            items: sale.images.map((Images image) {
                               return Builder(
                                 builder: (BuildContext context) {
                                   return Stack(
                                     children: <Widget>[
                                       Container(
-                                        child: Image.asset(
-                                          "assets/images/discountbackground.png",
-                                          width: double.infinity,
-                                          fit: BoxFit.cover,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image:
+                                                NetworkImage(image.imageTitle),
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
                                       Align(
@@ -224,10 +224,12 @@ class SaleDetailsPage extends State<SaleDetails>
                                   countPostion: CountPostion.bottom,
                                   circleColor: CircleColor(
                                       start: Colors.blue, end: Colors.purple),
+                                  isLiked: sale.isfavorite != 0,
                                   onTap: (bool loved) async {
-                                    likeFunction(
+                                    favFunction(
                                         "App\\Sale", merchant.mydata.id);
-                                    return true;
+                                    isloved = !isloved;
+                                    return isloved;
                                   },
                                   likeCountPadding:
                                       const EdgeInsets.symmetric(vertical: 0),
@@ -249,6 +251,7 @@ class SaleDetailsPage extends State<SaleDetails>
                                           height: 10),
                                     );
                                   },
+                                  isLiked: sale.isliked != 0,
                                   likeCountPadding:
                                       const EdgeInsets.symmetric(vertical: 3),
                                   padding:
@@ -267,7 +270,8 @@ class SaleDetailsPage extends State<SaleDetails>
                                   onTap: (bool loved) async {
                                     likeFunction(
                                         "App\\Sale", merchant.mydata.id);
-                                    return true;
+                                    isliked = !isliked;
+                                    return isliked;
                                   },
                                 ),
                                 const SizedBox(height: 6)
@@ -275,7 +279,7 @@ class SaleDetailsPage extends State<SaleDetails>
                             ),
                           ),
                           Positioned(
-                            top: 190,
+                            top: 240,
                             right: 8,
                             child: Column(
                               crossAxisAlignment: isRTL
@@ -296,47 +300,47 @@ class SaleDetailsPage extends State<SaleDetails>
                                           ]
                                       ],
                                     )),
-                                IconButton(
-                                    icon: Icon(Icons.star_border),
-                                    onPressed: () {
-                                      showDialog<dynamic>(
-                                          context: context,
-                                          barrierDismissible: true,
-                                          builder: (BuildContext context) {
-                                            return RatingDialog(
-                                              icon: Container(
-                                                height: 10,
-                                                width: 10,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                    Radius.circular(12),
-                                                  ),
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        merchant.mydata.logo),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                              title: "Please Rate me",
-                                              description:
-                                                  "Yor feedback Give us Motivation",
-                                              submitButton: "SUBMIT",
-                                              alternativeButton:
-                                                  "Contact us instead?",
-                                              positiveComment:
-                                                  "We are so happy to hear :)",
-                                              negativeComment:
-                                                  "We're sad to hear :(",
-                                              accentColor: Colors.orange,
-                                              onSubmitPressed: (int rating) {
-                                                setState(() {});
-                                              },
-                                              onAlternativePressed: () {},
-                                            );
-                                          });
-                                    }),
+                                // IconButton(
+                                //     icon: Icon(Icons.star_border),
+                                //     onPressed: () {
+                                //       showDialog<dynamic>(
+                                //           context: context,
+                                //           barrierDismissible: true,
+                                //           builder: (BuildContext context) {
+                                //             return RatingDialog(
+                                //               icon: Container(
+                                //                 height: 10,
+                                //                 width: 10,
+                                //                 decoration: BoxDecoration(
+                                //                   borderRadius:
+                                //                       const BorderRadius.all(
+                                //                     Radius.circular(12),
+                                //                   ),
+                                //                   image: DecorationImage(
+                                //                     image: NetworkImage(
+                                //                         merchant.mydata.logo),
+                                //                     fit: BoxFit.cover,
+                                //                   ),
+                                //                 ),
+                                //               ),
+                                //               title: "Please Rate me",
+                                //               description:
+                                //                   "Yor feedback Give us Motivation",
+                                //               submitButton: "SUBMIT",
+                                //               alternativeButton:
+                                //                   "Contact us instead?",
+                                //               positiveComment:
+                                //                   "We are so happy to hear :)",
+                                //               negativeComment:
+                                //                   "We're sad to hear :(",
+                                //               accentColor: Colors.orange,
+                                //               onSubmitPressed: (int rating) {
+                                //                 setState(() {});
+                                //               },
+                                //               onAlternativePressed: () {},
+                                //             );
+                                //           });
+                                //     }),
                                 Text(sale.name, style: styles.underHeadblack),
                                 const SizedBox(height: 8),
                                 Row(
@@ -513,9 +517,13 @@ class SaleDetailsPage extends State<SaleDetails>
                     Positioned(
                       top: 12,
                       bottom: 10,
-                      child: SvgPicture.asset(
-                        "assets/images/arrow_andclipped_line.svg",
-                      ),
+                      child: isRTL
+                          ? SvgPicture.asset(
+                              "assets/images/arrow_andclipped_line.svg",
+                            )
+                          : SvgPicture.asset(
+                              "assets/images/arrow_andclipped_line2.svg",
+                            ),
                     )
                   ],
                 ),
@@ -693,14 +701,12 @@ class SaleDetailsPage extends State<SaleDetails>
               alignment: Alignment.bottomCenter,
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    const EdgeInsets.fromLTRB(12,0,12,12),
                 color: Colors.black,
                 child: Row(
                   children: <Widget>[
-                    Text("25", style: styles.saleScreenBottomBar),
-                    const SizedBox(
-                      width: 12,
-                    ),
+                    Text(sale.merchant.id.toString(), style: styles.saleScreenBottomBar),
+                    const SizedBox(width: 12),
                     Text(trans(context, "available_merchant_sales"),
                         style: styles.underHeadwhite),
                   ],

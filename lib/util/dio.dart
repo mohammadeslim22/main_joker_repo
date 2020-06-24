@@ -23,6 +23,7 @@ Response<dynamic> response;
  Dio dio =  Dio(options);
 
 void dioDefaults() {
+  
  // dio.options.headers['authorization'] = 'Bearer ${config.token}';
   dio.interceptors
       .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
