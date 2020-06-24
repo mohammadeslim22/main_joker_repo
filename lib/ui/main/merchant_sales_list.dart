@@ -4,7 +4,6 @@ import 'package:joker/models/sales.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/ui/cards/sale_card.dart';
-import '../../ui/cards/sale_card_for_editing_for_shop_merchant_screen.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';

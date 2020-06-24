@@ -68,28 +68,26 @@ class SaleData {
   MerchantForSale merchant;
   int isliked;
   int isfavorite;
+  
 }
 
 class MerchantForSale {
-  MerchantForSale({this.id, this.name, this.logo});
+  MerchantForSale({this.id, this.name, this.logo,this.salesCount,this.ratesAverage});
 
   MerchantForSale.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'] as String;
     logo = json['logo'] as String;
+    salesCount = json['sales_count']as int;
+    ratesAverage = json['rates_average']as int;
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['logo'] = logo;
-    return data;
-  }
 
   int id;
   String name;
   String logo;
+  int salesCount;
+  int ratesAverage;
 }
 
 class Links {

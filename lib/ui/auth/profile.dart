@@ -435,7 +435,7 @@ class MyAccountPage extends State<MyAccount> {
                                   await dio.post<dynamic>("update",
                                       data: <String, dynamic>{
                                         "name": usernameController.text,
-                               
+                                        "birth_date": birthDateController.text,
                                         "email": emailController.text,
                                         "phone": mobileNoController.text,
                                         "country_id": 1,

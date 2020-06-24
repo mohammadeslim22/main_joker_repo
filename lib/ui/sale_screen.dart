@@ -14,7 +14,8 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/models/sales.dart';
 import 'package:after_layout/after_layout.dart';
-import 'package:joker/constants/config.dart';
+import 'dart:math';
+import 'dart:async';
 
 class SaleDetailPage extends StatefulWidget {
   const SaleDetailPage({Key key, this.merchantId, this.saleId})
@@ -47,10 +48,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
       future: getMerchantData(widget.merchantId, widget.saleId),
       builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return SaleDetails(
-            merchant: merchant,
-            sale: sale,
-          );
+          return SaleDetails(merchant: merchant, sale: sale);
         } else {
           return const Center(
               child: CircularProgressIndicator(
@@ -69,12 +67,17 @@ class SaleDetails extends StatefulWidget {
   SaleDetailsPage createState() => SaleDetailsPage();
 }
 
+StreamController<double> streamController =
+    StreamController<double>.broadcast();
+
 class SaleDetailsPage extends State<SaleDetails>
-    with AfterLayoutMixin<SaleDetails> {
+    with AfterLayoutMixin<SaleDetails>, TickerProviderStateMixin {
   TextEditingController controller = TextEditingController();
   int myindex = 0;
   double clientRatingStar = 0;
   bool hasMemberShip = false;
+
+  PersistentBottomSheetController<dynamic> _errorController;
   Widget circleBar(bool isActive) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
@@ -100,10 +103,13 @@ class SaleDetailsPage extends State<SaleDetails>
   double extededPlus = 0.0;
   bool isliked;
   bool isloved;
+  bool isbottomSheetOpened;
+
   final GlobalKey<BottomWidgetForSliverState> key =
       GlobalKey<BottomWidgetForSliverState>();
-
+  AnimationController rotationController;
   List<Widget> items = <Widget>[];
+  double angel;
   @override
   void initState() {
     super.initState();
@@ -112,13 +118,16 @@ class SaleDetailsPage extends State<SaleDetails>
         mytext = controller.text;
       });
     });
-
+    rotationController = AnimationController(
+        duration: const Duration(milliseconds: 700), vsync: this);
     merchant = widget.merchant;
     sale = widget.sale;
     mytext = sale.details;
     index += merchant.mydata.branches[0].id;
     isliked = sale.isliked != 0;
     isloved = sale.isfavorite != 0;
+    angel = 0.0;
+    isbottomSheetOpened= false;
   }
 
   void getHeight() {
@@ -129,6 +138,7 @@ class SaleDetailsPage extends State<SaleDetails>
     });
   }
 
+  double position;
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -274,12 +284,55 @@ class SaleDetailsPage extends State<SaleDetails>
                                     return isliked;
                                   },
                                 ),
-                                const SizedBox(height: 6)
+                                InkWell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: Icon(Icons.star_border),
+                                    ),
+                                    onTap: () {
+                                      showDialog<dynamic>(
+                                          context: context,
+                                          barrierDismissible: true,
+                                          builder: (BuildContext context) {
+                                            return RatingDialog(
+                                              icon: Container(
+                                                height: 100,
+                                                width: 200,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                    Radius.circular(12),
+                                                  ),
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        merchant.mydata.logo),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              title: "Please Rate me",
+                                              description:
+                                                  "Yor feedback Give us Motivation",
+                                              submitButton: "SUBMIT",
+                                              alternativeButton:
+                                                  "Contact us instead?",
+                                              positiveComment:
+                                                  "We are so happy to hear :)",
+                                              negativeComment:
+                                                  "We're sad to hear :(",
+                                              accentColor: Colors.orange,
+                                              onSubmitPressed: (int rating) {
+                                                setState(() {});
+                                              },
+                                              onAlternativePressed: () {},
+                                            );
+                                          });
+                                    }),
                               ],
                             ),
                           ),
                           Positioned(
-                            top: 240,
+                            bottom: 0,
                             right: 8,
                             child: Column(
                               crossAxisAlignment: isRTL
@@ -290,7 +343,9 @@ class SaleDetailsPage extends State<SaleDetails>
                                     alignment: Alignment.centerRight,
                                     child: Column(
                                       children: <Widget>[
-                                        for (int i = 0; i < 5; i++)
+                                        for (int i = 0;
+                                            i < sale.images.length;
+                                            i++)
                                           if (i == myindex) ...<Widget>[
                                             const SizedBox(height: 3),
                                             circleBar(true),
@@ -300,47 +355,6 @@ class SaleDetailsPage extends State<SaleDetails>
                                           ]
                                       ],
                                     )),
-                                // IconButton(
-                                //     icon: Icon(Icons.star_border),
-                                //     onPressed: () {
-                                //       showDialog<dynamic>(
-                                //           context: context,
-                                //           barrierDismissible: true,
-                                //           builder: (BuildContext context) {
-                                //             return RatingDialog(
-                                //               icon: Container(
-                                //                 height: 10,
-                                //                 width: 10,
-                                //                 decoration: BoxDecoration(
-                                //                   borderRadius:
-                                //                       const BorderRadius.all(
-                                //                     Radius.circular(12),
-                                //                   ),
-                                //                   image: DecorationImage(
-                                //                     image: NetworkImage(
-                                //                         merchant.mydata.logo),
-                                //                     fit: BoxFit.cover,
-                                //                   ),
-                                //                 ),
-                                //               ),
-                                //               title: "Please Rate me",
-                                //               description:
-                                //                   "Yor feedback Give us Motivation",
-                                //               submitButton: "SUBMIT",
-                                //               alternativeButton:
-                                //                   "Contact us instead?",
-                                //               positiveComment:
-                                //                   "We are so happy to hear :)",
-                                //               negativeComment:
-                                //                   "We're sad to hear :(",
-                                //               accentColor: Colors.orange,
-                                //               onSubmitPressed: (int rating) {
-                                //                 setState(() {});
-                                //               },
-                                //               onAlternativePressed: () {},
-                                //             );
-                                //           });
-                                //     }),
                                 Text(sale.name, style: styles.underHeadblack),
                                 const SizedBox(height: 8),
                                 Row(
@@ -679,9 +693,7 @@ class SaleDetailsPage extends State<SaleDetails>
                                 ),
                                 Flexible(
                                     child:
-                                        Image.asset("assets/images/qrcode.png")
-                                    //  SvgPicture.asset("assets/images/vip.svg")
-                                    )
+                                        Image.asset("assets/images/qrcode.png"))
                               ],
                             ),
                           )),
@@ -693,45 +705,152 @@ class SaleDetailsPage extends State<SaleDetails>
               ],
             ),
           )),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: Container(
         height: 40,
-        child: Stack(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding:
-                    const EdgeInsets.fromLTRB(12,0,12,12),
-                color: Colors.black,
-                child: Row(
-                  children: <Widget>[
-                    Text(sale.merchant.id.toString(), style: styles.saleScreenBottomBar),
-                    const SizedBox(width: 12),
-                    Text(trans(context, "available_merchant_sales"),
-                        style: styles.underHeadwhite),
-                  ],
-                ),
-              ),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+            color: Colors.black,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Text(sale.merchant.salesCount.toString(),
+                    style: styles.saleScreenBottomBar),
+                const SizedBox(width: 12),
+                Text(trans(context, "available_merchant_sales"),
+                    style: styles.underHeadwhite),
+              ],
             ),
-            Positioned.directional(
-              start: 20,
-              bottom: 10,
-              textDirection: isRTL ? TextDirection.ltr : TextDirection.rtl,
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 24,
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: SvgPicture.asset(
-                    "assets/images/arrowup.svg",
-                    color: colors.yellow,
+          ),
+        ),
+      ),
+      floatingActionButton: CircleAvatar(
+        backgroundColor: Colors.white,
+        radius: 24,
+        child: AnimatedBuilder(
+          animation: rotationController,
+          builder: (_, Widget child) {
+            return Transform.rotate(
+              angle: rotationController.value * 2 * pi / 2,
+              child: child,
+            );
+          },
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            icon: SvgPicture.asset("assets/images/arrowup.svg",
+                color: colors.yellow),
+            color: Colors.white,
+            onPressed: () async {
+              if (isbottomSheetOpened) {
+                rotationController.reverse(from: pi / 2);
+                _errorController.close();
+                _errorController=null;
+                isbottomSheetOpened = false;
+              } else {
+                isbottomSheetOpened = true;
+                rotationController.forward(from: 0.0);
+                _errorController =
+                    scaffoldkey.currentState.showBottomSheet<dynamic>(
+                  (BuildContext context) =>
+                      //  ListView(
+                      //     shrinkWrap: true,
+                      //     children: <Widget>[
+                      //       ClipPath(
+                      //           clipper: const ShapeBorderClipper(
+                      //               shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.only(
+                      //                 bottomLeft: Radius.circular(24),
+                      //                 bottomRight: Radius.circular(24)),
+                      //           )),
+                      //           child: Container(
+                      //             width: MediaQuery.of(context).size.width,
+                      //             decoration: BoxDecoration(
+                      //                 color: Colors.black.withOpacity(.1),
+                      //                 border: const Border(
+                      //                     top: BorderSide(
+                      //                         color: Colors.orange,
+                      //                         width: 7.0))),
+                      //             child: Text(
+                      //               "${trans(context, 'use_current_location')}",
+                      //               textAlign: TextAlign.center,
+                      //               style: styles.underHead,
+                      //             ),
+                      //           )),
+                      //       ListTile(
+                      //         contentPadding: const EdgeInsets.symmetric(
+                      //             horizontal: 12),
+                      //         title: Text(
+                      //             "${trans(context, 'my_address_list')}"),
+                      //         trailing: Icon(
+                      //           Icons.search,
+                      //           color: Colors.black,
+                      //         ),
+                      //         onTap: () {
+                      //           Navigator.pushNamed(
+                      //               context, "/AddressList");
+                      //         },
+                      //       ),
+                      //       ListTile(
+                      //         contentPadding: const EdgeInsets.symmetric(
+                      //             horizontal: 12),
+                      //         title: Text(
+                      //             "${trans(context, 'use_current_location')}"),
+                      //         trailing: Icon(
+                      //           Icons.my_location,
+                      //           color: Colors.black,
+                      //         ),
+                      //         onTap: () {},
+                      //       ),
+                      //       ListTile(
+                      //         contentPadding: const EdgeInsets.symmetric(
+                      //             horizontal: 12),
+                      //         title:
+                      //             Text("${trans(context, 'add_location')}"),
+                      //         trailing: Icon(
+                      //           Icons.add,
+                      //           color: Colors.black,
+                      //         ),
+                      //         onTap: () async {},
+                      //       ),
+                      //       const SizedBox(height: 12),
+                      //     ])
+
+                      DraggableScrollableSheet(
+                    initialChildSize: 0.4,
+                    
+                    maxChildSize: 0.6,
+                    minChildSize: 0.0,
+                    expand: false,
+                    builder: (BuildContext context,
+                        ScrollController scrollController) {
+                      scrollController.addListener(() {
+                        if (scrollController.position.atEdge) {
+                          rotationController.reverse(from: pi / 2);
+                          _errorController.close();
+                          isbottomSheetOpened = false;
+                          _errorController=null;
+                          print("did we close it ? ");
+                        }
+                      });
+                      return Container(
+                        height: 20,
+                        color: Colors.blue[100],
+                        child: ListView.builder(
+                          controller: scrollController,
+                          itemCount: 25,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(title: Text('Item $index'));
+                          },
+                        ),
+                      );
+                    },
                   ),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-              ),
-            )
-          ],
+                );
+              }
+            },
+          ),
         ),
       ),
     );

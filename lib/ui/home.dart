@@ -36,6 +36,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   PersistentBottomSheetController<dynamic> _errorController;
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification.depth == 0) {
+      print(notification.metrics);
       if (notification is UserScrollNotification) {
         final UserScrollNotification userScroll = notification;
         switch (userScroll.direction) {
@@ -64,7 +65,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
     _hide.forward();
     filterData = widget.filterData;
-    checkUserData();
   }
 
   User user;

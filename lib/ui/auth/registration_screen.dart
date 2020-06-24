@@ -352,8 +352,8 @@ bool _isButtonEnabled;
                                       data: <String, dynamic>{
                                         "name": usernameController.text,
                                         "password": passwordController.text,
-                                        "password_confirmation":
-                                            passwordController.text,
+                                        "birth_date":
+                                            birthDateController.text,
                                         "email": emailController.text,
                                         "phone": mobileNoController.text,
                                         "country_id": 1,
