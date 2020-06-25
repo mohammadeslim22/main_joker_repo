@@ -6,26 +6,25 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import '../models/membership.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:dio/dio.dart';
+import 'package:joker/util/dio.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 
 class MyMemberShip extends StatefulWidget {
-  const MyMemberShip(this.membershipsData);
-  final List<MemberShip> membershipsData;
   @override
   MyMemberShipState createState() => MyMemberShipState();
 }
 
 class MyMemberShipState extends State<MyMemberShip>
     with SingleTickerProviderStateMixin {
+  Memberships memberships;
 
-List<MemberShip> membershipsData;
-  @override
-void initState() {
-   
-    super.initState();
-    membershipsData=widget.membershipsData;
+  Future<List<MembershipData>> getMembershipsData(int pageIndex) async {
+    final Response<dynamic> response = await dio.get<dynamic>("memberships",
+        queryParameters: <String, dynamic>{'page': pageIndex + 1});
+    memberships = Memberships.fromJson(response.data);
+    return memberships.data;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -36,30 +35,46 @@ void initState() {
         ),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(20),
-        itemCount: membershipsData.length,
-        addRepaintBoundaries: true,
-        itemBuilder: (BuildContext context, int index) {
-          return AnimatedCard(
-            direction: AnimatedCardDirection.left,
-            initDelay:const Duration(milliseconds: 0),
-            duration:const Duration(seconds: 1),
-            curve: Curves.ease,
-            child: _itemBuilder(context, membershipsData.elementAt(index)),
-          );
-        },
-      ),
+      body: PagewiseListView<dynamic>(
+          physics: const ScrollPhysics(),
+          shrinkWrap: true,
+          loadingBuilder: (BuildContext context) {
+            return const Center(
+                child: CircularProgressIndicator(
+              backgroundColor: Colors.transparent,
+            ));
+          },
+          pageSize: 10,
+          padding: const EdgeInsets.all(15.0),
+          itemBuilder: (BuildContext context, dynamic entry, int index) {
+            return AnimatedCard(
+              direction: AnimatedCardDirection.left,
+              initDelay: const Duration(milliseconds: 0),
+              duration: const Duration(seconds: 1),
+              curve: Curves.ease,
+              child: _itemBuilder(context, entry as MembershipData),
+            );
+          },
+          noItemsFoundBuilder: (BuildContext context) {
+            return Text(trans(context, "noting_to_show"));
+          },
+          pageFuture: (int pageIndex) {
+            return getMembershipsData(pageIndex);
+          }),
     );
   }
 
-  Widget _itemBuilder(BuildContext context, MemberShip memberShip) {
+  Widget _itemBuilder(BuildContext context, MembershipData memberShip) {
     return Card(
-        shape:const RoundedRectangleBorder(
-          borderRadius:  BorderRadius.all(Radius.circular(12)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: InkWell(
-          onTap: (){  Navigator.pushNamed(context, "/MembershipDetails");},
+          onTap: () {
+            Navigator.pushNamed(context, "/MembershipDetails",arguments:<String, dynamic>{
+                "membership":memberShip
+              });
+          },
           child: Container(
             padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
             child: Row(
@@ -69,14 +84,15 @@ void initState() {
                   child: Column(
                     children: <Widget>[
                       FloatingActionButton(
-                          mini: true,
-                          heroTag: memberShip.shopName,
-                          elevation: 0,
-                          backgroundColor: colors.trans,
-                          onPressed: () {},
-                          child:  SvgPicture.asset("assets/images/vip.svg"),),
+                        mini: true,
+                        heroTag: memberShip.membership.merchant,
+                        elevation: 0,
+                        backgroundColor: colors.trans,
+                        onPressed: () {},
+                        child: SvgPicture.asset("assets/images/vip.svg"),
+                      ),
                       Text(
-                        memberShip.type,
+                        memberShip.membership.type,
                         textAlign: TextAlign.center,
                       )
                     ],
@@ -102,11 +118,12 @@ void initState() {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          "${memberShip.startingDate}".split(' ')[0],
+                          "${memberShip.startAt}".split(' ')[0],
                           style: styles.mysmall,
                         ),
-                        Icon(Icons.arrow_forward, color: Colors.orange, size: 12),
-                        Text("${memberShip.endDtae}".split(' ')[0],
+                        Icon(Icons.arrow_forward,
+                            color: Colors.orange, size: 12),
+                        Text("${memberShip.endAt}".split(' ')[0],
                             style: styles.mysmall),
                       ],
                     )
@@ -114,13 +131,12 @@ void initState() {
                 ),
                 Flexible(
                     child: Image.asset(
-                  memberShip.image,
+                  "assets/images/qrcode.png",
                   scale: 2,
                 ))
               ],
             ),
           ),
-        )
-        );
+        ));
   }
 }

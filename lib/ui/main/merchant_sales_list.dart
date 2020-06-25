@@ -18,7 +18,6 @@ class MerchantSalesList extends StatefulWidget {
 }
 
 class _MerchantSalesListState extends State<MerchantSalesList> {
-  List<SaleData> salesData;
   Sales sale;
 
   MyCounter bolc;

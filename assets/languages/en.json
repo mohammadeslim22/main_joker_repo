@@ -134,7 +134,7 @@
     "age":"Age",
     "consruction_date":"Construction Date",
     "affiliation_date":"Affiliation Date",
-    "membership_status":"Status",
+    "membership_status":"MemberShip Status",
     "associate_members_count":"The number of associate members",
     "discount_details":"Discount Details",
     "notification_off":"Souns Off",

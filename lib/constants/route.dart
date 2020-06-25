@@ -85,13 +85,13 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       break;
     case "/Membership":
       page = PageTransition<PageController>(
-        child: MyMemberShip(args['membershipsData'] as List<MemberShip>),
+        child: MyMemberShip(/*args['membershipsData'] as List<MemberShip>*/),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
     case "/MembershipDetails":
       page = PageTransition<PageController>(
-        child: MemberShipDetails(),
+        child:  MemberShipDetails(mermbershipData:args['membership'] as MembershipData),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
@@ -145,24 +145,23 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       break;
     case "/ContactUs":
       page = PageTransition<PageController>(
-        child:  ContactUs(),
+        child: ContactUs(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
     case "/AddressList":
       page = PageTransition<PageController>(
-        child:  const AddressList(),
+        child: const AddressList(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-          case "/AboutUs":
+    case "/AboutUs":
       page = PageTransition<PageController>(
-        child:  AboutUs(),
+        child: AboutUs(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
   }
 
-  
   return page;
 }

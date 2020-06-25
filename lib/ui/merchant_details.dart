@@ -180,10 +180,8 @@ bool isloved;
                               onTap: (bool loved) async {
                               favFunction(
                                     "App\\Merchant", merchant.mydata.id);
-                            
                                 isloved = !isloved;
                                 return isloved;
-
                               },
                               likeCountPadding:
                                   const EdgeInsets.symmetric(vertical: 0),
@@ -304,7 +302,6 @@ bool isloved;
                                           'rateable_id': index,
                                           'rate_value': rating
                                         });
-                               
                                   },
                                   filledIcon: Icons.star,
                                   emptyIcon: Icons.star_border,

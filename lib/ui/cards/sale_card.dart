@@ -177,10 +177,8 @@ class _SalesCardState extends State<SalesCard> {
                               Text(saledata.startAt, style: styles.mystyle)
                             ],
                           ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          const SizedBox(width: 36),
+                        
+                          const SizedBox(width: 41),
                           Column(
                             children: <Widget>[
                               Text(

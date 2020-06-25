@@ -49,12 +49,6 @@ Future<bool> get updateLocation async {
   }
   return res;
 }
-// class MyObject{
-//    MyObject(this.location2);
-//   final List<String> location2;
-//   final
-
-// }
 Future<void> getLocationName() async {
   try {
     config.coordinates = Coordinates(config.lat, config.long);

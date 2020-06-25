@@ -7,7 +7,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/styles.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
-import 'package:joker/models/membership.dart';
 import 'package:joker/util/data.dart';
 
 class MyInnerDrawer extends StatefulWidget {
@@ -162,9 +161,10 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 leading: SvgPicture.asset("assets/images/vip.svg"),
                 onTap: () {
                   Navigator.pushNamed(context, "/Membership",
-                      arguments: <String, List<MemberShip>>{
-                        "membershipsData": MemberShip.membershipsData
-                      });
+                      // arguments: <String, List<MemberShip>>{
+                      //   "membershipsData": MemberShip.membershipsData
+                      // }
+                      );
                   toggle();
                 },
               ),

@@ -5,8 +5,11 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import '../models/membership.dart';
 
 class MemberShipDetails extends StatefulWidget {
+  const MemberShipDetails({Key key, this.mermbershipData}) : super(key: key);
+  final MembershipData mermbershipData;
   @override
   _MemberShipDetailsState createState() => _MemberShipDetailsState();
 }
@@ -15,14 +18,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
   final double hight = 30;
 
   bool isactivated = true;
-
-  final List<String> options = const <String>[
-    "سنوي",
-    "شهري",
-    "موسمي",
-    "اسبوعي"
-  ];
-
+  MembershipData mermbershipData;
   PersistentBottomSheetController<dynamic> _errorController;
   Set<int> selectedOptions = <int>{};
 
@@ -31,8 +27,16 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
   @override
   void initState() {
     super.initState();
+    mermbershipData = widget.mermbershipData;
     _scaffoldkey = GlobalKey<ScaffoldState>();
   }
+
+  final List<String> options = const <String>[
+    "yearly",
+    "monthly",
+    "sesonly",
+    "weekly"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -243,7 +247,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                               ],
                             ),
                             const SizedBox(height: 12),
-                            Text("عضوية لدى",
+                            Text(trans(context, 'membership_to'),
                                 style: styles.memberShipBottomSheet),
                             const SizedBox(height: 12),
                             Container(
@@ -258,13 +262,13 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.max,
                                   children: <Widget>[
-                                    Text("متجر كابيتال مول",
+                                    Text(mermbershipData.membership.merchant,
                                         style: styles
                                             .memberShipBottomSheetmercahnt)
                                   ]),
                             ),
                             const SizedBox(height: 16),
-                            Text("نوع العضوية",
+                            Text(trans(context, 'membership_type'),
                                 style: styles.memberShipBottomSheet),
                             const SizedBox(height: 12),
                             GridView.count(
@@ -302,14 +306,14 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                               .add(options.indexOf(item));
                                         });
                                       },
-                                      child: Text(item,
+                                      child: Text(trans(context, item),
                                           style: styles.mysmallforgridview));
                                 }).toList()),
                             const SizedBox(height: 24),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text("الحالة",
+                                Text(trans(context, 'membership_status'),
                                     style: styles.memberShipBottomSheet),
                                 ToggleSwitch(
                                     minWidth: 90.0,
@@ -318,7 +322,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                     activeTextColor: Colors.white,
                                     inactiveBgColor: Colors.grey,
                                     inactiveTextColor: Colors.white,
-                                    labels: const <String>['مفعل', 'غير مفعل'],
+                                    labels:  <String>[trans(context, 'activated'),trans(context, 'deactivated')],
                                     icons: <IconData>[
                                       Icons.power_settings_new,
                                       Icons.blur_off
@@ -328,7 +332,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                       Colors.orange
                                     ],
                                     onToggle: (int index) {
-                                      print('switched to: $index');
+
                                     }),
                               ],
                             ),
@@ -373,7 +377,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                 },
                 color: Colors.red,
                 textColor: Colors.white,
-                child: Text(trans(context, "search"),
+                child: Text(trans(context, "update"),
                     style: styles.notificationNO),
               ),
             ],

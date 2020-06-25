@@ -13,9 +13,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/models/simplesales.dart';
 import 'package:after_layout/after_layout.dart';
 import 'dart:math';
 import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 
 class SaleDetailPage extends StatefulWidget {
   const SaleDetailPage({Key key, this.merchantId, this.saleId})
@@ -34,8 +37,10 @@ class ShopDetailsPage extends State<SaleDetailPage>
   SaleData sale;
 
   Future<Merchant> getMerchantData(int merchentid, int saleid) async {
+
     final dynamic saleResult = await dio.get<dynamic>("sales/$saleid");
     sale = SaleData.fromJson(saleResult.data['data']);
+    print("${sale.isliked}  ${sale.isfavorite}");
     final dynamic mercantResult =
         await dio.get<dynamic>("merchants/$merchentid");
     merchant = Merchant.fromJson(mercantResult.data);
@@ -44,6 +49,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
 
   @override
   Widget build(BuildContext context) {
+    print( widget.saleId);
     return FutureBuilder<Merchant>(
       future: getMerchantData(widget.merchantId, widget.saleId),
       builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
@@ -78,24 +84,12 @@ class SaleDetailsPage extends State<SaleDetails>
   bool hasMemberShip = false;
 
   PersistentBottomSheetController<dynamic> _errorController;
-  Widget circleBar(bool isActive) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 150),
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      height: isActive ? 12 : 8,
-      width: isActive ? 12 : 8,
-      decoration: BoxDecoration(
-          color: isActive
-              ? const Color.fromARGB(1023, 255, 112, 5)
-              : const Color.fromARGB(1023, 231, 231, 232),
-          borderRadius: const BorderRadius.all(Radius.circular(12))),
-    );
-  }
 
   final GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   PersistentBottomSheetController<dynamic> bottomSheetController;
   Merchant merchant;
   SaleData sale;
+  SimpleSales merchantSales;
   Color tabBackgroundColor = colors.trans;
 
   int index = 0;
@@ -104,12 +98,10 @@ class SaleDetailsPage extends State<SaleDetails>
   bool isliked;
   bool isloved;
   bool isbottomSheetOpened;
-
+  int pageIndexx;
   final GlobalKey<BottomWidgetForSliverState> key =
       GlobalKey<BottomWidgetForSliverState>();
   AnimationController rotationController;
-  List<Widget> items = <Widget>[];
-  double angel;
   @override
   void initState() {
     super.initState();
@@ -126,8 +118,19 @@ class SaleDetailsPage extends State<SaleDetails>
     index += merchant.mydata.branches[0].id;
     isliked = sale.isliked != 0;
     isloved = sale.isfavorite != 0;
-    angel = 0.0;
-    isbottomSheetOpened= false;
+    isbottomSheetOpened = false;
+    pageIndexx = 1;
+  }
+
+  Future<List<SimpleSalesData>> getSalesData(int pageIndex) async {
+    final Response<dynamic> response = await dio.get<dynamic>(
+        "simplesales?merchant_id=${merchant.mydata.id}",
+        queryParameters: <String, dynamic>{'page': pageIndex});
+
+    merchantSales = SimpleSales.fromJson(response.data);
+    print("${merchant.mydata.id} merchant second id");
+
+    return merchantSales.data;
   }
 
   void getHeight() {
@@ -138,7 +141,6 @@ class SaleDetailsPage extends State<SaleDetails>
     });
   }
 
-  double position;
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -157,237 +159,146 @@ class SaleDetailsPage extends State<SaleDetails>
                 stretch: true,
                 title: Text(trans(context, 'slae_details')),
                 flexibleSpace: FlexibleSpaceBar(
-                  background: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          CarouselSlider(
-                            options: CarouselOptions(
-                              height: 380,
-                              viewportFraction: 1,
-                              initialPage: 0,
-                              enableInfiniteScroll: true,
-                              reverse: true,
-                              autoPlay: true,
-                              autoPlayInterval: const Duration(seconds: 3),
-                              autoPlayAnimationDuration:
-                                  const Duration(milliseconds: 800),
-                              autoPlayCurve: Curves.fastOutSlowIn,
-                              scrollDirection: Axis.horizontal,
-                              onPageChanged: (int index,
-                                  CarouselPageChangedReason reason) {
-                                setState(() {
-                                  myindex = index;
-                                });
-                              },
-                              pageViewKey: const PageStorageKey<dynamic>(
-                                  'carousel_slider'),
-                            ),
-                            items: sale.images.map((Images image) {
-                              return Builder(
-                                builder: (BuildContext context) {
-                                  return Stack(
-                                    children: <Widget>[
-                                      Container(
+                  background: InkWell(
+                    onTap: () {
+                      print("$isbottomSheetOpened hellooooo");
+                      if (isbottomSheetOpened)
+                        Future<dynamic>.delayed(Duration.zero, () {
+                          Navigator.pop(context);
+                        });
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Stack(
+                          children: <Widget>[
+                            ///////////////// my whole widget
+                            LiKeLove(
+                                sale: sale, merchant: merchant, myindex: index),
+                            Positioned(
+                              left: 6,
+                              top: 250,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  LikeButton(
+                                    circleSize: 50,
+                                    size: 31,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 3),
+                                    countPostion: CountPostion.bottom,
+                                    circleColor: CircleColor(
+                                        start: Colors.blue, end: Colors.purple),
+                                    isLiked: isloved,
+                                    onTap: (bool loved) async {
+                                      favFunction(
+                                          "App\\Sale", sale.id);
+                                      isloved = !isloved;
+                                      return isloved;
+                                    },
+                                    likeCountPadding:
+                                        const EdgeInsets.symmetric(vertical: 0),
+                                  ),
+                                  LikeButton(
+                                    size: 26,
+                                    likeBuilder: (bool isLiked) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(3),
                                         decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image:
-                                                NetworkImage(image.imageTitle),
-                                            fit: BoxFit.cover,
-                                          ),
+                                          color: !isLiked
+                                              ? Colors.black.withOpacity(.5)
+                                              : Colors.blue,
+                                          borderRadius:
+                                              BorderRadius.circular(70),
                                         ),
+                                        child: Image.asset(
+                                            "assets/images/like.png",
+                                            width: 10,
+                                            height: 10),
+                                      );
+                                    },
+                                    isLiked: isliked,
+                                    likeCountPadding:
+                                        const EdgeInsets.symmetric(vertical: 3),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    countBuilder:
+                                        (int c, bool b, String count) {
+                                      return Text(
+                                        count,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                      );
+                                    },
+                                    likeCount: sale.id,
+                                    countPostion: CountPostion.bottom,
+                                    circleColor: CircleColor(
+                                        start: Colors.white,
+                                        end: Colors.purple),
+                                    onTap: (bool loved) async {
+                                      likeFunction(
+                                          "App\\Sale", sale.id);
+                                      isliked = !isliked;
+                                      return isliked;
+                                    },
+                                  ),
+                                  InkWell(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Icon(Icons.star_border),
                                       ),
-                                      Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Container(
-                                          height: 300,
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                                begin: Alignment.centerRight,
-                                                end: Alignment.bottomRight,
-                                                colors: <Color>[
-                                                  const Color(0x00FFFFFF),
-                                                  Colors.grey[200],
-                                                ]),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                },
-                              );
-                            }).toList(),
-                          ),
-                          Positioned(
-                            left: 6,
-                            top: 250,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                LikeButton(
-                                  circleSize: 50,
-                                  size: 31,
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 3),
-                                  countPostion: CountPostion.bottom,
-                                  circleColor: CircleColor(
-                                      start: Colors.blue, end: Colors.purple),
-                                  isLiked: sale.isfavorite != 0,
-                                  onTap: (bool loved) async {
-                                    favFunction(
-                                        "App\\Sale", merchant.mydata.id);
-                                    isloved = !isloved;
-                                    return isloved;
-                                  },
-                                  likeCountPadding:
-                                      const EdgeInsets.symmetric(vertical: 0),
-                                ),
-                                LikeButton(
-                                  size: 26,
-                                  likeBuilder: (bool isLiked) {
-                                    return Container(
-                                      padding: const EdgeInsets.all(3),
-                                      decoration: BoxDecoration(
-                                        color: !isLiked
-                                            ? Colors.black.withOpacity(.5)
-                                            : Colors.blue,
-                                        borderRadius: BorderRadius.circular(70),
-                                      ),
-                                      child: Image.asset(
-                                          "assets/images/like.png",
-                                          width: 10,
-                                          height: 10),
-                                    );
-                                  },
-                                  isLiked: sale.isliked != 0,
-                                  likeCountPadding:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  countBuilder: (int c, bool b, String count) {
-                                    return Text(
-                                      count,
-                                      style:
-                                          const TextStyle(color: Colors.black),
-                                    );
-                                  },
-                                  likeCount: sale.id,
-                                  countPostion: CountPostion.bottom,
-                                  circleColor: CircleColor(
-                                      start: Colors.white, end: Colors.purple),
-                                  onTap: (bool loved) async {
-                                    likeFunction(
-                                        "App\\Sale", merchant.mydata.id);
-                                    isliked = !isliked;
-                                    return isliked;
-                                  },
-                                ),
-                                InkWell(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: Icon(Icons.star_border),
-                                    ),
-                                    onTap: () {
-                                      showDialog<dynamic>(
-                                          context: context,
-                                          barrierDismissible: true,
-                                          builder: (BuildContext context) {
-                                            return RatingDialog(
-                                              icon: Container(
-                                                height: 100,
-                                                width: 200,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                    Radius.circular(12),
-                                                  ),
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        merchant.mydata.logo),
-                                                    fit: BoxFit.cover,
+                                      onTap: () {
+                                        showDialog<dynamic>(
+                                            context: context,
+                                            barrierDismissible: true,
+                                            builder: (BuildContext context) {
+                                              return RatingDialog(
+                                                icon: Container(
+                                                  height: 100,
+                                                  width: 200,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                      Radius.circular(12),
+                                                    ),
+                                                    image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          merchant.mydata.logo),
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              title: "Please Rate me",
-                                              description:
-                                                  "Yor feedback Give us Motivation",
-                                              submitButton: "SUBMIT",
-                                              alternativeButton:
-                                                  "Contact us instead?",
-                                              positiveComment:
-                                                  "We are so happy to hear :)",
-                                              negativeComment:
-                                                  "We're sad to hear :(",
-                                              accentColor: Colors.orange,
-                                              onSubmitPressed: (int rating) {
-                                                setState(() {});
-                                              },
-                                              onAlternativePressed: () {},
-                                            );
-                                          });
-                                    }),
-                              ],
+                                                title: "Please Rate me",
+                                                description:
+                                                    "Yor feedback Give us Motivation",
+                                                submitButton: "SUBMIT",
+                                                alternativeButton:
+                                                    "Contact us instead?",
+                                                positiveComment:
+                                                    "We are so happy to hear :)",
+                                                negativeComment:
+                                                    "We're sad to hear :(",
+                                                accentColor: Colors.orange,
+                                                onSubmitPressed:
+                                                    (int rating) {},
+                                                onAlternativePressed: () {},
+                                              );
+                                            });
+                                      }),
+                                ],
+                              ),
                             ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 8,
-                            child: Column(
-                              crossAxisAlignment: isRTL
-                                  ? CrossAxisAlignment.start
-                                  : CrossAxisAlignment.end,
-                              children: <Widget>[
-                                Container(
-                                    alignment: Alignment.centerRight,
-                                    child: Column(
-                                      children: <Widget>[
-                                        for (int i = 0;
-                                            i < sale.images.length;
-                                            i++)
-                                          if (i == myindex) ...<Widget>[
-                                            const SizedBox(height: 3),
-                                            circleBar(true),
-                                          ] else ...<Widget>[
-                                            const SizedBox(height: 3),
-                                            circleBar(false),
-                                          ]
-                                      ],
-                                    )),
-                                Text(sale.name, style: styles.underHeadblack),
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      sale.price ?? "30",
-                                      style: styles.redstyleForSaleScreen,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      sale.oldPrice,
-                                      style: TextStyle(
-                                          decoration:
-                                              TextDecoration.lineThrough),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Text(trans(context, "discount_details"),
-                                    style: styles.underHeadblack),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      BottomWidgetForSliver(
-                        key: key,
-                        bottomSheetController: bottomSheetController,
-                        mytext: mytext,
-                        scaffoldkey: scaffoldkey,
-                      )
-                    ],
+                          ],
+                        ),
+                        BottomWidgetForSliver(
+                          key: key,
+                          bottomSheetController: bottomSheetController,
+                          mytext: mytext,
+                          scaffoldkey: scaffoldkey,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -745,109 +656,125 @@ class SaleDetailsPage extends State<SaleDetails>
             onPressed: () async {
               if (isbottomSheetOpened) {
                 rotationController.reverse(from: pi / 2);
-                _errorController.close();
-                _errorController=null;
-                isbottomSheetOpened = false;
+                _errorController = null;
+                Future<dynamic>.delayed(Duration.zero, () {
+                  Navigator.pop(context);
+                });
+                setState(() {
+                  isbottomSheetOpened = false;
+                });
               } else {
-                isbottomSheetOpened = true;
+                setState(() {
+                  isbottomSheetOpened = true;
+                });
+
                 rotationController.forward(from: 0.0);
                 _errorController =
                     scaffoldkey.currentState.showBottomSheet<dynamic>(
-                  (BuildContext context) =>
-                      //  ListView(
-                      //     shrinkWrap: true,
-                      //     children: <Widget>[
-                      //       ClipPath(
-                      //           clipper: const ShapeBorderClipper(
-                      //               shape: RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.only(
-                      //                 bottomLeft: Radius.circular(24),
-                      //                 bottomRight: Radius.circular(24)),
-                      //           )),
-                      //           child: Container(
-                      //             width: MediaQuery.of(context).size.width,
-                      //             decoration: BoxDecoration(
-                      //                 color: Colors.black.withOpacity(.1),
-                      //                 border: const Border(
-                      //                     top: BorderSide(
-                      //                         color: Colors.orange,
-                      //                         width: 7.0))),
-                      //             child: Text(
-                      //               "${trans(context, 'use_current_location')}",
-                      //               textAlign: TextAlign.center,
-                      //               style: styles.underHead,
-                      //             ),
-                      //           )),
-                      //       ListTile(
-                      //         contentPadding: const EdgeInsets.symmetric(
-                      //             horizontal: 12),
-                      //         title: Text(
-                      //             "${trans(context, 'my_address_list')}"),
-                      //         trailing: Icon(
-                      //           Icons.search,
-                      //           color: Colors.black,
-                      //         ),
-                      //         onTap: () {
-                      //           Navigator.pushNamed(
-                      //               context, "/AddressList");
-                      //         },
-                      //       ),
-                      //       ListTile(
-                      //         contentPadding: const EdgeInsets.symmetric(
-                      //             horizontal: 12),
-                      //         title: Text(
-                      //             "${trans(context, 'use_current_location')}"),
-                      //         trailing: Icon(
-                      //           Icons.my_location,
-                      //           color: Colors.black,
-                      //         ),
-                      //         onTap: () {},
-                      //       ),
-                      //       ListTile(
-                      //         contentPadding: const EdgeInsets.symmetric(
-                      //             horizontal: 12),
-                      //         title:
-                      //             Text("${trans(context, 'add_location')}"),
-                      //         trailing: Icon(
-                      //           Icons.add,
-                      //           color: Colors.black,
-                      //         ),
-                      //         onTap: () async {},
-                      //       ),
-                      //       const SizedBox(height: 12),
-                      //     ])
-
-                      DraggableScrollableSheet(
+                  (BuildContext context) => DraggableScrollableSheet(
                     initialChildSize: 0.4,
-                    
                     maxChildSize: 0.6,
                     minChildSize: 0.0,
                     expand: false,
                     builder: (BuildContext context,
                         ScrollController scrollController) {
-                      scrollController.addListener(() {
-                        if (scrollController.position.atEdge) {
-                          rotationController.reverse(from: pi / 2);
-                          _errorController.close();
-                          isbottomSheetOpened = false;
-                          _errorController=null;
-                          print("did we close it ? ");
-                        }
-                      });
+                      scrollController.addListener(() {});
                       return Container(
-                        height: 20,
-                        color: Colors.blue[100],
-                        child: ListView.builder(
-                          controller: scrollController,
-                          itemCount: 25,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(title: Text('Item $index'));
-                          },
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                                width: 16.0, color: Colors.lightBlue.shade600),
+                          ),
                         ),
+                        child: PagewiseListView<dynamic>(
+                            physics: const ScrollPhysics(),
+                            shrinkWrap: true,
+                            controller: scrollController,
+                            loadingBuilder: (BuildContext context) {
+                              return const Center(
+                                  child: CircularProgressIndicator(
+                                backgroundColor: Colors.transparent,
+                              ));
+                            },
+                            pageSize: 15,
+                            // padding: const EdgeInsets.all(5.0),
+                            itemBuilder: (BuildContext context, dynamic entry,
+                                int index) {
+                              final SimpleSalesData e =
+                                  entry as SimpleSalesData;
+                              return Container(
+                                color: index % 2 == 0
+                                    ? Colors.grey[100]
+                                    : Colors.grey[200],
+                                child: ListTile(
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text('${e.name}'),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            e.price ?? "30",
+                                            style: styles.redstyleForSaleScreen,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            e.oldPrice,
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.lineThrough),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  subtitle: Row(
+                                    children: <Widget>[
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: <Widget>[
+                                          Text(
+                                            trans(context, 'starting_date'),
+                                            style: styles.mysmalllight,
+                                          ),
+                                          const SizedBox(width: 3),
+                                          Text(e.startAt, style: styles.mystyle)
+                                        ],
+                                      ),
+                                      const SizedBox(width: 40),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: <Widget>[
+                                          Text(
+                                            trans(context, 'end_date'),
+                                            style: styles.mysmalllight,
+                                          ),
+                                          const SizedBox(width: 3),
+                                          Text(e.endAt, style: styles.mystyle)
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            pageFuture: (int pageIndex) {
+                              return getSalesData(pageIndexx);
+                            }),
                       );
                     },
                   ),
                 );
+                _errorController.closed.then((dynamic value) {
+                  rotationController.reverse(from: pi / 2);
+                  isbottomSheetOpened = false;
+                  _errorController = null;
+                });
               }
             },
           ),
@@ -941,6 +868,137 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
             Container(),
         ]);
       }),
+    );
+  }
+}
+
+class LiKeLove extends StatefulWidget {
+  LiKeLove({Key key, this.sale, this.myindex, this.merchant}) : super(key: key);
+  final SaleData sale;
+  int myindex;
+  final Merchant merchant;
+  @override
+  _LiKeLoveState createState() => _LiKeLoveState();
+}
+
+class _LiKeLoveState extends State<LiKeLove> {
+  Widget circleBar(bool isActive) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      height: isActive ? 12 : 8,
+      width: isActive ? 12 : 8,
+      decoration: BoxDecoration(
+          color: isActive
+              ? const Color.fromARGB(1023, 255, 112, 5)
+              : const Color.fromARGB(1023, 231, 231, 232),
+          borderRadius: const BorderRadius.all(Radius.circular(12))),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+
+    return Stack(
+      children: <Widget>[
+        CarouselSlider(
+          options: CarouselOptions(
+            height: 380,
+            viewportFraction: 1,
+            initialPage: 0,
+            enableInfiniteScroll: true,
+            reverse: true,
+            autoPlay: true,
+            autoPlayInterval: const Duration(seconds: 3),
+            autoPlayAnimationDuration: const Duration(milliseconds: 800),
+            autoPlayCurve: Curves.fastOutSlowIn,
+            scrollDirection: Axis.horizontal,
+            onPageChanged: (int index, CarouselPageChangedReason reason) {
+              setState(() {
+                widget.myindex = index;
+              });
+            },
+            pageViewKey: const PageStorageKey<dynamic>('carousel_slider'),
+          ),
+          items: widget.sale.images.map((Images image) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Stack(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(image.imageTitle),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        height: 300,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.centerRight,
+                              end: Alignment.bottomRight,
+                              colors: <Color>[
+                                const Color(0x00FFFFFF),
+                                Colors.grey[200],
+                              ]),
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              },
+            );
+          }).toList(),
+        ),
+        Positioned(
+          bottom: 0,
+          right: 8,
+          child: Column(
+            crossAxisAlignment:
+                isRTL ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                  alignment: Alignment.centerRight,
+                  child: Column(
+                    children: <Widget>[
+                      for (int i = 0; i < widget.sale.images.length; i++)
+                        if (i == widget.myindex) ...<Widget>[
+                          const SizedBox(height: 3),
+                          circleBar(true),
+                        ] else ...<Widget>[
+                          const SizedBox(height: 3),
+                          circleBar(false),
+                        ]
+                    ],
+                  )),
+              Text(widget.sale.name, style: styles.underHeadblack),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    widget.sale.price ?? "30",
+                    style: styles.redstyleForSaleScreen,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.sale.oldPrice,
+                    style: TextStyle(decoration: TextDecoration.lineThrough),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(trans(context, "discount_details"),
+                  style: styles.underHeadblack),
+            ],
+          ),
+        )
+      ],
     );
   }
 }
