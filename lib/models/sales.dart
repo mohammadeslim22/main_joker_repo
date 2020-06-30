@@ -31,7 +31,8 @@ class SaleData {
       this.images,
       this.merchant,
       this.isfavorite,
-      this.isliked});
+      this.isliked,
+      this.branches});
 
   SaleData.fromJson(dynamic json) {
     id = json['id'] as int;
@@ -53,6 +54,18 @@ class SaleData {
     merchant = MerchantForSale.fromJson(json['merchant']);
     isliked = json['isliked'] as int;
     isfavorite = json['isfavorite'] as int;
+       if (json['branches'] != null) {
+         if(json['branches']!=<dynamic>[]){}
+         else{
+     branches = <int>[];
+      json['branches'].forEach((int v) {
+        branches.add(v);
+      });
+
+         }
+ 
+    }
+
   }
   int id;
   String name;
@@ -68,20 +81,20 @@ class SaleData {
   MerchantForSale merchant;
   int isliked;
   int isfavorite;
-  
+  List<int> branches;
 }
 
 class MerchantForSale {
-  MerchantForSale({this.id, this.name, this.logo,this.salesCount,this.ratesAverage});
+  MerchantForSale(
+      {this.id, this.name, this.logo, this.salesCount, this.ratesAverage});
 
   MerchantForSale.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'] as String;
     logo = json['logo'] as String;
-    salesCount = json['sales_count']as int;
-    ratesAverage = json['rates_average']as int;
+    salesCount = json['sales_count'] as int;
+    ratesAverage = json['rates_average'] as int;
   }
-
 
   int id;
   String name;

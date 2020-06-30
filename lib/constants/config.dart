@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:joker/providers/counter.dart';
 
 class Config {
   factory Config() {
@@ -23,11 +24,13 @@ final TextEditingController locationController = TextEditingController();
 Address first;
 Coordinates coordinates;
 List<Address> addresses;
-
+MyCounter bolc;
 double lat=0.0;
 double long=0.0;
 String token= "";
 bool amIcomingFromHome=false;
+bool prifleNoVerfiyVisit = false;
+bool prifleNoVerfiyDone= false;
 }
 
 final Config config = Config();

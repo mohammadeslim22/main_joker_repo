@@ -42,7 +42,9 @@ class _AutoLocateState extends State<AutoLocate> {
 
     serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
+      
     } else {
+      
       permissionGranted = await location.hasPermission();
       if (permissionGranted == PermissionStatus.denied) {
       } else {
@@ -59,6 +61,7 @@ class _AutoLocateState extends State<AutoLocate> {
     super.initState();
     lat = widget.lat;
     long = widget.long;
+   // tryToAnimate();
   }
 
   @override
@@ -84,6 +87,19 @@ class _AutoLocateState extends State<AutoLocate> {
     Provider.of<MyCounter>(context, listen: false).togelocationloading(false);
     Navigator.pop(context);
     return true;
+  }
+  Future<void> tryToAnimate() async {
+        serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      
+    } else {
+      _animateToUser();
+      permissionGranted = await location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied) {
+      } else {
+        _animateToUser();
+      }
+    }
   }
 
   @override

@@ -20,7 +20,7 @@ class MyMemberShipState extends State<MyMemberShip>
   Memberships memberships;
 
   Future<List<MembershipData>> getMembershipsData(int pageIndex) async {
-    final Response<dynamic> response = await dio.get<dynamic>("memberships",
+    final Response<dynamic> response = await dio.get<dynamic>("usermemberships",
         queryParameters: <String, dynamic>{'page': pageIndex + 1});
     memberships = Memberships.fromJson(response.data);
     return memberships.data;
@@ -71,9 +71,8 @@ class MyMemberShipState extends State<MyMemberShip>
         ),
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, "/MembershipDetails",arguments:<String, dynamic>{
-                "membership":memberShip
-              });
+            Navigator.pushNamed(context, "/MembershipDetails",
+                arguments: <String, dynamic>{"membership": memberShip});
           },
           child: Container(
             padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
@@ -99,16 +98,13 @@ class MyMemberShipState extends State<MyMemberShip>
                   ),
                 ),
                 Container(
-                  child: const VerticalDivider(
-                    color: Colors.grey,
-                    thickness: 1,
-                  ),
-                  height: 45,
-                ),
+                    child:
+                        const VerticalDivider(color: Colors.grey, thickness: 1),
+                    height: 45),
                 Column(
                   children: <Widget>[
                     Text(
-                      trans(context, 'shop_name'),
+                     memberShip.membership.merchant,
                       style: styles.underHead,
                     ),
                     const SizedBox(

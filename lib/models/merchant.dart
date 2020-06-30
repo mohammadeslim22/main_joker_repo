@@ -95,21 +95,6 @@ class Branches {
   CityId cityId;
   String address;
   String phone;
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    if (countryId != null) {
-      data['country_id'] = countryId.toJson();
-    }
-    if (cityId != null) {
-      data['city_id'] = cityId.toJson();
-    }
-    data['address'] = address;
-    data['phone'] = phone;
-    return data;
-  }
 }
 
 class CountryId {

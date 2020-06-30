@@ -37,10 +37,9 @@ class ShopDetailsPage extends State<SaleDetailPage>
   SaleData sale;
 
   Future<Merchant> getMerchantData(int merchentid, int saleid) async {
-
     final dynamic saleResult = await dio.get<dynamic>("sales/$saleid");
     sale = SaleData.fromJson(saleResult.data['data']);
-    print("${sale.isliked}  ${sale.isfavorite}");
+    print("${saleResult.data}  ${sale.isfavorite}");
     final dynamic mercantResult =
         await dio.get<dynamic>("merchants/$merchentid");
     merchant = Merchant.fromJson(mercantResult.data);
@@ -49,7 +48,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    print( widget.saleId);
+    print(widget.saleId);
     return FutureBuilder<Merchant>(
       future: getMerchantData(widget.merchantId, widget.saleId),
       builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
@@ -161,7 +160,6 @@ class SaleDetailsPage extends State<SaleDetails>
                 flexibleSpace: FlexibleSpaceBar(
                   background: InkWell(
                     onTap: () {
-                      print("$isbottomSheetOpened hellooooo");
                       if (isbottomSheetOpened)
                         Future<dynamic>.delayed(Duration.zero, () {
                           Navigator.pop(context);
@@ -192,15 +190,17 @@ class SaleDetailsPage extends State<SaleDetails>
                                         start: Colors.blue, end: Colors.purple),
                                     isLiked: isloved,
                                     onTap: (bool loved) async {
-                                      favFunction(
-                                          "App\\Sale", sale.id);
+                                      favFunction("App\\Sale", sale.id);
+                                      //   setState(() {
                                       isloved = !isloved;
+                                      //  });
                                       return isloved;
                                     },
                                     likeCountPadding:
                                         const EdgeInsets.symmetric(vertical: 0),
                                   ),
                                   LikeButton(
+                                    circleSize: 50,
                                     size: 26,
                                     likeBuilder: (bool isLiked) {
                                       return Container(
@@ -237,9 +237,11 @@ class SaleDetailsPage extends State<SaleDetails>
                                         start: Colors.white,
                                         end: Colors.purple),
                                     onTap: (bool loved) async {
-                                      likeFunction(
-                                          "App\\Sale", sale.id);
+                                      likeFunction("App\\Sale", sale.id);
+                                      //  setState(() {
                                       isliked = !isliked;
+                                      //  });
+
                                       return isliked;
                                     },
                                   ),
@@ -281,7 +283,16 @@ class SaleDetailsPage extends State<SaleDetails>
                                                     "We're sad to hear :(",
                                                 accentColor: Colors.orange,
                                                 onSubmitPressed:
-                                                    (int rating) {},
+                                                    (int rating) async {
+                                                  await dio.post<dynamic>(
+                                                      "rates",
+                                                      data: <String, dynamic>{
+                                                        'rateable_type':
+                                                            "App\\Sale",
+                                                        'rateable_id': sale.id,
+                                                        'rate_value': rating
+                                                      });
+                                                },
                                                 onAlternativePressed: () {},
                                               );
                                             });
@@ -344,16 +355,25 @@ class SaleDetailsPage extends State<SaleDetails>
                                 style: styles.mysmall),
                             const SizedBox(height: 12),
                             RatingBar(
-                              onRatingChanged: (double rating) =>
-                                  setState(() => clientRatingStar = rating),
+                              onRatingChanged: (double rating) async {
+                                print("${merchant.mydata.id}   ${merchant.mydata.ratesAverage}");
+                                await dio.post<dynamic>("rates",
+                                    data: <String, dynamic>{
+                                      'rateable_type': "App\\Merchant",
+                                      'rateable_id': merchant.mydata.id,
+                                      'rate_value': rating
+                                    });
+                                setState(() => clientRatingStar = rating);
+                              },
                               filledIcon: Icons.star,
+                              initialRating: merchant.mydata.ratesAverage,
                               emptyIcon: Icons.star_border,
                               halfFilledIcon: Icons.star_half,
                               isHalfAllowed: true,
                               filledColor: Colors.amberAccent,
                               emptyColor: Colors.grey,
                               halfFilledColor: Colors.orange[300],
-                              size: 20,
+                              size: 26,
                             ),
                             const SizedBox(height: 12),
                             InkWell(
@@ -562,8 +582,8 @@ class SaleDetailsPage extends State<SaleDetails>
                             onPressed: () async {}),
                       ),
                       const SizedBox(height: 16),
-                      Text(trans(context, "hello_")),
-                      Text(trans(context, "hello_")),
+                      Text(trans(context,
+                          "join_merchant_members_have_more_offers_for_qrcode_on_entrance")),
                     ],
                   )
                 else
@@ -584,8 +604,8 @@ class SaleDetailsPage extends State<SaleDetails>
                                 Column(
                                   children: <Widget>[
                                     Text(
-                                      trans(
-                                          context, 'you_r_member_in  resName'),
+                                      trans(context,
+                                          'you_r_member_in_merchant_name'),
                                       style: styles.underHead,
                                     ),
                                     const SizedBox(height: 8),
@@ -609,8 +629,8 @@ class SaleDetailsPage extends State<SaleDetails>
                             ),
                           )),
                       const SizedBox(height: 16),
-                      Text(trans(context, "hello_")),
-                      Text(trans(context, "hello_")),
+                      Text(trans(context,
+                          "have_great_discounts_when_qrcode_scan_on_entrance")),
                     ],
                   )
               ],
@@ -717,7 +737,7 @@ class SaleDetailsPage extends State<SaleDetails>
                                             MainAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            e.price ?? "30",
+                                            e.price == "null" ? "" : e.price,
                                             style: styles.redstyleForSaleScreen,
                                           ),
                                           const SizedBox(width: 8),
@@ -789,6 +809,7 @@ class SaleDetailsPage extends State<SaleDetails>
   }
 }
 
+// ignore: must_be_immutable
 class BottomWidgetForSliver extends StatefulWidget {
   BottomWidgetForSliver(
       {Key key, this.mytext, this.bottomSheetController, this.scaffoldkey})
@@ -872,6 +893,7 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
   }
 }
 
+// ignore: must_be_immutable
 class LiKeLove extends StatefulWidget {
   LiKeLove({Key key, this.sale, this.myindex, this.merchant}) : super(key: key);
   final SaleData sale;

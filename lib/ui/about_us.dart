@@ -10,7 +10,7 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("About Us"),
+        title:  Text(trans(context, 'about_us')),
         centerTitle: true,
       ),
       body: Padding(

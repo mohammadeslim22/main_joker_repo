@@ -42,7 +42,7 @@ Future<bool> get updateLocation async {
   final List<String> loglat = await getLocation();
   if (loglat.isEmpty) {
     res = false;
-  } else {
+  } else { 
     config.lat = double.parse(loglat.elementAt(0));
     config.long = double.parse(loglat.elementAt(1));
     res = true;

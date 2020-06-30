@@ -8,6 +8,7 @@ import '../../ui/cards/merchant_card.dart';
 import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
 
 class ShopList extends StatefulWidget {
   @override
@@ -28,19 +29,19 @@ class _ShopListState extends State<ShopList> {
     return branches.data;
   }
 
-  Future<void> _onRefresh() async {
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
-    _refreshController.refreshCompleted();
-  }
+   PagewiseLoadController<dynamic> _pagewiseController;
 
-  Future<void> _onLoading() async {
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
-    if (mounted) {
-      setState(() {});
-      _refreshController.loadComplete();
-    }
-  }
 
+@override
+  void initState() {
+   _pagewiseController=  PagewiseLoadController<dynamic>(
+  pageSize: 10,
+  pageFuture: (int pageIndex)async {
+    return getBranchesData(pageIndex);
+  }
+);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
@@ -71,9 +72,21 @@ class _ShopListState extends State<ShopList> {
         },
       ),
       controller: _refreshController,
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
+          onRefresh: () async {
+         _pagewiseController.reset();
+        _refreshController.refreshCompleted();
+      },
+      onLoading: () async {
+        
+        
+         await Future<void>.delayed(const Duration(milliseconds: 1000));
+        if (mounted) {
+          setState(() {});
+          _refreshController.loadComplete();
+        }
+      },
       child: PagewiseListView<dynamic>(
+        // controller: _pagewiseController,
           physics: const ScrollPhysics(),
           shrinkWrap: true,
           loadingBuilder: (BuildContext context) {
@@ -82,14 +95,16 @@ class _ShopListState extends State<ShopList> {
               backgroundColor: Colors.transparent,
             ));
           },
-          pageSize: 10,
+          
           itemBuilder: (BuildContext context, dynamic entry, int index) {
             return FadeIn(child: MerchantCard(branchData: entry as BranchData));
           },
-          pageFuture: (int pageIndex) {
-            print(pageIndex);
-            return getBranchesData(pageIndex);
-          }),
+          pageLoadController: _pagewiseController,
+          // pageFuture: (int pageIndex) {
+          //   print(pageIndex);
+          //   return getBranchesData(pageIndex);
+          // }
+          ),
     );
   }
 }

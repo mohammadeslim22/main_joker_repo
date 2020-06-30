@@ -1,27 +1,22 @@
 class Memberships {
-
-
   Memberships({this.data, this.links, this.meta});
 
   Memberships.fromJson(dynamic json) {
     if (json['data'] != null) {
-      data =  <MembershipData>[];
+      data = <MembershipData>[];
       json['data'].forEach((dynamic v) {
-        data.add( MembershipData.fromJson(v));
+        data.add(MembershipData.fromJson(v));
       });
     }
-    links = json['links'] != null ?  Links.fromJson(json['links']) : null;
-    meta = json['meta'] != null ?  Meta.fromJson(json['meta']) : null;
+    links = json['links'] != null ? Links.fromJson(json['links']) : null;
+    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
   }
   List<MembershipData> data;
   Links links;
   Meta meta;
-
 }
 
 class MembershipData {
-
-
   MembershipData(
       {this.id,
       this.status,
@@ -31,15 +26,15 @@ class MembershipData {
       this.createdAt,
       this.membership});
 
-  MembershipData.fromJson( dynamic json) {
-    id = json['id']as int;
+  MembershipData.fromJson(dynamic json) {
+    id = json['id'] as int;
     status = json['status'].toString();
     startAt = json['start_at'].toString();
     endAt = json['end_at'].toString();
     qrCode = json['qr_code'].toString();
     createdAt = json['created_at'].toString();
     membership = json['membership'] != null
-        ?  Membership.fromJson(json['membership'])
+        ? Membership.fromJson(json['membership'])
         : null;
   }
   int id;
@@ -52,23 +47,23 @@ class MembershipData {
 }
 
 class Membership {
-
-
   Membership(
       {this.id,
       this.title,
       this.gender,
       this.ageStage,
+      this.meesage,
       this.type,
       this.status,
       this.createdAt,
       this.merchant});
 
   Membership.fromJson(dynamic json) {
-    id = json['id']as int;
+    id = json['id'] as int;
     title = json['title'].toString();
     gender = json['gender'].toString();
     ageStage = json['age_stage'].toString();
+    meesage = json['meesage'].toString();
     type = json['type'].toString();
     status = json['status'].toString();
     createdAt = json['created_at'].toString();
@@ -78,16 +73,14 @@ class Membership {
   String title;
   String gender;
   String ageStage;
+  String meesage;
   String type;
   String status;
   String createdAt;
   String merchant;
-
 }
 
 class Links {
-
-
   Links({this.first, this.last, this.prev, this.next});
 
   Links.fromJson(dynamic json) {
@@ -103,8 +96,6 @@ class Links {
 }
 
 class Meta {
-
-
   Meta(
       {this.currentPage,
       this.from,
@@ -114,14 +105,14 @@ class Meta {
       this.to,
       this.total});
 
-  Meta.fromJson( dynamic json) {
-    currentPage = json['current_page']as int;
-    from = json['from']as int;
-    lastPage = json['last_page']as int;
+  Meta.fromJson(dynamic json) {
+    currentPage = json['current_page'] as int;
+    from = json['from'] as int;
+    lastPage = json['last_page'] as int;
     path = json['path'].toString();
-    perPage = json['per_page']as int;
-    to = json['to']as int;
-    total = json['total']as int;
+    perPage = json['per_page'] as int;
+    to = json['to'] as int;
+    total = json['total'] as int;
   }
   int currentPage;
   int from;

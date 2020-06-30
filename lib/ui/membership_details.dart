@@ -62,7 +62,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                    "هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً ",
+                   mermbershipData.membership.meesage,
                     textWidthBasis: TextWidthBasis.parent,
                     style: styles.memberSipMessageText),
               ],
@@ -70,7 +70,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
           ),
           const SizedBox(height: 12),
           Text(
-            trans(context, "membership_message"),
+            trans(context, "membership_details"),
             style: styles.underHead,
           ),
           const SizedBox(height: 12),
@@ -91,7 +91,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                             style: styles.smallButton,
                           ),
                           Text(
-                            "${trans(context, 'account')}",
+                            mermbershipData.membership.merchant,
                             style: styles.smallButton,
                           ),
                         ],
@@ -107,7 +107,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                             style: styles.smallButton,
                           ),
                           Text(
-                            "${trans(context, 'account')}",
+                            mermbershipData.membership.gender,
                             style: styles.smallButton,
                           ),
                         ],
@@ -124,7 +124,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                             style: styles.smallButton,
                           ),
                           Text(
-                            "${trans(context, 'account')}",
+                           mermbershipData.membership.ageStage,
                             style: styles.smallButton,
                           ),
                         ],
@@ -140,7 +140,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                             style: styles.smallButton,
                           ),
                           Text(
-                            "${trans(context, 'account')}",
+                            mermbershipData.createdAt,
                             style: styles.smallButton,
                           ),
                         ],
@@ -157,7 +157,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                             style: styles.smallButton,
                           ),
                           Text(
-                            "${trans(context, 'account')}",
+                            mermbershipData.startAt,
                             style: styles.smallButton,
                           ),
                         ],
@@ -173,7 +173,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                             style: styles.smallButton,
                           ),
                           Text(
-                            "${trans(context, 'account')}",
+                            mermbershipData.status,
                             style: styles.smallButton,
                           ),
                         ],
@@ -190,7 +190,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                             style: styles.smallButton,
                           ),
                           Text(
-                            "${trans(context, 'account')}",
+                            "390.00",
                             style: styles.smallButton,
                           ),
                         ],

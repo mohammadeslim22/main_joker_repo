@@ -44,6 +44,7 @@ class Styles {
       fontSize: 15,
       height: 1.7
       );
+
         TextStyle myredstyle = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.red,

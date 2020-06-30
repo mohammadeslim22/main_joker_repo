@@ -166,7 +166,7 @@ class _MyChangePasswordState extends State<ChangePassword>
               children: <Widget>[
                 Text(trans(context, 'hello'), style: styles.mystyle2),
                 const SizedBox(height: 10),
-                Text(trans(context, 'enter old & new password'),
+                Text(trans(context, 'enter_old_new_password'),
                     style: styles.mystyle),
                 customcard(context),
                 const Divider(),

@@ -21,6 +21,7 @@ Color saleStatus;
 class _SalesCardState extends State<SalesCard> {
   bool isliked = false;
   SaleData saledata;
+  String branches;
   @override
   void initState() {
     super.initState();
@@ -32,6 +33,13 @@ class _SalesCardState extends State<SalesCard> {
     } else {
       saleStatus = Colors.red;
     }
+    // if (saledata.branches.isNotEmpty) {
+    //   saledata.branches.forEach((int element) {
+    //     branches += element.toString() + " ";
+    //   });
+    // } else {
+    //   branches = "0";
+    // }
   }
 
   @override
@@ -122,7 +130,7 @@ class _SalesCardState extends State<SalesCard> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            widget.sale.price ?? "35",
+                            widget.sale.price ?? "",
                             style: styles.redstyleForSaleScreen,
                           ),
                           const SizedBox(width: 8),
@@ -145,9 +153,7 @@ class _SalesCardState extends State<SalesCard> {
                           children: <Widget>[
                             Text(trans(context, 'branch'),
                                 style: styles.mylight),
-                            const SizedBox(
-                              width: 10,
-                            ),
+                            const SizedBox(width: 10),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 4),
@@ -157,10 +163,7 @@ class _SalesCardState extends State<SalesCard> {
                                 color: Colors.grey[200],
                               ),
                               alignment: Alignment.center,
-                              child: Text(
-                                trans(context, 'branches_with_offer'),
-                                style: styles.mystyle,
-                              ),
+                              child: Text("0"),
                             )
                           ],
                         ),
@@ -177,7 +180,6 @@ class _SalesCardState extends State<SalesCard> {
                               Text(saledata.startAt, style: styles.mystyle)
                             ],
                           ),
-                        
                           const SizedBox(width: 41),
                           Column(
                             children: <Widget>[

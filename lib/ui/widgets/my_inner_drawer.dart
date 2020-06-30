@@ -29,13 +29,13 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
         );
   }
 
-  String username = " gg";
+  String username = ".";
   @override
   void initState() {
     super.initState();
-    data.getData("usernamr").then((String value) {
+    data.getData("username").then((String value) {
       setState(() {
-     //   username = value;
+        username = value ?? "username";
       });
     });
   }
@@ -77,8 +77,6 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
                                   Text(username, style: styles.underHead),
-                                  const SizedBox(height: 10),
-                                  Text('الرياض', style: styles.mylight),
                                 ],
                               ),
                               decoration: BoxDecoration(
@@ -143,6 +141,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 ),
                 leading: SvgPicture.asset("assets/images/notifications.svg"),
                 onTap: () {
+                  Navigator.pushNamed(context, "/Notifications");
                   toggle();
                 },
               ),
@@ -160,11 +159,12 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 title: Text("${trans(context, 'membership')}"),
                 leading: SvgPicture.asset("assets/images/vip.svg"),
                 onTap: () {
-                  Navigator.pushNamed(context, "/Membership",
-                      // arguments: <String, List<MemberShip>>{
-                      //   "membershipsData": MemberShip.membershipsData
-                      // }
-                      );
+                  Navigator.pushNamed(
+                    context, "/Membership",
+                    // arguments: <String, List<MemberShip>>{
+                    //   "membershipsData": MemberShip.membershipsData
+                    // }
+                  );
                   toggle();
                 },
               ),
@@ -199,8 +199,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 title: Text("${trans(context, 'privacy')}"),
                 leading: SvgPicture.asset("assets/images/privacy.svg"),
                 onTap: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                  context, '/AboutUs', (_) => false);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/AboutUs', (_) => false);
                   toggle();
                 },
               ),

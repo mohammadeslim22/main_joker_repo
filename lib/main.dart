@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:joker/ui/home.dart';
+import 'package:joker/ui/auth/login_screen.dart';
 import 'constants/config.dart';
 import 'util/dio.dart';
 import 'package:joker/providers/counter.dart';
@@ -30,19 +30,17 @@ Future<void> main() async {
     ),
   );
   dioDefaults();
- await data.getData('authorization').then<dynamic>((dynamic auth)  {
+  await data.getData('authorization').then<dynamic>((dynamic auth) {
     print(auth);
-    if(auth==null){
-            
-    }
+    if (auth == null) {}
     dio.options.headers['authorization'] = '$auth';
   });
 
   data.getData("lat").then((String value) {
-    config.lat = value as double;
+    config.lat =double.parse( value);
   });
   data.getData("long").then((String value) {
-    config.long = value as double;
+    config.long = double.parse(value);
   });
   dio.get<dynamic>("user").then((dynamic value) {
     print(value.data);
@@ -53,6 +51,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Language lang = Provider.of<Language>(context);
+    final MyCounter bolc = Provider.of<MyCounter>(context);
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -93,6 +92,6 @@ class MyApp extends StatelessWidget {
         },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home: const Home());
+        home:  LoginScreen());
   }
 }

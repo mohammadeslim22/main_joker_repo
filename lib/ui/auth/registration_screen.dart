@@ -17,6 +17,7 @@ import 'package:joker/util/dio.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
 import 'package:dio/dio.dart';
+import 'package:joker/models/user.dart';
 
 class Registration extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _MyRegistrationState extends State<Registration>
     with TickerProviderStateMixin {
   List<String> location2;
   Location location = Location();
-  
+
   static List<String> validators = <String>[null, null, null, null, null, null];
   static List<String> keys = <String>[
     'name',
@@ -39,7 +40,7 @@ class _MyRegistrationState extends State<Registration>
   ];
   Map<String, String> validationMap =
       Map<String, String>.fromIterables(keys, validators);
-bool _isButtonEnabled;
+  bool _isButtonEnabled;
   @override
   void initState() {
     super.initState();
@@ -54,7 +55,7 @@ bool _isButtonEnabled;
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
   static DateTime today = DateTime.now();
-
+  String countryCodeTemp = "+90";
   DateTime firstDate = DateTime(today.year - 90, today.month, today.day);
   DateTime lastDate = DateTime(today.year - 18, today.month, today.day);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -156,7 +157,7 @@ bool _isButtonEnabled;
                   onTab: () {},
                   suffixicon: CountryCodePicker(
                     onChanged: _onCountryChange,
-                    initialSelection: 'SA',
+                    initialSelection: 'TR',
                     favorite: const <String>['+966', 'SA'],
                     showFlagDialog: true,
                     showFlag: false,
@@ -273,7 +274,7 @@ bool _isButtonEnabled;
                     }
                   },
                   suffixicon: IconButton(
-                    icon: Icon(Icons.add_location),
+                    icon: Icon(Icons.add_location, color: Colors.orange),
                     onPressed: () {
                       Navigator.pushNamed(context, '/AutoLocate',
                           arguments: <String, double>{
@@ -352,22 +353,23 @@ bool _isButtonEnabled;
                                       data: <String, dynamic>{
                                         "name": usernameController.text,
                                         "password": passwordController.text,
-                                        "birth_date":
-                                            birthDateController.text,
+                                        "password_confirmation":
+                                            passwordController.text,
+                                        "birth_date": birthDateController.text,
                                         "email": emailController.text,
-                                        "phone": mobileNoController.text,
+                                        "phone": countryCodeTemp +
+                                            mobileNoController.text,
                                         "country_id": 1,
                                         "city_id": 1,
                                         "address":
                                             config.locationController.text,
                                         "longitude": config.long,
                                         "latitude": config.lat
-                                      }).then((Response<dynamic> value) {
+                                      }).then((Response<dynamic> value) async {
                                     setState(() {
                                       _isButtonEnabled = true;
                                     });
 
-                                    print(value.data);
                                     if (value.statusCode == 422) {
                                       value.data['errors']
                                           .forEach((String k, dynamic vv) {
@@ -381,14 +383,18 @@ bool _isButtonEnabled;
                                           (String key, String value) {
                                         return null;
                                       });
-                                      print(validationMap);
                                     }
                                     if (value.statusCode == 201) {
+                                      print(value.data['data']['id']);
+
                                       Navigator.pushNamed(context, '/pin',
                                           arguments: <String, String>{
-                                            'mobileNo': mobileNoController.text
+                                            'mobileNo': countryCodeTemp +
+                                              mobileNoController.text
                                           });
                                       config.locationController.clear();
+                                     await data.setData("id",
+                                          value.data['data']['id'].toString());
                                       data.setData(
                                           "email", emailController.text);
                                       data.setData(
@@ -396,7 +402,9 @@ bool _isButtonEnabled;
                                       data.setData(
                                           "password", passwordController.text);
                                       data.setData(
-                                          "phone", mobileNoController.text);
+                                          "phone",
+                                          countryCodeTemp +
+                                              mobileNoController.text);
                                       data.setData(
                                           "lat", config.lat.toString());
                                       data.setData(
@@ -414,7 +422,7 @@ bool _isButtonEnabled;
                             color: Colors.deepOrangeAccent,
                             textColor: colors.white,
                             child: bolc
-                                .returnchild(trans(context, 'Regisration'))),
+                                .returnchild(trans(context, 'regisration'))),
                       ),
                       const Padding(
                           padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
@@ -441,6 +449,10 @@ bool _isButtonEnabled;
   }
 
   void _onCountryChange(CountryCode countryCode) {
+    setState(() {
+      countryCodeTemp = countryCode.dialCode;
+    });
+
     FocusScope.of(context).requestFocus(FocusNode());
   }
 }

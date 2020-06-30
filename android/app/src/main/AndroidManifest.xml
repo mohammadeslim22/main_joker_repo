@@ -11,7 +11,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="joker"
-        android:icon="@mipmap/lunch">
+        android:icon="@mipmap/ontop">
         
         <activity
             android:name=".MainActivity"

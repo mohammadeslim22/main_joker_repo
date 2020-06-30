@@ -16,7 +16,7 @@ class Notifcations extends StatefulWidget {
 
 class _NotifcationsState extends State<Notifcations> {
   Future<String> getNotifications() async {
-     final Response<dynamic> response = await dio.get<dynamic>("sales");
+    final Response<dynamic> response = await dio.get<dynamic>("sales");
     return response.data.toString();
   }
 
@@ -59,40 +59,11 @@ class _NotifcationsState extends State<Notifcations> {
   Widget _itemBuilder(
     BuildContext c,
   ) {
-    return Container(
-      color: Colors.white,
-      margin: const EdgeInsets.symmetric(vertical: 3),
-      child: Slidable(
-        actionPane: const SlidableDrawerActionPane(),
-        actionExtentRatio: 0.25,
-        actions: <Widget>[
-          IconSlideAction(
-            caption: 'Archive',
-            color: Colors.blue,
-            icon: Icons.archive,
-            onTap: () {},
-          ),
-          IconSlideAction(
-            caption: 'Share',
-            color: Colors.indigo,
-            icon: Icons.share,
-            onTap: () {},
-          ),
-        ],
-        secondaryActions: <Widget>[
-          IconSlideAction(
-            caption: 'More',
-            color: Colors.black45,
-            icon: Icons.more_horiz,
-            onTap: () {},
-          ),
-          IconSlideAction(
-            caption: 'Delete',
-            color: Colors.red,
-            icon: Icons.delete,
-            onTap: () {},
-          ),
-        ],
+    return Dismissible(
+      key: const Key("c"),
+      child: Container(
+        color: Colors.white,
+        margin: const EdgeInsets.symmetric(vertical: 3),
         child: ListTile(
           leading: SvgPicture.asset(
             'assets/images/notification.svg',
@@ -117,7 +88,8 @@ class NoNotificationsToday extends StatelessWidget {
           SvgPicture.asset(
             'assets/images/no_notification.svg',
           ),
-          Text(trans(context, 'No Notifications Yet:'),style: styles.underHeadblack),
+          Text(trans(context, 'no_notifications_yet'),
+              style: styles.underHeadblack),
         ],
       ),
     );

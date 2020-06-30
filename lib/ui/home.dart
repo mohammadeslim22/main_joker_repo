@@ -8,6 +8,7 @@ import 'package:joker/models/user.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
 import 'package:joker/util/data.dart';
+import 'package:joker/util/functions.dart';
 import 'package:provider/provider.dart';
 import '../constants/colors.dart';
 import '../constants/styles.dart';
@@ -36,7 +37,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   PersistentBottomSheetController<dynamic> _errorController;
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification.depth == 0) {
-      print(notification.metrics);
+     
       if (notification is UserScrollNotification) {
         final UserScrollNotification userScroll = notification;
         switch (userScroll.direction) {
@@ -77,9 +78,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     });
   }
 
+  bool doonce = true;
   @override
   Widget build(BuildContext context) {
     final MyCounter bolc = Provider.of<MyCounter>(context);
+    if (doonce) {
+      setState(() {
+        config.bolc = Provider.of<MyCounter>(context);
+        doonce = false;
+      });
+    }
+
     return MyInnerDrawer(
       drawerKey: key,
       scaffold: Scaffold(
@@ -109,7 +118,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             try {
                               _errorController.close();
                             } catch (e) {
-                              print("hi");
+                           
                             }
                           },
                           child: Row(
@@ -205,7 +214,32 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                                       Icons.my_location,
                                                       color: Colors.black,
                                                     ),
-                                                    onTap: () {},
+                                                    onTap: () async {
+                                                      final bool t =
+                                                          await updateLocation;
+                                                      if (t) {
+                                                        Navigator.pop(context);
+                                                      } else {
+                                                        // should not be used
+                                                        // TODO(iSLEEM): CHECK IF ITS WORKING WITHOUT SETSTATE
+                                                        final List<String>
+                                                            loglat =
+                                                            await getLocation();
+                                                        if (loglat.isEmpty) {
+                                                        } else {
+                                                          setState(() {
+                                                            config.lat = double
+                                                                .parse(loglat
+                                                                    .elementAt(
+                                                                        0));
+                                                            config.long = double
+                                                                .parse(loglat
+                                                                    .elementAt(
+                                                                        1));
+                                                          });
+                                                        }
+                                                      }
+                                                    },
                                                   ),
                                                   ListTile(
                                                     contentPadding:

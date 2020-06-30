@@ -91,8 +91,8 @@ class _MyForgetPassState extends State<ForgetPassword>
                             onTab: () {},
                             onFieldSubmitted: () {},
                             validator: (String value) {
-                              if(value.isEmpty){
-                                  return "mobile_number is needed";
+                              if (value.isEmpty) {
+                                return "mobile_number is needed";
                               }
                               if (value.length < 6) {
                                 return "mobile_number must be more than 3 letters";
@@ -173,7 +173,6 @@ class _MyForgetPassState extends State<ForgetPassword>
                           ),
                         ),
                       ),
-                    
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                         child: RaisedButton(
@@ -232,19 +231,19 @@ class _MyForgetPassState extends State<ForgetPassword>
                                 .returnchild(trans(context, mainButtonkey))),
                       ),
                       FlatButton(
-                        
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      side: const BorderSide(color: Colors.black)),
-                  color: Colors.white,
-                  textColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(vertical:8.0,horizontal: 28),
-                  onPressed: () {},
-                  child: Text(
-                    trans(context, 'resend_code'),
-                    style: styles.resend,
-                  ),
-                ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            side: const BorderSide(color: Colors.black)),
+                        color: Colors.white,
+                        textColor: Colors.orange,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 28),
+                        onPressed: () {},
+                        child: Text(
+                          trans(context, 'resend_code'),
+                          style: styles.resend,
+                        ),
+                      ),
                     ],
                   ),
                 ]),

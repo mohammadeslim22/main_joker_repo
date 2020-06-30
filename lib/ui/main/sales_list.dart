@@ -12,6 +12,7 @@ import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class DiscountsList extends StatefulWidget {
   const DiscountsList({Key key, this.filterData}) : super(key: key);
@@ -52,17 +53,16 @@ class _DiscountsListState extends State<DiscountsList> {
     return sale.data;
   }
 
-  Future<void> _onRefresh() async {
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
-    _refreshController.refreshCompleted();
-  }
+  PagewiseLoadController<dynamic> _pagewiseController;
 
-  Future<void> _onLoading() async {
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
-    if (mounted) {
-      setState(() {});
-      _refreshController.loadComplete();
-    }
+  @override
+  void initState() {
+    _pagewiseController = PagewiseLoadController<dynamic>(
+        pageSize: 10,
+        pageFuture: (int pageIndex) async {
+          return getSalesData(pageIndex);
+        });
+    super.initState();
   }
 
   @override
@@ -70,7 +70,8 @@ class _DiscountsListState extends State<DiscountsList> {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: const WaterDropHeader(
+      header: WaterDropHeader(
+        complete: Container(),
         waterDropColor: Colors.orange,
       ),
       footer: CustomFooter(
@@ -94,32 +95,43 @@ class _DiscountsListState extends State<DiscountsList> {
         },
       ),
       controller: _refreshController,
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
+      onRefresh: () async {
+        _pagewiseController.reset();
+        _refreshController.refreshCompleted();
+      },
+      onLoading: () async {
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+        if (mounted) {
+          setState(() {});
+          _refreshController.loadComplete();
+        }
+      },
       child: PagewiseListView<dynamic>(
-          physics: const ScrollPhysics(),
-          shrinkWrap: true,
-          loadingBuilder: (BuildContext context) {
-            return const Center(
-                child: CircularProgressIndicator(
-              backgroundColor: Colors.transparent,
-            ));
-          },
-          pageSize: 10,
-          padding: const EdgeInsets.all(15.0),
-          itemBuilder: (BuildContext context, dynamic entry, int index) {
-            return FadeIn(
-                child: SalesCard(context: context, sale: entry as SaleData));
-          },
-          noItemsFoundBuilder: (BuildContext context) {
-            return Text(trans(context, "noting_to_show"));
-          },
-          pageFuture: (int pageIndex) {
-            //  return getSalesDataFilterd(pageIndex, widget.filterData);
-            return (widget.filterData != null)
-                ? getSalesDataFilterd(pageIndex, widget.filterData)
-                : getSalesData(pageIndex);
-          }),
+        physics: const ScrollPhysics(),
+        shrinkWrap: true,
+        loadingBuilder: (BuildContext context) {
+          return const Center(
+              child: CircularProgressIndicator(
+            backgroundColor: Colors.transparent,
+          ));
+        },
+        // pageSize: 10,
+        pageLoadController: _pagewiseController,
+        padding: const EdgeInsets.all(15.0),
+        itemBuilder: (BuildContext context, dynamic entry, int index) {
+          return FadeIn(
+              child: SalesCard(context: context, sale: entry as SaleData));
+        },
+        noItemsFoundBuilder: (BuildContext context) {
+          return Text(trans(context, "noting_to_show"));
+        },
+        // pageFuture: (int pageIndex) {
+        //   //  return getSalesDataFilterd(pageIndex, widget.filterData);
+        //   return (widget.filterData != null)
+        //       ? getSalesDataFilterd(pageIndex, widget.filterData)
+        //       : getSalesData(pageIndex);
+        // },
+      ),
     );
   }
 }

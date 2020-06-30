@@ -58,7 +58,7 @@ class AddressListState extends State<AddressList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(trans(context, 'Address List')),
+          title: Text(trans(context, 'address_List')),
           centerTitle: true,
         ),
         body: Padding(
@@ -104,7 +104,7 @@ class AddressListState extends State<AddressList> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(trans(context, 'Add address'),
+                      Text(trans(context, 'add_address'),
                           style: styles.underHeadwhite),
                       Icon(
                         Icons.add_circle_outline,
@@ -175,7 +175,7 @@ class AddressListState extends State<AddressList> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Text(
-                      "${trans(context, 'latitude')}   ${locationData.latitude.toStringAsFixed(3)}"),
+                      "${trans(context, 'latitude')}  ${locationData.latitude.toStringAsFixed(3)}"),
                   Text(
                       "${trans(context, 'longitue')}   ${locationData.longitude.toStringAsFixed(3)}"),
                 ],

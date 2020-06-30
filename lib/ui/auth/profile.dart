@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:after_layout/after_layout.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
@@ -29,7 +31,7 @@ class MyAccount extends StatefulWidget {
   MyAccountPage createState() => MyAccountPage();
 }
 
-class MyAccountPage extends State<MyAccount> {
+class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   List<String> location2;
   Location location = Location();
   SnackBar snackBar = SnackBar(
@@ -92,21 +94,40 @@ class MyAccountPage extends State<MyAccount> {
       FocusScope.of(context).requestFocus(FocusNode());
   }
 
+  String tempPhone;
   bool showImageOptions = false;
   bool _isButtonEnabled;
   @override
   void initState() {
     super.initState();
+
     _isButtonEnabled = true;
     getProfileData().then((Profile value) {
       setState(() {
         usernameController.text = value.name;
         emailController.text = value.email;
         mobileNoController.text = value.phone;
+        tempPhone = value.phone;
         birthDateController.text = value.updatedAt;
         config.locationController.text = "${value.address}";
       });
     });
+  }
+
+  void shoeTosted() {
+    showToast('new Phone number was Not Verfiyed!',
+        context: context,
+        animation: StyledToastAnimation.slideFromBottom,
+        reverseAnimation: StyledToastAnimation.slideToBottom,
+        startOffset: const Offset(0.0, 3.0),
+        reverseEndOffset: const Offset(0.0, 3.0),
+        position: StyledToastPosition.bottom,
+        duration: const Duration(seconds: 4),
+        //Animation duration   animDuration * 2 <= duration
+        animDuration: const Duration(seconds: 1),
+        curve: Curves.elasticOut,
+        reverseCurve: Curves.fastOutSlowIn);
+    return;
   }
 
   static List<String> validators = <String>[null, null, null, null, null, null];
@@ -383,7 +404,8 @@ class MyAccountPage extends State<MyAccount> {
                                     }
                                   },
                                   suffixicon: IconButton(
-                                    icon: Icon(Icons.add_location),
+                                    icon: Icon(Icons.add_location,
+                                        color: Colors.orange),
                                     onPressed: () {
                                       Navigator.pushNamed(
                                           context, '/AutoLocate',
@@ -432,62 +454,24 @@ class MyAccountPage extends State<MyAccount> {
                                   setState(() {
                                     _isButtonEnabled = false;
                                   });
-                                  await dio.post<dynamic>("update",
-                                      data: <String, dynamic>{
-                                        "name": usernameController.text,
-                                        "birth_date": birthDateController.text,
-                                        "email": emailController.text,
-                                        "phone": mobileNoController.text,
-                                        "country_id": 1,
-                                        "city_id": 1,
-                                        "address":
-                                            config.locationController.text,
-                                        "longitude": config.long,
-                                        "latitude": config.lat
-                                      }).then((Response<dynamic> value) {
-                                    setState(() {
-                                      _isButtonEnabled = true;
-                                    });
-
-                                    print(value.data);
-                                    if (value.statusCode == 422) {
-                                      value.data['errors']
-                                          .forEach((String k, dynamic vv) {
-                                        setState(() {
-                                          validationMap[k] = vv[0].toString();
-                                        });
-                                        print(validationMap);
-                                      });
-                                      _formKey.currentState.validate();
-                                      validationMap.updateAll(
-                                          (String key, String value) {
-                                        return null;
-                                      });
-                                      print(validationMap);
-                                    }
-                                    if (value.statusCode == 201) {
-                                      Navigator.pushNamed(context, '/pin',
-                                          arguments: <String, String>{
-                                            'mobileNo': mobileNoController.text
-                                          });
-                                      config.locationController.clear();
-                                      data.setData(
-                                          "email", emailController.text);
-                                      data.setData(
-                                          "username", usernameController.text);
-                                      data.setData(
-                                          "phone", mobileNoController.text);
-                                      data.setData(
-                                          "lat", config.lat.toString());
-                                      data.setData(
-                                          "long", config.long.toString());
-                                      data.setData(
-                                          "address",
-                                          config.locationController.text
-                                              .toString());
-                                    }
-                                    bolc.togelf(false);
-                                  });
+                                  if (tempPhone != mobileNoController.text) {
+                                    print(mobileNoController.text);
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      '/pinForProfile',
+                                      (_) => false,
+                                      arguments: <String, String>{
+                                        'mobileNo': mobileNoController.text
+                                      },
+                                    );
+                                    // Navigator.pushNamed(
+                                    //     context, '/pinForProfile',
+                                    //     arguments: <String, String>{
+                                    //       'mobileNo': mobileNoController.text
+                                    //     });
+                                  } else {
+                                    login(bolc);
+                                  }
                                 }
                               }
                             },
@@ -503,7 +487,111 @@ class MyAccountPage extends State<MyAccount> {
                 ))));
   }
 
+  Future<void> login(MyCounter bolc) async {
+    await dio.post<dynamic>("update", data: <String, dynamic>{
+      "name": usernameController.text,
+      "birth_date": birthDateController.text,
+      "email": emailController.text,
+      "phone": mobileNoController.text,
+      "country_id": 1,
+      "city_id": 1,
+      "address": config.locationController.text,
+      "longitude": config.long,
+      "latitude": config.lat
+    }).then((Response<dynamic> value) {
+      setState(() {
+        _isButtonEnabled = true;
+      });
+      print(value.data);
+      if (value.statusCode == 422) {
+        value.data['errors'].forEach((String k, dynamic vv) {
+          setState(() {
+            validationMap[k] = vv[0].toString();
+          });
+          print(validationMap);
+        });
+        _formKey.currentState.validate();
+        validationMap.updateAll((String key, String value) {
+          return null;
+        });
+        print(validationMap);
+      }
+      if (value.statusCode == 200) {
+        data.setData("email", emailController.text);
+        data.setData("username", usernameController.text);
+        data.setData("phone", mobileNoController.text);
+        data.setData("lat", config.lat.toString());
+        data.setData("long", config.long.toString());
+        data.setData("address", config.locationController.text.toString());
+
+        showGeneralDialog<dynamic>(
+          barrierLabel: "Label",
+          barrierDismissible: true,
+          barrierColor: Colors.black.withOpacity(0.73),
+          transitionDuration: const Duration(milliseconds: 350),
+          context: context,
+          pageBuilder: (BuildContext context, Animation<double> anim1,
+              Animation<double> anim2) {
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 360,
+                margin: const EdgeInsets.only(bottom: 160, left: 36, right: 36),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: SizedBox.expand(
+                    child: Column(
+                      children: <Widget>[
+                        SvgPicture.asset('assets/images/checkdone.svg'),
+                        const SizedBox(height: 15),
+                        Text(trans(context, "information_updated_successfully"),
+                            style: styles.underHeadblack),
+                        const SizedBox(height: 15),
+                        RaisedButton(
+                          color: colors.orange,
+                            child: Text(trans(context, "ok"),
+                                style: styles.underHeadwhite),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            })
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          transitionBuilder: (BuildContext context, Animation<double> anim1,
+              Animation<double> anim2, Widget child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                      begin: const Offset(0, 1), end: const Offset(0, 0))
+                  .animate(anim1),
+              child: child,
+            );
+          },
+        );
+      }
+      bolc.togelf(false);
+    });
+  }
+
   void _onCountryChange(CountryCode value) {}
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    if (config.prifleNoVerfiyDone) {
+      login(config.bolc);
+    } else {
+      if (config.prifleNoVerfiyVisit) {
+        shoeTosted();
+      }
+    }
+  }
 }
 
 class HeaderColor extends CustomClipper<Path> {

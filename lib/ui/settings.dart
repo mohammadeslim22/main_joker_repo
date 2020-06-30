@@ -270,9 +270,10 @@ Widget verticalDiv() {
       ),
       height: 18);
 }
-Future<void> sendtoAPI({int index,String voice,String lang}){
-return          dio.post<dynamic>("settings", data: <String, dynamic>{
-                      'recieve_notify': voice != null ? "on" : "off",
-                      'notify_sound ':index==0?"on":"off"
-                    });
+
+Future<void> sendtoAPI({int index, String voice, String lang}) {
+  return dio.post<dynamic>("settings", data: <String, dynamic>{
+    'recieve_notify': voice != null ? "on" : "off",
+    'notify_sound ': index == 0 ? "on" : "off"
+  });
 }

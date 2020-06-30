@@ -32,7 +32,33 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(trans(context, "shop_details")), centerTitle: true),
+          title: Text(trans(context, "shop_details")),
+          centerTitle: true,
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: DropdownButton<dynamic>(
+                elevation: 0,
+                isDense: false,
+                icon: Icon(Icons.more_vert),
+                items: <dynamic>[trans(context, "join")].map((dynamic value) {
+                  return DropdownMenuItem<dynamic>(
+                    value: value,
+                    onTap: () {
+                      //   Navigator.pushNamed(context, "/MemberShipsForMerchant");
+                    },
+                    child: Text(value.toString()),
+                  );
+                }).toList(),
+                onChanged: (dynamic value) {
+                  Navigator.pushNamed(context, "/MemberShipsForMerchant",
+                      arguments: <String, dynamic>{
+                        "merchantId": merchant.mydata.id
+                      });
+                },
+              ),
+            )
+          ]),
       body: FutureBuilder<Merchant>(
         future: getMerchantData(widget.merchantId),
         builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
@@ -61,6 +87,7 @@ class Page extends StatefulWidget {
 
 class _PageState extends State<Page> with TickerProviderStateMixin {
   TabController _tabController;
+
   int index = 2;
   double ratingStar = 0;
   Color tabBackgroundColor = colors.ggrey;
@@ -68,8 +95,8 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
   int likecount;
   int lovecount;
   int salesNo;
-bool isliked ;
-bool isloved;
+  bool isliked;
+  bool isloved;
   @override
   void initState() {
     super.initState();
@@ -79,13 +106,17 @@ bool isloved;
     _tabController =
         TabController(vsync: this, length: merchant.mydata.branches.length);
     _tabController.addListener(() {
+      setState(() {
+        index = _tabController.index + merchant.mydata.branches[0].id;
+      });
+
       if (_tabController.indexIsChanging) {
       } else if (_tabController.index != _tabController.previousIndex) {}
     });
 
     likecount = merchant.mydata.likesCount;
-    isliked = merchant.mydata.isliked!=0;
-    isloved = merchant.mydata.isfavorite!=0;
+    isliked = merchant.mydata.isliked != 0;
+    isloved = merchant.mydata.isfavorite != 0;
   }
 
   @override
@@ -152,10 +183,9 @@ bool isloved;
                           circleColor: CircleColor(
                               start: Colors.white, end: Colors.purple),
                           onTap: (bool loved) async {
-                              likeFunction(
-                                "App\\Merchant", merchant.mydata.id);
-                                  isliked = !isliked;
-                                return isliked;
+                            likeFunction("App\\Merchant", merchant.mydata.id);
+                            isliked = !isliked;
+                            return isliked;
                           },
                         ),
                         const SizedBox(width: 8),
@@ -178,7 +208,7 @@ bool isloved;
                               circleColor: CircleColor(
                                   start: Colors.blue, end: Colors.purple),
                               onTap: (bool loved) async {
-                              favFunction(
+                                favFunction(
                                     "App\\Merchant", merchant.mydata.id);
                                 isloved = !isloved;
                                 return isloved;
@@ -296,7 +326,7 @@ bool isloved;
                               children: <Widget>[
                                 RatingBar(
                                   onRatingChanged: (double rating) async {
-                                   await dio.post<dynamic>("rates",
+                                    await dio.post<dynamic>("rates",
                                         data: <String, dynamic>{
                                           'rateable_type': "App\\Branch",
                                           'rateable_id': index,

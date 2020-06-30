@@ -5,11 +5,13 @@ import 'package:joker/ui/about_us.dart';
 import 'package:joker/ui/address_list.dart';
 import 'package:joker/ui/advanced_search.dart';
 import 'package:joker/ui/contact_us.dart';
+import 'package:joker/ui/merchant_memberships.dart';
 import 'package:joker/ui/sale_screen.dart';
 import 'package:joker/ui/auth/registration_screen.dart';
 import 'package:joker/ui/membership_details.dart';
 import 'package:joker/ui/my_membership.dart';
 import 'package:joker/ui/auth/pin_code.dart';
+import 'package:joker/ui/auth/pinCode_for_profile.dart';
 import 'package:joker/ui/auth/reset_password.dart';
 import 'package:joker/ui/auth/change_password.dart';
 import 'package:joker/ui/auth/forget_password.dart';
@@ -95,6 +97,12 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
+        case "/MemberShipsForMerchant":
+      page = PageTransition<PageController>(
+        child:   MemberShipsForMerchant(merchantId:args["merchantId"]as int),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
     case "/Fav":
       page = PageTransition<PageController>(
         child: Favorite(),
@@ -104,6 +112,12 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     case "/pin":
       page = PageTransition<PageController>(
         child: PinCode(mobileNo: args['mobileNo'].toString()),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
+      case "/pinForProfile":
+      page = PageTransition<PageController>(
+        child: PinCodeForProfile(mobileNo: args['mobileNo'].toString()),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;

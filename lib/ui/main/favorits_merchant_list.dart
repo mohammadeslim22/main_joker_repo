@@ -99,7 +99,7 @@ class _MerchantsListState extends State<FavoritMerchantsList> {
             return FadeIn(child: MerchantCard(branchData: entry as BranchData));
           },
           noItemsFoundBuilder: (BuildContext context) {
-            return Text(trans(context, "noting_to_show_rn"));
+            return Text(trans(context, "noting_to_show"));
           },
           pageFuture: (int pageIndex) {
             return getFavoritData(pageIndex);

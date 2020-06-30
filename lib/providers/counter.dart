@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:joker/util/data.dart';
 
 class MyCounter extends ChangeNotifier {
-
+  bool darkthemeIson =false;
   bool loading = false;
   static TickerProvider c;
   static String loginbase = "login";
@@ -35,6 +35,10 @@ class MyCounter extends ChangeNotifier {
   }
   void changenotificationSit(int state) {
     notificationSit = state==0?<bool>[true,false]:<bool>[false,true];
+    notifyListeners();
+  }
+    void changeTheme(bool state) {
+    darkthemeIson=state;
     notifyListeners();
   }
   void changelanguageindex(int index) {

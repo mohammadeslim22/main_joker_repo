@@ -46,16 +46,12 @@ class BottomContent extends StatelessWidget {
                   //   width: bolc.bottomNavIndex == 1 ? 25 : 35,
                   // ),
                 ),
-                const SizedBox(
-                  height: 2,
-                ),
+                const SizedBox(height: 2),
                 Text(
                   '${trans(context, 'sales')}',
                   style: styles.mylight,
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 5),
                 Container(
                   alignment: Alignment.bottomCenter,
                   height: 2,

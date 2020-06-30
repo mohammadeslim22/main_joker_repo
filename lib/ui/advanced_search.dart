@@ -236,28 +236,30 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
           kt: TextInputType.visiblePassword,
           readOnly: true,
           onTab: () async {
-            try {
-              bolc.togelocationloading(true);
-              if (await updateLocation) {
-                await getLocationName();
-                bolc.togelocationloading(false);
-                FocusScope.of(context).requestFocus(globalFocus);
-              } else {
-                Vibration.vibrate(duration: 400);
-                bolc.togelocationloading(false);
-                Scaffold.of(context).showSnackBar(snackBar);
-                setState(() {
-                  config.locationController.text = "Tap to set my location";
-                });
-              }
-            } catch (e) {
-              Vibration.vibrate(duration: 400);
-              bolc.togelocationloading(false);
-              Scaffold.of(context).showSnackBar(snackBar);
-              setState(() {
-                config.locationController.text = "Tap to set my location";
-              });
-            }
+                   Navigator.pushNamed(context, '/AutoLocate',
+                  arguments: <String, double>{"lat": 51.0, "long": 9.6});
+            // try {
+            //   bolc.togelocationloading(true);
+            //   if (await updateLocation) {
+            //     await getLocationName();
+            //     bolc.togelocationloading(false);
+            //     FocusScope.of(context).requestFocus(globalFocus);
+            //   } else {
+            //     Vibration.vibrate(duration: 400);
+            //     bolc.togelocationloading(false);
+            //     Scaffold.of(context).showSnackBar(snackBar);
+            //     setState(() {
+            //       config.locationController.text = "Tap to set my location";
+            //     });
+            //   }
+            // } catch (e) {
+            //   Vibration.vibrate(duration: 400);
+            //   bolc.togelocationloading(false);
+            //   Scaffold.of(context).showSnackBar(snackBar);
+            //   setState(() {
+            //     config.locationController.text = "Tap to set my location";
+            //   });
+            // }
           },
           suffixicon: IconButton(
             icon: Icon(Icons.add_location),
