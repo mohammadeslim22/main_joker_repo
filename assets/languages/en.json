@@ -184,5 +184,6 @@
     "enter_new_mobile": "Enter New Mobile No.",
     "problem_in_verifying": "facing problems in Verifying ?",
     "new_mobile_no":"New Mobile Number",
-    "features":"features"
+    "features":"features",
+    "you_can_change_mo_only_once":"Sorry, You can Change Mobile No. only once"
 }

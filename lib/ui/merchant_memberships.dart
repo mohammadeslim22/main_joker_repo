@@ -51,7 +51,7 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                     initDelay: const Duration(milliseconds: 0),
                     duration: const Duration(seconds: 1),
                     curve: Curves.ease,
-                    child: _itemBuilder(memberShips.data[index], controller),
+                    child: _itemBuilder(memberShips.data[index]),
                   );
                 },
               );
@@ -66,15 +66,15 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
   }
 
   Widget _itemBuilder(
-      MemFromMerchant memFromMerchant, ExpandableController controller) {
-    final ExpandableController exp = ExpandableController.of(context);
+      MemFromMerchant memFromMerchant) {
+    final ExpandableController exp = ExpandableController();
     return Card(
         margin: const EdgeInsets.symmetric(vertical: 12),
         child: ExpandableNotifier(
-            controller: ExpandableController(),
+            controller: exp,
             child: ExpandablePanel(
               iconColor: Colors.orange,
-              controller: controller,
+              controller: exp,
               header: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -100,7 +100,7 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                   ],
                 ),
               ),
-              collapsed: Text(trans(context, 'features')),
+              // collapsed: Text(trans(context, 'features')),
               expanded: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(

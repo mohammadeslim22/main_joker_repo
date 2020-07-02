@@ -14,6 +14,7 @@ import 'package:joker/util/dio.dart';
 import 'package:joker/util/data.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import '../widgets/text_form_input.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 class PinCode extends StatefulWidget {
   const PinCode({Key key, this.mobileNo}) : super(key: key);
@@ -27,6 +28,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
   AnimationController controller;
   String currentText = "0000";
   bool showTimer = true;
+  bool buttonChangeMoEnabeld = true;
   final TextEditingController mobileNoController = TextEditingController();
   PersistentBottomSheetController<dynamic> bottomSheetController;
 
@@ -157,63 +159,92 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                     ],
                   ),
                   onTap: () {
-                    final FocusNode focus1 = FocusNode();
-                    final bool isRTL =
-                        Directionality.of(context) == TextDirection.rtl;
-                    bottomSheetController =
-                        _scaffoldkey.currentState.showBottomSheet<dynamic>(
-                      (BuildContext context) {
-                        focus1.requestFocus();
-                        return Container(
-                          height: 200,
-                          padding: const EdgeInsets.all(32.0),
-                          color: Colors.grey[200],
-                          child: Column(
-                            children: <Widget>[
-                              Text(trans(context, 'enter_new_mobile')),
-                              const SizedBox(height: 24),
-                              TextFormInput(
-                                  text: trans(context, 'mobile_no'),
-                                  cController: mobileNoController,
-                                  prefixIcon: Icons.phone,
-                                  kt: TextInputType.phone,
-                                  obscureText: false,
-                                  readOnly: false,
-                                  onTab: () {},
-                                  suffixicon: CountryCodePicker(
-                                    onChanged: _onCountryChange,
-                                    initialSelection: 'TR',
-                                    favorite: const <String>['+966', 'SA'],
-                                    showFlagDialog: true,
-                                    showFlag: false,
-                                    showCountryOnly: false,
-                                    showOnlyCountryWhenClosed: false,
-                                    alignLeft: false,
-                                    padding: isRTL == true
-                                        ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                                        : const EdgeInsets.fromLTRB(
-                                            32, 0, 0, 0),
-                                  ),
-                                  focusNode: focus1,
-                                  onFieldSubmitted: () {
-                                    sendPinNewPhone(countryCodeTemp +
-                                        mobileNoController.text);
-                                    Navigator.pop(context);
-                                  },
-                                  validator: (String value) {
-                                    if (value.isEmpty) {
-                                      return "please enter your mobile Number  ";
-                                    }
-                                    return "";
-                                  }),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                    bottomSheetController.closed.then((dynamic value) {
-                      //  sendPinNewPhone(mobileNoController.text);
-                    });
+                    if (buttonChangeMoEnabeld) {
+                      final FocusNode focus1 = FocusNode();
+                      final bool isRTL =
+                          Directionality.of(context) == TextDirection.rtl;
+                      bottomSheetController =
+                          _scaffoldkey.currentState.showBottomSheet<dynamic>(
+                        (BuildContext context) {
+                          focus1.requestFocus();
+                          return Container(
+                            height: 290,
+                            padding: const EdgeInsets.all(32.0),
+                            color: Colors.grey[200],
+                            child: Column(
+                              children: <Widget>[
+                                Text(trans(context, 'enter_new_mobile')),
+                                const SizedBox(height: 24),
+                                TextFormInput(
+                                    text: trans(context, 'mobile_no'),
+                                    cController: mobileNoController,
+                                    prefixIcon: Icons.phone,
+                                    kt: TextInputType.phone,
+                                    obscureText: false,
+                                    readOnly: false,
+                                    onTab: () {},
+                                    suffixicon: CountryCodePicker(
+                                      onChanged: _onCountryChange,
+                                      initialSelection: 'TR',
+                                      favorite: const <String>['+966', 'SA'],
+                                      showFlagDialog: true,
+                                      showFlag: false,
+                                      showCountryOnly: false,
+                                      showOnlyCountryWhenClosed: false,
+                                      alignLeft: false,
+                                      padding: isRTL == true
+                                          ? const EdgeInsets.fromLTRB(
+                                              0, 0, 32, 0)
+                                          : const EdgeInsets.fromLTRB(
+                                              32, 0, 0, 0),
+                                    ),
+                                    focusNode: focus1,
+                                    onFieldSubmitted: () {
+                                      verifyanewPhone();
+                                    },
+                                    validator: (String value) {
+                                      if (value.isEmpty) {
+                                        return "please enter your mobile Number  ";
+                                      }
+                                      return "";
+                                    }),
+                                Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 30, 20, 10),
+                                    child: RaisedButton(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: const BorderSide(
+                                                color: Colors.orange)),
+                                        onPressed: () {
+                                          verifyanewPhone();
+                                        },
+                                        color: Colors.deepOrangeAccent,
+                                        textColor: Colors.white,
+                                        child: bolc.returnchild(
+                                            trans(context, 'send_code')))),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                      bottomSheetController.closed.then((dynamic value) {
+                        //  sendPinNewPhone(mobileNoController.text);
+                      });
+                    } else {
+                      showToast(trans(context, 'you_can_change_mo_only_once'),
+                          context: context,
+                          textStyle: styles.underHeadblack,
+                          animation: StyledToastAnimation.scale,
+                          reverseAnimation: StyledToastAnimation.fade,
+                          position: StyledToastPosition.center,
+                          animDuration: const Duration(seconds: 1),
+                          duration: const Duration(seconds: 4),
+                          curve: Curves.elasticOut,
+                          backgroundColor: colors.white,
+                          reverseCurve: Curves.decelerate);
+                    }
                   },
                 ),
               ),
@@ -295,5 +326,13 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
     });
 
     FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  void verifyanewPhone() {
+    sendPinNewPhone(countryCodeTemp + mobileNoController.text);
+    setState(() {
+      buttonChangeMoEnabeld = false;
+    });
+    Navigator.pop(context);
   }
 }

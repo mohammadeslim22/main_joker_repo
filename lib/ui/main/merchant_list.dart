@@ -34,7 +34,7 @@ class _ShopListState extends State<ShopList> {
 @override
   void initState() {
    _pagewiseController=  PagewiseLoadController<dynamic>(
-  pageSize: 10,
+  pageSize: 5,
   pageFuture: (int pageIndex)async {
     return getBranchesData(pageIndex);
   }

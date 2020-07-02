@@ -57,7 +57,7 @@ class _DiscountsListState extends State<DiscountsList> {
   @override
   void initState() {
     _pagewiseController = PagewiseLoadController<dynamic>(
-        pageSize: 10,
+        pageSize: 3,
         pageFuture: (int pageIndex) async {
           return getSalesData(pageIndex);
         });

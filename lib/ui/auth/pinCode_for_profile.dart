@@ -235,7 +235,22 @@ class _MyHomePageState extends State<PinCodeForProfile>
                   // return validationMap['phone'];
                 },
               ),
+               
+                 Padding(
+                  padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
+                  child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: const BorderSide(color: Colors.orange)),
+                      onPressed: () {
+                        verifyanewPhone();
+                      },
+                      color: Colors.deepOrangeAccent,
+                      textColor: Colors.white,
+                      child: bolc.returnchild(trans(context, 'send_code')))),
+                      
               pinCode(bolc),
+              const SizedBox(height: 15),
               if (enabeld)
                 CircularPercentIndicator(
                     radius: 130.0,
@@ -253,19 +268,8 @@ class _MyHomePageState extends State<PinCodeForProfile>
                         seconds: 30))
               else
                 Container(),
-              const SizedBox(height: 15),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: const BorderSide(color: Colors.orange)),
-                      onPressed: () {
-                        verifyanewPhone();
-                      },
-                      color: Colors.deepOrangeAccent,
-                      textColor: Colors.white,
-                      child: bolc.returnchild(trans(context, 'aprove')))),
+             
+           
               const SizedBox(height: 15),
               Text(trans(context, 'code_not_recieved'),
                   textAlign: TextAlign.center, style: styles.underHead),
