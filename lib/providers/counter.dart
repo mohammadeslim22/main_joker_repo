@@ -4,24 +4,24 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:joker/util/data.dart';
 
 class MyCounter extends ChangeNotifier {
-  bool darkthemeIson =false;
+  bool darkthemeIson = false;
   bool loading = false;
   static TickerProvider c;
   static String loginbase = "login";
   static AnimationController _controller;
   int _currentIndex = 0;
   int favocurrentIndex = 0;
-  
+  String profileUrl = "";
   List<bool> fontlist = <bool>[false, true, false];
   List<bool> language = <bool>[false, false, false];
   bool _visible = true;
   bool __visible = false;
   bool visibilityObs = false;
-  List<bool> notificationSit = <bool>[true,false];
-  void saveData(){
+  List<bool> notificationSit = <bool>[true, false];
+  void saveData() {
     data.setData("erf", "value");
   }
-  
+
   int get bottomNavIndex => _currentIndex;
   bool get visible1 => _visible;
   List<bool> get font => fontlist;
@@ -33,14 +33,22 @@ class MyCounter extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void changeImageUrl(String path) {
+    profileUrl = path;
+    notifyListeners();
+  }
+
   void changenotificationSit(int state) {
-    notificationSit = state==0?<bool>[true,false]:<bool>[false,true];
+    notificationSit = state == 0 ? <bool>[true, false] : <bool>[false, true];
     notifyListeners();
   }
-    void changeTheme(bool state) {
-    darkthemeIson=state;
+
+  void changeTheme(bool state) {
+    darkthemeIson = state;
     notifyListeners();
   }
+
   void changelanguageindex(int index) {
     for (int i = 0; i < language.length; i++) {
       if (i == index) {
@@ -111,7 +119,7 @@ class MyCounter extends ChangeNotifier {
 
   void togelf(bool state) {
     loading = state;
-      notifyListeners();
+    notifyListeners();
   }
 
   void togelocationloading(bool state) {

@@ -2,6 +2,7 @@ import 'package:animated_card/animated_card.dart';
 import 'package:dio/dio.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/constants/styles.dart';
 import 'package:joker/models/Merchant.dart';
 import 'package:joker/models/merchant_memberships.dart';
 import 'package:joker/util/dio.dart';
@@ -27,6 +28,8 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
 
   @override
   Widget build(BuildContext context) {
+    final ExpandableController controller = ExpandableController.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(trans(context, 'Merchant MemberShips')),
@@ -48,7 +51,7 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                     initDelay: const Duration(milliseconds: 0),
                     duration: const Duration(seconds: 1),
                     curve: Curves.ease,
-                    child: _itemBuilder(memberShips.data[index]),
+                    child: _itemBuilder(memberShips.data[index], controller),
                   );
                 },
               );
@@ -62,67 +65,67 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
     );
   }
 
-  Widget _itemBuilder(MemFromMerchant memFromMerchant) {
+  Widget _itemBuilder(
+      MemFromMerchant memFromMerchant, ExpandableController controller) {
+    ExpandableController exp = ExpandableController.of(context);
     return Card(
         margin: const EdgeInsets.symmetric(vertical: 12),
-        child: ExpandablePanel(
-          tapBodyToCollapse: true,
-          iconColor: Colors.orange,
-
-          header: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              onLongPress: () {
-                dio.post<dynamic>("usermemberships",
-                    queryParameters: <String, dynamic>{
-                      "membership_id": memFromMerchant.id
-                    });
-              },
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(memFromMerchant.merchant),
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(memFromMerchant.title),
-                      Column(
-                        children: <Widget>[
-                          Text(trans(context, 'age: ') +
-                              memFromMerchant.ageStage),
-                          const SizedBox(height: 6),
-                          Text(trans(context, 'Type: ') + memFromMerchant.type),
-                        ],
-                      )
-                    ],
-                  ),
-                ],
+        child: ExpandableNotifier(
+            controller: ExpandableController(),
+            child: ExpandablePanel(
+              tapBodyToCollapse: true,
+              iconColor: Colors.orange,
+              controller: controller,
+              header: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(memFromMerchant.merchant),
+                    const SizedBox(height: 6),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(memFromMerchant.title),
+                        Column(
+                          children: <Widget>[
+                            Text(trans(context, 'age: ') +
+                                memFromMerchant.ageStage),
+                            const SizedBox(height: 6),
+                            Text(trans(context, 'Type: ') +
+                                memFromMerchant.type),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-          collapsed: Text(trans(context, 'features')),
-          expanded: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                Text(memFromMerchant.message),
-                FlatButton(
-                  onPressed: () {
-                    dio.post<dynamic>("usermemberships",
-                        queryParameters: <String, dynamic>{
-                          "membership_id": memFromMerchant.id
-                        });
-                  },
-                  child: Text(trans(context, 'subscribe')),
-                )
-              ],
-            ),
-          ),
-          // ignore: deprecated_member_use
-          tapHeaderToExpand: true,
-          // ignore: deprecated_member_use
-          hasIcon: true,
-        ));
+              collapsed: Text(trans(context, 'features')),
+              expanded: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: <Widget>[
+                    Text(memFromMerchant.message),
+                    FlatButton(
+                      color: Colors.orange,
+                      onPressed: () {
+                        exp.toggle();
+                        dio.post<dynamic>("usermemberships",
+                            queryParameters: <String, dynamic>{
+                              "membership_id": memFromMerchant.id
+                            }).then((Response<dynamic> value) {});
+                      },
+                      child: Text(trans(context, 'subscribe'),
+                          style: styles.mywhitestyle),
+                    )
+                  ],
+                ),
+              ),
+              // ignore: deprecated_member_use
+              tapHeaderToExpand: true,
+              // ignore: deprecated_member_use
+              hasIcon: true,
+            )));
   }
 }

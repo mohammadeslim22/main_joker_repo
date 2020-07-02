@@ -8,6 +8,8 @@ import 'package:joker/constants/styles.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
 import 'package:joker/util/data.dart';
+import 'package:joker/providers/counter.dart';
+import 'package:provider/provider.dart';
 
 class MyInnerDrawer extends StatefulWidget {
   const MyInnerDrawer({this.scaffold, this.drawerKey});
@@ -40,11 +42,11 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
     });
   }
 
-  final String imageUrl =
-      "https://celebritypets.net/wp-content/uploads/2016/12/Adriana-Lima.jpg";
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    final MyCounter bolc = Provider.of<MyCounter>(context);
+
     final Scaffold menu = Scaffold(
       backgroundColor: colors.grey,
       body: ListView(
@@ -95,10 +97,14 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                           child: CircleAvatar(
                         maxRadius: 40,
                         minRadius: 30,
-                        child: CachedNetworkImage(
+                        child: //Image.asset("assets/images/profile_placeholder.jpg")
+
+                            CachedNetworkImage(
                           placeholderFadeInDuration:
                               const Duration(milliseconds: 300),
-                          imageUrl: imageUrl,
+                          // progressIndicatorBuilder: (BuildContext context, String url) =>
+                          //     Container(),
+                          imageUrl: bolc.profileUrl,
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
                               Container(

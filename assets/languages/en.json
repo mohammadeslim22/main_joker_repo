@@ -162,7 +162,7 @@
     "from": "from",
     "to": "to",
     "sale_is_available_in_branches": "Sale is Available in Branches",
-    "request_membership_for_merchant": "Request Membership of Merchant",
+    "request_membership_for_merchant": "Request Merchant Membership",
     "join_merchant_members_have_more_offers_for_qrcode_on_entrance": "Join Mercahnt members for free! and have a great discounts on QR Code scanning when entring the Merchant",
     "you_r_member_in_merchant_name": "you are a member in ",
     "have_great_discounts_when_qrcode_scan_on_entrance": "Have great discounts on QR code scan on Entrance",
@@ -181,5 +181,8 @@
     "restore": "Restore",
     "join": "Subscribe",
     "change_phone_while_regestrating": "Send Code to another Mobile NO.",
-    "enter_new_mobile": "Enter New Mobile No."
+    "enter_new_mobile": "Enter New Mobile No.",
+    "problem_in_verifying": "facing problems in Verifying ?",
+    "new_mobile_no":"New Mobile Number",
+    "features":"features"
 }

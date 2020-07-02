@@ -37,7 +37,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   PersistentBottomSheetController<dynamic> _errorController;
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification.depth == 0) {
-     
       if (notification is UserScrollNotification) {
         final UserScrollNotification userScroll = notification;
         switch (userScroll.direction) {
@@ -83,6 +82,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final MyCounter bolc = Provider.of<MyCounter>(context);
     if (doonce) {
+      data.getData("profile_pic").then((String value) {
+        bolc.changeImageUrl(value);
+      });
       setState(() {
         config.bolc = Provider.of<MyCounter>(context);
         doonce = false;
@@ -117,9 +119,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           onTap: () {
                             try {
                               _errorController.close();
-                            } catch (e) {
-                           
-                            }
+                            } catch (e) {}
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

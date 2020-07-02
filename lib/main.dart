@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:joker/ui/auth/login_screen.dart';
+import 'package:joker/ui/home.dart';
 import 'constants/config.dart';
 import 'util/dio.dart';
 import 'package:joker/providers/counter.dart';
@@ -37,7 +37,7 @@ Future<void> main() async {
   });
 
   data.getData("lat").then((String value) {
-    config.lat =double.parse( value);
+    config.lat = double.parse(value);
   });
   data.getData("long").then((String value) {
     config.long = double.parse(value);
@@ -45,6 +45,7 @@ Future<void> main() async {
   dio.get<dynamic>("user").then((dynamic value) {
     print(value.data);
   });
+
 }
 
 class MyApp extends StatelessWidget {
@@ -92,6 +93,6 @@ class MyApp extends StatelessWidget {
         },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home:  LoginScreen());
+        home: const Home());
   }
 }

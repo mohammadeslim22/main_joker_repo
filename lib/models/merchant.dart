@@ -44,18 +44,18 @@ class Data {
     } else {
       likesCount = 0;
     }
-    if (json['ratesCount'] != null) {
-      ratesCount = json['ratesCount'] as int;
+    if (json['rates_count'] != null) {
+      ratesCount = json['rates_count'] as int;
     } else {
       ratesCount = 0;
     }
-    if (json['ratesAverage'] != null) {
-      ratesAverage = json['ratesAverage'] as double;
+    if (json['rates_average'] != null) {
+      ratesAverage = json['rates_average'] as int;
     } else {
       ratesAverage = 0;
     }
-        isliked=json['isliked'] as int;
-    isfavorite=json['isfavorite'] as int;
+    isliked = json['isliked'] as int;
+    isfavorite = json['isfavorite'] as int;
   }
   int id;
   String name;
@@ -64,7 +64,7 @@ class Data {
   int salesCount;
   int likesCount;
   int ratesCount;
-  double ratesAverage;
+  int ratesAverage;
   int isliked;
   int isfavorite;
 }
@@ -87,7 +87,6 @@ class Branches {
     cityId = json['city_id'] != null ? CityId.fromJson(json['city_id']) : null;
     address = json['address'].toString();
     phone = json['phone'].toString();
-
   }
   int id;
   String name;

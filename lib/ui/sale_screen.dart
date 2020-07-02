@@ -356,17 +356,18 @@ class SaleDetailsPage extends State<SaleDetails>
                             const SizedBox(height: 12),
                             RatingBar(
                               onRatingChanged: (double rating) async {
-                                print("${merchant.mydata.id}   ${merchant.mydata.ratesAverage}");
+                                print(
+                                    "${merchant.mydata.id}   ${merchant.mydata.ratesAverage}");
                                 await dio.post<dynamic>("rates",
                                     data: <String, dynamic>{
                                       'rateable_type': "App\\Merchant",
                                       'rateable_id': merchant.mydata.id,
                                       'rate_value': rating
                                     });
-                                setState(() => clientRatingStar = rating);
                               },
                               filledIcon: Icons.star,
-                              initialRating: merchant.mydata.ratesAverage,
+                              initialRating: double.parse(
+                                  merchant.mydata.ratesAverage.toString()),
                               emptyIcon: Icons.star_border,
                               halfFilledIcon: Icons.star_half,
                               isHalfAllowed: true,
@@ -565,25 +566,25 @@ class SaleDetailsPage extends State<SaleDetails>
                 if (!hasMemberShip)
                   Column(
                     children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 36, vertical: 12),
-                        child: RaisedButton(
-                            color: colors.orange,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 36, vertical: 12),
-                            child: Text(
-                              trans(context, 'request_membership_for_merchant'),
-                              style: styles.underHeadwhite,
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: colors.orange)),
-                            onPressed: () async {}),
-                      ),
+                      RaisedButton(
+                        
+                          color: colors.orange,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 12),
+                          child: Text(
+                            trans(context, 'request_membership_for_merchant'),
+                            style: styles.underHeadwhite,
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: colors.orange)),
+                          onPressed: () async {}),
                       const SizedBox(height: 16),
-                      Text(trans(context,
-                          "join_merchant_members_have_more_offers_for_qrcode_on_entrance")),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(trans(context,
+                            "join_merchant_members_have_more_offers_for_qrcode_on_entrance"),textAlign: TextAlign.center,),
+                      ),
                     ],
                   )
                 else

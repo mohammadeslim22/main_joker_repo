@@ -258,15 +258,17 @@ class _MyLoginScreenState extends State<LoginScreen>
               
             }),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(trans(context, 'you_have_shop_'), style: styles.mystyle),
-                  ButtonToUse(
-                    trans(context, 'click_here'),
-                    fw: FontWeight.bold,
-                    fc: Colors.green,
+                  Expanded(
+                    child: ButtonToUse(
+                      trans(context, 'click_here'),
+                      fw: FontWeight.bold,
+                      fc: Colors.green,
+                    ),
                   ),
                 ],
               ),

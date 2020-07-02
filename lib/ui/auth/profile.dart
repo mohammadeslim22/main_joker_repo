@@ -147,6 +147,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     final MyCounter bolc = Provider.of<MyCounter>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text(trans(context, "my_account")),
@@ -177,22 +178,16 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                           Align(
                             alignment: Alignment.topCenter,
                             child: GestureDetector(
-                              onTap: () {
-                                Navigator.push<dynamic>(context,
-                                    MaterialPageRoute<dynamic>(builder: (_) {
-                                  return const FullScreenImage(
-                                    imageUrl:
-                                        'https://avatars0.githubusercontent.com/u/8264639?s=460&v=4',
-                                    tag: "generate_a_unique_tag",
-                                  );
-                                }));
-                              },
+                              onTap: () {},
                               child: Hero(
                                 child: CircularProfileAvatar(
-                                  'https://avatars0.githubusercontent.com/u/8264639?s=460&v=4', //sets image path, it should be a URL string. default value is empty string, if path is empty it will display only initials
+                                  bolc.profileUrl,
                                   radius: 80,
                                   backgroundColor: Colors.transparent,
                                   borderWidth: 5,
+                                  placeHolder:
+                                      (BuildContext context, String url) =>
+                                          const CircularProgressIndicator(),
                                   borderColor: Colors.orange,
                                   cacheImage: true,
                                 ),
@@ -229,29 +224,17 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   child: Text('Take A Photo',
                                       style: styles.mysmall),
                                   onPressed: () async {
-                                    final File image =
-                                        await ImagePicker.pickImage(
-                                            source: ImageSource.gallery);
-
-                                    setState(() {
-                                      myimage = image;
-                                    });
+                                    getImage(ImageSource.camera, bolc);
                                   }),
                               FlatButton(
                                 child:
                                     Text('Open Gallery', style: styles.mysmall),
                                 onPressed: () async {
-                                  final File image =
-                                      await ImagePicker.pickImage(
-                                          source: ImageSource.gallery);
-
-                                  setState(() {
-                                    myimage = image;
-                                  });
+                                  getImage(ImageSource.gallery, bolc);
                                 },
                               ),
                               if (myimage == null)
-                                const Text('No image selected.')
+                                Container()
                               else
                                 Image.file(myimage),
                             ],
@@ -289,8 +272,13 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   prefixIcon: Icons.mail_outline,
                                   kt: TextInputType.emailAddress,
                                   obscureText: false,
-                                  readOnly: false,
+                                  readOnly: true,
                                   focusNode: focus,
+                                  suffixicon: IconButton(
+                                    icon:
+                                        Icon(Icons.edit, color: Colors.orange),
+                                    onPressed: () {},
+                                  ),
                                   onTab: () {},
                                   onFieldSubmitted: () {
                                     focus1.requestFocus();
@@ -307,21 +295,23 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   prefixIcon: Icons.phone,
                                   kt: TextInputType.phone,
                                   obscureText: false,
-                                  readOnly: false,
-                                  onTab: () {},
-                                  suffixicon: CountryCodePicker(
-                                    onChanged: _onCountryChange,
-                                    initialSelection: 'SA',
-                                    favorite: const <String>['+966', 'SA'],
-                                    showFlagDialog: true,
-                                    showFlag: false,
-                                    showCountryOnly: false,
-                                    showOnlyCountryWhenClosed: false,
-                                    alignLeft: false,
-                                    padding: isRTL == true
-                                        ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                                        : const EdgeInsets.fromLTRB(
-                                            32, 0, 0, 0),
+                                  readOnly: true,
+                                  onTab: () {
+                                    print(mobileNoController.text);
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/pinForProfile',
+                                      arguments: <String, String>{
+                                        'mobileNo': mobileNoController.text
+                                      },
+                                    );
+                                  },
+                                  suffixicon: IconButton(
+                                    icon:
+                                        Icon(Icons.edit, color: Colors.orange),
+                                    onPressed: () {
+                                      print(mobileNoController.text);
+                                    },
                                   ),
                                   focusNode: focus1,
                                   onFieldSubmitted: () {
@@ -343,23 +333,12 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   onTab: () {
                                     _selectDate(context);
                                   },
-                                  suffixicon: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Text("${today.toLocal()}".split(' ')[0]),
-                                      const SizedBox(
-                                        height: 20.0,
-                                      ),
-                                      IconButton(
-                                        color: Colors.orange,
-                                        icon: Icon(
-                                          Icons.calendar_today,
-                                        ),
-                                        onPressed: () {
-                                          _selectDate(context);
-                                        },
-                                      ),
-                                    ],
+                                  suffixicon: IconButton(
+                                    color: Colors.orange,
+                                    icon: Icon(Icons.calendar_today),
+                                    onPressed: () {
+                                      //   _selectDate(context);
+                                    },
                                   ),
                                   focusNode: focus3,
                                   validator: (String value) {
@@ -424,9 +403,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                     return validationMap['location'];
                                   }),
                               Container(
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: bolc.visibilityObs
                                     ? Row(
                                         children: <Widget>[
@@ -444,6 +422,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 70),
                         child: RaisedButton(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                                 side: BorderSide(color: colors.orange)),
@@ -454,24 +433,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   setState(() {
                                     _isButtonEnabled = false;
                                   });
-                                  if (tempPhone != mobileNoController.text) {
-                                    print(mobileNoController.text);
-                                    Navigator.pushNamedAndRemoveUntil(
-                                      context,
-                                      '/pinForProfile',
-                                      (_) => false,
-                                      arguments: <String, String>{
-                                        'mobileNo': mobileNoController.text
-                                      },
-                                    );
-                                    // Navigator.pushNamed(
-                                    //     context, '/pinForProfile',
-                                    //     arguments: <String, String>{
-                                    //       'mobileNo': mobileNoController.text
-                                    //     });
-                                  } else {
-                                    login(bolc);
-                                  }
+
+                                  login(bolc);
                                 }
                               }
                             },
@@ -487,12 +450,35 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                 ))));
   }
 
+  Future<void> getImage(ImageSource imageSource, MyCounter bolc) async {
+    final File image = await ImagePicker.pickImage(source: imageSource);
+    if (image != null) {
+      final FormData formData = FormData.fromMap(<String, dynamic>{
+        "avatar": await MultipartFile.fromFile(image.path)
+      });
+      dio
+          .post<dynamic>(
+        "avatar",
+        data: formData,
+        // queryParameters: <String, dynamic>{"avater": formData},
+        onSendProgress: (int sent, int total) {},
+      )
+          .then((dynamic result) {
+        print(result.data);
+        if (result.statusCode == 200) {
+          bolc.changeImageUrl(result.data['image'].toString());
+          data.setData('profile_pic', result.data['image'].toString());
+          setState(() {});
+        }
+      });
+    }
+  }
+
   Future<void> login(MyCounter bolc) async {
     await dio.post<dynamic>("update", data: <String, dynamic>{
       "name": usernameController.text,
       "birth_date": birthDateController.text,
       "email": emailController.text,
-      "phone": mobileNoController.text,
       "country_id": 1,
       "city_id": 1,
       "address": config.locationController.text,
@@ -519,7 +505,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
       if (value.statusCode == 200) {
         data.setData("email", emailController.text);
         data.setData("username", usernameController.text);
-        data.setData("phone", mobileNoController.text);
+        // data.setData("phone", mobileNoController.text);
         data.setData("lat", config.lat.toString());
         data.setData("long", config.long.toString());
         data.setData("address", config.locationController.text.toString());
@@ -552,7 +538,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                             style: styles.underHeadblack),
                         const SizedBox(height: 15),
                         RaisedButton(
-                          color: colors.orange,
+                            color: colors.orange,
                             child: Text(trans(context, "ok"),
                                 style: styles.underHeadwhite),
                             onPressed: () {
@@ -609,43 +595,4 @@ class HeaderColor extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
-class FullScreenImage extends StatelessWidget {
-  const FullScreenImage({Key key, this.imageUrl, this.tag}) : super(key: key);
-  final String imageUrl;
-  final String tag;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: colors.ggrey,
-        leading: IconButton(
-          color: colors.white,
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-
-            SystemChannels.textInput.invokeMethod<String>('TextInput.hide');
-          },
-        ),
-      ),
-      backgroundColor: Colors.black87,
-      body: GestureDetector(
-        child: Center(
-          child: Hero(
-            tag: tag,
-            child: CachedNetworkImage(
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.contain,
-              imageUrl: imageUrl,
-            ),
-          ),
-        ),
-        onTap: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
-  }
 }

@@ -17,7 +17,6 @@ import 'package:joker/util/dio.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
 import 'package:dio/dio.dart';
-import 'package:joker/models/user.dart';
 
 class Registration extends StatefulWidget {
   @override
@@ -61,6 +60,7 @@ class _MyRegistrationState extends State<Registration>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
+      
         context: context,
         initialDate: lastDate,
         firstDate: firstDate,
@@ -215,23 +215,14 @@ class _MyRegistrationState extends State<Registration>
                   onTab: () {
                     _selectDate(context);
                   },
-                  suffixicon: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text("${today.toLocal()}".split(' ')[0]),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      IconButton(
-                        color: Colors.orange,
-                        icon: Icon(
-                          Icons.calendar_today,
-                        ),
-                        onPressed: () {
-                          _selectDate(context);
-                        },
-                      ),
-                    ],
+                  suffixicon: IconButton(
+                    color: Colors.orange,
+                    icon: Icon(
+                      Icons.calendar_today,
+                    ),
+                    onPressed: () {
+                    //  _selectDate(context);
+                    },
                   ),
                   focusNode: focus3,
                   validator: (String value) {

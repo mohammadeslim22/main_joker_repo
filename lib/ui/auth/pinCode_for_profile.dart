@@ -3,15 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/models/profile.dart';
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui';
-import 'dart:ui';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:joker/providers/counter.dart';
-import 'package:joker/ui/auth/profile.dart';
 import 'package:joker/ui/widgets/text_form_input.dart';
 import 'package:joker/util/data.dart';
 import '../widgets/buttonTouse.dart';
@@ -22,6 +17,7 @@ import 'package:timer_count_down/timer_count_down.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/util/dio.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 
 class PinCodeForProfile extends StatefulWidget {
   const PinCodeForProfile({Key key, this.mobileNo}) : super(key: key);
@@ -36,6 +32,8 @@ class _MyHomePageState extends State<PinCodeForProfile>
   AnimationController controller;
   String currentText = "0000";
   bool showTimer = true;
+  String countryCodeTemp = "+90";
+
   @override
   void initState() {
     super.initState();
@@ -95,7 +93,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
               width: 140,
               child: PinCodeTextField(
                 enabled: enabeld,
-                focusNode: focus1,
+                // focusNode: focus1,
                 length: 4,
                 obsecureText: false,
                 animationType: AnimationType.fade,
@@ -130,9 +128,13 @@ class _MyHomePageState extends State<PinCodeForProfile>
   }
 
   final TextEditingController passwordController = TextEditingController();
+
+  final TextEditingController mobileNoController = TextEditingController();
   bool _obscureText = false;
   final FocusNode focus = FocusNode();
   final FocusNode focus1 = FocusNode();
+  final FocusNode focus2 = FocusNode();
+
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
     'phone',
@@ -143,16 +145,11 @@ class _MyHomePageState extends State<PinCodeForProfile>
 
   @override
   Widget build(BuildContext context) {
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+
     final MyCounter bolc = Provider.of<MyCounter>(context);
     return Scaffold(
-        appBar: AppBar(
-            leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/Profile', (_) => false);
-          },
-        )),
+        appBar: AppBar(),
         body: GestureDetector(
             onTap: () {
               FocusScope.of(context).requestFocus(FocusNode());
@@ -197,17 +194,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                   obscureText: _obscureText,
                   focusNode: focus,
                   onFieldSubmitted: () async {
-                    data.getData('phone').then((String value) {
-                      dio.post<dynamic>("login", data: <String, dynamic>{
-                        "phone": value,
-                        "password": passwordController.text.toString()
-                      }).then((Response<dynamic> value) async {
-                        setState(() {
-                          enabeld = true;
-                        });
-                        focus1.requestFocus();
-                      });
-                    });
+                    focus2.requestFocus();
                   },
                   validator: (String value) {
                     if (passwordController.text.length < 6) {
@@ -215,36 +202,119 @@ class _MyHomePageState extends State<PinCodeForProfile>
                     }
                     return validationMap['password'];
                   }),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 64),
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      side: const BorderSide(color: Colors.black)),
-                  color: Colors.white,
-                  textColor: Colors.orange,
-                  padding: const EdgeInsets.all(8.0),
-                  onPressed: () {
-                    if (!enabeld) {
-                      data.getData('phone').then((String value) {
-                        dio.post<dynamic>("login", data: <String, dynamic>{
-                          "phone": value,
-                          "password": passwordController.text.toString()
-                        }).then((Response<dynamic> value) async {
-                          setState(() {
-                            enabeld = true;
-                          });
-                          focus1.requestFocus();
-                        });
-                      });
-                    }
-                  },
-                  child: Text(
-                    trans(context, 'check_pass'),
-                    style: styles.resend,
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+              //   child: TextFormField(
+              //     keyboardType: TextInputType.phone,
+              //     decoration: InputDecoration(
+              //       enabledBorder: OutlineInputBorder(
+              //           borderSide: BorderSide(
+              //         color: colors.ggrey,
+              //       )),
+              //       filled: true,
+              //       fillColor: Colors.white70,
+              //       hintText: trans(context, 'new_mobile_no'),
+              //       hintStyle: TextStyle(
+              //         color: colors.ggrey,
+              //         fontSize: 15,
+              //       ),
+              //       disabledBorder: const OutlineInputBorder(
+              //           borderSide: BorderSide(
+              //         color: Colors.grey,
+              //       )),
+              //       border: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(7),
+              //       ),
+              //       focusedBorder: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(7),
+              //       ),
+
+              //       contentPadding: const EdgeInsets.symmetric(vertical: 0),
+              //       prefixIcon: Icon(Icons.phone),
+              // suffixIcon: CountryCodePicker(
+              //   onChanged: _onCountryChange,
+              //   initialSelection: 'TR',
+              //   favorite: const <String>['+966', 'SA'],
+              //   showFlagDialog: true,
+
+              //   showFlag: false,
+              //   showCountryOnly: false,
+              //   showOnlyCountryWhenClosed: false,
+              //   alignLeft: false,
+              //   padding: isRTL == true
+              //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+              //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
+              // ),
+              //     ),
+              //     focusNode: focus2,
+              //     controller: mobileNoController,
+              //     onFieldSubmitted: (String v) {
+              //       verifyanewPhone();
+              //     },
+              //   ),
+              // )
+              TextFormInput(
+                  text: trans(context, 'new_mobile_no'),
+                  cController: mobileNoController,
+                  prefixIcon: Icons.phone,
+                  kt: TextInputType.phone,
+                  obscureText: false,
+                  readOnly: false,
+                  onTab: () {},
+                  suffixicon: CountryCodePicker(
+                    onChanged: _onCountryChange,
+                    initialSelection: 'TR',
+                    favorite: const <String>['+966', 'SA'],
+                    showFlagDialog: true,
+                    showFlag: false,
+                    showCountryOnly: false,
+                    showOnlyCountryWhenClosed: false,
+                    alignLeft: false,
+                    padding: isRTL == true
+                        ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+                        : const EdgeInsets.fromLTRB(32, 0, 0, 0),
                   ),
-                ),
-              ),
+                  focusNode: focus2,
+                  onFieldSubmitted: () {
+                    verifyanewPhone();
+                  },
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return "please enter your mobile Number  ";
+                    }
+                    return validationMap['phone'];
+                  }),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 64),
+              //   child: FlatButton(
+              //     shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(20.0),
+              //         side: const BorderSide(color: Colors.black)),
+              //     color: Colors.white,
+              //     textColor: Colors.orange,
+              //     padding: const EdgeInsets.all(8.0),
+              //     onPressed: () {
+              //       if (!enabeld) {
+              //         data.getData('phone').then((String value) {
+              //           dio.post<dynamic>("login", data: <String, dynamic>{
+              //             "phone": value,
+              //             "password": passwordController.text.toString()
+              //           }).then((Response<dynamic> value) async {
+              //             setState(() {
+              //               enabeld = true;
+              //             });
+              //             focus1.requestFocus();
+              //           });
+              //         });
+              //       }
+              //     },
+              //     child: Text(
+              //       trans(context, 'check_pass'),
+              //       style: styles.resend,
+              //     ),
+              //   ),
+              // ),
+
               pinCode(bolc),
               if (enabeld)
                 CircularPercentIndicator(
@@ -270,7 +340,9 @@ class _MyHomePageState extends State<PinCodeForProfile>
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                           side: const BorderSide(color: Colors.orange)),
-                      onPressed: () {},
+                      onPressed: () {
+                        verifyanewPhone();
+                      },
                       color: Colors.deepOrangeAccent,
                       textColor: Colors.white,
                       child: bolc.returnchild(trans(context, 'aprove')))),
@@ -315,5 +387,25 @@ class _MyHomePageState extends State<PinCodeForProfile>
                 ],
               ),
             ])));
+  }
+
+  void _onCountryChange(CountryCode countryCode) {
+    setState(() {
+      countryCodeTemp = countryCode.dialCode;
+    });
+
+    FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  void verifyanewPhone() {
+    dio.put<dynamic>("update_phone", queryParameters: <String, dynamic>{
+      "password": passwordController.text,
+      "new_phone": mobileNoController.text
+    }).then((Response<dynamic> value) {
+      if (value.statusCode == 200) {
+        data.setData("phone", mobileNoController.text);
+      }
+      print(value.data);
+    });
   }
 }

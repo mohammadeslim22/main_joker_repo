@@ -44,13 +44,21 @@ class AddressListState extends State<AddressList> {
   void initState() {
     super.initState();
     data.getData("address").then((String value) {
-      currentAddress = value;
+      setState(() {
+        currentAddress = value;
+      });  
     });
     data.getData("lat").then((String value) {
-      lat = value;
+      setState(() {
+         lat = value;
+      });
+     
     });
     data.getData("long").then((String value) {
-      long = value;
+      setState(() {
+        long = value;
+      });
+      
     });
   }
 
@@ -79,7 +87,7 @@ class AddressListState extends State<AddressList> {
                       Row(
                         children: <Widget>[
                           Expanded(
-                            child: Text("current address: $currentAddress",
+                            child: Text("current address:\n$currentAddress",
                                 style: styles.underHeadblack),
                           ),
                         ],
