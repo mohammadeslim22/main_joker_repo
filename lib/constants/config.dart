@@ -19,18 +19,18 @@ class Config {
   // default country code prefix mobile number
   String countryCode = '+970';
 
-
-final TextEditingController locationController = TextEditingController();
-Address first;
-Coordinates coordinates;
-List<Address> addresses;
-MyCounter bolc;
-double lat=0.0;
-double long=0.0;
-String token= "";
-bool amIcomingFromHome=false;
-bool prifleNoVerfiyVisit = false;
-bool prifleNoVerfiyDone= false;
+  final TextEditingController locationController = TextEditingController();
+  Address first;
+  Coordinates coordinates;
+  List<Address> addresses;
+  MyCounter bolc;
+  double lat = 0.0;
+  double long = 0.0;
+  String token = "";
+  String profileUrl = "";
+  bool amIcomingFromHome = false;
+  bool prifleNoVerfiyVisit = false;
+  bool prifleNoVerfiyDone = false;
 }
 
 final Config config = Config();

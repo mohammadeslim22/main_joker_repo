@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
 import 'package:joker/util/data.dart';
-import 'package:joker/providers/counter.dart';
-import 'package:provider/provider.dart';
 
 class MyInnerDrawer extends StatefulWidget {
   const MyInnerDrawer({this.scaffold, this.drawerKey});
@@ -45,7 +44,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+     
 
     final Scaffold menu = Scaffold(
       backgroundColor: colors.grey,
@@ -104,7 +103,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                               const Duration(milliseconds: 300),
                           // progressIndicatorBuilder: (BuildContext context, String url) =>
                           //     Container(),
-                          imageUrl: bolc.profileUrl,
+                          imageUrl: config.profileUrl,
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
                               Container(

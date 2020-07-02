@@ -67,13 +67,12 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
 
   Widget _itemBuilder(
       MemFromMerchant memFromMerchant, ExpandableController controller) {
-    ExpandableController exp = ExpandableController.of(context);
+    final ExpandableController exp = ExpandableController.of(context);
     return Card(
         margin: const EdgeInsets.symmetric(vertical: 12),
         child: ExpandableNotifier(
             controller: ExpandableController(),
             child: ExpandablePanel(
-              tapBodyToCollapse: true,
               iconColor: Colors.orange,
               controller: controller,
               header: Padding(

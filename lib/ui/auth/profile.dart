@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:after_layout/after_layout.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -145,7 +143,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+
     final MyCounter bolc = Provider.of<MyCounter>(context);
 
     return Scaffold(
@@ -181,7 +179,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                               onTap: () {},
                               child: Hero(
                                 child: CircularProfileAvatar(
-                                  bolc.profileUrl,
+                                  config.profileUrl,
                                   radius: 80,
                                   backgroundColor: Colors.transparent,
                                   borderWidth: 5,
@@ -468,7 +466,10 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
         if (result.statusCode == 200) {
           bolc.changeImageUrl(result.data['image'].toString());
           data.setData('profile_pic', result.data['image'].toString());
-          setState(() {});
+
+          setState(() {
+            config.profileUrl = result.data['image'].toString();
+          });
         }
       });
     }
@@ -566,12 +567,12 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
     });
   }
 
-  void _onCountryChange(CountryCode value) {}
+
 
   @override
   void afterFirstLayout(BuildContext context) {
     if (config.prifleNoVerfiyDone) {
-      login(config.bolc);
+      
     } else {
       if (config.prifleNoVerfiyVisit) {
         shoeTosted();

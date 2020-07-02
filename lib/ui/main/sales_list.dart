@@ -12,7 +12,6 @@ import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class DiscountsList extends StatefulWidget {
   const DiscountsList({Key key, this.filterData}) : super(key: key);

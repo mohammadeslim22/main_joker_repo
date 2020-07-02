@@ -37,7 +37,6 @@ class _MyHomePageState extends State<PinCodeForProfile>
   @override
   void initState() {
     super.initState();
-    currentText = resendCode();
     controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 30),
@@ -47,20 +46,12 @@ class _MyHomePageState extends State<PinCodeForProfile>
     });
   }
 
-  String resendCode() {
-    String res = "";
-    dio.post<dynamic>("resend", data: <String, dynamic>{
-      "phone": widget.mobileNo
-    }).then((Response<dynamic> value) async {
-      res = value.toString();
-      print("$res am res in prin for profile page + ${widget.mobileNo}");
-    });
-    return res;
-  }
-
   Future<bool> getPinCode(String code) async {
-    final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
-        data: <String, dynamic>{"phone": widget.mobileNo, "verfiy_code": code});
+    final Response<dynamic> correct = await dio.put<dynamic>("save_phone",
+        data: <String, dynamic>{
+          "new_phone": countryCodeTemp + mobileNoController.text,
+          "verfiy_code": code
+        });
     print(correct.data);
     if (correct.data == "false") {
       print(correct.data);
@@ -93,7 +84,6 @@ class _MyHomePageState extends State<PinCodeForProfile>
               width: 140,
               child: PinCodeTextField(
                 enabled: enabeld,
-                // focusNode: focus1,
                 length: 4,
                 obsecureText: false,
                 animationType: AnimationType.fade,
@@ -134,7 +124,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
   final FocusNode focus = FocusNode();
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
     'phone',
@@ -172,149 +162,79 @@ class _MyHomePageState extends State<PinCodeForProfile>
               Text(trans(context, 'enter_your_pass_s_u_can_change_phone'),
                   textAlign: TextAlign.center, style: styles.underHead),
               const SizedBox(height: 15),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    TextFormInput(
+                        text: trans(context, 'password'),
+                        cController: passwordController,
+                        prefixIcon: Icons.lock_outline,
+                        kt: TextInputType.visiblePassword,
+                        readOnly: false,
+                        onTab: () {},
+                        suffixicon: IconButton(
+                          icon: Icon(
+                            (_obscureText == false)
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        ),
+                        obscureText: _obscureText,
+                        focusNode: focus,
+                        onFieldSubmitted: () async {
+                          focus2.requestFocus();
+                        },
+                        validator: (String value) {
+                          if (passwordController.text.length < 6) {
+                            return "password must be more than 6 letters";
+                          }
+                          return validationMap['password'];
+                        }),
+                  ],
+                ),
+              ),
               TextFormInput(
-                  text: trans(context, 'password'),
-                  cController: passwordController,
-                  prefixIcon: Icons.lock_outline,
-                  kt: TextInputType.visiblePassword,
-                  readOnly: false,
-                  onTab: () {},
-                  suffixicon: IconButton(
-                    icon: Icon(
-                      (_obscureText == false)
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                  ),
-                  obscureText: _obscureText,
-                  focusNode: focus,
-                  onFieldSubmitted: () async {
-                    focus2.requestFocus();
-                  },
-                  validator: (String value) {
-                    if (passwordController.text.length < 6) {
-                      return "password must be more than 6 letters";
-                    }
-                    return validationMap['password'];
-                  }),
-              // Padding(
-              //   padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-              //   child: TextFormField(
-              //     keyboardType: TextInputType.phone,
-              //     decoration: InputDecoration(
-              //       enabledBorder: OutlineInputBorder(
-              //           borderSide: BorderSide(
-              //         color: colors.ggrey,
-              //       )),
-              //       filled: true,
-              //       fillColor: Colors.white70,
-              //       hintText: trans(context, 'new_mobile_no'),
-              //       hintStyle: TextStyle(
-              //         color: colors.ggrey,
-              //         fontSize: 15,
-              //       ),
-              //       disabledBorder: const OutlineInputBorder(
-              //           borderSide: BorderSide(
-              //         color: Colors.grey,
-              //       )),
-              //       border: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(7),
-              //       ),
-              //       focusedBorder: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(7),
-              //       ),
+                text: trans(context, 'new_mobile_no'),
+                cController: mobileNoController,
+                prefixIcon: Icons.phone,
+                kt: TextInputType.phone,
+                obscureText: false,
+                readOnly: false,
+                // onTab: () {},
+                suffixicon: CountryCodePicker(
+                  onChanged: _onCountryChange,
+                  initialSelection: 'TR',
+                  favorite: const <String>['+972', 'IS'],
+                  showFlagDialog: true,
+                  showFlag: false,
+                  showCountryOnly: false,
+                  showOnlyCountryWhenClosed: false,
+                  alignLeft: false,
+                  padding: isRTL == true
+                      ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+                      : const EdgeInsets.fromLTRB(32, 0, 0, 0),
+                ),
+                // focusNode: focus2,
+                // onFieldSubmitted: () {
+                //   SystemChannels.textInput
+                //       .invokeMethod<dynamic>('TextInput.hide');
+                // },
+                validator: (String value) {
+                  // print("==== $value");
+                  // if (mobileNoController.text.isEmpty) {
+                  //   return "please enter your mobile Number";
+                  // } else
+                  return "dfgsdf";
 
-              //       contentPadding: const EdgeInsets.symmetric(vertical: 0),
-              //       prefixIcon: Icon(Icons.phone),
-              // suffixIcon: CountryCodePicker(
-              //   onChanged: _onCountryChange,
-              //   initialSelection: 'TR',
-              //   favorite: const <String>['+966', 'SA'],
-              //   showFlagDialog: true,
-
-              //   showFlag: false,
-              //   showCountryOnly: false,
-              //   showOnlyCountryWhenClosed: false,
-              //   alignLeft: false,
-              //   padding: isRTL == true
-              //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-              //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-              // ),
-              //     ),
-              //     focusNode: focus2,
-              //     controller: mobileNoController,
-              //     onFieldSubmitted: (String v) {
-              //       verifyanewPhone();
-              //     },
-              //   ),
-              // )
-              TextFormInput(
-                  text: trans(context, 'new_mobile_no'),
-                  cController: mobileNoController,
-                  prefixIcon: Icons.phone,
-                  kt: TextInputType.phone,
-                  obscureText: false,
-                  readOnly: false,
-                  onTab: () {},
-                  suffixicon: CountryCodePicker(
-                    onChanged: _onCountryChange,
-                    initialSelection: 'TR',
-                    favorite: const <String>['+966', 'SA'],
-                    showFlagDialog: true,
-                    showFlag: false,
-                    showCountryOnly: false,
-                    showOnlyCountryWhenClosed: false,
-                    alignLeft: false,
-                    padding: isRTL == true
-                        ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                        : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                  ),
-                  focusNode: focus2,
-                  onFieldSubmitted: () {
-                    verifyanewPhone();
-                  },
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return "please enter your mobile Number  ";
-                    }
-                    return validationMap['phone'];
-                  }),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 64),
-              //   child: FlatButton(
-              //     shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(20.0),
-              //         side: const BorderSide(color: Colors.black)),
-              //     color: Colors.white,
-              //     textColor: Colors.orange,
-              //     padding: const EdgeInsets.all(8.0),
-              //     onPressed: () {
-              //       if (!enabeld) {
-              //         data.getData('phone').then((String value) {
-              //           dio.post<dynamic>("login", data: <String, dynamic>{
-              //             "phone": value,
-              //             "password": passwordController.text.toString()
-              //           }).then((Response<dynamic> value) async {
-              //             setState(() {
-              //               enabeld = true;
-              //             });
-              //             focus1.requestFocus();
-              //           });
-              //         });
-              //       }
-              //     },
-              //     child: Text(
-              //       trans(context, 'check_pass'),
-              //       style: styles.resend,
-              //     ),
-              //   ),
-              // ),
-
+                  // return validationMap['phone'];
+                },
+              ),
               pinCode(bolc),
               if (enabeld)
                 CircularPercentIndicator(
@@ -398,14 +318,34 @@ class _MyHomePageState extends State<PinCodeForProfile>
   }
 
   void verifyanewPhone() {
-    dio.put<dynamic>("update_phone", queryParameters: <String, dynamic>{
-      "password": passwordController.text,
-      "new_phone": mobileNoController.text
-    }).then((Response<dynamic> value) {
-      if (value.statusCode == 200) {
-        data.setData("phone", mobileNoController.text);
-      }
-      print(value.data);
-    });
+    if (_formKey.currentState.validate()) {
+    } else {
+      print(" == ${mobileNoController.text}");
+
+      dio.put<dynamic>("update_phone", queryParameters: <String, dynamic>{
+        "password": passwordController.text,
+        "new_phone": countryCodeTemp + mobileNoController.text
+      }).then((Response<dynamic> value) {
+        if (value.statusCode == 422) {
+          value.data['errors'].forEach((String k, dynamic vv) {
+            setState(() {
+              validationMap[k] = vv[0].toString();
+            });
+            print(validationMap);
+          });
+          _formKey.currentState.validate();
+          validationMap.updateAll((String key, String value) {
+            return null;
+          });
+        }
+        if (value.statusCode == 200) {
+          setState(() {
+            enabeld = true;
+          });
+          data.setData("phone", countryCodeTemp + mobileNoController.text);
+        }
+        print(value.data);
+      });
+    }
   }
 }

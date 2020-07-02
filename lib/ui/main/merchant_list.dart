@@ -8,7 +8,6 @@ import '../../ui/cards/merchant_card.dart';
 import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
-import 'package:provider/provider.dart';
 
 class ShopList extends StatefulWidget {
   @override

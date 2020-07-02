@@ -45,15 +45,15 @@ Future<void> main() async {
   dio.get<dynamic>("user").then((dynamic value) {
     print(value.data);
   });
-
+  data.getData("profile_pic").then((String value) {
+    config.profileUrl = value;
+  });
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Language lang = Provider.of<Language>(context);
-    final MyCounter bolc = Provider.of<MyCounter>(context);
-
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         localizationsDelegates: <LocalizationsDelegate<dynamic>>[

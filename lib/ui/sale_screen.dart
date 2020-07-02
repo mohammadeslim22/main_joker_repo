@@ -858,7 +858,7 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
                   children: <Widget>[
                     Text(
                       trans(context, "show_more"),
-                      style: TextStyle(color: Colors.blue),
+                      style:const TextStyle(color: Colors.blue),
                     ),
                   ],
                 ),
@@ -869,14 +869,14 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
                     .showBottomSheet<dynamic>((BuildContext context) {
                   return Container(
                     padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-                    decoration: BoxDecoration(
-                      border: const Border(
+                    decoration:const BoxDecoration(
+                      border:  Border(
                         top: BorderSide(color: Colors.orange, width: 7.0),
                         bottom: BorderSide(color: Colors.orange, width: 7.0),
                         right: BorderSide(color: Colors.orange, width: 7.0),
                         left: BorderSide(color: Colors.orange, width: 7.0),
                       ),
-                      borderRadius: const BorderRadius.all(
+                      borderRadius:  BorderRadius.all(
                         Radius.circular(24),
                       ),
                       color: Colors.white,
