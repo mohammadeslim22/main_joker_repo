@@ -44,7 +44,6 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
-     
 
     final Scaffold menu = Scaffold(
       backgroundColor: colors.grey,
@@ -101,9 +100,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                             CachedNetworkImage(
                           placeholderFadeInDuration:
                               const Duration(milliseconds: 300),
-                          // progressIndicatorBuilder: (BuildContext context, String url) =>
-                          //     Container(),
-                          imageUrl: config.profileUrl,
+                          imageUrl: config.profileUrl ?? "",
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
                               Container(

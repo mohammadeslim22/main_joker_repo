@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:joker/ui/auth/login_screen.dart';
 import 'package:joker/ui/home.dart';
 import 'constants/config.dart';
 import 'util/dio.dart';
@@ -93,6 +94,6 @@ class MyApp extends StatelessWidget {
         },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home: const Home());
+        home:  LoginScreen());
   }
 }

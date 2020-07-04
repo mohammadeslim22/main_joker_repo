@@ -143,7 +143,6 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
 
   @override
   Widget build(BuildContext context) {
-
     final MyCounter bolc = Provider.of<MyCounter>(context);
 
     return Scaffold(
@@ -179,7 +178,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                               onTap: () {},
                               child: Hero(
                                 child: CircularProfileAvatar(
-                                  config.profileUrl,
+                                  config.profileUrl ?? "",
                                   radius: 80,
                                   backgroundColor: Colors.transparent,
                                   borderWidth: 5,
@@ -567,12 +566,9 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
     });
   }
 
-
-
   @override
   void afterFirstLayout(BuildContext context) {
     if (config.prifleNoVerfiyDone) {
-      
     } else {
       if (config.prifleNoVerfiyVisit) {
         shoeTosted();

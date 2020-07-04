@@ -718,7 +718,7 @@ class SaleDetailsPage extends State<SaleDetails>
                               ));
                             },
                             pageSize: 15,
-                            // padding: const EdgeInsets.all(5.0),
+                            
                             itemBuilder: (BuildContext context, dynamic entry,
                                 int index) {
                               final SimpleSalesData e =
