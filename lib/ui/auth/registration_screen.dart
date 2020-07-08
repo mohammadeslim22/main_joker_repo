@@ -376,7 +376,7 @@ class _MyRegistrationState extends State<Registration>
                                       });
                                     }
                                     if (value.statusCode == 201) {
-                                      print(value.data['data']['id']);
+                                      print(value.data);
 
                                       Navigator.pushNamed(context, '/pin',
                                           arguments: <String, String>{

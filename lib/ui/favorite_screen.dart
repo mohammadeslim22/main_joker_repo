@@ -8,35 +8,31 @@ import 'main/favorits_sales_list.dart';
 import 'widgets/favoritetab_bar.dart';
 import '../constants/colors.dart';
 
-
-
 class Favorite extends StatefulWidget {
   @override
   _MyFavState createState() => _MyFavState();
 }
 
-class _MyFavState extends State<Favorite>
-    with SingleTickerProviderStateMixin {
-     
+class _MyFavState extends State<Favorite> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-        final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MyCounter bolc = Provider.of<MyCounter>(context);
 
     return Scaffold(
-      appBar:  AppBar(
-          title: Text(
-            trans(context, "fav"),
-          ),
-          centerTitle: true,
-          bottom: PreferredSize(
-            preferredSize:const  Size.fromHeight(50.0), 
-            child: FavoritBar(),
-          )),
-      body: Container(
-                  color: colors.grey,
-                  child:(bolc.favocurrentIndex == 0)
-          ?const FavoritDiscountsList()
-          : const FavoritMerchantsList(),
-    ));
+        appBar: AppBar(
+            title: Text(
+              trans(context, "fav"),
+            ),
+            centerTitle: true,
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(50.0),
+              child: FavoritBar(),
+            )),
+        body: Container(
+          color: colors.grey,
+          child: (bolc.favocurrentIndex == 0)
+              ? const FavoritMerchantsList()
+              : const FavoritDiscountsList(),
+        ));
   }
 }

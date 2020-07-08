@@ -33,6 +33,8 @@ class _SalesCardState extends State<SalesCard> {
     } else {
       saleStatus = Colors.red;
     }
+    print(saledata.branches.length);
+
     // if (saledata.branches.isNotEmpty) {
     //   saledata.branches.forEach((int element) {
     //     branches += element.toString() + " ";
@@ -163,7 +165,7 @@ class _SalesCardState extends State<SalesCard> {
                                 color: Colors.grey[200],
                               ),
                               alignment: Alignment.center,
-                              child: Text("0"),
+                              child: Text(saledata.branches.length.toString()),
                             )
                           ],
                         ),

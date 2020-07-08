@@ -42,9 +42,7 @@ class _AutoLocateState extends State<AutoLocate> {
 
     serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
-      
     } else {
-      
       permissionGranted = await location.hasPermission();
       if (permissionGranted == PermissionStatus.denied) {
       } else {
@@ -61,7 +59,7 @@ class _AutoLocateState extends State<AutoLocate> {
     super.initState();
     lat = widget.lat;
     long = widget.long;
-   // tryToAnimate();
+    // tryToAnimate();
   }
 
   @override
@@ -88,10 +86,10 @@ class _AutoLocateState extends State<AutoLocate> {
     Navigator.pop(context);
     return true;
   }
+
   Future<void> tryToAnimate() async {
-        serviceEnabled = await location.serviceEnabled();
+    serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
-      
     } else {
       _animateToUser();
       permissionGranted = await location.hasPermission();
@@ -317,6 +315,7 @@ class _AutoLocateState extends State<AutoLocate> {
 
   Future<void> _animateToUser() async {
     try {
+      if (mounted) {}
       final Uint8List markerIcon =
           await getBytesFromAsset('assets/images/logo.jpg', 100);
       await location.getLocation().then((LocationData value) {
@@ -386,10 +385,12 @@ class _AutoLocateState extends State<AutoLocate> {
                     borderRadius: BorderRadius.circular(18.0),
                     side: BorderSide(color: colors.blue)),
                 onPressed: () {
-                  if (config.amIcomingFromHome) {
-                    data.setData("lat", lat.toString());
-                    data.setData("long", long.toString());
-                  }
+                  data.setData("lat", lat.toString());
+                  data.setData("long", long.toString());
+                  // if (config.amIcomingFromHome) {
+                  //   data.setData("lat", lat.toString());
+                  //   data.setData("long", long.toString());
+                  // }
                   setState(() {
                     config.lat = lat;
                     config.long = long;
@@ -401,7 +402,7 @@ class _AutoLocateState extends State<AutoLocate> {
                   Navigator.pop(context);
                   Provider.of<MyCounter>(context, listen: false)
                       .togelocationloading(false);
-                //  Scaffold.of(context).hideCurrentSnackBar();
+                  //  Scaffold.of(context).hideCurrentSnackBar();
                 },
                 color: Colors.blue,
                 textColor: Colors.white,

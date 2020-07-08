@@ -151,7 +151,7 @@
     "update_app": "عن التطبيق",
     "address_List": "قائمة المواقع",
     "add_address": "أضف موقع جديد",
-    "noting_to_show": "لا يوجد بيانات للعرض",
+    "nothing_to_show": "لا يوجد بيانات للعرض",
     "latitude": "إحداثيات العرض",
     "longitue": "إحداثيات الطول",
     "offer_starting_date": "تاريخ بدء العرض",
@@ -187,5 +187,10 @@
     "restore": "إستعادة",
     "change_phone_while_regestrating": "لم يصلك الرمز؟ تغغير رقم الهاتف",
     "enter_new_mobile": "أدخل رقم الهاتف",
-    "you_can_change_mo_only_once":"يمكنك تغيير رقم الهاتف مرة واحدة"
+    "you_can_change_mo_only_once":"يمكنك تغيير رقم الهاتف مرة واحدة",
+    "wrong_user_or_pass":"خطأ في اسم المستخدم أو كلمة المرور",
+    "type":"نوع العضوية",
+    "request_sent_successfully":"تم إرسال طلبك بنجاح"
+
+
 }

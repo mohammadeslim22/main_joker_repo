@@ -1,6 +1,4 @@
 class Profile {
-
-
   Profile(
       {this.id,
       this.name,
@@ -19,27 +17,29 @@ class Profile {
       this.verfiyCode,
       this.createdAt,
       this.updatedAt,
-      this.apiToken});
+      this.apiToken,
+      this.birthDate});
 
-  Profile.fromJson( dynamic json) {
-    id = json['id'] as int;
-    name = json['name'].toString();
-    username = json['username'].toString();
-    email = json['email'].toString();
-    emailVerifiedAt = json['email_verified_at'].toString();
-    countryId = json['country_id'].toString();
-    cityId = json['city_id'].toString();
-    address = json['address'].toString();
-    longitude = json['longitude'].toString();
-    latitude = json['latitude'].toString();
-    phone = json['phone'].toString();
-    status = json['status'].toString();
-    userType = json['user_type'].toString();
-    image = json['image'].toString();
-    verfiyCode = json['verfiy_code'].toString();
-    createdAt = json['created_at'].toString();
-    updatedAt = json['updated_at'].toString();
-    apiToken = json['api_token'].toString();
+  Profile.fromJson(dynamic json) {
+    id = json['data']['id'] as int;
+    name = json['data']['name'].toString();
+    username = json['data']['username'].toString();
+    email = json['data']['email'].toString();
+    emailVerifiedAt = json['data']['email_verified_at'].toString();
+    countryId = json['data']['country_id'].toString();
+    cityId = json['data']['city_id'].toString();
+    address = json['data']['address'].toString();
+    longitude = json['data']['longitude'].toString();
+    latitude = json['data']['latitude'].toString();
+    phone = json['data']['phone'].toString();
+    status = json['data']['status'].toString();
+    userType = json['data']['user_type'].toString();
+    image = json['data']['image'].toString();
+    verfiyCode = json['data']['verfiy_code'].toString();
+    createdAt = json['data']['created_at'].toString();
+    updatedAt = json['data']['updated_at'].toString();
+    apiToken = json['data']['api_token'].toString();
+    birthDate = json['data']['birth_date'].toString();
   }
   int id;
   String name;
@@ -59,26 +59,5 @@ class Profile {
   String createdAt;
   String updatedAt;
   String apiToken;
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['username'] = username;
-    data['email'] = email;
-    data['email_verified_at'] = emailVerifiedAt;
-    data['country_id'] = countryId;
-    data['city_id'] = cityId;
-    data['address'] = address;
-    data['longitude'] = longitude;
-    data['latitude'] = latitude;
-    data['phone'] = phone;
-    data['status'] = status;
-    data['user_type'] = userType;
-    data['image'] = image;
-    data['verfiy_code'] = verfiyCode;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['api_token'] = apiToken;
-    return data;
-  }
+  String birthDate;
 }

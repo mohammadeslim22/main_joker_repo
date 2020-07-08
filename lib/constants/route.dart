@@ -80,7 +80,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     case "/MerchantDetails":
       page = PageTransition<PageController>(
         child: ShopDetails(
-          merchantId: args['merchantId'] as int,
+          merchantId: args['merchantId'] as int,branchId:args['branchId'] as int
         ),
         type: PageTransitionType.rightToLeftWithFade,
       );

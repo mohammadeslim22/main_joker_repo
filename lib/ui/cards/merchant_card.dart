@@ -39,7 +39,8 @@ class _MerchantCardState extends State<MerchantCard> {
         onTap: () async {
           Navigator.pushNamed(context, "/MerchantDetails",
               arguments: <String, dynamic>{
-                "merchantId": branchData.merchant.id
+                "merchantId": branchData.merchant.id,
+                "branchId":branchData.id
               });
         },
         child: Column(

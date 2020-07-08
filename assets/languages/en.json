@@ -145,7 +145,7 @@
     "update_app": "Update App",
     "address_List": "Address List",
     "add_address": "Add Address",
-    "noting_to_show": "Nothing to Show",
+    "nothing_to_show": "Nothing to Show",
     "latitude": "latitude",
     "longitue": "longitue",
     "offer_starting_date": "Sale Starting Date",
@@ -185,5 +185,10 @@
     "problem_in_verifying": "facing problems in Verifying ?",
     "new_mobile_no":"New Mobile Number",
     "features":"features",
-    "you_can_change_mo_only_once":"Sorry, You can Change Mobile No. only once"
+    "you_can_change_mo_only_once":"Sorry, You can Change Mobile No. only once",
+    "wrong_user_or_pass":"Wrong password or Password",
+    "type":"MemberShip Type",
+    "request_sent_successfully":"your Request has been Sent Successfully"
+
+
 }

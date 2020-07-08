@@ -9,6 +9,8 @@ import 'package:joker/constants/styles.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
 import 'package:joker/util/data.dart';
+import 'package:dio/dio.dart';
+import 'package:joker/util/dio.dart';
 
 class MyInnerDrawer extends StatefulWidget {
   const MyInnerDrawer({this.scaffold, this.drawerKey});
@@ -34,10 +36,34 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
   @override
   void initState() {
     super.initState();
-    data.getData("username").then((String value) {
-      setState(() {
-        username = value ?? "username";
+    if (config.username == null) {
+      data.getData("username").then((String value) {
+        setState(() {
+          username = value ?? "username";
+        });
       });
+    } else {
+      username = config.username;
+    }
+    print(config.profileUrl);
+    data.getData("profile_pic").then((String value) {
+      print("profile drawer pic:   $value");
+      setState(() {
+        config.profileUrl = value;
+      });
+      if (value == null) {
+        print("error here ?");
+        dio.get<dynamic>("user").then((Response<dynamic> value) {
+          print(value.data['data']['name'].toString());
+          setState(() {
+            config.username = value.data['data']['name'].toString();
+            config.profileUrl = value.data['data']['image'].toString().trim();
+          });
+
+          data.setData("profile_pic", value.data['data']['image'].toString());
+          data.setData("username", value.data['data']['name'].toString());
+        });
+      }
     });
   }
 
@@ -74,7 +100,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                               width: 250,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Text(username, style: styles.underHead),
                                 ],
@@ -100,7 +126,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                             CachedNetworkImage(
                           placeholderFadeInDuration:
                               const Duration(milliseconds: 300),
-                          imageUrl: config.profileUrl ?? "",
+                          imageUrl: config.profileUrl.trim() ?? "",
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
                               Container(
@@ -223,6 +249,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
             title: Text("${trans(context, 'logout')}"),
             leading: SvgPicture.asset("assets/images/logout.svg"),
             onTap: () {
+              data.setData('authorization', null);
               Navigator.pushNamedAndRemoveUntil(
                   context, '/login', (_) => false);
             },

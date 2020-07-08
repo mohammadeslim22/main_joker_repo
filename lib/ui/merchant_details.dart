@@ -11,9 +11,11 @@ import 'package:rating_bar/rating_bar.dart';
 import 'main/merchant_sales_list.dart';
 
 class ShopDetails extends StatefulWidget {
-  const ShopDetails({Key key, this.merchantId}) : super(key: key);
+  const ShopDetails({Key key, this.merchantId, this.branchId})
+      : super(key: key);
 
   final int merchantId;
+  final int branchId;
 
   @override
   ShopDetailsPage createState() => ShopDetailsPage();
@@ -63,7 +65,7 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
         future: getMerchantData(widget.merchantId),
         builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Page(merchant: merchant);
+            return Page(merchant: merchant, branchId: widget.branchId);
           } else {
             return const Center(
                 child: CircularProgressIndicator(
@@ -76,18 +78,16 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
 }
 
 class Page extends StatefulWidget {
-  const Page({Key key, this.likecount, this.lovecount, this.merchant})
-      : super(key: key);
-  final int likecount;
-  final int lovecount;
+  const Page({Key key, this.merchant, this.branchId}) : super(key: key);
   final Merchant merchant;
+  final int branchId;
+
   @override
   _PageState createState() => _PageState();
 }
 
 class _PageState extends State<Page> with TickerProviderStateMixin {
   TabController _tabController;
-
   int index = 2;
   double ratingStar = 0;
   Color tabBackgroundColor = colors.ggrey;
@@ -208,8 +208,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                               circleColor: CircleColor(
                                   start: Colors.blue, end: Colors.purple),
                               onTap: (bool loved) async {
-                                favFunction(
-                                    "App\\Merchant", merchant.mydata.id);
+                                favFunction("App\\Branch", widget.branchId);
                                 isloved = !isloved;
                                 return isloved;
                               },

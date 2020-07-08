@@ -59,7 +59,9 @@ class _DiscountsListState extends State<DiscountsList> {
     _pagewiseController = PagewiseLoadController<dynamic>(
         pageSize: 3,
         pageFuture: (int pageIndex) async {
-          return getSalesData(pageIndex);
+          return (widget.filterData != null)
+              ? getSalesDataFilterd(pageIndex, widget.filterData)
+              : getSalesData(pageIndex);
         });
     super.initState();
   }

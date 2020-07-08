@@ -12,8 +12,52 @@ import 'providers/language.dart';
 import 'localization/localization_delegate.dart';
 import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
+import 'package:joker/util/functions.dart';
+// import 'package:flutter/scheduler.dart';
+// import 'package:joker/models/user.dart';
+import 'package:dio/dio.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  dioDefaults();
+  await data.getData('authorization').then<dynamic>((String auth) {
+    if (auth == null) {
+      print("khhhhhhhhhhhhhhhhh");
+      config.loggedin = false;
+    } else {
+      config.loggedin = true;
+    }
+    dio.options.headers['authorization'] = '$auth';
+  });
+
+  // await data.getData("profile_pic").then((String value) {
+  //   print("profile pic:   $value");
+  //   if (value == "null") {
+  //     print("error here ?");
+  //     dio.get<dynamic>("user").then((Response<dynamic> value) {
+  //       print(value.data['data']['image'].toString());
+  //       config.profileUrl = value.data['data']['image'].toString();
+  //       data.setData("profile_pic", value.data['data']['image'].toString());
+  //       data.setData("username", value.data['data']['name'].toString());
+  //     });
+  //   }
+
+  //   config.profileUrl = value;
+  // });
+  data.getData("lat").then((String value) {
+    config.lat = double.parse(value);
+  });
+  data.getData("long").then((String value) async {
+    print("lat  $value");
+    if (value == null) {
+      print("no location saved ");
+      await updateLocation;
+    }
+  });
+  data.getData("lang").then((String value) {
+    config.userLnag = Locale(value);
+  });
+
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -30,31 +74,27 @@ Future<void> main() async {
       child: MyApp(),
     ),
   );
-  dioDefaults();
-  await data.getData('authorization').then<dynamic>((dynamic auth) {
-    print(auth);
-    if (auth == null) {}
-    dio.options.headers['authorization'] = '$auth';
-  });
-
-  data.getData("lat").then((String value) {
-    config.lat = double.parse(value);
-  });
-  data.getData("long").then((String value) {
-    config.long = double.parse(value);
-  });
-  dio.get<dynamic>("user").then((dynamic value) {
-    print(value.data);
-  });
-  data.getData("profile_pic").then((String value) {
-    config.profileUrl = value;
-  });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Language lang = Provider.of<Language>(context);
+    // data.getData("lang").then((String value) {
+    //   config.userLnag = Locale(value);
+    //   lang.setLanguage(Locale(value));
+    // });
+
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         localizationsDelegates: <LocalizationsDelegate<dynamic>>[
@@ -69,7 +109,7 @@ class MyApp extends StatelessWidget {
           Locale('en'),
           Locale('tr'),
         ],
-        locale: lang.currentLanguage,
+        locale: config.userLnag,
         localeResolutionCallback:
             (Locale locale, Iterable<Locale> supportedLocales) {
           if (locale == null) {
@@ -78,22 +118,32 @@ class MyApp extends StatelessWidget {
 
           for (final Locale supportedLocale in supportedLocales) {
             if (supportedLocale.languageCode == locale.languageCode) {
-              if (data.getData("lang") == null) {
-                data.setData("lang", locale.languageCode);
-              }
+              // lang.setLanguage(supportedLocale);
+              data.setData("lang", supportedLocale.languageCode);
 
+              //lang.setLanguage(supportedLocale);
               return supportedLocale;
             }
           }
+
           // TODO(ahmed): use it to change language on start application
-          /* SchedulerBinding.instance.addPostFrameCallback(
-          (_) => lang.setLanguage(supportedLocales.first),
-        ); */
+          // SchedulerBinding.instance.addPostFrameCallback((_) async {
+          //   await data.getData("lang").then((String value) {
+          //     config.userLnag = Locale(value);
+          //     lang.setLanguage(Locale(value));
+          //   });
+          // });
 
           return supportedLocales.first;
         },
+        // builder: (BuildContext context, Widget t) {
+        //   if (dio.options.headers['authorization'] == "null") {
+        //     return LoginScreen();
+        //   }
+        //   return const Home();
+        // },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home:  LoginScreen());
+        home: config.loggedin ? const Home() : LoginScreen());
   }
 }

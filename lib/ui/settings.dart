@@ -30,8 +30,9 @@ class MySettingState extends State<SettingsScreen> {
   bool doOnce = true;
   int sountState = 0;
 
-  Future<void> setStartingLang(MyCounter bolc) async {
+  Future<void> setStartingLang(MyCounter bolc, Language lang) async {
     await data.getData("lang").then<dynamic>((String value) {
+      print("here in settings and this is lang $value");
       if (value == 'en') {
         bolc.changelanguageindex(1);
       } else if (value == 'ar') {
@@ -53,8 +54,10 @@ class MySettingState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final MyCounter bolc = Provider.of<MyCounter>(context);
+    final Language lang = Provider.of<Language>(context);
+
     if (doOnce) {
-      setStartingLang(bolc);
+      setStartingLang(bolc, lang);
       setNotifcationSound(bolc);
       doOnce = false;
     }
@@ -73,19 +76,19 @@ class MySettingState extends State<SettingsScreen> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * .35,
           ),
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              color: Colors.white,
-              child: Row(
-                children: <Widget>[
-                  Text(trans(context, "font"), style: styles.mystyle),
-                  const SizedBox(width: 3),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Container(child: fontBar(context)),
-                  )
-                ],
-              )),
+          // Container(
+          //     padding: const EdgeInsets.symmetric(horizontal: 10),
+          //     color: Colors.white,
+          //     child: Row(
+          //       children: <Widget>[
+          //         Text(trans(context, "font"), style: styles.mystyle),
+          //         const SizedBox(width: 3),
+          //         Flexible(
+          //           fit: FlexFit.tight,
+          //           child: Container(child: fontBar(context)),
+          //         )
+          //       ],
+          //     )),
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -225,21 +228,21 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
           )));
 }
 
-Widget fontBar(BuildContext context) {
-  final MyCounter bolc = Provider.of<MyCounter>(context);
+// Widget fontBar(BuildContext context) {
+//   final MyCounter bolc = Provider.of<MyCounter>(context);
 
-  return Container(
-    child: Row(
-      children: <Widget>[
-        fontBarChoice(context, "large", 0, bolc.fontlist, "font", () {}),
-        verticalDiv(),
-        fontBarChoice(context, "meduim", 1, bolc.fontlist, "font", () {}),
-        verticalDiv(),
-        fontBarChoice(context, "small", 2, bolc.fontlist, "font", () {}),
-      ],
-    ),
-  );
-}
+//   return Container(
+//     child: Row(
+//       children: <Widget>[
+//         fontBarChoice(context, "large", 0, bolc.fontlist, "font", () {}),
+//         verticalDiv(),
+//         fontBarChoice(context, "meduim", 1, bolc.fontlist, "font", () {}),
+//         verticalDiv(),
+//         fontBarChoice(context, "small", 2, bolc.fontlist, "font", () {}),
+//       ],
+//     ),
+//   );
+// }
 
 Widget languagBar(BuildContext context) {
   final MyCounter bolc = Provider.of<MyCounter>(context);
@@ -256,7 +259,9 @@ Widget languagBar(BuildContext context) {
           lang.setLanguage(const Locale('en'));
         }),
         verticalDiv(),
-        fontBarChoice(context, "turkish", 2, bolc.language, "language", () {}),
+        fontBarChoice(context, "turkish", 2, bolc.language, "language", () {
+          lang.setLanguage(const Locale('tr'));
+        }),
       ],
     ),
   );
@@ -271,9 +276,3 @@ Widget verticalDiv() {
       height: 18);
 }
 
-Future<void> sendtoAPI({int index, String voice, String lang}) {
-  return dio.post<dynamic>("settings", data: <String, dynamic>{
-    'recieve_notify': voice != null ? "on" : "off",
-    'notify_sound ': index == 0 ? "on" : "off"
-  });
-}

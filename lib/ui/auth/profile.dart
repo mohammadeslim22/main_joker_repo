@@ -60,21 +60,11 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   final FocusNode focus4 = FocusNode();
   File myimage;
   Future<Profile> getProfileData() async {
-    print(await data.getData("authorization"));
     final dynamic response = await dio.get<dynamic>("user");
-
+    print(response.data);
     profile = Profile.fromJson(response.data);
     return profile;
   }
-
-  // Future<void> getImage() async {
-  //   final File image =
-  //       await ImagePicker.getImage(source: ImageSource.gallery) as File;
-
-  //   setState(() {
-  //     myimage = image;
-  //   });
-  // }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -106,7 +96,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
         emailController.text = value.email;
         mobileNoController.text = value.phone;
         tempPhone = value.phone;
-        birthDateController.text = value.updatedAt;
+        birthDateController.text = value.birthDate;
         config.locationController.text = "${value.address}";
       });
     });
@@ -505,7 +495,6 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
       if (value.statusCode == 200) {
         data.setData("email", emailController.text);
         data.setData("username", usernameController.text);
-        // data.setData("phone", mobileNoController.text);
         data.setData("lat", config.lat.toString());
         data.setData("long", config.long.toString());
         data.setData("address", config.locationController.text.toString());
@@ -522,7 +511,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 height: 360,
-                margin: const EdgeInsets.only(bottom: 160, left: 36, right: 36),
+                margin: const EdgeInsets.only(bottom: 160, left: 24, right: 24),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(40),
@@ -531,11 +520,16 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                   type: MaterialType.transparency,
                   child: SizedBox.expand(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         SvgPicture.asset('assets/images/checkdone.svg'),
                         const SizedBox(height: 15),
-                        Text(trans(context, "information_updated_successfully"),
-                            style: styles.underHeadblack),
+                        Flexible(
+                          child: Text(
+                              trans(
+                                  context, "information_updated_successfully"),
+                              style: styles.underHeadblack),
+                        ),
                         const SizedBox(height: 15),
                         RaisedButton(
                             color: colors.orange,

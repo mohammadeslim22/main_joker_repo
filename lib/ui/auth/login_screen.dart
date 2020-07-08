@@ -14,6 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import '../widgets/buttonTouse.dart';
 import 'package:dio/dio.dart';
 import '../widgets/custom_toast_widget.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -28,8 +29,10 @@ class _MyLoginScreenState extends State<LoginScreen>
     'phone',
     'password',
   ];
+
   Map<String, String> validationMap =
       Map<String, String>.fromIterables(keys, validators);
+  String countryCodeTemp = "+90";
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -60,6 +63,8 @@ class _MyLoginScreenState extends State<LoginScreen>
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
   Widget customcard(BuildContext context) {
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
       child: Form(
@@ -77,16 +82,46 @@ class _MyLoginScreenState extends State<LoginScreen>
                 obscureText: false,
                 readOnly: false,
                 onTab: () {},
-                nextfocusNode: focus1,
-                onFieldSubmitted: () {
+                suffixicon: CountryCodePicker(
+                  onChanged: _onCountryChange,
+                  initialSelection: 'TR',
+                  favorite: const <String>['+90', 'TR'],
+                  showFlagDialog: true,
+                  showFlag: false,
+                  showCountryOnly: false,
+                  showOnlyCountryWhenClosed: false,
+                  alignLeft: false,
+                  padding: isRTL == true
+                      ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+                      : const EdgeInsets.fromLTRB(32, 0, 0, 0),
+                ),
+                   onFieldSubmitted: () {
                   focus1.requestFocus();
                 },
                 validator: (String value) {
                   if (value.isEmpty) {
-                    return "please enter a mobile number ";
+                    return "please enter your mobile Number  ";
                   }
                   return validationMap['phone'];
                 }),
+            // TextFormInput(
+            //     text: trans(context, 'mobile_no'),
+            //     cController: usernameController,
+            //     prefixIcon: Icons.phone,
+            //     kt: TextInputType.phone,
+            //     obscureText: false,
+            //     readOnly: false,
+            //     onTab: () {},
+            //     nextfocusNode: focus1,
+            //     onFieldSubmitted: () {
+            //       focus1.requestFocus();
+            //     },
+            //     validator: (String value) {
+            //       if (value.isEmpty) {
+            //         return "please enter a mobile number ";
+            //       }
+            //       return validationMap['phone'];
+            //     }),
             TextFormInput(
                 text: trans(context, 'password'),
                 cController: passwordController,
@@ -185,7 +220,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                         });
                         await dio
                             .post<dynamic>("login", data: <String, dynamic>{
-                          "phone": usernameController.text.toString().trim(),
+                          "phone": countryCodeTemp+usernameController.text.toString().trim(),
                           "password": passwordController.text.toString()
                         }).then((Response<dynamic> value) async {
                           print(value.data);
@@ -214,11 +249,6 @@ class _MyLoginScreenState extends State<LoginScreen>
                               dio.options.headers['authorization'] =
                                   'Bearer ${value.data['api_token']}';
 
-                              // await  data.getData('authorization').then<dynamic>(
-                              //       (dynamic auth) => dio.options.headers.update(
-                              //           'authorization',
-                              //           (dynamic value) async => auth));
-
                               print(dio.options.headers);
                               Navigator.pushNamed(context, '/Home',
                                   arguments: <String, dynamic>{
@@ -227,7 +257,9 @@ class _MyLoginScreenState extends State<LoginScreen>
                                   });
                             } else {
                               showToastWidget(
-                                  IconToastWidget.fail(msg: 'Wrong password'),
+                                  IconToastWidget.fail(
+                                      msg:
+                                          trans(context, 'wrong_user_or_pass')),
                                   context: context,
                                   position: StyledToastPosition.center,
                                   animation: StyledToastAnimation.scale,
@@ -253,9 +285,8 @@ class _MyLoginScreenState extends State<LoginScreen>
                 fw: FontWeight.bold,
                 fc: Colors.black,
                 width: MediaQuery.of(context).size.width, myfunc: () {
-                  
-              Navigator.pushNamedAndRemoveUntil(context, '/Registration', (_) => false);
-              
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/Registration', (_) => false);
             }),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -277,5 +308,13 @@ class _MyLoginScreenState extends State<LoginScreen>
         ),
       ]),
     ));
+  }
+
+  void _onCountryChange(CountryCode countryCode) {
+    setState(() {
+      countryCodeTemp = countryCode.dialCode;
+    });
+
+    FocusScope.of(context).requestFocus(FocusNode());
   }
 }

@@ -38,7 +38,7 @@ class SaleData {
     id = json['id'] as int;
     name = json['name'] as String;
     oldPrice = json['old_price'] as String;
-    price = json[' price'] as String;
+    price = json['new_price'] as String;
     startAt = json['start_at'] as String;
     endAt = json['end_at'] as String;
     details = json['details'] as String;
@@ -54,19 +54,14 @@ class SaleData {
     merchant = MerchantForSale.fromJson(json['merchant']);
     isliked = json['isliked'] as int;
     isfavorite = json['isfavorite'] as int;
-       if (json['branches'] != null) {
-         if(json['branches']!=<dynamic>[]){}
-         else{
-     branches = <int>[];
-      json['branches'].forEach((int v) {
-        branches.add(v);
+    if (json['branches'] != null) {
+      branches = <BranchesMini>[];
+      json['branches'].forEach((dynamic v) {
+        branches.add(BranchesMini.fromJson(v));
       });
-
-         }
- 
     }
-
   }
+
   int id;
   String name;
   String oldPrice;
@@ -81,7 +76,19 @@ class SaleData {
   MerchantForSale merchant;
   int isliked;
   int isfavorite;
-  List<int> branches;
+  List<BranchesMini> branches;
+}
+
+class BranchesMini {
+  BranchesMini({this.id, this.name});
+
+  BranchesMini.fromJson(dynamic json) {
+    id = json['id'] as int;
+    name = json['name'].toString();
+  }
+
+  int id;
+  String name;
 }
 
 class MerchantForSale {

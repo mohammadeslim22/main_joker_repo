@@ -77,7 +77,8 @@ class SettingBottom extends StatelessWidget {
                                       "delete_reason":
                                           reasonforDeleteController.text
                                     });
-                                Navigator.pop(context);
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/login', (_) => false);
                               }),
                           RaisedButton(
                               splashColor: Colors.transparent,

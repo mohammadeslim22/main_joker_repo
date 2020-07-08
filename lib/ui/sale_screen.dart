@@ -567,7 +567,6 @@ class SaleDetailsPage extends State<SaleDetails>
                   Column(
                     children: <Widget>[
                       RaisedButton(
-                        
                           color: colors.orange,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 12),
@@ -578,12 +577,21 @@ class SaleDetailsPage extends State<SaleDetails>
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
                               side: BorderSide(color: colors.orange)),
-                          onPressed: () async {}),
+                          onPressed: () async {
+                            Navigator.pushNamed(
+                                context, "/MemberShipsForMerchant",
+                                arguments: <String, dynamic>{
+                                  "merchantId": merchant.mydata.id
+                                });
+                          }),
                       const SizedBox(height: 16),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(trans(context,
-                            "join_merchant_members_have_more_offers_for_qrcode_on_entrance"),textAlign: TextAlign.center,),
+                        child: Text(
+                          trans(context,
+                              "join_merchant_members_have_more_offers_for_qrcode_on_entrance"),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ],
                   )
@@ -718,7 +726,6 @@ class SaleDetailsPage extends State<SaleDetails>
                               ));
                             },
                             pageSize: 15,
-                            
                             itemBuilder: (BuildContext context, dynamic entry,
                                 int index) {
                               final SimpleSalesData e =
@@ -858,7 +865,7 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
                   children: <Widget>[
                     Text(
                       trans(context, "show_more"),
-                      style:const TextStyle(color: Colors.blue),
+                      style: const TextStyle(color: Colors.blue),
                     ),
                   ],
                 ),
@@ -869,14 +876,14 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
                     .showBottomSheet<dynamic>((BuildContext context) {
                   return Container(
                     padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-                    decoration:const BoxDecoration(
-                      border:  Border(
+                    decoration: const BoxDecoration(
+                      border: Border(
                         top: BorderSide(color: Colors.orange, width: 7.0),
                         bottom: BorderSide(color: Colors.orange, width: 7.0),
                         right: BorderSide(color: Colors.orange, width: 7.0),
                         left: BorderSide(color: Colors.orange, width: 7.0),
                       ),
-                      borderRadius:  BorderRadius.all(
+                      borderRadius: BorderRadius.all(
                         Radius.circular(24),
                       ),
                       color: Colors.white,

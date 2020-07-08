@@ -20,6 +20,8 @@ class Config {
   String countryCode = '+970';
 
   final TextEditingController locationController = TextEditingController();
+  bool loggedin = true;
+  Locale userLnag;
   Address first;
   Coordinates coordinates;
   List<Address> addresses;
@@ -28,6 +30,7 @@ class Config {
   double long = 0.0;
   String token = "";
   String profileUrl = "";
+  String username;
   bool amIcomingFromHome = false;
   bool prifleNoVerfiyVisit = false;
   bool prifleNoVerfiyDone = false;
