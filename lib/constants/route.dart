@@ -36,7 +36,6 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     case "/Home":
       page = PageTransition<PageController>(
         child: Home(
-            salesDataFilter: args['salesDataFilter'] as bool,
             filterData: args['FilterData'] as FilterData),
         type: PageTransitionType.rightToLeftWithFade,
       );

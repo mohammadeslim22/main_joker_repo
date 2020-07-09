@@ -58,7 +58,7 @@ class _MyForgetPassState extends State<ForgetPassword>
 
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(

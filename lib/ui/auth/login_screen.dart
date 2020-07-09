@@ -15,6 +15,8 @@ import '../widgets/buttonTouse.dart';
 import 'package:dio/dio.dart';
 import '../widgets/custom_toast_widget.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+//import 'package:joker/providers/language.dart';
+//import 'package:joker/constants/config.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -33,6 +35,17 @@ class _MyLoginScreenState extends State<LoginScreen>
   Map<String, String> validationMap =
       Map<String, String>.fromIterables(keys, validators);
   String countryCodeTemp = "+90";
+    String countryCode = "TR";
+
+  @override
+  void initState() {
+    super.initState();
+    data.getData("countryCodeTemp").then((String value) {
+      setState(() {
+        countryCode = value;
+      });
+    });
+  }
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -84,7 +97,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                 onTab: () {},
                 suffixicon: CountryCodePicker(
                   onChanged: _onCountryChange,
-                  initialSelection: 'TR',
+                  initialSelection: countryCode,
                   favorite: const <String>['+90', 'TR'],
                   showFlagDialog: true,
                   showFlag: false,
@@ -95,7 +108,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
                       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
                 ),
-                   onFieldSubmitted: () {
+                onFieldSubmitted: () {
                   focus1.requestFocus();
                 },
                 validator: (String value) {
@@ -160,7 +173,9 @@ class _MyLoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
+    //final Language lang = Provider.of<Language>(context);
+
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     return Scaffold(
         body: GestureDetector(
@@ -220,7 +235,8 @@ class _MyLoginScreenState extends State<LoginScreen>
                         });
                         await dio
                             .post<dynamic>("login", data: <String, dynamic>{
-                          "phone": countryCodeTemp+usernameController.text.toString().trim(),
+                          "phone": countryCodeTemp +
+                              usernameController.text.toString().trim(),
                           "password": passwordController.text.toString()
                         }).then((Response<dynamic> value) async {
                           print(value.data);
@@ -248,6 +264,13 @@ class _MyLoginScreenState extends State<LoginScreen>
                                   "Bearer ${value.data['api_token']}");
                               dio.options.headers['authorization'] =
                                   'Bearer ${value.data['api_token']}';
+
+                              // data.getData("lang").then((String value) async {
+                              //   print("1: $value");
+                              //   config.userLnag = Locale(value);
+                              //   await lang.setLanguage(Locale(value));
+                              //   print("2: ${lang.currentLanguage}");
+                              // });
 
                               print(dio.options.headers);
                               Navigator.pushNamed(context, '/Home',
@@ -312,6 +335,7 @@ class _MyLoginScreenState extends State<LoginScreen>
 
   void _onCountryChange(CountryCode countryCode) {
     setState(() {
+
       countryCodeTemp = countryCode.dialCode;
     });
 

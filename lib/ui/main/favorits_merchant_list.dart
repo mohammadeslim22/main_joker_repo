@@ -23,7 +23,7 @@ class _MerchantsListState extends State<FavoritMerchantsList> {
   Branches branches;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  MyCounter bolc;
+  MinProvider bolc;
 
   Future<List<BranchData>> getFavoritData(int pageIndex) async {
     final Response<dynamic> response = await dio.get<dynamic>("favorites",

@@ -153,7 +153,7 @@ class _MyChangePasswordState extends State<ChangePassword>
 
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
 
     return Scaffold(
         appBar: AppBar(),

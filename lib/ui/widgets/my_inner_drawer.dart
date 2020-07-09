@@ -39,7 +39,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
     if (config.username == null) {
       data.getData("username").then((String value) {
         setState(() {
-          username = value ?? "username";
+          username = value ?? "";
         });
       });
     } else {
@@ -51,11 +51,12 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
       setState(() {
         config.profileUrl = value;
       });
-      if (value == null) {
+      if (value.isEmpty) {
         print("error here ?");
         dio.get<dynamic>("user").then((Response<dynamic> value) {
           print(value.data['data']['name'].toString());
           setState(() {
+            username= value.data['data']['name'].toString();
             config.username = value.data['data']['name'].toString();
             config.profileUrl = value.data['data']['image'].toString().trim();
           });

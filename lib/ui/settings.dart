@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'widgets/setting_bottombar.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
+import 'package:joker/constants/config.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key key}) : super(key: key);
@@ -30,20 +31,36 @@ class MySettingState extends State<SettingsScreen> {
   bool doOnce = true;
   int sountState = 0;
 
-  Future<void> setStartingLang(MyCounter bolc, Language lang) async {
-    await data.getData("lang").then<dynamic>((String value) {
-      print("here in settings and this is lang $value");
-      if (value == 'en') {
-        bolc.changelanguageindex(1);
-      } else if (value == 'ar') {
-        bolc.changelanguageindex(0);
+  Future<void> setStartingLang(MinProvider bolc, Language lang) async {
+    await data.getData("lang").then<dynamic>((String value) async {
+      if (value.isEmpty) {
+        print("here in settings and this is lang empty");
+
+        await data.getData("initlang").then<dynamic>((String local) {
+          print("here in settings and this is lang $local");
+
+          if (local == 'en') {
+            bolc.changelanguageindex(1);
+          } else if (local == 'ar') {
+            bolc.changelanguageindex(0);
+          } else {
+            bolc.changelanguageindex(2);
+          }
+        });
       } else {
-        bolc.changelanguageindex(2);
+        print("here in settings and this is lang $value");
+        if (value == 'en') {
+          bolc.changelanguageindex(1);
+        } else if (value == 'ar') {
+          bolc.changelanguageindex(0);
+        } else {
+          bolc.changelanguageindex(2);
+        }
       }
     });
   }
 
-  Future<void> setNotifcationSound(MyCounter bolc) async {
+  Future<void> setNotifcationSound(MinProvider bolc) async {
     data.getData("notification_sound").then<dynamic>((String value) {
       if (value == "true") {
         bolc.changenotificationSit(0);
@@ -53,13 +70,15 @@ class MySettingState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
     final Language lang = Provider.of<Language>(context);
 
     if (doOnce) {
       setStartingLang(bolc, lang);
       setNotifcationSound(bolc);
-      doOnce = false;
+      setState(() {
+        doOnce = false;
+      });
     }
     return Scaffold(
       appBar: AppBar(
@@ -178,7 +197,7 @@ class MySettingState extends State<SettingsScreen> {
 
 Widget fontBarChoice(BuildContext context, String choice, int index,
     List<bool> list, String category, Function func) {
-  final MyCounter bolc = Provider.of<MyCounter>(context);
+  final MinProvider bolc = Provider.of<MinProvider>(context);
   return Flexible(
       fit: FlexFit.tight,
       child: FlatButton(
@@ -245,7 +264,7 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
 // }
 
 Widget languagBar(BuildContext context) {
-  final MyCounter bolc = Provider.of<MyCounter>(context);
+  final MinProvider bolc = Provider.of<MinProvider>(context);
   final Language lang = Provider.of<Language>(context);
   return Container(
     child: Row(
@@ -253,14 +272,18 @@ Widget languagBar(BuildContext context) {
       children: <Widget>[
         fontBarChoice(context, "arabic", 0, bolc.language, "language", () {
           lang.setLanguage(const Locale('ar'));
+          config.userLnag = const Locale('ar');
         }),
         verticalDiv(),
         fontBarChoice(context, "english", 1, bolc.language, "language", () {
           lang.setLanguage(const Locale('en'));
+          // setState(() {});
+          config.userLnag = const Locale('en');
         }),
         verticalDiv(),
         fontBarChoice(context, "turkish", 2, bolc.language, "language", () {
           lang.setLanguage(const Locale('tr'));
+          config.userLnag = const Locale('tr');
         }),
       ],
     ),
@@ -275,4 +298,3 @@ Widget verticalDiv() {
       ),
       height: 18);
 }
-

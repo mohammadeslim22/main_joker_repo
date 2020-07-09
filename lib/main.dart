@@ -13,15 +13,15 @@ import 'localization/localization_delegate.dart';
 import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
-// import 'package:flutter/scheduler.dart';
+//import 'package:flutter/scheduler.dart';
 // import 'package:joker/models/user.dart';
-import 'package:dio/dio.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   dioDefaults();
   await data.getData('authorization').then<dynamic>((String auth) {
-    if (auth == null) {
+    print("auth  :$auth");
+    if (auth.isEmpty) {
       print("khhhhhhhhhhhhhhhhh");
       config.loggedin = false;
     } else {
@@ -67,8 +67,8 @@ Future<void> main() async {
         ChangeNotifierProvider<Language>(
           create: (_) => Language(),
         ),
-        ChangeNotifierProvider<MyCounter>(
-          create: (_) => MyCounter(),
+        ChangeNotifierProvider<MinProvider>(
+          create: (_) => MinProvider(),
         ),
       ],
       child: MyApp(),
@@ -87,6 +87,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  bool doOnce = true;
   @override
   Widget build(BuildContext context) {
     final Language lang = Provider.of<Language>(context);
@@ -109,17 +110,18 @@ class _MyAppState extends State<MyApp> {
           Locale('en'),
           Locale('tr'),
         ],
-        locale: config.userLnag,
+        locale: lang.currentLanguage, //config.userLnag,
         localeResolutionCallback:
             (Locale locale, Iterable<Locale> supportedLocales) {
           if (locale == null) {
+            data.setData("initlang", supportedLocales.first.countryCode);
             return supportedLocales.first;
           }
 
           for (final Locale supportedLocale in supportedLocales) {
             if (supportedLocale.languageCode == locale.languageCode) {
               // lang.setLanguage(supportedLocale);
-              data.setData("lang", supportedLocale.languageCode);
+              data.setData("initlang", supportedLocale.languageCode);
 
               //lang.setLanguage(supportedLocale);
               return supportedLocale;
@@ -133,7 +135,7 @@ class _MyAppState extends State<MyApp> {
           //     lang.setLanguage(Locale(value));
           //   });
           // });
-
+          data.setData("initlang", supportedLocales.first.countryCode);
           return supportedLocales.first;
         },
         // builder: (BuildContext context, Widget t) {
@@ -144,6 +146,26 @@ class _MyAppState extends State<MyApp> {
         // },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home: config.loggedin ? const Home() : LoginScreen());
+        home: Builder(builder: (BuildContext context) {
+          if (doOnce) {
+            data.getData("lang").then((String value) async {
+              if (value.isEmpty) {
+              } else {
+                    print("1: $value");
+              config.userLnag = Locale(value);
+              await lang.setLanguage(Locale(value));
+              print("2: ${lang.currentLanguage}"); 
+              }
+         
+            });
+
+            print("3: ${lang.currentLanguage}");
+            //  setState(() {
+            doOnce = false;
+            //    });
+          }
+
+          return config.loggedin ? const Home() : LoginScreen();
+        }));
   }
 }

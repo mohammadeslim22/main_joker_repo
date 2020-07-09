@@ -133,7 +133,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -437,7 +437,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                 ))));
   }
 
-  Future<void> getImage(ImageSource imageSource, MyCounter bolc) async {
+  Future<void> getImage(ImageSource imageSource, MinProvider bolc) async {
     final File image = await ImagePicker.pickImage(source: imageSource);
     if (image != null) {
       final FormData formData = FormData.fromMap(<String, dynamic>{
@@ -464,7 +464,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
     }
   }
 
-  Future<void> login(MyCounter bolc) async {
+  Future<void> login(MinProvider bolc) async {
     await dio.post<dynamic>("update", data: <String, dynamic>{
       "name": usernameController.text,
       "birth_date": birthDateController.text,

@@ -4,7 +4,6 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/models/search_filter_data.dart';
-import 'package:joker/models/user.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
 import 'package:joker/util/data.dart';
@@ -18,13 +17,9 @@ import 'main/merchant_list.dart';
 import 'main/sales_list.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:joker/constants/config.dart';
-import 'package:joker/util/dio.dart';
-import 'package:dio/dio.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key, this.salesDataFilter, this.filterData})
-      : super(key: key);
-  final bool salesDataFilter;
+  const Home({Key key, this.filterData}) : super(key: key);
   final FilterData filterData;
   @override
   _HomeState createState() => _HomeState();
@@ -54,6 +49,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return false;
   }
 
+  String tapTitle = "";
   FilterData filterData;
   @override
   void initState() {
@@ -65,29 +61,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
     _hide.forward();
     filterData = widget.filterData;
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   final MinProvider bolc = Provider.of<MinProvider>(context, listen: false);
+    //   tapTitle = bolc.bottomNavIndex == 0
+    //       ? '${trans(context, 'sales')}'
+    //       : '${trans(context, 'merchants')}';
+    // });
   }
 
-  User user;
-  void checkUserData() {
-    dio.get<dynamic>("user").then((Response<dynamic> value) {
-      user = User.fromJson(value.data);
-      if (value.statusCode == 401) {
-        Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
-      }
-    });
-  }
-
-  bool doonce = true;
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
-    if (doonce) {
-      setState(() {
-        config.bolc = Provider.of<MyCounter>(context);
-        doonce = false;
-      });
-    }
-
+    final MinProvider bolc = Provider.of<MinProvider>(context);
     return MyInnerDrawer(
       drawerKey: key,
       scaffold: Scaffold(
@@ -129,6 +113,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   bolc.bottomNavIndex == 0
                                       ? '${trans(context, 'sales')}'
                                       : '${trans(context, 'merchants')}',
+                                  //  tapTitle,
                                   style: styles.saleTitle,
                                 ),
                               ),

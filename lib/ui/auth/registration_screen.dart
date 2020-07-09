@@ -60,7 +60,6 @@ class _MyRegistrationState extends State<Registration>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
-      
         context: context,
         initialDate: lastDate,
         firstDate: firstDate,
@@ -97,7 +96,7 @@ class _MyRegistrationState extends State<Registration>
         false;
   }
 
-  Widget customcard(BuildContext context, MyCounter bolc) {
+  Widget customcard(BuildContext context, MinProvider bolc) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     final FocusNode focus = FocusNode();
     final FocusNode focus1 = FocusNode();
@@ -221,7 +220,7 @@ class _MyRegistrationState extends State<Registration>
                       Icons.calendar_today,
                     ),
                     onPressed: () {
-                    //  _selectDate(context);
+                      //  _selectDate(context);
                     },
                   ),
                   focusNode: focus3,
@@ -301,7 +300,7 @@ class _MyRegistrationState extends State<Registration>
 
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
     return Scaffold(
         appBar: AppBar(),
         body: Builder(
@@ -381,10 +380,10 @@ class _MyRegistrationState extends State<Registration>
                                       Navigator.pushNamed(context, '/pin',
                                           arguments: <String, String>{
                                             'mobileNo': countryCodeTemp +
-                                              mobileNoController.text
+                                                mobileNoController.text
                                           });
                                       config.locationController.clear();
-                                     await data.setData("id",
+                                      await data.setData("id",
                                           value.data['data']['id'].toString());
                                       data.setData(
                                           "email", emailController.text);
@@ -440,6 +439,7 @@ class _MyRegistrationState extends State<Registration>
   }
 
   void _onCountryChange(CountryCode countryCode) {
+    data.setData("countryCodeTemp", countryCode.code);
     setState(() {
       countryCodeTemp = countryCode.dialCode;
     });

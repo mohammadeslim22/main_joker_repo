@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:joker/util/data.dart';
 
-class MyCounter extends ChangeNotifier {
+class MinProvider extends ChangeNotifier {
   bool darkthemeIson = false;
   bool loading = false;
   static TickerProvider c;
@@ -18,6 +18,8 @@ class MyCounter extends ChangeNotifier {
   bool __visible = false;
   bool visibilityObs = false;
   List<bool> notificationSit = <bool>[true, false];
+
+  
   void saveData() {
     data.setData("erf", "value");
   }

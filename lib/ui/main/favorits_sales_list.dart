@@ -22,7 +22,7 @@ class _DiscountsListState extends State<FavoritDiscountsList> {
   Sales sale;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  MyCounter bolc;
+  MinProvider bolc;
 
   Future<List<SaleData>> getFavoritData(int pageIndex) async {
     final Response<dynamic> response =

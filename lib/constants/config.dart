@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:joker/providers/counter.dart';
 
 class Config {
   factory Config() {
@@ -25,7 +24,6 @@ class Config {
   Address first;
   Coordinates coordinates;
   List<Address> addresses;
-  MyCounter bolc;
   double lat = 0.0;
   double long = 0.0;
   String token = "";

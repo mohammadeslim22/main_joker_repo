@@ -16,7 +16,7 @@ class Favorite extends StatefulWidget {
 class _MyFavState extends State<Favorite> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
 
     return Scaffold(
         appBar: AppBar(

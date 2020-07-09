@@ -63,7 +63,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
   }
 
   bool enabeld = false;
-  Widget pinCode(MyCounter bolc) {
+  Widget pinCode(MinProvider bolc) {
     return SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -137,7 +137,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
     return Scaffold(
         appBar: AppBar(),
         body: GestureDetector(

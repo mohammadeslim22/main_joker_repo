@@ -73,7 +73,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
     data.setData("phone", correct.data['phone'].toString());
   }
 
-  Widget pinCode(MyCounter bolc) {
+  Widget pinCode(MinProvider bolc) {
     return SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -126,7 +126,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
     return Scaffold(
         key: _scaffoldkey,
         appBar: AppBar(),

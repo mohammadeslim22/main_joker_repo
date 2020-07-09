@@ -155,7 +155,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
     return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(16),

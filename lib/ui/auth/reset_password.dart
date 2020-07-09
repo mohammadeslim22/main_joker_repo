@@ -131,7 +131,7 @@ class _MyResetPasswordState extends State<ResetPassword>
 
   @override
   Widget build(BuildContext context) {
-    final MyCounter bolc = Provider.of<MyCounter>(context);
+    final MinProvider bolc = Provider.of<MinProvider>(context);
 
     return Scaffold(
         appBar: AppBar(),
