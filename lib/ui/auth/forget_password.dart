@@ -1,3 +1,4 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -20,6 +21,7 @@ class ForgetPassword extends StatefulWidget {
 class _MyForgetPassState extends State<ForgetPassword>
     with TickerProviderStateMixin {
   String gotCode;
+  String countryCodeTemp = "+90";
 
   bool _isButtonEnabled = true;
   static List<String> validators = <String>[null];
@@ -55,10 +57,20 @@ class _MyForgetPassState extends State<ForgetPassword>
   final TextEditingController mobileController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String currentText = "0000";
-
+@override
+  void initState() {
+    super.initState();
+        data.getData("countryDialCodeTemp").then((String value) {
+      setState(() {
+        countryCodeTemp = value;
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    final MinProvider bolc = Provider.of<MinProvider>(context);
+    final MainProvider bolc = Provider.of<MainProvider>(context);
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -89,6 +101,19 @@ class _MyForgetPassState extends State<ForgetPassword>
                             obscureText: false,
                             readOnly: false,
                             onTab: () {},
+                            suffixicon: CountryCodePicker(
+                              onChanged: _onCountryChange,
+                              initialSelection: 'TR',
+                              favorite: const <String>['+966', 'SA'],
+                              showFlagDialog: true,
+                              showFlag: false,
+                              showCountryOnly: false,
+                              showOnlyCountryWhenClosed: false,
+                              alignLeft: false,
+                              padding: isRTL == true
+                                  ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+                                  : const EdgeInsets.fromLTRB(32, 0, 0, 0),
+                            ),
                             onFieldSubmitted: () {},
                             validator: (String value) {
                               if (value.isEmpty) {
@@ -249,5 +274,18 @@ class _MyForgetPassState extends State<ForgetPassword>
                 ]),
           )),
     );
+  }
+
+  void _onCountryChange(CountryCode countryCode) {
+        final MainProvider bolc = Provider.of<MainProvider>(context);
+bolc.saveCountryCode(countryCode.code,countryCode.dialCode);
+    data.setData("countryCodeTemp", countryCode.code);
+        data.setData("countryDialCodeTemp", countryCode.dialCode);
+
+    setState(() {
+      countryCodeTemp = countryCode.dialCode;
+    });
+
+    FocusScope.of(context).requestFocus(FocusNode());
   }
 }

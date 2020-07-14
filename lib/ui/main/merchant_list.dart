@@ -19,7 +19,7 @@ class _ShopListState extends State<ShopList> {
   Branches branches;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  MinProvider bolc;
+  MainProvider bolc;
   Future<List<BranchData>> getBranchesData(int pageIndex) async {
     final Response<dynamic> response = await dio.get<dynamic>("branches",
         queryParameters: <String, dynamic>{'page': pageIndex + 1});

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:joker/util/data.dart';
 
-class MinProvider extends ChangeNotifier {
+class MainProvider extends ChangeNotifier {
   bool darkthemeIson = false;
   bool loading = false;
   static TickerProvider c;
@@ -18,8 +18,18 @@ class MinProvider extends ChangeNotifier {
   bool __visible = false;
   bool visibilityObs = false;
   List<bool> notificationSit = <bool>[true, false];
+  String countryCode;
+  String countryDialCode;
 
-  
+  void saveCountryCode(String code, String dialCode) {
+    countryCode = code;
+    countryDialCode = dialCode;
+    data.setData("countryCodeTemp", code);
+        data.setData("countryDialCodeTemp", dialCode);
+
+    notifyListeners();
+  }
+
   void saveData() {
     data.setData("erf", "value");
   }

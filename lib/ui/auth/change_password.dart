@@ -38,10 +38,7 @@ class _MyChangePasswordState extends State<ChangePassword>
   }
 
   static List<String> validators = <String>[null, null];
-  static List<String> keys = <String>[
-    'old_passwoed',
-    'new_password'
-  ];
+  static List<String> keys = <String>['old_passwoed', 'new_password'];
   Map<String, String> validationMap =
       Map<String, String>.fromIterables(keys, validators);
 
@@ -127,11 +124,8 @@ class _MyChangePasswordState extends State<ChangePassword>
                   },
                 ),
                 focusNode: focus2,
-                onFieldSubmitted: () {
-                
-                },
+                onFieldSubmitted: () {},
                 obscureText: _obscureText,
-                
                 validator: (String value) {
                   if (value.length < 6) {
                     return "password must be more than 5 letters";
@@ -153,7 +147,7 @@ class _MyChangePasswordState extends State<ChangePassword>
 
   @override
   Widget build(BuildContext context) {
-    final MinProvider bolc = Provider.of<MinProvider>(context);
+    final MainProvider bolc = Provider.of<MainProvider>(context);
 
     return Scaffold(
         appBar: AppBar(),
@@ -184,7 +178,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                               _isButtonEnabled = false;
                             });
                             await dio.post<dynamic>("changepassword",
-                                data: <String, dynamic>{  
+                                data: <String, dynamic>{
                                   'old_password':
                                       oldpasswordController.text.trim(),
                                   'new_password':
@@ -197,7 +191,6 @@ class _MyChangePasswordState extends State<ChangePassword>
                                   setState(() {
                                     validationMap[k] = vv[0].toString();
                                   });
-                                  
                                 });
                                 _formKey.currentState.validate();
                                 validationMap

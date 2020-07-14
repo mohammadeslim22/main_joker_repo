@@ -31,7 +31,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
   bool buttonChangeMoEnabeld = true;
   final TextEditingController mobileNoController = TextEditingController();
   PersistentBottomSheetController<dynamic> bottomSheetController;
-
+  String errorMessage;
   @override
   void initState() {
     super.initState();
@@ -39,6 +39,11 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
       vsync: this,
       duration: const Duration(seconds: 30),
     );
+        data.getData("countryDialCodeTemp").then((String value) {
+      setState(() {
+        countryCodeTemp = value;
+      });
+    });
   }
 
   Future<bool> getPinCode(String code) async {
@@ -69,11 +74,31 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
           "email": email,
           "new_phone": newPhone
         });
-
+    if (correct.statusCode == 422) {
+      setState(() {
+        errorMessage = correct.data['errors']['new_phone'][0].toString();
+        showToast(errorMessage,
+            context: context,
+            textStyle: styles.underHeadblack,
+            animation: StyledToastAnimation.scale,
+            reverseAnimation: StyledToastAnimation.fade,
+            position: StyledToastPosition.center,
+            animDuration: const Duration(seconds: 1),
+            duration: const Duration(seconds: 4),
+            curve: Curves.elasticOut,
+            backgroundColor: colors.white,
+            reverseCurve: Curves.decelerate);
+      });
+    } else if (correct.statusCode == 200) {
+      setState(() {
+        buttonChangeMoEnabeld = false;
+      });
+      Navigator.pop(context);
+    }
     data.setData("phone", correct.data['phone'].toString());
   }
 
-  Widget pinCode(MinProvider bolc) {
+  Widget pinCode(MainProvider bolc) {
     return SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -126,7 +151,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    final MinProvider bolc = Provider.of<MinProvider>(context);
+    final MainProvider bolc = Provider.of<MainProvider>(context);
     return Scaffold(
         key: _scaffoldkey,
         appBar: AppBar(),
@@ -185,7 +210,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                     onTab: () {},
                                     suffixicon: CountryCodePicker(
                                       onChanged: _onCountryChange,
-                                      initialSelection: 'TR',
+                                      initialSelection: bolc.countryCode,
                                       favorite: const <String>['+966', 'SA'],
                                       showFlagDialog: true,
                                       showFlag: false,
@@ -200,7 +225,8 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                     ),
                                     focusNode: focus1,
                                     onFieldSubmitted: () {
-                                      verifyanewPhone();
+                                      sendPinNewPhone(countryCodeTemp +
+                                          mobileNoController.text);
                                     },
                                     validator: (String value) {
                                       if (value.isEmpty) {
@@ -218,7 +244,8 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                             side: const BorderSide(
                                                 color: Colors.orange)),
                                         onPressed: () {
-                                          verifyanewPhone();
+                                          sendPinNewPhone(countryCodeTemp +
+                                              mobileNoController.text);
                                         },
                                         color: Colors.deepOrangeAccent,
                                         textColor: Colors.white,
@@ -321,18 +348,15 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
   String countryCodeTemp = "+90";
 
   void _onCountryChange(CountryCode countryCode) {
+    final MainProvider bolc = Provider.of<MainProvider>(context);
+    bolc.saveCountryCode(countryCode.code,countryCode.dialCode);
+    data.setData("countryCodeTemp", countryCode.code);
+        data.setData("countryDialCodeTemp", countryCode.dialCode);
+
     setState(() {
       countryCodeTemp = countryCode.dialCode;
     });
 
     FocusScope.of(context).requestFocus(FocusNode());
-  }
-
-  void verifyanewPhone() {
-    sendPinNewPhone(countryCodeTemp + mobileNoController.text);
-    setState(() {
-      buttonChangeMoEnabeld = false;
-    });
-    Navigator.pop(context);
   }
 }

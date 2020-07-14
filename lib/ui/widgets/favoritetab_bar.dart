@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class FavoritBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MinProvider bolc = Provider.of<MinProvider>(context);
+    final MainProvider bolc = Provider.of<MainProvider>(context);
     return Container(
       color: Colors.grey[100],
       child: Row(

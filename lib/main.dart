@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:joker/providers/map_provider.dart';
 import 'package:joker/ui/auth/login_screen.dart';
-import 'package:joker/ui/home.dart';
 import 'constants/config.dart';
+import 'services/navigationService.dart';
+import 'ui/home_map.dart';
 import 'util/dio.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:provider/provider.dart';
@@ -13,47 +15,38 @@ import 'localization/localization_delegate.dart';
 import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
+
+import 'util/service_locator.dart';
 //import 'package:flutter/scheduler.dart';
 // import 'package:joker/models/user.dart';
 
 Future<void> main() async {
+  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>
+      errorScreen(flutterErrorDetails.exception);
+
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
   dioDefaults();
   await data.getData('authorization').then<dynamic>((String auth) {
     print("auth  :$auth");
     if (auth.isEmpty) {
-      print("khhhhhhhhhhhhhhhhh");
       config.loggedin = false;
     } else {
       config.loggedin = true;
     }
     dio.options.headers['authorization'] = '$auth';
   });
-
-  // await data.getData("profile_pic").then((String value) {
-  //   print("profile pic:   $value");
-  //   if (value == "null") {
-  //     print("error here ?");
-  //     dio.get<dynamic>("user").then((Response<dynamic> value) {
-  //       print(value.data['data']['image'].toString());
-  //       config.profileUrl = value.data['data']['image'].toString();
-  //       data.setData("profile_pic", value.data['data']['image'].toString());
-  //       data.setData("username", value.data['data']['name'].toString());
-  //     });
-  //   }
-
-  //   config.profileUrl = value;
+  // data.getData("lat").then((String value) {
+  //   config.lat = double.parse(value);
   // });
-  data.getData("lat").then((String value) {
-    config.lat = double.parse(value);
-  });
-  data.getData("long").then((String value) async {
-    print("lat  $value");
-    if (value == null) {
-      print("no location saved ");
-      await updateLocation;
-    }
-  });
+  await updateLocation;
+  // data.getData("long").then((String value) async {
+
+  //   print("lat  $value");
+  //   if (value == null) {
+  //     await updateLocation;
+  //   }
+  // });
   data.getData("lang").then((String value) {
     config.userLnag = Locale(value);
   });
@@ -67,14 +60,19 @@ Future<void> main() async {
         ChangeNotifierProvider<Language>(
           create: (_) => Language(),
         ),
-        ChangeNotifierProvider<MinProvider>(
-          create: (_) => MinProvider(),
+        ChangeNotifierProvider<MainProvider>(
+          create: (_) => MainProvider(),
+        ),
+        ChangeNotifierProvider<HOMEMAProvider>.value(
+          value: getIt<HOMEMAProvider>(),
         ),
       ],
       child: MyApp(),
     ),
   );
 }
+
+GlobalKey<NavigatorState> navigatorState = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   @override
@@ -91,12 +89,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final Language lang = Provider.of<Language>(context);
+    final MainProvider bolc = Provider.of<MainProvider>(context);
+
     // data.getData("lang").then((String value) {
     //   config.userLnag = Locale(value);
     //   lang.setLanguage(Locale(value));
     // });
 
     return MaterialApp(
+        navigatorKey: getIt<NavigationService>().navigatorKey,
         debugShowCheckedModeBanner: false,
         localizationsDelegates: <LocalizationsDelegate<dynamic>>[
           DemoLocalizationsDelegate(),
@@ -148,15 +149,19 @@ class _MyAppState extends State<MyApp> {
         onGenerateRoute: onGenerateRoute,
         home: Builder(builder: (BuildContext context) {
           if (doOnce) {
+            data.getData("countryCodeTemp").then((String value1) {
+              data.getData("countryDialCodeTemp").then((String value2) {
+                bolc.saveCountryCode(value1, value2);
+              });
+            });
             data.getData("lang").then((String value) async {
               if (value.isEmpty) {
               } else {
-                    print("1: $value");
-              config.userLnag = Locale(value);
-              await lang.setLanguage(Locale(value));
-              print("2: ${lang.currentLanguage}"); 
+                print("1: $value");
+                config.userLnag = Locale(value);
+                await lang.setLanguage(Locale(value));
+                print("2: ${lang.currentLanguage}");
               }
-         
             });
 
             print("3: ${lang.currentLanguage}");
@@ -165,7 +170,47 @@ class _MyAppState extends State<MyApp> {
             //    });
           }
 
-          return config.loggedin ? const Home() : LoginScreen();
+          return config.loggedin ? const HOMEMAP() : LoginScreen();
         }));
   }
+}
+
+Widget errorScreen(dynamic detailsException) {
+  return Builder(
+    builder: (BuildContext context) {
+      return Material(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 130),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  'Sorry for inconvenience',
+                  style: TextStyle(fontSize: 24.0),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text('Exeption Details: $detailsException'),
+                ),
+                FlatButton(
+                  color: Colors.blue,
+                  child:const Text(
+                    'Go Back',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
 }

@@ -44,6 +44,11 @@ class _MyRegistrationState extends State<Registration>
   void initState() {
     super.initState();
     _isButtonEnabled = true;
+        data.getData("countryDialCodeTemp").then((String value) {
+      setState(() {
+        countryCodeTemp = value;
+      });
+    });
   }
 
   bool _obscureText = false;
@@ -96,9 +101,10 @@ class _MyRegistrationState extends State<Registration>
         false;
   }
 
-  Widget customcard(BuildContext context, MinProvider bolc) {
+  Widget customcard(BuildContext context, MainProvider bolc) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     final FocusNode focus = FocusNode();
+    final FocusNode focusminus1 = FocusNode();
     final FocusNode focus1 = FocusNode();
     final FocusNode focus2 = FocusNode();
     final FocusNode focus3 = FocusNode();
@@ -117,11 +123,14 @@ class _MyRegistrationState extends State<Registration>
                   prefixIcon: Icons.person_outline,
                   kt: TextInputType.visiblePassword,
                   obscureText: false,
+                  focusNode: focusminus1,
                   readOnly: false,
                   onFieldSubmitted: () {
                     focus.requestFocus();
                   },
-                  onTab: () {},
+                  onTab: () {
+                    focusminus1.requestFocus();
+                  },
                   validator: (String value) {
                     if (value.length < 3) {
                       return "username must be more than 3 letters";
@@ -136,7 +145,9 @@ class _MyRegistrationState extends State<Registration>
                   obscureText: false,
                   readOnly: false,
                   focusNode: focus,
-                  onTab: () {},
+                  onTab: () {
+                    focus.requestFocus();
+                  },
                   onFieldSubmitted: () {
                     focus1.requestFocus();
                   },
@@ -300,7 +311,7 @@ class _MyRegistrationState extends State<Registration>
 
   @override
   Widget build(BuildContext context) {
-    final MinProvider bolc = Provider.of<MinProvider>(context);
+    final MainProvider bolc = Provider.of<MainProvider>(context);
     return Scaffold(
         appBar: AppBar(),
         body: Builder(
@@ -439,7 +450,11 @@ class _MyRegistrationState extends State<Registration>
   }
 
   void _onCountryChange(CountryCode countryCode) {
+    final MainProvider bolc = Provider.of<MainProvider>(context);
+    bolc.saveCountryCode(countryCode.code,countryCode.dialCode);
     data.setData("countryCodeTemp", countryCode.code);
+        data.setData("countryDialCodeTemp", countryCode.dialCode);
+
     setState(() {
       countryCodeTemp = countryCode.dialCode;
     });

@@ -31,7 +31,7 @@ class MySettingState extends State<SettingsScreen> {
   bool doOnce = true;
   int sountState = 0;
 
-  Future<void> setStartingLang(MinProvider bolc, Language lang) async {
+  Future<void> setStartingLang(MainProvider bolc, Language lang) async {
     await data.getData("lang").then<dynamic>((String value) async {
       if (value.isEmpty) {
         print("here in settings and this is lang empty");
@@ -60,7 +60,7 @@ class MySettingState extends State<SettingsScreen> {
     });
   }
 
-  Future<void> setNotifcationSound(MinProvider bolc) async {
+  Future<void> setNotifcationSound(MainProvider bolc) async {
     data.getData("notification_sound").then<dynamic>((String value) {
       if (value == "true") {
         bolc.changenotificationSit(0);
@@ -70,7 +70,7 @@ class MySettingState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final MinProvider bolc = Provider.of<MinProvider>(context);
+    final MainProvider bolc = Provider.of<MainProvider>(context);
     final Language lang = Provider.of<Language>(context);
 
     if (doOnce) {
@@ -197,7 +197,7 @@ class MySettingState extends State<SettingsScreen> {
 
 Widget fontBarChoice(BuildContext context, String choice, int index,
     List<bool> list, String category, Function func) {
-  final MinProvider bolc = Provider.of<MinProvider>(context);
+  final MainProvider bolc = Provider.of<MainProvider>(context);
   return Flexible(
       fit: FlexFit.tight,
       child: FlatButton(
@@ -264,7 +264,7 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
 // }
 
 Widget languagBar(BuildContext context) {
-  final MinProvider bolc = Provider.of<MinProvider>(context);
+  final MainProvider bolc = Provider.of<MainProvider>(context);
   final Language lang = Provider.of<Language>(context);
   return Container(
     child: Row(

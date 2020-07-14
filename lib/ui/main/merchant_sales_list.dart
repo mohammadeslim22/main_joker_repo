@@ -20,7 +20,7 @@ class MerchantSalesList extends StatefulWidget {
 class _MerchantSalesListState extends State<MerchantSalesList> {
   Sales sale;
 
-  MinProvider bolc;
+  MainProvider bolc;
   Future<List<SaleData>> getSalesData(int pageIndex) async {
     final Response<dynamic> response = await dio.get<dynamic>("sales?merchant_id=${widget.merchantId}", queryParameters:<String, dynamic> {'page': pageIndex+1});
 

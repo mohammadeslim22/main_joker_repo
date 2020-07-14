@@ -82,7 +82,7 @@ class _AutoLocateState extends State<AutoLocate> {
   }
 
   Future<bool> _willPopCallback() async {
-    Provider.of<MinProvider>(context, listen: false).togelocationloading(false);
+    Provider.of<MainProvider>(context, listen: false).togelocationloading(false);
     Navigator.pop(context);
     return true;
   }
@@ -370,7 +370,7 @@ class _AutoLocateState extends State<AutoLocate> {
                   config.locationController.text =
                       "Tap to get your Location...";
                   Navigator.pop(context);
-                  Provider.of<MinProvider>(context, listen: false)
+                  Provider.of<MainProvider>(context, listen: false)
                       .togelocationloading(false);
                   Scaffold.of(context).hideCurrentSnackBar();
                 },
@@ -400,7 +400,7 @@ class _AutoLocateState extends State<AutoLocate> {
                   });
                   print("${config.lat},${config.long}");
                   Navigator.pop(context);
-                  Provider.of<MinProvider>(context, listen: false)
+                  Provider.of<MainProvider>(context, listen: false)
                       .togelocationloading(false);
                   //  Scaffold.of(context).hideCurrentSnackBar();
                 },

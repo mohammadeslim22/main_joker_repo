@@ -24,7 +24,7 @@ class _DiscountsListState extends State<DiscountsList> {
   Sales sale;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  MinProvider bolc;
+  MainProvider bolc;
 
   Future<List<SaleData>> getSalesData(int pageIndex) async {
     final Response<dynamic> response = await dio.get<dynamic>("sales",

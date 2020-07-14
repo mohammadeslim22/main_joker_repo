@@ -44,6 +44,11 @@ class _MyHomePageState extends State<PinCodeForProfile>
     setState(() {
       config.prifleNoVerfiyVisit = true;
     });
+        data.getData("countryDialCodeTemp").then((String value) {
+      setState(() {
+        countryCodeTemp = value;
+      });
+    });
   }
 
   Future<bool> getPinCode(String code) async {
@@ -63,7 +68,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
   }
 
   bool enabeld = false;
-  Widget pinCode(MinProvider bolc) {
+  Widget pinCode(MainProvider bolc) {
     return SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -137,7 +142,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
-    final MinProvider bolc = Provider.of<MinProvider>(context);
+    final MainProvider bolc = Provider.of<MainProvider>(context);
     return Scaffold(
         appBar: AppBar(),
         body: GestureDetector(
@@ -209,7 +214,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                 // onTab: () {},
                 suffixicon: CountryCodePicker(
                   onChanged: _onCountryChange,
-                  initialSelection: 'TR',
+                  initialSelection:bolc.countryCode,
                   favorite: const <String>['+972', 'IS'],
                   showFlagDialog: true,
                   showFlag: false,
@@ -314,6 +319,11 @@ class _MyHomePageState extends State<PinCodeForProfile>
   }
 
   void _onCountryChange(CountryCode countryCode) {
+    final MainProvider bolc = Provider.of<MainProvider>(context);
+bolc.saveCountryCode(countryCode.code,countryCode.dialCode);
+    data.setData("countryCodeTemp", countryCode.code);
+        data.setData("countryDialCodeTemp", countryCode.dialCode);
+
     setState(() {
       countryCodeTemp = countryCode.dialCode;
     });

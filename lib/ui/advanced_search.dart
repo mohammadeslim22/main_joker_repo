@@ -122,7 +122,6 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
         formatButtonDecoration: BoxDecoration(
           color: Colors.deepOrange[400],
           borderRadius: BorderRadius.circular(16.0),
-          
         ),
       ),
       onDaySelected: _onDaySelected,
@@ -155,7 +154,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final MinProvider bolc = Provider.of<MinProvider>(context);
+    final MainProvider bolc = Provider.of<MainProvider>(context);
     return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(16),
@@ -235,38 +234,12 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
           kt: TextInputType.visiblePassword,
           readOnly: true,
           onTab: () async {
-                   Navigator.pushNamed(context, '/AutoLocate',
-                  arguments: <String, double>{"lat": 51.0, "long": 9.6});
-            // try {
-            //   bolc.togelocationloading(true);
-            //   if (await updateLocation) {
-            //     await getLocationName();
-            //     bolc.togelocationloading(false);
-            //     FocusScope.of(context).requestFocus(globalFocus);
-            //   } else {
-            //     Vibration.vibrate(duration: 400);
-            //     bolc.togelocationloading(false);
-            //     Scaffold.of(context).showSnackBar(snackBar);
-            //     setState(() {
-            //       config.locationController.text = "Tap to set my location";
-            //     });
-            //   }
-            // } catch (e) {
-            //   Vibration.vibrate(duration: 400);
-            //   bolc.togelocationloading(false);
-            //   Scaffold.of(context).showSnackBar(snackBar);
-            //   setState(() {
-            //     config.locationController.text = "Tap to set my location";
-            //   });
-            // }
+            Navigator.pushNamed(context, '/AutoLocate',
+                arguments: <String, double>{
+                  "lat": config.lat,
+                  "long": config.long
+                });
           },
-          suffixicon: IconButton(
-            icon: Icon(Icons.add_location),
-            onPressed: () {
-              Navigator.pushNamed(context, '/AutoLocate',
-                  arguments: <String, double>{"lat": 51.0, "long": 9.6});
-            },
-          ),
           obscureText: false,
         ),
         Container(

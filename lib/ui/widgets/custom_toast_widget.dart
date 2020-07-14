@@ -146,9 +146,7 @@ class BannerToastWidget extends StatelessWidget {
       child: textWidget ??
           Text(
             message ?? '',
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headline6.fontSize,
-                color: Colors.white),
+            style:const TextStyle(fontSize: 16, color: Colors.white),
           ),
     );
 

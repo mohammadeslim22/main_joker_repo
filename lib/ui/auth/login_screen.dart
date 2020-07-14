@@ -35,14 +35,14 @@ class _MyLoginScreenState extends State<LoginScreen>
   Map<String, String> validationMap =
       Map<String, String>.fromIterables(keys, validators);
   String countryCodeTemp = "+90";
-    String countryCode = "TR";
+  //  String countryCode = "TR";
 
   @override
   void initState() {
     super.initState();
-    data.getData("countryCodeTemp").then((String value) {
+    data.getData("countryDialCodeTemp").then((String value) {
       setState(() {
-        countryCode = value;
+        countryCodeTemp = value;
       });
     });
   }
@@ -75,7 +75,7 @@ class _MyLoginScreenState extends State<LoginScreen>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
-  Widget customcard(BuildContext context) {
+  Widget customcard(BuildContext context, MainProvider bolc) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
     return Padding(
@@ -97,7 +97,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                 onTab: () {},
                 suffixicon: CountryCodePicker(
                   onChanged: _onCountryChange,
-                  initialSelection: countryCode,
+                  initialSelection: bolc.countryCode,
                   favorite: const <String>['+90', 'TR'],
                   showFlagDialog: true,
                   showFlag: false,
@@ -117,24 +117,6 @@ class _MyLoginScreenState extends State<LoginScreen>
                   }
                   return validationMap['phone'];
                 }),
-            // TextFormInput(
-            //     text: trans(context, 'mobile_no'),
-            //     cController: usernameController,
-            //     prefixIcon: Icons.phone,
-            //     kt: TextInputType.phone,
-            //     obscureText: false,
-            //     readOnly: false,
-            //     onTab: () {},
-            //     nextfocusNode: focus1,
-            //     onFieldSubmitted: () {
-            //       focus1.requestFocus();
-            //     },
-            //     validator: (String value) {
-            //       if (value.isEmpty) {
-            //         return "please enter a mobile number ";
-            //       }
-            //       return validationMap['phone'];
-            //     }),
             TextFormInput(
                 text: trans(context, 'password'),
                 cController: passwordController,
@@ -173,7 +155,7 @@ class _MyLoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    final MinProvider bolc = Provider.of<MinProvider>(context);
+    final MainProvider bolc = Provider.of<MainProvider>(context);
     //final Language lang = Provider.of<Language>(context);
 
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -207,7 +189,7 @@ class _MyLoginScreenState extends State<LoginScreen>
             const SizedBox(height: 10),
             Text(trans(context, 'enter_login_information'),
                 style: styles.mystyle),
-            customcard(context),
+            customcard(context, bolc),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               alignment: isRTL ? Alignment.centerLeft : Alignment.centerRight,
@@ -334,8 +316,12 @@ class _MyLoginScreenState extends State<LoginScreen>
   }
 
   void _onCountryChange(CountryCode countryCode) {
-    setState(() {
+    final MainProvider bolc = Provider.of<MainProvider>(context);
+    bolc.saveCountryCode(countryCode.code, countryCode.dialCode);
+    data.setData("countryCodeTemp", countryCode.code);
+    data.setData("countryDialCodeTemp", countryCode.dialCode);
 
+    setState(() {
       countryCodeTemp = countryCode.dialCode;
     });
 

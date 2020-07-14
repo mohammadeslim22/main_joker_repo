@@ -73,6 +73,7 @@ dependencies:
   rating_dialog: ^1.0.0
   after_layout: ^1.0.7+2
   expandable: ^4.1.4
+  get_it: ^4.0.2
   #modal_bottom_sheet: ^0.1.6+1
   
 dev_dependencies:

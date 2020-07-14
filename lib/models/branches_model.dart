@@ -20,8 +20,8 @@ class BranchData {
   BranchData(
       {this.id,
       this.name,
-      this.country,
-      this.city,
+      this.latitude,
+      this.longitude,
       this.address,
       this.phone,
       this.salesCount,
@@ -32,68 +32,36 @@ class BranchData {
   BranchData.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'] as String;
-    country =
-        json['country'] != null ? Country.fromJson(json['country']) : null;
-    city = json['city'] != null ? City.fromJson(json['city']) : null;
+    latitude = json['latitude'] as double;
+    longitude = json['longitude'] as double;
     address = json['address'] as String;
     phone = json['phone'] as String;
     salesCount = json['sales'] as int;
     merchant =
         MerchantfromBranch.fromJson(json['merchant'] as Map<String, dynamic>);
-                isliked=json['isliked'] as int;
-    isfavorite=json['isfavorite'] as int;
+    isliked = json['isliked'] as int;
+    isfavorite = json['isfavorite'] as int;
   }
   int id;
   String name;
-  Country country;
-  City city;
+  double latitude;
+  double longitude;
   String address;
   String phone;
   int salesCount;
   MerchantfromBranch merchant;
   int isliked;
   int isfavorite;
-}
-
-class Country {
-  Country({this.id, this.name});
-
-  Country.fromJson(dynamic json) {
-    id = json['id'] as int;
-    name = json['name'] as String;
-  }
-  int id;
-  String name;
-}
-
-class City {
-  City({this.id, this.countryId, this.name});
-
-  City.fromJson(dynamic json) {
-    id = json['id'] as int;
-    countryId = json['country_id'] as String;
-    name = json['name'] as String;
-  }
-  int id;
-  String countryId;
-  String name;
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['country_id'] = countryId;
-    data['name'] = name;
-    return data;
-  }
+  int sales;
 }
 
 class MerchantfromBranch {
-  MerchantfromBranch({this.id, this.name, this.logo,this.rateAverage});
+  MerchantfromBranch({this.id, this.name, this.logo, this.rateAverage});
   MerchantfromBranch.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'].toString();
     logo = json['logo'] as String;
-    rateAverage=json['rates_average'] as int;
-
+    rateAverage = json['rates_average'] as int;
   }
   int id;
   String name;
