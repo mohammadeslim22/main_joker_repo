@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/models/map_branches.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/util/service_locator.dart';
@@ -35,20 +37,22 @@ class _HOMEMAPState extends State<HOMEMAP> {
   LocationData locationData;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   List<String> choices;
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
-
   Coordinates coordinates;
   List<Address> addresses;
   Address address;
+  GlobalKey<ScaffoldState> _scaffoldkey;
+
   @override
   void initState() {
     super.initState();
-    lat = widget.lat ?? 34;
-    long = widget.long ?? 31;
+    lat = widget.lat;
+    long = widget.long;
+    _scaffoldkey = GlobalKey<ScaffoldState>();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       choices = <String>[trans(context, "home"), trans(context, "exit")];
 
-      getIt<HOMEMAProvider>().getBranchesData();
+      getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey, lat, long);
     });
   }
 
@@ -77,30 +81,18 @@ class _HOMEMAPState extends State<HOMEMAP> {
     Navigator.pop(context);
     return true;
   }
-
-  Future<void> tryToAnimate() async {
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-    } else {
-      _animateToUser();
-      permissionGranted = await location.hasPermission();
-      if (permissionGranted == PermissionStatus.denied) {
-      } else {
-        _animateToUser();
-      }
-    }
-  }
-
   Set<int> selectedOptions = <int>{};
 
   @override
   Widget build(BuildContext context) {
+    final HOMEMAProvider mapProv = Provider.of<HOMEMAProvider>(context);
+
     return WillPopScope(
         onWillPop: _willPopCallback,
         child: Stack(
           children: <Widget>[
             Scaffold(
-                key: _scaffoldKey,
+                key: _scaffoldkey,
                 resizeToAvoidBottomInset: false,
                 body: Consumer<HOMEMAProvider>(builder:
                     (BuildContext context, HOMEMAProvider value, Widget child) {
@@ -120,31 +112,30 @@ class _HOMEMAPState extends State<HOMEMAP> {
                           },
                           onMapCreated: (GoogleMapController controller) async {
                             serviceEnabled = await location.serviceEnabled();
-                            if (!serviceEnabled) {
+                            permissionGranted = await location.hasPermission();
+
+                            if (permissionGranted == PermissionStatus.denied) {
                             } else {
-                              permissionGranted =
-                                  await location.hasPermission();
-                              if (permissionGranted ==
-                                  PermissionStatus.denied) {
+                              if (!serviceEnabled) {
                               } else {
                                 _animateToUser();
                               }
                             }
-                            // await Future<void>.delayed(
-                            //   const Duration(seconds: 1));
+                            await Future<void>.delayed(
+                                const Duration(microseconds: 2000));
                             mapController = controller;
-                            Timer(Duration(seconds: 2), () {
-                              value.markers.keys.forEach((MarkerId element) {
-                                print(element.value);
-                                controller.showMarkerInfoWindow(element);
-                                print("how many marker id we have ? $element");
-                              });
-                            });
+
+                            controller
+                                .showMarkerInfoWindow(value.markers.keys.last);
+                          },
+                          onTap: (LatLng ll) {
+                            print(ll);
+                            getIt<HOMEMAProvider>()
+                                .showHorizentalListOrHideIt(false);
                           },
                           padding: const EdgeInsets.only(bottom: 60),
                           mapType: MapType.normal,
-                          markers: Set<Marker>.of(
-                              getIt<HOMEMAProvider>().markers.values),
+                          markers: Set<Marker>.of(mapProv.markers.values),
                           initialCameraPosition: CameraPosition(
                             target: LatLng(lat, long),
                             zoom: 13,
@@ -157,7 +148,8 @@ class _HOMEMAPState extends State<HOMEMAP> {
                           },
                           onCameraIdle: () {
                             setState(() {
-                              getIt<HOMEMAProvider>().getBranchesData();
+                              getIt<HOMEMAProvider>()
+                                  .getBranchesData(_scaffoldkey, lat, long);
                             });
                           },
                         ),
@@ -216,7 +208,6 @@ class _HOMEMAPState extends State<HOMEMAP> {
                                             _animateToUser();
                                           }
                                         } else {
-                                          print("iam fucked up");
                                           _animateToUser();
                                         }
                                       }
@@ -228,10 +219,12 @@ class _HOMEMAPState extends State<HOMEMAP> {
                           ),
                         ),
                         Positioned(
-                          top: 10,
+                          top: 0,
                           child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 12),
-                            height: 40,
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.black.withOpacity(.55),
+                            padding: const EdgeInsets.fromLTRB(0, 28, 0, 12),
+                            height: 80,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -243,51 +236,52 @@ class _HOMEMAPState extends State<HOMEMAP> {
                                       return Container(
                                         margin: const EdgeInsets.symmetric(
                                             horizontal: 6),
-                                        child:
-                                            //  Text("${item.id}")
-                                            FlatButton(
-                                                padding: EdgeInsets.zero,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          38.0),
-                                                  side: BorderSide(
-                                                    color: selectedOptions
-                                                            .contains(item.id)
-                                                        ? colors.orange
-                                                        : colors.ggrey,
-                                                  ),
-                                                ),
-                                                color: colors.white,
-                                                textColor: selectedOptions
+                                        child: FlatButton(
+                                            padding: EdgeInsets.zero,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(38.0),
+                                              side: BorderSide(
+                                                color: selectedOptions
                                                         .contains(item.id)
                                                     ? colors.orange
-                                                    : colors.black,
-                                                onPressed: () {
-                                                  setState(() {
-                                                    if (!selectedOptions
-                                                        .add(item.id)) {
-                                                      selectedOptions
-                                                          .remove(item.id);
-                                                    }
-                                                  });
-                                                },
-                                                onLongPress: () {},
-                                                child: Text(item.name,
-                                                    style: styles
-                                                        .mysmallforgridview)),
+                                                    : colors.ggrey,
+                                              ),
+                                            ),
+                                            color: colors.white,
+                                            textColor: selectedOptions
+                                                    .contains(item.id)
+                                                ? colors.orange
+                                                : colors.black,
+                                            onPressed: () {
+                                              setState(() {
+                                                if (!selectedOptions
+                                                    .add(item.id)) {
+                                                  selectedOptions
+                                                      .remove(item.id);
+                                                }
+                                              });
+                                            },
+                                            onLongPress: () {},
+                                            child: Text(item.name,
+                                                style:
+                                                    styles.mysmallforgridview)),
                                       );
                                     }).toList()),
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 12, 0, 0),
                                   child: PopupMenuButton<String>(
+                                    icon: Icon(Icons.more_vert,
+                                        color: colors.white),
                                     padding: EdgeInsets.zero,
                                     itemBuilder: (BuildContext context) {
                                       return choices.map((String choice) {
                                         return PopupMenuItem<String>(
                                           value: choice,
-                                          child: Text(choice),
+                                          child: FlatButton(
+                                              onPressed: () {},
+                                              child: Text(choice)),
                                         );
                                       }).toList();
                                     },
@@ -297,6 +291,22 @@ class _HOMEMAPState extends State<HOMEMAP> {
                             ),
                           ),
                         ),
+                        if (mapProv.horizentalListOn)
+                          Positioned(
+                              bottom: 40,
+                              child: Container(
+                                height: 140,
+                                width: MediaQuery.of(context).size.width,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  physics: const ScrollPhysics(),
+                                  children: value.branches.mapBranches
+                                      .map((MapBranch e) {
+                                    return listHorizentalCard(e);
+                                  }).toList(),
+                                ),
+                              ))
                       ],
                     );
                   } else {
@@ -305,16 +315,6 @@ class _HOMEMAPState extends State<HOMEMAP> {
                     );
                   }
                 })),
-            // Align(
-            //   alignment: Alignment.center,
-            //   child: Container(
-            //     child: Icon(
-            //       FontAwesomeIcons.mapMarkerAlt,
-            //       color: colors.blue,
-            //       size: 32,
-            //     ),
-            //   ),
-            // ),
           ],
         ));
   }
@@ -322,23 +322,13 @@ class _HOMEMAPState extends State<HOMEMAP> {
   Future<void> _animateToUser() async {
     try {
       if (mounted) {
-        // final Uint8List markerIcon =
-        //     await getBytesFromAsset('assets/images/logo.jpg', 100);
         await location.getLocation().then((LocationData value) {
           mapController
               .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
             target: LatLng(value.latitude, value.longitude),
             zoom: 13,
           )));
-          // getPositionSubscription =
-          //     location.onLocationChanged.listen((LocationData value) {
-          //   final Marker marker = Marker(
-          //       markerId: MarkerId('current_location'),
-          //       position: LatLng(value.latitude, value.longitude),
-          //       icon: BitmapDescriptor.fromBytes(markerIcon),
-          //       infoWindow: InfoWindow(title: trans(context, "your_location")));
-          //   _addMarker(marker);
-          // });
+
           setState(() {
             lat = value.latitude;
             long = value.longitude;
@@ -348,6 +338,94 @@ class _HOMEMAPState extends State<HOMEMAP> {
     } catch (e) {
       return;
     }
+  }
+
+  Widget listHorizentalCard(MapBranch e) {
+    return Card(
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            mapController
+                .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+              target: LatLng(e.latitude, e.longitude),
+              zoom: 13,
+            )));
+            lat = e.latitude;
+            long = e.longitude;
+          });
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12)),
+                    image: DecorationImage(
+                        image: CachedNetworkImageProvider(e.merchant.logo),
+                        fit: BoxFit.cover),
+                  ),
+                ),
+                Column(
+                  children: <Widget>[
+                    Text(
+                      e.merchant.name,
+                      textAlign: TextAlign.center,
+                      style: styles.underHead,
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: e.twoSales.map((TwoSales e) {
+                        return InkWell(
+                          onTap: () {},
+                          child: Container(
+                            width: 150,
+                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(e.name, textAlign: TextAlign.start),
+                                const SizedBox(width: 12),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      e.newPrice,
+                                      style: styles.redstyleForminiSaleScreen,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      e.oldPrice,
+                                      style: TextStyle(
+                                          decoration:
+                                              TextDecoration.lineThrough),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    FlatButton(
+                        onPressed: () {},
+                        child: Text(trans(context, "show_more")))
+                  ],
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {

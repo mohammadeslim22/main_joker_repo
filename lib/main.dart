@@ -15,7 +15,6 @@ import 'localization/localization_delegate.dart';
 import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
-
 import 'util/service_locator.dart';
 //import 'package:flutter/scheduler.dart';
 // import 'package:joker/models/user.dart';
@@ -39,7 +38,7 @@ Future<void> main() async {
   // data.getData("lat").then((String value) {
   //   config.lat = double.parse(value);
   // });
-  await updateLocation;
+   updateLocation;
   // data.getData("long").then((String value) async {
 
   //   print("lat  $value");
@@ -139,12 +138,6 @@ class _MyAppState extends State<MyApp> {
           data.setData("initlang", supportedLocales.first.countryCode);
           return supportedLocales.first;
         },
-        // builder: (BuildContext context, Widget t) {
-        //   if (dio.options.headers['authorization'] == "null") {
-        //     return LoginScreen();
-        //   }
-        //   return const Home();
-        // },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
         home: Builder(builder: (BuildContext context) {
@@ -170,7 +163,9 @@ class _MyAppState extends State<MyApp> {
             //    });
           }
 
-          return config.loggedin ? const HOMEMAP() : LoginScreen();
+          return config.loggedin
+              ? HOMEMAP(lat: config.lat??34, long: config.long??31)
+              : LoginScreen();
         }));
   }
 }
@@ -196,7 +191,7 @@ Widget errorScreen(dynamic detailsException) {
                 ),
                 FlatButton(
                   color: Colors.blue,
-                  child:const Text(
+                  child: const Text(
                     'Go Back',
                     style: TextStyle(
                       color: Colors.white,

@@ -39,7 +39,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
   Future<Merchant> getMerchantData(int merchentid, int saleid) async {
     final dynamic saleResult = await dio.get<dynamic>("sales/$saleid");
     sale = SaleData.fromJson(saleResult.data['data']);
-    print("${saleResult.data}  ${sale.isfavorite}");
+    print("${saleResult.dara}  ${sale.isfavorite}");
     final dynamic mercantResult =
         await dio.get<dynamic>("merchants/$merchentid");
     merchant = Merchant.fromJson(mercantResult.data);

@@ -91,6 +91,11 @@ class Styles {
     color: Colors.red,
     fontSize:24,
   );
+      TextStyle redstyleForminiSaleScreen = const TextStyle(
+    fontWeight: FontWeight.w100,
+    color: Colors.red,
+    fontSize:16,
+  );
   TextStyle mywhitestyle = const TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.white,
