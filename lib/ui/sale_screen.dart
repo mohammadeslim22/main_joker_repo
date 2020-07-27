@@ -2,18 +2,18 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:joker/constants/styles.dart';
-import 'package:joker/models/Merchant.dart';
-import 'package:joker/util/dio.dart';
+import '../constants/styles.dart';
+import '../models/Merchant.dart';
+import '../util/dio.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import '../localization/trans.dart';
 import 'package:like_button/like_button.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:joker/constants/colors.dart';
-import 'package:joker/util/functions.dart';
-import 'package:joker/models/sales.dart';
-import 'package:joker/models/simplesales.dart';
+import '../constants/colors.dart';
+import '../util/functions.dart';
+import '../models/sales.dart';
+import '../models/simplesales.dart';
 import 'package:after_layout/after_layout.dart';
 import 'dart:math';
 import 'dart:async';
@@ -26,6 +26,7 @@ class SaleDetailPage extends StatefulWidget {
 
   final int merchantId;
   final int saleId;
+  
 
   @override
   ShopDetailsPage createState() => ShopDetailsPage();
