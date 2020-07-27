@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:joker/providers/map_provider.dart';
-import 'package:joker/ui/auth/login_screen.dart';
+import 'package:joker/splash_screen.dart';
 import 'constants/config.dart';
 import 'services/navigationService.dart';
-import 'ui/home_map.dart';
 import 'util/dio.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +13,6 @@ import 'providers/language.dart';
 import 'localization/localization_delegate.dart';
 import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
-import 'package:joker/util/functions.dart';
 import 'util/service_locator.dart';
 //import 'package:flutter/scheduler.dart';
 // import 'package:joker/models/user.dart';
@@ -38,7 +36,7 @@ Future<void> main() async {
   // data.getData("lat").then((String value) {
   //   config.lat = double.parse(value);
   // });
-   updateLocation;
+  //  updateLocation;
   // data.getData("long").then((String value) async {
 
   //   print("lat  $value");
@@ -88,7 +86,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final Language lang = Provider.of<Language>(context);
-    final MainProvider bolc = Provider.of<MainProvider>(context);
+   // final MainProvider bolc = Provider.of<MainProvider>(context);
 
     // data.getData("lang").then((String value) {
     //   config.userLnag = Locale(value);
@@ -96,51 +94,53 @@ class _MyAppState extends State<MyApp> {
     // });
 
     return MaterialApp(
-        navigatorKey: getIt<NavigationService>().navigatorKey,
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-          DemoLocalizationsDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          DefaultMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const <Locale>[
-          Locale('ar'),
-          Locale('en'),
-          Locale('tr'),
-        ],
-        locale: lang.currentLanguage, //config.userLnag,
-        localeResolutionCallback:
-            (Locale locale, Iterable<Locale> supportedLocales) {
-          if (locale == null) {
-            data.setData("initlang", supportedLocales.first.countryCode);
-            return supportedLocales.first;
-          }
-
-          for (final Locale supportedLocale in supportedLocales) {
-            if (supportedLocale.languageCode == locale.languageCode) {
-              // lang.setLanguage(supportedLocale);
-              data.setData("initlang", supportedLocale.languageCode);
-
-              //lang.setLanguage(supportedLocale);
-              return supportedLocale;
-            }
-          }
-
-          // TODO(ahmed): use it to change language on start application
-          // SchedulerBinding.instance.addPostFrameCallback((_) async {
-          //   await data.getData("lang").then((String value) {
-          //     config.userLnag = Locale(value);
-          //     lang.setLanguage(Locale(value));
-          //   });
-          // });
+      navigatorKey: getIt<NavigationService>().navigatorKey,
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+        DemoLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        DefaultMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const <Locale>[
+        Locale('ar'),
+        Locale('en'),
+        Locale('tr'),
+      ],
+      locale: lang.currentLanguage, //config.userLnag,
+      localeResolutionCallback:
+          (Locale locale, Iterable<Locale> supportedLocales) {
+        if (locale == null) {
           data.setData("initlang", supportedLocales.first.countryCode);
           return supportedLocales.first;
-        },
-        theme: mainThemeData(),
-        onGenerateRoute: onGenerateRoute,
-        home: Builder(builder: (BuildContext context) {
+        }
+
+        for (final Locale supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale.languageCode) {
+            // lang.setLanguage(supportedLocale);
+            data.setData("initlang", supportedLocale.languageCode);
+
+            //lang.setLanguage(supportedLocale);
+            return supportedLocale;
+          }
+        }
+
+        // TODO(ahmed): use it to change language on start application
+        // SchedulerBinding.instance.addPostFrameCallback((_) async {
+        //   await data.getData("lang").then((String value) {
+        //     config.userLnag = Locale(value);
+        //     lang.setLanguage(Locale(value));
+        //   });
+        // });
+        data.setData("initlang", supportedLocales.first.countryCode);
+        return supportedLocales.first;
+      },
+      theme: mainThemeData(),
+      onGenerateRoute: onGenerateRoute,
+      home: const SplashScreen(),
+      /*Builder(
+        builder: (BuildContext context) {
           if (doOnce) {
             data.getData("countryCodeTemp").then((String value1) {
               data.getData("countryDialCodeTemp").then((String value2) {
@@ -162,11 +162,13 @@ class _MyAppState extends State<MyApp> {
             doOnce = false;
             //    });
           }
-
-          return config.loggedin
-              ? HOMEMAP(lat: config.lat??34, long: config.long??31)
-              : LoginScreen();
-        }));
+          return const SplashScreen();
+          // return config.loggedin
+          //     ? HOMEMAP(lat: config.lat??34, long: config.long??31)
+          //     : LoginScreen();
+        },
+      ),*/
+    );
   }
 }
 

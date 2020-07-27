@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
 import 'package:joker/models/specializations.dart';
 import '../constants/styles.dart';
+import 'package:joker/services/navigationService.dart';
+import 'package:joker/util/data.dart';
 
 class HOMEMAP extends StatefulWidget {
   const HOMEMAP({Key key, this.long, this.lat}) : super(key: key);
@@ -36,12 +39,12 @@ class _HOMEMAPState extends State<HOMEMAP> {
   PermissionStatus permissionGranted;
   LocationData locationData;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-  List<String> choices;
+  List<Choic> choices;
   Coordinates coordinates;
   List<Address> addresses;
   Address address;
   GlobalKey<ScaffoldState> _scaffoldkey;
-
+  int specId;
   @override
   void initState() {
     super.initState();
@@ -50,9 +53,12 @@ class _HOMEMAPState extends State<HOMEMAP> {
     _scaffoldkey = GlobalKey<ScaffoldState>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      choices = <String>[trans(context, "home"), trans(context, "exit")];
+      choices = <Choic>[
+        Choic(trans(context, "home"), 0),
+        Choic(trans(context, "logout"), 1)
+      ];
 
-      getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey, lat, long);
+      getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey, lat, long, specId);
     });
   }
 
@@ -75,12 +81,36 @@ class _HOMEMAPState extends State<HOMEMAP> {
     }
   }
 
-  Future<bool> _willPopCallback() async {
-    Provider.of<MainProvider>(context, listen: false)
-        .togelocationloading(false);
-    Navigator.pop(context);
-    return true;
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('Do you want to exit the App'),
+            actionsOverflowButtonSpacing: 50,
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              FlatButton(
+                onPressed: () => SystemChannels.platform
+                    .invokeMethod<dynamic>("SystemNavigator.pop"),
+                //  exit(0),
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
   }
+  // Future<bool> _willPopCallback() async {
+  //   Provider.of<MainProvider>(context, listen: false)
+  //       .togelocationloading(false);
+  //   Navigator.pop(context);
+  //   return true;
+  // }
+
   Set<int> selectedOptions = <int>{};
 
   @override
@@ -88,7 +118,7 @@ class _HOMEMAPState extends State<HOMEMAP> {
     final HOMEMAProvider mapProv = Provider.of<HOMEMAProvider>(context);
 
     return WillPopScope(
-        onWillPop: _willPopCallback,
+        onWillPop: _onWillPop,
         child: Stack(
           children: <Widget>[
             Scaffold(
@@ -148,8 +178,8 @@ class _HOMEMAPState extends State<HOMEMAP> {
                           },
                           onCameraIdle: () {
                             setState(() {
-                              getIt<HOMEMAProvider>()
-                                  .getBranchesData(_scaffoldkey, lat, long);
+                              getIt<HOMEMAProvider>().getBranchesData(
+                                  _scaffoldkey, lat, long, specId);
                             });
                           },
                         ),
@@ -255,11 +285,22 @@ class _HOMEMAPState extends State<HOMEMAP> {
                                                 : colors.black,
                                             onPressed: () {
                                               setState(() {
+                                                specId = item.id;
+                                                selectedOptions.clear();
                                                 if (!selectedOptions
                                                     .add(item.id)) {
                                                   selectedOptions
                                                       .remove(item.id);
                                                 }
+                                                getIt<HOMEMAProvider>()
+                                                    .showHorizentalListOrHideIt(
+                                                        false);
+                                                getIt<HOMEMAProvider>()
+                                                    .getBranchesData(
+                                                        _scaffoldkey,
+                                                        lat,
+                                                        long,
+                                                        specId);
                                               });
                                             },
                                             onLongPress: () {},
@@ -271,17 +312,28 @@ class _HOMEMAPState extends State<HOMEMAP> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 12, 0, 0),
-                                  child: PopupMenuButton<String>(
+                                  child: PopupMenuButton<Choic>(
+                                    onSelected: (Choic value) {
+                                      if (value.id == 0) {
+                                        Navigator.pushNamed(context, "/Home",
+                                            arguments: <String, dynamic>{
+                                              "salesDataFilter": false,
+                                              "FilterData": null
+                                            });
+                                      } else {
+                                        data.setData('authorization', null);
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context, '/login', (_) => false);
+                                      }
+                                    },
                                     icon: Icon(Icons.more_vert,
                                         color: colors.white),
                                     padding: EdgeInsets.zero,
                                     itemBuilder: (BuildContext context) {
-                                      return choices.map((String choice) {
-                                        return PopupMenuItem<String>(
+                                      return choices.map((Choic choice) {
+                                        return PopupMenuItem<Choic>(
                                           value: choice,
-                                          child: FlatButton(
-                                              onPressed: () {},
-                                              child: Text(choice)),
+                                          child: Text(choice.name),
                                         );
                                       }).toList();
                                     },
@@ -301,9 +353,10 @@ class _HOMEMAPState extends State<HOMEMAP> {
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
                                   physics: const ScrollPhysics(),
-                                  children: value.branches.mapBranches
-                                      .map((MapBranch e) {
-                                    return listHorizentalCard(e);
+                                  children: value.inFocusBranch.twoSales
+                                      .map((TwoSales e) {
+                                    return listHorizentalCard(
+                                        value.inFocusBranch, e);
                                   }).toList(),
                                 ),
                               ))
@@ -340,19 +393,23 @@ class _HOMEMAPState extends State<HOMEMAP> {
     }
   }
 
-  Widget listHorizentalCard(MapBranch e) {
+  Widget listHorizentalCard(MapBranch mb, TwoSales e) {
     return Card(
       child: InkWell(
         onTap: () {
-          setState(() {
-            mapController
-                .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-              target: LatLng(e.latitude, e.longitude),
-              zoom: 13,
-            )));
-            lat = e.latitude;
-            long = e.longitude;
-          });
+          getIt<NavigationService>().navigateToNamed(
+            "/MerchantDetails",
+            <String, dynamic>{"merchantId": mb.merchant.id, "branchId": mb.id},
+          );
+          // setState(() {
+          //   mapController
+          //       .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          //     target: LatLng(e.latitude, e.longitude),
+          //     zoom: 13,
+          //   )));
+          //   lat = e.latitude;
+          //   long = e.longitude;
+          // });
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -369,54 +426,80 @@ class _HOMEMAPState extends State<HOMEMAP> {
                         topLeft: Radius.circular(12),
                         topRight: Radius.circular(12)),
                     image: DecorationImage(
-                        image: CachedNetworkImageProvider(e.merchant.logo),
+                        image: CachedNetworkImageProvider(e.mainImage),
                         fit: BoxFit.cover),
                   ),
                 ),
                 Column(
                   children: <Widget>[
-                    Text(
-                      e.merchant.name,
-                      textAlign: TextAlign.center,
-                      style: styles.underHead,
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: e.twoSales.map((TwoSales e) {
-                        return InkWell(
-                          onTap: () {},
-                          child: Container(
-                            width: 150,
-                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 4),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Text(mb.name,
+                        textAlign: TextAlign.center, style: styles.underHead),
+                    Container(
+                      color: colors.white,
+                      child: Column(children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('${e.name}'),
+                            const SizedBox(width: 80),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Text(e.name, textAlign: TextAlign.start),
-                                const SizedBox(width: 12),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      e.newPrice,
-                                      style: styles.redstyleForminiSaleScreen,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      e.oldPrice,
-                                      style: TextStyle(
-                                          decoration:
-                                              TextDecoration.lineThrough),
-                                    ),
-                                  ],
+                                Text(
+                                  e.newPrice ?? "",
+                                  style: styles.redstyleForSaleScreen,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  e.oldPrice,
+                                  style: TextStyle(
+                                      decoration: TextDecoration.lineThrough),
                                 ),
                               ],
                             ),
-                          ),
-                        );
-                      }).toList(),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  trans(context, 'starting_date'),
+                                  style: styles.mysmalllight,
+                                ),
+                                const SizedBox(width: 3),
+                                Text(e.startAt, style: styles.mystyle)
+                              ],
+                            ),
+                            const SizedBox(width: 40),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  trans(context, 'end_date'),
+                                  style: styles.mysmalllight,
+                                ),
+                                const SizedBox(
+                                  width: 3,
+                                ),
+                                Text(e.endAt, style: styles.mystyle)
+                              ],
+                            ),
+                          ],
+                        ),
+                      ]),
                     ),
                     FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          getIt<NavigationService>().navigateToNamed(
+                            "/MerchantDetails",
+                            <String, dynamic>{
+                              "merchantId": mb.merchant.id,
+                              "branchId": mb.id
+                            },
+                          );
+                        },
                         child: Text(trans(context, "show_more")))
                   ],
                 )
@@ -437,4 +520,11 @@ class _HOMEMAPState extends State<HOMEMAP> {
         .buffer
         .asUint8List();
   }
+}
+
+class Choic {
+  Choic(this.name, this.id);
+
+  String name;
+  int id;
 }

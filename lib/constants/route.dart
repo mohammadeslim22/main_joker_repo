@@ -5,6 +5,7 @@ import 'package:joker/ui/about_us.dart';
 import 'package:joker/ui/address_list.dart';
 import 'package:joker/ui/advanced_search.dart';
 import 'package:joker/ui/contact_us.dart';
+import 'package:joker/ui/home_map.dart';
 import 'package:joker/ui/merchant_memberships.dart';
 import 'package:joker/ui/sale_screen.dart';
 import 'package:joker/ui/auth/registration_screen.dart';
@@ -35,8 +36,16 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case "/Home":
       page = PageTransition<PageController>(
-        child: Home(
-            filterData: args['FilterData'] as FilterData),
+        child: Home(filterData: args['FilterData'] as FilterData),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
+    case "/HomeMap":
+      page = PageTransition<PageController>(
+        child: HOMEMAP(
+          lat: args['home_map_lat'] as double,
+          long: args['home_map_long'] as double,
+        ),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
@@ -79,8 +88,8 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     case "/MerchantDetails":
       page = PageTransition<PageController>(
         child: ShopDetails(
-          merchantId: args['merchantId'] as int,branchId:args['branchId'] as int
-        ),
+            merchantId: args['merchantId'] as int,
+            branchId: args['branchId'] as int),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
@@ -92,13 +101,14 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       break;
     case "/MembershipDetails":
       page = PageTransition<PageController>(
-        child:  MemberShipDetails(mermbershipData:args['membership'] as MembershipData),
+        child: MemberShipDetails(
+            mermbershipData: args['membership'] as MembershipData),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-        case "/MemberShipsForMerchant":
+    case "/MemberShipsForMerchant":
       page = PageTransition<PageController>(
-        child:   MemberShipsForMerchant(merchantId:args["merchantId"]as int),
+        child: MemberShipsForMerchant(merchantId: args["merchantId"] as int),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
@@ -114,7 +124,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-      case "/pinForProfile":
+    case "/pinForProfile":
       page = PageTransition<PageController>(
         child: PinCodeForProfile(mobileNo: args['mobileNo'].toString()),
         type: PageTransitionType.rightToLeftWithFade,

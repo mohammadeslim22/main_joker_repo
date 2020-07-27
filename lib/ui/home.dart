@@ -61,7 +61,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
     _hide.forward();
     filterData = widget.filterData;
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // /*
     //   final MinProvider bolc = Provider.of<MinProvider>(context, listen: false);
     //   tapTitle = bolc.bottomNavIndex == 0
     //       ? '${trans(context, 'sales')}'
@@ -127,142 +127,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   splashColor: colors.white,
                                   onTap: () {
                                     _errorController = _scaffoldkey.currentState
-                                        .showBottomSheet<dynamic>((BuildContext
-                                                context) =>
-                                            Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  ClipPath(
-                                                      clipper:
-                                                          const ShapeBorderClipper(
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        24),
-                                                                bottomRight:
-                                                                    Radius
-                                                                        .circular(
-                                                                            24)),
-                                                      )),
-                                                      child: Container(
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        decoration: BoxDecoration(
-                                                            color: Colors.black
-                                                                .withOpacity(
-                                                                    .1),
-                                                            border: const Border(
-                                                                top: BorderSide(
-                                                                    color: Colors
-                                                                        .orange,
-                                                                    width:
-                                                                        7.0))),
-                                                        child: Text(
-                                                          "${trans(context, 'use_current_location')}",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              styles.underHead,
-                                                        ),
-                                                      )),
-                                                  ListTile(
-                                                    contentPadding:
-                                                        const EdgeInsets
-                                                                .symmetric(
-                                                            horizontal: 12),
-                                                    title: Text(
-                                                        "${trans(context, 'my_address_list')}"),
-                                                    trailing: Icon(
-                                                      Icons.search,
-                                                      color: Colors.black,
-                                                    ),
-                                                    onTap: () {
-                                                      Navigator.pushNamed(
-                                                          context,
-                                                          "/AddressList");
-                                                    },
-                                                  ),
-                                                  ListTile(
-                                                    contentPadding:
-                                                        const EdgeInsets
-                                                                .symmetric(
-                                                            horizontal: 12),
-                                                    title: Text(
-                                                        "${trans(context, 'use_current_location')}"),
-                                                    trailing: Icon(
-                                                      Icons.my_location,
-                                                      color: Colors.black,
-                                                    ),
-                                                    onTap: () async {
-                                                      final bool t =
-                                                          await updateLocation;
-                                                      if (t) {
-                                                        Navigator.pop(context);
-                                                      } else {
-                                                        // should not be used
-                                                        // TODO(iSLEEM): CHECK IF ITS WORKING WITHOUT SETSTATE
-                                                        final List<String>
-                                                            loglat =
-                                                            await getLocation();
-                                                        if (loglat.isEmpty) {
-                                                        } else {
-                                                          setState(() {
-                                                            config.lat = double
-                                                                .parse(loglat
-                                                                    .elementAt(
-                                                                        0));
-                                                            config.long = double
-                                                                .parse(loglat
-                                                                    .elementAt(
-                                                                        1));
-                                                          });
-                                                        }
-                                                      }
-                                                    },
-                                                  ),
-                                                  ListTile(
-                                                    contentPadding:
-                                                        const EdgeInsets
-                                                                .symmetric(
-                                                            horizontal: 12),
-                                                    title: Text(
-                                                        "${trans(context, 'add_location')}"),
-                                                    trailing: Icon(
-                                                      Icons.add,
-                                                      color: Colors.black,
-                                                    ),
-                                                    onTap: () async {
-                                                      config.amIcomingFromHome =
-                                                          true;
-                                                      String lat;
-                                                      String long;
-                                                      lat = await data
-                                                          .getData("lat");
-                                                      long = await data
-                                                          .getData("long");
-
-                                                      await Navigator.pushNamed(
-                                                          context,
-                                                          '/AutoLocate',
-                                                          arguments: <String,
-                                                              double>{
-                                                            "lat": double.parse(
-                                                                    lat) ??
-                                                                10.176,
-                                                            "long":
-                                                                double.parse(
-                                                                        long) ??
-                                                                    51.6565
-                                                          });
-                                                    },
-                                                  ),
-                                                  const SizedBox(height: 12),
-                                                ]));
+                                        .showBottomSheet<dynamic>(
+                                            (BuildContext context) =>
+                                                locationBottomSheet());
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -292,6 +159,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                   automaticallyImplyLeading: true,
                   actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.map,color: colors.orange,),
+                      onPressed: () {
+                        if (_errorController != null) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+
+                        } else {
+                          Navigator.pop(context);
+
+                        }
+                      },
+                    ),
                     IconButton(
                       icon: SvgPicture.asset(
                         'assets/images/filter.svg',
@@ -354,5 +234,87 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  Widget locationBottomSheet() {
+    return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      ClipPath(
+          clipper: const ShapeBorderClipper(
+              shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(24),
+                bottomRight: Radius.circular(24)),
+          )),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: Colors.black.withOpacity(.1),
+                border: const Border(
+                    top: BorderSide(color: Colors.orange, width: 7.0))),
+            child: Text(
+              "${trans(context, 'use_current_location')}",
+              textAlign: TextAlign.center,
+              style: styles.underHead,
+            ),
+          )),
+      ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+        title: Text("${trans(context, 'my_address_list')}"),
+        trailing: Icon(
+          Icons.search,
+          color: Colors.black,
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, "/AddressList");
+        },
+      ),
+      ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+        title: Text("${trans(context, 'use_current_location')}"),
+        trailing: Icon(
+          Icons.my_location,
+          color: Colors.black,
+        ),
+        onTap: () async {
+          final bool t = await updateLocation;
+          if (t) {
+            Navigator.pop(context);
+          } else {
+            // should not be used
+            // TODO(iSLEEM): CHECK IF ITS WORKING WITHOUT SETSTATE
+            final List<String> loglat = await getLocation();
+            if (loglat.isEmpty) {
+            } else {
+              setState(() {
+                config.lat = double.parse(loglat.elementAt(0));
+                config.long = double.parse(loglat.elementAt(1));
+              });
+            }
+          }
+        },
+      ),
+      ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+        title: Text("${trans(context, 'add_location')}"),
+        trailing: Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
+        onTap: () async {
+          config.amIcomingFromHome = true;
+          String lat;
+          String long;
+          lat = await data.getData("lat");
+          long = await data.getData("long");
+
+          await Navigator.pushNamed(context, '/AutoLocate',
+              arguments: <String, double>{
+                "lat": double.parse(lat) ?? 10.176,
+                "long": double.parse(long) ?? 51.6565
+              });
+        },
+      ),
+      const SizedBox(height: 12),
+    ]);
   }
 }
