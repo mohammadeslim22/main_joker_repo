@@ -21,12 +21,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 
 class SaleDetailPage extends StatefulWidget {
-  const SaleDetailPage({Key key, this.merchantId, this.saleId})
+  const SaleDetailPage({Key key, this.merchantId, this.saleId, this.saleData})
       : super(key: key);
 
   final int merchantId;
   final int saleId;
-  
+  final SaleData saleData;
 
   @override
   ShopDetailsPage createState() => ShopDetailsPage();
@@ -38,13 +38,16 @@ class ShopDetailsPage extends State<SaleDetailPage>
   SaleData sale;
 
   Future<Merchant> getMerchantData(int merchentid, int saleid) async {
-    final dynamic saleResult = await dio.get<dynamic>("sales/$saleid");
-    sale = SaleData.fromJson(saleResult.data['data']);
-    print("${saleResult.dara}  ${sale.isfavorite}");
     final dynamic mercantResult =
         await dio.get<dynamic>("merchants/$merchentid");
     merchant = Merchant.fromJson(mercantResult.data);
     return merchant;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    sale = widget.saleData;
   }
 
   @override
