@@ -21,11 +21,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 
 class SaleDetailPage extends StatefulWidget {
-  const SaleDetailPage({Key key, this.merchantId, this.saleId})
+  const SaleDetailPage({Key key, this.merchantId, this.sale})
       : super(key: key);
 
   final int merchantId;
-  final int saleId;
+  final SaleData sale;
 
   @override
   ShopDetailsPage createState() => ShopDetailsPage();
@@ -35,11 +35,10 @@ class ShopDetailsPage extends State<SaleDetailPage>
     with TickerProviderStateMixin {
   Merchant merchant;
   SaleData sale;
-
-  Future<Merchant> getMerchantData(int merchentid, int saleid) async {
-    final dynamic saleResult = await dio.get<dynamic>("sales/$saleid");
-    sale = SaleData.fromJson(saleResult.data['data']);
-    print("${saleResult.dara}  ${sale.isfavorite}");
+  Future<Merchant> getMerchantData(int merchentid) async {
+    //final dynamic saleResult = await dio.get<dynamic>("sales/$saleid");
+  //  sale = SaleData.fromJson(saleResult.data['data']);
+   // print("${saleResult.dara}  ${sale.isfavorite}");
     final dynamic mercantResult =
         await dio.get<dynamic>("merchants/$merchentid");
     merchant = Merchant.fromJson(mercantResult.data);
@@ -48,9 +47,8 @@ class ShopDetailsPage extends State<SaleDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    print(widget.saleId);
     return FutureBuilder<Merchant>(
-      future: getMerchantData(widget.merchantId, widget.saleId),
+      future: getMerchantData(widget.merchantId),
       builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return SaleDetails(merchant: merchant, sale: sale);
