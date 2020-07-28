@@ -56,7 +56,7 @@ class _SalesCardState extends State<SalesCard> {
           Navigator.pushNamed(context, "/SaleDetails",
               arguments: <String, dynamic>{
                 "merchant_id": saledata.merchant.id,
-                "sale_id": saledata.id
+                "sale": saledata
               });
         },
         child: Column(

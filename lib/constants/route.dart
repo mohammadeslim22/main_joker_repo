@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:joker/models/membership.dart';
+import 'package:joker/models/sales.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/ui/about_us.dart';
 import 'package:joker/ui/address_list.dart';
@@ -65,7 +66,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       page = PageTransition<PageController>(
         child: SaleDetailPage(
           merchantId: args['merchant_id'] as int,
-          saleId: args['sale_id'] as int,
+          saleData: args['sale'] as SaleData,
         ),
         type: PageTransitionType.rightToLeftWithFade,
       );
