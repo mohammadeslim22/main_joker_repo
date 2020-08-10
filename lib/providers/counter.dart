@@ -21,6 +21,7 @@ class MainProvider extends ChangeNotifier {
   String countryCode;
   String countryDialCode;
 
+
   void saveCountryCode(String code, String dialCode) {
     countryCode = code;
     countryDialCode = dialCode;
@@ -30,9 +31,6 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveData() {
-    data.setData("erf", "value");
-  }
 
   int get bottomNavIndex => _currentIndex;
   bool get visible1 => _visible;

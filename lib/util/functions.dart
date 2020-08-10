@@ -33,7 +33,7 @@ Future<List<String>> getLocation() async {
   locaion.add(locationData.latitude.toString());
   data.setData("lat", locationData.latitude.toString());
   locaion.add(locationData.longitude.toString());
-    data.setData("long", locationData.longitude.toString());
+  data.setData("long", locationData.longitude.toString());
 
   return locaion;
 }

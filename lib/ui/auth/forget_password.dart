@@ -279,8 +279,7 @@ class _MyForgetPassState extends State<ForgetPassword>
   void _onCountryChange(CountryCode countryCode) {
         final MainProvider bolc = Provider.of<MainProvider>(context);
 bolc.saveCountryCode(countryCode.code,countryCode.dialCode);
-    data.setData("countryCodeTemp", countryCode.code);
-        data.setData("countryDialCodeTemp", countryCode.dialCode);
+ 
 
     setState(() {
       countryCodeTemp = countryCode.dialCode;

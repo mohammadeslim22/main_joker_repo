@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/counter.dart';
 import 'package:joker/util/data.dart';
 import '../widgets/text_form_input.dart';
@@ -26,14 +27,14 @@ class LoginScreen extends StatefulWidget {
 class _MyLoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   bool _isButtonEnabled = true;
-  static List<String> validators = <String>[null, null];
-  static List<String> keys = <String>[
-    'phone',
-    'password',
-  ];
+  // static List<String> validators = <String>[null, null];
+  // static List<String> keys = <String>[
+  //   'phone',
+  //   'password',
+  // ];
 
-  Map<String, String> validationMap =
-      Map<String, String>.fromIterables(keys, validators);
+  // Map<String, String> validationMap =
+  //     Map<String, String>.fromIterables(keys, validators);
   String countryCodeTemp = "+90";
   //  String countryCode = "TR";
 
@@ -75,7 +76,7 @@ class _MyLoginScreenState extends State<LoginScreen>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
-  Widget customcard(BuildContext context, MainProvider bolc) {
+  Widget customcard(BuildContext context, MainProvider bolc, Auth auht) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
     return Padding(
@@ -115,7 +116,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                   if (value.isEmpty) {
                     return "please enter your mobile Number  ";
                   }
-                  return validationMap['phone'];
+                  return auht.validationMap['phone'];
                 }),
             TextFormInput(
                 text: trans(context, 'password'),
@@ -145,7 +146,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                   if (value.isEmpty) {
                     return "please enter your password ";
                   }
-                  return validationMap['password'];
+                  return auht.validationMap['password'];
                 }),
           ],
         ),
@@ -156,7 +157,7 @@ class _MyLoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     final MainProvider bolc = Provider.of<MainProvider>(context);
-    //final Language lang = Provider.of<Language>(context);
+    final Auth auht = Provider.of<Auth>(context);
 
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     return Scaffold(
@@ -189,7 +190,7 @@ class _MyLoginScreenState extends State<LoginScreen>
             const SizedBox(height: 10),
             Text(trans(context, 'enter_login_information'),
                 style: styles.mystyle),
-            customcard(context, bolc),
+            customcard(context, bolc, auht),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               alignment: isRTL ? Alignment.centerLeft : Alignment.centerRight,
@@ -215,67 +216,19 @@ class _MyLoginScreenState extends State<LoginScreen>
                         setState(() {
                           _isButtonEnabled = false;
                         });
-                        await dio
-                            .post<dynamic>("login", data: <String, dynamic>{
-                          "phone": countryCodeTemp +
-                              usernameController.text.toString().trim(),
-                          "password": passwordController.text.toString()
-                        }).then((Response<dynamic> value) async {
-                          print(value.data);
-                          setState(() {
-                            _isButtonEnabled = true;
-                          });
-                          if (value.statusCode == 422) {
-                            value.data['errors']
-                                .forEach((String k, dynamic vv) {
-                              setState(() {
-                                validationMap[k] = vv[0].toString();
-                              });
-                              print(validationMap);
-                            });
-                            _formKey.currentState.validate();
-                            validationMap.updateAll((String key, String value) {
-                              return null;
-                            });
-                            print(validationMap);
-                          }
 
-                          if (value.statusCode == 200) {
-                            if (value.data != "fail") {
-                              await data.setData("authorization",
-                                  "Bearer ${value.data['api_token']}");
-                              dio.options.headers['authorization'] =
-                                  'Bearer ${value.data['api_token']}';
-
-                              // data.getData("lang").then((String value) async {
-                              //   print("1: $value");
-                              //   config.userLnag = Locale(value);
-                              //   await lang.setLanguage(Locale(value));
-                              //   print("2: ${lang.currentLanguage}");
-                              // });
-
-                              print(dio.options.headers);
-                              Navigator.pushNamed(context, '/Home',
-                                  arguments: <String, dynamic>{
-                                    "salesDataFilter": false,
-                                    "FilterData": null
-                                  });
-                            } else {
-                              showToastWidget(
-                                  IconToastWidget.fail(
-                                      msg:
-                                          trans(context, 'wrong_user_or_pass')),
-                                  context: context,
-                                  position: StyledToastPosition.center,
-                                  animation: StyledToastAnimation.scale,
-                                  reverseAnimation: StyledToastAnimation.fade,
-                                  duration: const Duration(seconds: 4),
-                                  animDuration: const Duration(seconds: 1),
-                                  curve: Curves.elasticOut,
-                                  reverseCurve: Curves.linear);
-                            }
-                          }
+                        if (await auht.login(
+                            countryCodeTemp,
+                            usernameController.text,
+                            passwordController.text,
+                            context)) {
+                        } else {
+                          _formKey.currentState.validate();
+                        }
+                        setState(() {
+                          _isButtonEnabled = true;
                         });
+
                         bolc.togelf(false);
                       }
                     }
@@ -318,8 +271,7 @@ class _MyLoginScreenState extends State<LoginScreen>
   void _onCountryChange(CountryCode countryCode) {
     final MainProvider bolc = Provider.of<MainProvider>(context);
     bolc.saveCountryCode(countryCode.code, countryCode.dialCode);
-    data.setData("countryCodeTemp", countryCode.code);
-    data.setData("countryDialCodeTemp", countryCode.dialCode);
+
 
     setState(() {
       countryCodeTemp = countryCode.dialCode;

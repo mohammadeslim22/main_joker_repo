@@ -53,7 +53,7 @@ class _SalesCardState extends State<SalesCard> {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, "/SaleDetails",
+          Navigator.pushNamed(context, "/SaleLoader",
               arguments: <String, dynamic>{
                 "merchant_id": saledata.merchant.id,
                 "sale": saledata
@@ -68,6 +68,7 @@ class _SalesCardState extends State<SalesCard> {
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12)),
                 image: DecorationImage(
+                  fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
                   saledata.cropedImage,
                 )),
