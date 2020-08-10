@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:provider/provider.dart';
 
 

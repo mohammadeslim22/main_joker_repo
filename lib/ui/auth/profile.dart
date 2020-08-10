@@ -13,7 +13,7 @@ import 'package:joker/localization/trans.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:joker/models/profile.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
 import 'package:location/location.dart';

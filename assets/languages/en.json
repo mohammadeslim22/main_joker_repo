@@ -54,7 +54,7 @@
     "mobile_no": "Mobile number",
     "dont_have_account": "You Do not have an account ?",
     "create_account": "Crearte Account",
-    "you_have_shop_": "you Own a shop & wanna join us ?",
+    "you_have_shop": "you Own a shop & wanna join us ?",
     "click_here": "click here",
     "account_creation": "Create Account",
     "please_check": "Please make sure the data entered is correct",
@@ -188,7 +188,11 @@
     "you_can_change_mo_only_once":"Sorry, You can Change Mobile No. only once",
     "wrong_user_or_pass":"Wrong Username or Password",
     "type":"MemberShip Type",
-    "request_sent_successfully":"your Request has been Sent Successfully"
+    "request_sent_successfully":"your Request has been Sent Successfully",
+    "are_u_sure":"Are you sure ?",
+    "do_u_want_to_exit":"Do you want to exit ?",
+    "p_enter_u_mobile":"please enter your mobile Number",
+    "p_enter_password":"please enter your password"
 
 
 }

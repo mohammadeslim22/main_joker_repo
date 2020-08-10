@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:joker/constants/config.dart';
+import 'package:joker/localization/trans.dart';
 import 'package:joker/util/dio.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
@@ -129,3 +130,24 @@ Future<bool> favFunction(String model, int favoriteId) async {
 
   return res;
 }
+  Future<bool> onWillPop(BuildContext context) async {
+    return (await showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title:  Text(trans(context,'are_u_sure')),
+            content:  Text(trans(context,'do_u_want_to_exit')),
+            actionsOverflowButtonSpacing: 50,
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child:  Text(trans(context,'cancel')),
+              ),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child:  Text(trans(context,'ok')),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }

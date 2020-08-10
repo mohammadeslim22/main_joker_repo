@@ -10,7 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/map_branches.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';

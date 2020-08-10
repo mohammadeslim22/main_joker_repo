@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:joker/models/sales.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/ui/cards/sale_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';

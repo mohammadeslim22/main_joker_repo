@@ -40,7 +40,7 @@ class TextFormInput extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: TextFormField(
-        readOnly: readOnly,
+        readOnly: readOnly??false,
         keyboardType: kt,
         onTap: () => onTab(),
         controller: cController,

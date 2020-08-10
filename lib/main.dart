@@ -5,7 +5,7 @@ import 'package:joker/splash_screen.dart';
 import 'constants/config.dart';
 import 'services/navigationService.dart';
 import 'util/dio.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:provider/provider.dart';
 import 'constants/route.dart';
 import 'constants/themes.dart';

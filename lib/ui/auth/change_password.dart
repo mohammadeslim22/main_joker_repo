@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/util/data.dart';
 import '../widgets/text_form_input.dart';
 import 'package:joker/util/dio.dart';

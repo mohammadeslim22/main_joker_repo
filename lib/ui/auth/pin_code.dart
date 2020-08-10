@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import '../widgets/buttonTouse.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -336,8 +336,8 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                   ),
                   ButtonToUse(
                     trans(context, 'tech_support'),
-                    fw: FontWeight.bold,
-                    fc: Colors.green,
+                    fontWait: FontWeight.bold,
+                    fontColors: Colors.green,
                     onPressed: () {},
                   ),
                 ],

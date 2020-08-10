@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:joker/constants/colors.dart';
 
 class ButtonToUse extends StatelessWidget {
-  const ButtonToUse(this.buttonstring, {this.fw, this.fc, this.onPressed, this.width});
+  const ButtonToUse(this.buttonstring, {this.fontWait, this.fontColors, this.onPressed, this.width});
   final String buttonstring;
-  final FontWeight fw;
-  final Color fc;
+  final FontWeight fontWait;
+  final Color fontColors;
   final Function onPressed;
   final double width;
   @override
@@ -22,9 +22,9 @@ class ButtonToUse extends StatelessWidget {
           child: Text(
             buttonstring,
             style: TextStyle(
-              color: fc,
+              color: fontColors,
               fontSize: 15,
-              fontWeight: fw,
+              fontWeight: fontWait,
             ),
           ),
         ),

@@ -6,7 +6,7 @@ import 'package:joker/localization/trans.dart';
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/services.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/ui/widgets/text_form_input.dart';
 import 'package:joker/util/data.dart';
 import '../widgets/buttonTouse.dart';
@@ -305,8 +305,8 @@ class _MyHomePageState extends State<PinCodeForProfile>
                   ),
                   ButtonToUse(
                     trans(context, 'tech_support'),
-                    fw: FontWeight.bold,
-                    fc: Colors.green,
+                    fontWait: FontWeight.bold,
+                    fontColors: Colors.green,
                     onPressed: () {},
                   ),
                 ],

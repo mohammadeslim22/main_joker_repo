@@ -5,7 +5,7 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../widgets/text_form_input.dart';
 import 'package:provider/provider.dart';

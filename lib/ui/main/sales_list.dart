@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/models/search_filter_data.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../ui/cards/sale_card.dart';

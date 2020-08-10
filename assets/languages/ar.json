@@ -55,7 +55,7 @@
     "enter_login_information": "الرجاء ادخال رقم الموبايل وكلمة المرور",
     "mobile_no": "رقم الموبايل",
     "create_account": "أنشئ حساب",
-    "you_have_shop_": "تمتلك متجر وترغب في الإنضمام ؟",
+    "you_have_shop": "تمتلك متجر وترغب في الإنضمام ؟",
     "click_here": "اضغط هنا",
     "account_creation": "إنشاء حساب",
     "please_check": "الرجاء التأكد من صحة البيانات المدخلة",
@@ -190,7 +190,11 @@
     "you_can_change_mo_only_once":"يمكنك تغيير رقم الهاتف مرة واحدة",
     "wrong_user_or_pass":"خطأ في اسم المستخدم أو كلمة المرور",
     "type":"نوع العضوية",
-    "request_sent_successfully":"تم إرسال طلبك بنجاح"
+    "request_sent_successfully":"تم إرسال طلبك بنجاح",
+    "are_u_sure":"هل أنت متأكد ؟",
+    "do_u_want_to_exit":"هل تريد مغادرة التطبيق ؟",
+    "p_enter_u_mobile":"من فضلك أدخل رقم الموبايل",
+    "p_enter_password":"من فضلك أدخل كلمة المرور"
 
 
 }

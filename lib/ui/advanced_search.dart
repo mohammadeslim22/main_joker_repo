@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/models/specializations.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/util/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_bar/rating_bar.dart';

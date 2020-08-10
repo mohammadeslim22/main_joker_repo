@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:joker/models/branches_model.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';

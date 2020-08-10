@@ -4,7 +4,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import '../widgets/buttonTouse.dart';
 import '../widgets/text_form_input.dart';
 import 'package:location/location.dart';
@@ -439,8 +439,8 @@ class _MyRegistrationState extends State<Registration>
                           ),
                           ButtonToUse(
                             trans(context, 'tech_support'),
-                            fw: FontWeight.bold,
-                            fc: Colors.green,
+                            fontWait: FontWeight.bold,
+                            fontColors: Colors.green,
                           ),
                         ],
                       ),

@@ -4,7 +4,7 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/data.dart';
 import 'providers/language.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {

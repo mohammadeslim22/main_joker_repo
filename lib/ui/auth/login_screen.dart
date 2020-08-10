@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/auth.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/util/data.dart';
+import 'package:joker/util/functions.dart';
 import '../widgets/text_form_input.dart';
-import 'package:joker/util/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
 import '../widgets/buttonTouse.dart';
-import 'package:dio/dio.dart';
-import '../widgets/custom_toast_widget.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-//import 'package:joker/providers/language.dart';
-//import 'package:joker/constants/config.dart';
 import 'dart:io' show Platform;
 
 class LoginScreen extends StatefulWidget {
@@ -28,7 +23,6 @@ class LoginScreen extends StatefulWidget {
 class _MyLoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   bool _isButtonEnabled = true;
-
   bool _obscureText = false;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -48,38 +42,14 @@ class _MyLoginScreenState extends State<LoginScreen>
     });
   }
 
-  // TODO(mohammed): Translate this, take it to seperated file, in functions File
-  Future<bool> _onWillPop() async {
-    return (await showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Are you sure?'),
-            content: const Text('Do you want to exit the App'),
-            actionsOverflowButtonSpacing: 50,
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('Cancel'),
-              ),
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Yes'),
-              ),
-            ],
-          ),
-        )) ??
-        false;
-  }
-
   Widget customcard(BuildContext context,
       {MainProvider mainProvider, Auth auht, bool isRTL}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
       child: Form(
         key: _formKey,
-        // TODO(mohammed): think to move it unde=r build
         onWillPop: () {
-          return _onWillPop();
+          return onWillPop(context);
         },
         child: Column(
           children: <Widget>[
@@ -96,9 +66,6 @@ class _MyLoginScreenState extends State<LoginScreen>
                 favorite: const <String>['+90', 'TR'],
                 showFlagDialog: true,
                 showFlag: false,
-                showCountryOnly: false,
-                showOnlyCountryWhenClosed: false,
-                alignLeft: false,
                 padding: isRTL == true
                     ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
                     : const EdgeInsets.fromLTRB(32, 0, 0, 0),
@@ -108,7 +75,7 @@ class _MyLoginScreenState extends State<LoginScreen>
               },
               validator: (String value) {
                 if (value.isEmpty) {
-                  return "please enter your mobile Number  ";
+                  return trans(context, 'p_enter_u_mobile');
                 }
                 return auht.validationMap['phone'];
               },
@@ -118,8 +85,6 @@ class _MyLoginScreenState extends State<LoginScreen>
               cController: _passwordController,
               prefixIcon: Icons.lock_outline,
               kt: TextInputType.visiblePassword,
-              // TODO(mohammed): review readOnly attriute
-              readOnly: false,
               onTab: () {},
               suffixicon: IconButton(
                 icon: Icon(
@@ -140,7 +105,7 @@ class _MyLoginScreenState extends State<LoginScreen>
               focusNode: _focus1,
               validator: (String value) {
                 if (value.isEmpty) {
-                  return "please enter your password ";
+                  return trans(context, 'p_enter_password');
                 }
                 return auht.validationMap['password'];
               },
@@ -198,8 +163,8 @@ class _MyLoginScreenState extends State<LoginScreen>
               alignment: isRTL ? Alignment.centerLeft : Alignment.centerRight,
               child: ButtonToUse(
                 trans(context, 'forget_password'),
-                fw: FontWeight.w500,
-                fc: colors.black,
+                fontWait: FontWeight.w500,
+                fontColors: colors.black,
                 onPressed: () {
                   Navigator.pushNamed(context, '/forget_pass');
                 },
@@ -236,14 +201,14 @@ class _MyLoginScreenState extends State<LoginScreen>
                     }
                   },
                   color: Colors.deepOrangeAccent,
-                  textColor: Colors.white,
+                  textColor: colors.white,
                   child: mainProvider.returnchild(trans(context, 'login'))),
             ),
             const SizedBox(height: 80),
             Text(trans(context, 'dont_have_account'), style: styles.mystyle),
             ButtonToUse(trans(context, 'create_account'),
-                fw: FontWeight.bold,
-                fc: Colors.black,
+                fontWait: FontWeight.bold,
+                fontColors: Colors.black,
                 width: MediaQuery.of(context).size.width, onPressed: () {
               Navigator.pushNamedAndRemoveUntil(
                   context, '/Registration', (_) => false);
@@ -253,12 +218,12 @@ class _MyLoginScreenState extends State<LoginScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(trans(context, 'you_have_shop_'), style: styles.mystyle),
+                  Text(trans(context, 'you_have_shop'), style: styles.mystyle),
                   Expanded(
                     child: ButtonToUse(
                       trans(context, 'click_here'),
-                      fw: FontWeight.bold,
-                      fc: Colors.green,
+                      fontWait: FontWeight.bold,
+                      fontColors: colors.green,
                     ),
                   ),
                 ],

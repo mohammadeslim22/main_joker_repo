@@ -4,7 +4,7 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/models/search_filter_data.dart';
-import 'package:joker/providers/counter.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
