@@ -18,6 +18,7 @@ import '../widgets/custom_toast_widget.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 //import 'package:joker/providers/language.dart';
 //import 'package:joker/constants/config.dart';
+import 'dart:io' show Platform;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -27,16 +28,15 @@ class LoginScreen extends StatefulWidget {
 class _MyLoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   bool _isButtonEnabled = true;
-  // static List<String> validators = <String>[null, null];
-  // static List<String> keys = <String>[
-  //   'phone',
-  //   'password',
-  // ];
 
-  // Map<String, String> validationMap =
-  //     Map<String, String>.fromIterables(keys, validators);
+  bool _obscureText = false;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FocusNode _focus1 = FocusNode();
+  final FocusNode _focus2 = FocusNode();
+
   String countryCodeTemp = "+90";
-  //  String countryCode = "TR";
 
   @override
   void initState() {
@@ -48,6 +48,7 @@ class _MyLoginScreenState extends State<LoginScreen>
     });
   }
 
+  // TODO(mohammed): Translate this, take it to seperated file, in functions File
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -70,84 +71,80 @@ class _MyLoginScreenState extends State<LoginScreen>
         false;
   }
 
-  bool _obscureText = false;
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final FocusNode focus1 = FocusNode();
-  final FocusNode focus2 = FocusNode();
-  Widget customcard(BuildContext context, MainProvider bolc, Auth auht) {
-    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
-
+  Widget customcard(BuildContext context,
+      {MainProvider mainProvider, Auth auht, bool isRTL}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
       child: Form(
         key: _formKey,
+        // TODO(mohammed): think to move it unde=r build
         onWillPop: () {
           return _onWillPop();
         },
         child: Column(
           children: <Widget>[
             TextFormInput(
-                text: trans(context, 'mobile_no'),
-                cController: usernameController,
-                prefixIcon: Icons.phone,
-                kt: TextInputType.phone,
-                obscureText: false,
-                readOnly: false,
-                onTab: () {},
-                suffixicon: CountryCodePicker(
-                  onChanged: _onCountryChange,
-                  initialSelection: bolc.countryCode,
-                  favorite: const <String>['+90', 'TR'],
-                  showFlagDialog: true,
-                  showFlag: false,
-                  showCountryOnly: false,
-                  showOnlyCountryWhenClosed: false,
-                  alignLeft: false,
-                  padding: isRTL == true
-                      ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                      : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                ),
-                onFieldSubmitted: () {
-                  focus1.requestFocus();
-                },
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return "please enter your mobile Number  ";
-                  }
-                  return auht.validationMap['phone'];
-                }),
+              text: trans(context, 'mobile_no'),
+              cController: _usernameController,
+              prefixIcon: Icons.phone,
+              kt: TextInputType.phone,
+              obscureText: false,
+              readOnly: false,
+              suffixicon: CountryCodePicker(
+                onChanged: _onCountryChange,
+                initialSelection: mainProvider.countryCode,
+                favorite: const <String>['+90', 'TR'],
+                showFlagDialog: true,
+                showFlag: false,
+                showCountryOnly: false,
+                showOnlyCountryWhenClosed: false,
+                alignLeft: false,
+                padding: isRTL == true
+                    ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+                    : const EdgeInsets.fromLTRB(32, 0, 0, 0),
+              ),
+              onFieldSubmitted: () {
+                _focus1.requestFocus();
+              },
+              validator: (String value) {
+                if (value.isEmpty) {
+                  return "please enter your mobile Number  ";
+                }
+                return auht.validationMap['phone'];
+              },
+            ),
             TextFormInput(
-                text: trans(context, 'password'),
-                cController: passwordController,
-                prefixIcon: Icons.lock_outline,
-                kt: TextInputType.visiblePassword,
-                readOnly: false,
-                onTab: () {},
-                suffixicon: IconButton(
-                  icon: Icon(
-                    (_obscureText == false)
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
+              text: trans(context, 'password'),
+              cController: _passwordController,
+              prefixIcon: Icons.lock_outline,
+              kt: TextInputType.visiblePassword,
+              // TODO(mohammed): review readOnly attriute
+              readOnly: false,
+              onTab: () {},
+              suffixicon: IconButton(
+                icon: Icon(
+                  (_obscureText == false)
+                      ? Icons.visibility
+                      : Icons.visibility_off,
                 ),
-                onFieldSubmitted: () {
-                  focus2.requestFocus();
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
                 },
-                obscureText: _obscureText,
-                focusNode: focus1,
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return "please enter your password ";
-                  }
-                  return auht.validationMap['password'];
-                }),
+              ),
+              onFieldSubmitted: () {
+                _focus2.requestFocus();
+              },
+              obscureText: _obscureText,
+              focusNode: _focus1,
+              validator: (String value) {
+                if (value.isEmpty) {
+                  return "please enter your password ";
+                }
+                return auht.validationMap['password'];
+              },
+            ),
           ],
         ),
       ),
@@ -156,10 +153,10 @@ class _MyLoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
+    final MainProvider mainProvider = Provider.of<MainProvider>(context);
     final Auth auht = Provider.of<Auth>(context);
-
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+
     return Scaffold(
         body: GestureDetector(
       onTap: () {
@@ -176,21 +173,26 @@ class _MyLoginScreenState extends State<LoginScreen>
         ),
         Column(
           children: <Widget>[
+            // TODO(mohammed): rename mystyle2.
             Text(trans(context, 'joker'),
                 textAlign: TextAlign.center, style: styles.mystyle2),
             const SizedBox(height: 5),
-            Text(trans(context, 'all_you_need'),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    color: colors.orange,
-                    fontSize: 20)),
+            Text(
+              trans(context, 'all_you_need'),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                color: colors.orange,
+                fontSize: 20,
+              ),
+            ),
             const SizedBox(height: 50),
             Text(trans(context, 'hello'), style: styles.mystyle2),
             const SizedBox(height: 10),
             Text(trans(context, 'enter_login_information'),
                 style: styles.mystyle),
-            customcard(context, bolc, auht),
+            customcard(context,
+                mainProvider: mainProvider, isRTL: isRTL, auht: auht),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               alignment: isRTL ? Alignment.centerLeft : Alignment.centerRight,
@@ -198,7 +200,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                 trans(context, 'forget_password'),
                 fw: FontWeight.w500,
                 fc: colors.black,
-                myfunc: () {
+                onPressed: () {
                   Navigator.pushNamed(context, '/forget_pass');
                 },
               ),
@@ -212,15 +214,15 @@ class _MyLoginScreenState extends State<LoginScreen>
                   onPressed: () async {
                     if (_isButtonEnabled) {
                       if (_formKey.currentState.validate()) {
-                        bolc.togelf(true);
+                        mainProvider.togelf(true);
                         setState(() {
                           _isButtonEnabled = false;
                         });
 
                         if (await auht.login(
                             countryCodeTemp,
-                            usernameController.text,
-                            passwordController.text,
+                            _usernameController.text,
+                            _passwordController.text,
                             context)) {
                         } else {
                           _formKey.currentState.validate();
@@ -229,20 +231,20 @@ class _MyLoginScreenState extends State<LoginScreen>
                           _isButtonEnabled = true;
                         });
 
-                        bolc.togelf(false);
+                        mainProvider.togelf(false);
                       }
                     }
                   },
                   color: Colors.deepOrangeAccent,
                   textColor: Colors.white,
-                  child: bolc.returnchild(trans(context, 'login'))),
+                  child: mainProvider.returnchild(trans(context, 'login'))),
             ),
             const SizedBox(height: 80),
             Text(trans(context, 'dont_have_account'), style: styles.mystyle),
             ButtonToUse(trans(context, 'create_account'),
                 fw: FontWeight.bold,
                 fc: Colors.black,
-                width: MediaQuery.of(context).size.width, myfunc: () {
+                width: MediaQuery.of(context).size.width, onPressed: () {
               Navigator.pushNamedAndRemoveUntil(
                   context, '/Registration', (_) => false);
             }),
@@ -269,10 +271,8 @@ class _MyLoginScreenState extends State<LoginScreen>
   }
 
   void _onCountryChange(CountryCode countryCode) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
-    bolc.saveCountryCode(countryCode.code, countryCode.dialCode);
-
-
+    final MainProvider mainProvider = Provider.of<MainProvider>(context);
+    mainProvider.saveCountryCode(countryCode.code, countryCode.dialCode);
     setState(() {
       countryCodeTemp = countryCode.dialCode;
     });

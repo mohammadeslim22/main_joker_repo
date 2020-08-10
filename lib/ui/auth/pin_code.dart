@@ -338,7 +338,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                     trans(context, 'tech_support'),
                     fw: FontWeight.bold,
                     fc: Colors.green,
-                    myfunc: () {},
+                    onPressed: () {},
                   ),
                 ],
               ),

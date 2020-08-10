@@ -44,7 +44,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
     setState(() {
       config.prifleNoVerfiyVisit = true;
     });
-        data.getData("countryDialCodeTemp").then((String value) {
+    data.getData("countryDialCodeTemp").then((String value) {
       setState(() {
         countryCodeTemp = value;
       });
@@ -214,7 +214,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                 // onTab: () {},
                 suffixicon: CountryCodePicker(
                   onChanged: _onCountryChange,
-                  initialSelection:bolc.countryCode,
+                  initialSelection: bolc.countryCode,
                   favorite: const <String>['+972', 'IS'],
                   showFlagDialog: true,
                   showFlag: false,
@@ -240,8 +240,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                   // return validationMap['phone'];
                 },
               ),
-               
-                 Padding(
+              Padding(
                   padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
@@ -253,7 +252,6 @@ class _MyHomePageState extends State<PinCodeForProfile>
                       color: Colors.deepOrangeAccent,
                       textColor: Colors.white,
                       child: bolc.returnchild(trans(context, 'send_code')))),
-                      
               pinCode(bolc),
               const SizedBox(height: 15),
               if (enabeld)
@@ -273,8 +271,6 @@ class _MyHomePageState extends State<PinCodeForProfile>
                         seconds: 30))
               else
                 Container(),
-             
-           
               const SizedBox(height: 15),
               Text(trans(context, 'code_not_recieved'),
                   textAlign: TextAlign.center, style: styles.underHead),
@@ -311,7 +307,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                     trans(context, 'tech_support'),
                     fw: FontWeight.bold,
                     fc: Colors.green,
-                    myfunc: () {},
+                    onPressed: () {},
                   ),
                 ],
               ),
@@ -320,8 +316,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
 
   void _onCountryChange(CountryCode countryCode) {
     final MainProvider bolc = Provider.of<MainProvider>(context);
-bolc.saveCountryCode(countryCode.code,countryCode.dialCode);
-  
+    bolc.saveCountryCode(countryCode.code, countryCode.dialCode);
 
     setState(() {
       countryCodeTemp = countryCode.dialCode;
