@@ -49,33 +49,5 @@ class _MerchantSalesListState extends State<MerchantSalesList> {
         pageFuture: (int pageIndex) {
           return getSalesData(pageIndex);
         });
-
-    // FutureBuilder<List<SaleData>>(
-    //     future: getsalesData(),
-    //     builder:
-    //         (BuildContext ctx, AsyncSnapshot<List<SaleData>> snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.done) {
-    //         print(snapshot.data[0].merchant);
-    //         return ListView.builder(
-    //             shrinkWrap: true,
-    //             physics: const ScrollPhysics(),
-    //             padding: const EdgeInsets.all(20),
-    //             itemCount: snapshot.data.length,
-    //             addRepaintBoundaries: true,
-    //             itemBuilder: (BuildContext context, int index) {
-    //               return FadeIn(
-    //                   child: SalesCard(
-    //                       context: context,
-    //                       sale: snapshot.data.elementAt(index)));
-    //             });
-    //       } else {
-    //         return const Center(
-    //             child: CircularProgressIndicator(
-    //           backgroundColor: Colors.transparent,
-    //         ));
-    //       }
-    //     })
-
-    //   );
   }
 }

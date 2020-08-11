@@ -122,7 +122,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                           child: CircleAvatar(
                         maxRadius: 40,
                         minRadius: 30,
-                        child: //Image.asset("assets/images/profile_placeholder.jpg")
+                        child: 
 
                             CachedNetworkImage(
                           placeholderFadeInDuration:
@@ -190,9 +190,6 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 onTap: () {
                   Navigator.pushNamed(
                     context, "/Membership",
-                    // arguments: <String, List<MemberShip>>{
-                    //   "membershipsData": MemberShip.membershipsData
-                    // }
                   );
                   toggle();
                 },

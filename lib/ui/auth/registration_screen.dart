@@ -14,10 +14,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/util/dio.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
-import 'package:dio/dio.dart';
 
 class Registration extends StatefulWidget {
   @override

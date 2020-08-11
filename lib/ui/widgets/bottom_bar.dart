@@ -37,14 +37,6 @@ class BottomContent extends StatelessWidget {
                     height: bolc.bottomNavIndex == 1 ? 20 : 25,
                     width: bolc.bottomNavIndex == 1 ? 25 : 35,
                   ),
-
-                  // Image.asset(
-                  //   bolc.bottomNavIndex == 0
-                  //       ? "assets/images/discounts.png"
-                  //       : "assets/images/lightoffdiscount.png",
-                  //   height: bolc.bottomNavIndex == 1 ? 20 : 25,
-                  //   width: bolc.bottomNavIndex == 1 ? 25 : 35,
-                  // ),
                 ),
                 const SizedBox(height: 2),
                 Text(
@@ -93,15 +85,6 @@ class BottomContent extends StatelessWidget {
                     height: bolc.bottomNavIndex == 0 ? 20 : 25,
                     width: bolc.bottomNavIndex == 0 ? 25 : 35,
                   ),
-
-                  // Image.asset(
-                  //   bolc.bottomNavIndex == 0
-                  //       ? "assets/images/lightoffshop.png"
-                  //       : "assets/images/shop.png",
-                  //   height: bolc.bottomNavIndex == 0 ? 20 : 25,
-                  //   width: bolc.bottomNavIndex == 0 ? 25 : 35,
-
-                  // ),
                 ),
                 const SizedBox(
                   height: 5,

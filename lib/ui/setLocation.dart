@@ -387,10 +387,6 @@ class _AutoLocateState extends State<AutoLocate> {
                 onPressed: () {
                   data.setData("lat", lat.toString());
                   data.setData("long", long.toString());
-                  // if (config.amIcomingFromHome) {
-                  //   data.setData("lat", lat.toString());
-                  //   data.setData("long", long.toString());
-                  // }
                   setState(() {
                     config.lat = lat;
                     config.long = long;
@@ -401,9 +397,7 @@ class _AutoLocateState extends State<AutoLocate> {
                   print("${config.lat},${config.long}");
                   Navigator.pop(context);
                   Provider.of<MainProvider>(context, listen: false)
-                      .togelocationloading(false);
-                  //  Scaffold.of(context).hideCurrentSnackBar();
-                },
+                      .togelocationloading(false);                },
                 color: Colors.blue,
                 textColor: Colors.white,
                 child: Text(trans(context, 'pick'))),

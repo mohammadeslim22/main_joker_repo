@@ -116,7 +116,6 @@ class _DiscountsListState extends State<DiscountsList> {
             backgroundColor: Colors.transparent,
           ));
         },
-        // pageSize: 10,
         pageLoadController: _pagewiseController,
         padding: const EdgeInsets.all(15.0),
         itemBuilder: (BuildContext context, dynamic entry, int index) {
@@ -126,12 +125,6 @@ class _DiscountsListState extends State<DiscountsList> {
         noItemsFoundBuilder: (BuildContext context) {
           return Text(trans(context, "noting_to_show"));
         },
-        // pageFuture: (int pageIndex) {
-        //   //  return getSalesDataFilterd(pageIndex, widget.filterData);
-        //   return (widget.filterData != null)
-        //       ? getSalesDataFilterd(pageIndex, widget.filterData)
-        //       : getSalesData(pageIndex);
-        // },
       ),
     );
   }

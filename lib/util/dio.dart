@@ -42,7 +42,7 @@ void dioDefaults() {
     // print("error : ${response.realUri.toString()}");
     if (response.statusCode == 200) {
     } else if (response.statusCode == 401) {
-      Fluttertoast.showToast(msg: "Retry later");
+      Fluttertoast.showToast(msg:"Login please");
       getIt<NavigationService>().navigateTo('/login',null);
     }
     return response; // continue

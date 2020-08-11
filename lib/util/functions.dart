@@ -74,13 +74,11 @@ Future<void> getLocationName() async {
     config.addresses =
         await Geocoder.local.findAddressesFromCoordinates(config.coordinates);
     config.first = config.addresses.first;
-    // data.setData('address', config.addresses.first.toString());
     config.first = config.addresses.first;
     config.locationController.text = (config.first == null)
         ? "loading"
         : config.first.addressLine ?? "loading";
   } catch (e) {
-    //  data.setData('address', "Unkown Location");
     config.locationController.text =
         "Unkown latitude: ${config.lat.round().toString()} , longitud: ${config.long.round().toString()}";
   }

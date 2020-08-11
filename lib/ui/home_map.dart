@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
-import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/map_branches.dart';
-import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';
@@ -104,12 +102,6 @@ class _HOMEMAPState extends State<HOMEMAP> {
         )) ??
         false;
   }
-  // Future<bool> _willPopCallback() async {
-  //   Provider.of<MainProvider>(context, listen: false)
-  //       .togelocationloading(false);
-  //   Navigator.pop(context);
-  //   return true;
-  // }
 
   Set<int> selectedOptions = <int>{};
 
@@ -401,15 +393,6 @@ class _HOMEMAPState extends State<HOMEMAP> {
             "/MerchantDetails",
             <String, dynamic>{"merchantId": mb.merchant.id, "branchId": mb.id},
           );
-          // setState(() {
-          //   mapController
-          //       .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          //     target: LatLng(e.latitude, e.longitude),
-          //     zoom: 13,
-          //   )));
-          //   lat = e.latitude;
-          //   long = e.longitude;
-          // });
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,

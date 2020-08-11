@@ -33,8 +33,7 @@ class HOMEMAProvider with ChangeNotifier {
     });
     final Uint8List markerIcon =
         await getBytesFromAsset('assets/images/logo.jpg', 100);
-    // await location.getLocation().then((LocationData value) {
-    //   location.onLocationChanged.listen((LocationData value) {
+
     final Marker marker = Marker(
         markerId: MarkerId('current_location'),
         position: LatLng(config.lat ?? 0, config.long ?? 0),
@@ -44,9 +43,6 @@ class HOMEMAProvider with ChangeNotifier {
                 .translateWithNoContext("your_location")));
 
     markers[MarkerId('current_location')] = marker;
-    //   });
-    // });
-
     dataloaded = true;
     if (branches.mapBranches.isEmpty) {
       getIt<HOMEMAProvider>().showHorizentalListOrHideIt(false);

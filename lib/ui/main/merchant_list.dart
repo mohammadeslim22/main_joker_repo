@@ -85,7 +85,6 @@ class _ShopListState extends State<ShopList> {
         }
       },
       child: PagewiseListView<dynamic>(
-        // controller: _pagewiseController,
           physics: const ScrollPhysics(),
           shrinkWrap: true,
           loadingBuilder: (BuildContext context) {
@@ -99,10 +98,6 @@ class _ShopListState extends State<ShopList> {
             return FadeIn(child: MerchantCard(branchData: entry as BranchData));
           },
           pageLoadController: _pagewiseController,
-          // pageFuture: (int pageIndex) {
-          //   print(pageIndex);
-          //   return getBranchesData(pageIndex);
-          // }
           ),
     );
   }

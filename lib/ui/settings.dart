@@ -94,20 +94,7 @@ class MySettingState extends State<SettingsScreen> {
             'assets/images/settingsvg.svg',
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * .35,
-          ),
-          // Container(
-          //     padding: const EdgeInsets.symmetric(horizontal: 10),
-          //     color: Colors.white,
-          //     child: Row(
-          //       children: <Widget>[
-          //         Text(trans(context, "font"), style: styles.mystyle),
-          //         const SizedBox(width: 3),
-          //         Flexible(
-          //           fit: FlexFit.tight,
-          //           child: Container(child: fontBar(context)),
-          //         )
-          //       ],
-          //     )),
+          ), 
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),

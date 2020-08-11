@@ -447,7 +447,6 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
           .post<dynamic>(
         "avatar",
         data: formData,
-        // queryParameters: <String, dynamic>{"avater": formData},
         onSendProgress: (int sent, int total) {},
       )
           .then((dynamic result) {

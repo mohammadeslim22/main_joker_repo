@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
 import '../widgets/buttonTouse.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'dart:io' show Platform;
 
 class LoginScreen extends StatefulWidget {
   @override

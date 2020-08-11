@@ -61,12 +61,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
     _hide.forward();
     filterData = widget.filterData;
-    // /*
-    //   final MinProvider bolc = Provider.of<MinProvider>(context, listen: false);
-    //   tapTitle = bolc.bottomNavIndex == 0
-    //       ? '${trans(context, 'sales')}'
-    //       : '${trans(context, 'merchants')}';
-    // });
   }
 
   @override

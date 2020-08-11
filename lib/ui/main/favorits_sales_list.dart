@@ -102,7 +102,6 @@ class _DiscountsListState extends State<FavoritDiscountsList> {
             return Text(trans(context, "noting_to_show"));
           },
           pageFuture: (int pageIndex) {
-            //  return getSalesDataFilterd(pageIndex, widget.filterData);
             return getFavoritData(pageIndex);
           }),
     );
