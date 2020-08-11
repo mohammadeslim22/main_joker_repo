@@ -21,7 +21,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   bool locationTurnOn;
 
-  String _platformVersion = 'Unknown';
   Future<void> askUser(Language lang, MainProvider bolc) async {
     data.getData("countryCodeTemp").then((String value1) {
       data.getData("countryDialCodeTemp").then((String value2) {
