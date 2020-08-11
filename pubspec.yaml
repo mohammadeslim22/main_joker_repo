@@ -76,7 +76,7 @@ dependencies:
   get_it: ^4.0.2
   async: ^2.4.1
   #modal_bottom_sheet: ^0.1.6+1
-  
+  flutter_sim_country_code: ^0.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

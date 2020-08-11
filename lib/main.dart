@@ -18,8 +18,8 @@ import 'util/service_locator.dart';
 // import 'package:joker/models/user.dart';
 
 Future<void> main() async {
-  // ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>
-  //     errorScreen(flutterErrorDetails.exception);
+  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>
+      errorScreen(flutterErrorDetails.exception);
 
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
@@ -33,17 +33,7 @@ Future<void> main() async {
     }
     dio.options.headers['authorization'] = '$auth';
   });
-  // data.getData("lat").then((String value) {
-  //   config.lat = double.parse(value);
-  // });
-  //  updateLocation;
-  // data.getData("long").then((String value) async {
 
-  //   print("lat  $value");
-  //   if (value == null) {
-  //     await updateLocation;
-  //   }
-  // });
   data.getData("lang").then((String value) {
     config.userLnag = Locale(value);
   });
@@ -86,13 +76,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final Language lang = Provider.of<Language>(context);
-   // final MainProvider bolc = Provider.of<MainProvider>(context);
-
-    // data.getData("lang").then((String value) {
-    //   config.userLnag = Locale(value);
-    //   lang.setLanguage(Locale(value));
-    // });
-
     return MaterialApp(
       navigatorKey: getIt<NavigationService>().navigatorKey,
       debugShowCheckedModeBanner: false,
@@ -118,56 +101,18 @@ class _MyAppState extends State<MyApp> {
 
         for (final Locale supportedLocale in supportedLocales) {
           if (supportedLocale.languageCode == locale.languageCode) {
-            // lang.setLanguage(supportedLocale);
             data.setData("initlang", supportedLocale.languageCode);
-
-            //lang.setLanguage(supportedLocale);
             return supportedLocale;
           }
         }
 
-        // TODO(ahmed): use it to change language on start application
-        // SchedulerBinding.instance.addPostFrameCallback((_) async {
-        //   await data.getData("lang").then((String value) {
-        //     config.userLnag = Locale(value);
-        //     lang.setLanguage(Locale(value));
-        //   });
-        // });
+
         data.setData("initlang", supportedLocales.first.countryCode);
         return supportedLocales.first;
       },
       theme: mainThemeData(),
       onGenerateRoute: onGenerateRoute,
       home: const SplashScreen(),
-      /*Builder(
-        builder: (BuildContext context) {
-          if (doOnce) {
-            data.getData("countryCodeTemp").then((String value1) {
-              data.getData("countryDialCodeTemp").then((String value2) {
-                bolc.saveCountryCode(value1, value2);
-              });
-            });
-            data.getData("lang").then((String value) async {
-              if (value.isEmpty) {
-              } else {
-                print("1: $value");
-                config.userLnag = Locale(value);
-                await lang.setLanguage(Locale(value));
-                print("2: ${lang.currentLanguage}");
-              }
-            });
-
-            print("3: ${lang.currentLanguage}");
-            //  setState(() {
-            doOnce = false;
-            //    });
-          }
-          return const SplashScreen();
-          // return config.loggedin
-          //     ? HOMEMAP(lat: config.lat??34, long: config.long??31)
-          //     : LoginScreen();
-        },
-      ),*/
     );
   }
 }

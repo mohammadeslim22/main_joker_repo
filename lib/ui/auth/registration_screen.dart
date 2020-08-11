@@ -5,6 +5,7 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/auth.dart';
 import '../widgets/buttonTouse.dart';
 import '../widgets/text_form_input.dart';
 import 'package:location/location.dart';
@@ -28,28 +29,7 @@ class _MyRegistrationState extends State<Registration>
   List<String> location2;
   Location location = Location();
 
-  static List<String> validators = <String>[null, null, null, null, null, null];
-  static List<String> keys = <String>[
-    'name',
-    'email',
-    'phone',
-    'password',
-    'birthdate',
-    'location'
-  ];
-  Map<String, String> validationMap =
-      Map<String, String>.fromIterables(keys, validators);
   bool _isButtonEnabled;
-  @override
-  void initState() {
-    super.initState();
-    _isButtonEnabled = true;
-        data.getData("countryDialCodeTemp").then((String value) {
-      setState(() {
-        countryCodeTemp = value;
-      });
-    });
-  }
 
   bool _obscureText = false;
   bool loading = false;
@@ -63,6 +43,18 @@ class _MyRegistrationState extends State<Registration>
   DateTime firstDate = DateTime(today.year - 90, today.month, today.day);
   DateTime lastDate = DateTime(today.year - 18, today.month, today.day);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _isButtonEnabled = true;
+    data.getData("countryDialCodeTemp").then((String value) {
+      setState(() {
+        countryCodeTemp = value;
+      });
+    });
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -79,29 +71,8 @@ class _MyRegistrationState extends State<Registration>
       FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  Future<bool> _onWillPop() async {
-    return (await showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Are you sure?'),
-            content: const Text('Do you want to exit the App'),
-            actionsOverflowButtonSpacing: 50,
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('Cancel'),
-              ),
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Yes'),
-              ),
-            ],
-          ),
-        )) ??
-        false;
-  }
-
-  Widget customcard(BuildContext context, MainProvider bolc) {
+  Widget customcard(
+      BuildContext context, MainProvider mainProvider, Auth auth) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     final FocusNode focus = FocusNode();
     final FocusNode focusminus1 = FocusNode();
@@ -114,7 +85,7 @@ class _MyRegistrationState extends State<Registration>
         child: Form(
             key: _formKey,
             onWillPop: () {
-              return _onWillPop();
+              return onWillPop(context);
             },
             child: Column(children: <Widget>[
               TextFormInput(
@@ -133,9 +104,9 @@ class _MyRegistrationState extends State<Registration>
                   },
                   validator: (String value) {
                     if (value.length < 3) {
-                      return "username must be more than 3 letters";
+                      return trans(context, 'username_more_than_3');
                     }
-                    return validationMap['name'];
+                    return auth.regValidationMap['name'];
                   }),
               TextFormInput(
                   text: trans(context, 'email'),
@@ -153,9 +124,9 @@ class _MyRegistrationState extends State<Registration>
                   },
                   validator: (String value) {
                     if (value.isEmpty) {
-                      return "please enter a valid email ";
+                      return trans(context, 'plz_enter_valid_email');
                     }
-                    return validationMap['email'];
+                    return auth.regValidationMap['email'];
                   }),
               TextFormInput(
                   text: trans(context, 'mobile_no'),
@@ -167,13 +138,10 @@ class _MyRegistrationState extends State<Registration>
                   onTab: () {},
                   suffixicon: CountryCodePicker(
                     onChanged: _onCountryChange,
-                    initialSelection: 'TR',
-                    favorite: const <String>['+966', 'SA'],
+                    initialSelection:'IL',
+                    favorite: <String>[mainProvider.dialCodeFav],
                     showFlagDialog: true,
                     showFlag: false,
-                    showCountryOnly: false,
-                    showOnlyCountryWhenClosed: false,
-                    alignLeft: false,
                     padding: isRTL == true
                         ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
                         : const EdgeInsets.fromLTRB(32, 0, 0, 0),
@@ -184,9 +152,9 @@ class _MyRegistrationState extends State<Registration>
                   },
                   validator: (String value) {
                     if (value.isEmpty) {
-                      return "please enter your mobile Number  ";
+                      return trans(context, 'plz_enter_valid_email');
                     }
-                    return validationMap['phone'];
+                    return auth.regValidationMap['phone'];
                   }),
               TextFormInput(
                   text: trans(context, 'password'),
@@ -211,9 +179,9 @@ class _MyRegistrationState extends State<Registration>
                   focusNode: focus2,
                   validator: (String value) {
                     if (passwordController.text.length < 6) {
-                      return "password must be more than 6 letters";
+                      return trans(context, 'pass_must_more_6');
                     }
-                    return validationMap['password'];
+                    return auth.regValidationMap['password'];
                   }),
               TextFormInput(
                   text: trans(context, 'birth_date'),
@@ -225,21 +193,21 @@ class _MyRegistrationState extends State<Registration>
                   onTab: () {
                     _selectDate(context);
                   },
-                  suffixicon: IconButton(
-                    color: Colors.orange,
-                    icon: Icon(
-                      Icons.calendar_today,
-                    ),
-                    onPressed: () {
-                      //  _selectDate(context);
-                    },
+                  suffixicon:
+                      // IconButton(
+                      // color: Colors.orange,
+                      // icon:
+                      Icon(
+                    Icons.calendar_today,
                   ),
+                  // onPressed: () {},
+                  // ),
                   focusNode: focus3,
                   validator: (String value) {
                     if (value.isEmpty) {
-                      return "please enter your Birth Date ";
+                      return trans(context, 'plz_enter_birthdate');
                     }
-                    return validationMap['birthdate'];
+                    return auth.regValidationMap['birthdate'];
                   }),
               TextFormInput(
                   text: trans(context, 'get_location'),
@@ -249,28 +217,27 @@ class _MyRegistrationState extends State<Registration>
                   readOnly: true,
                   onTab: () async {
                     try {
-                      bolc.togelocationloading(true);
+                      mainProvider.togelocationloading(true);
                       if (await updateLocation) {
                         await getLocationName();
-                        bolc.togelocationloading(false);
+                        mainProvider.togelocationloading(false);
                       } else {
                         Vibration.vibrate(duration: 400);
-                        bolc.togelocationloading(false);
+                        mainProvider.togelocationloading(false);
 
                         Scaffold.of(context).showSnackBar(snackBar);
-                        //  Scaffold.of(context).hideCurrentSnackBar();
                         setState(() {
                           config.locationController.text =
-                              "Tap to set my location";
+                              trans(context, 'tab_set_ur_location');
                         });
                       }
                     } catch (e) {
                       Vibration.vibrate(duration: 400);
-                      bolc.togelocationloading(false);
+                      mainProvider.togelocationloading(false);
                       Scaffold.of(context).showSnackBar(snackBar);
                       setState(() {
                         config.locationController.text =
-                            "Tap to set my location";
+                            trans(context, 'tab_set_ur_location');
                       });
                     }
                   },
@@ -288,15 +255,15 @@ class _MyRegistrationState extends State<Registration>
                   focusNode: focus4,
                   validator: (String value) {
                     if (value.isEmpty) {
-                      return "please specify you Location :)";
+                      return trans(context, 'plz_set_ur_location');
                     }
-                    return validationMap['location'];
+                    return auth.regValidationMap['location'];
                   }),
               Container(
                 margin: const EdgeInsets.symmetric(
                   horizontal: 16,
                 ),
-                child: bolc.visibilityObs
+                child: mainProvider.visibilityObs
                     ? Row(
                         children: <Widget>[
                           Expanded(
@@ -311,7 +278,8 @@ class _MyRegistrationState extends State<Registration>
 
   @override
   Widget build(BuildContext context) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
+    final MainProvider mainProvider = Provider.of<MainProvider>(context);
+    final Auth auth = Provider.of<Auth>(context);
     return Scaffold(
         appBar: AppBar(),
         body: Builder(
@@ -326,16 +294,10 @@ class _MyRegistrationState extends State<Registration>
                       Text(trans(context, 'account_creation'),
                           textAlign: TextAlign.center, style: styles.mystyle2),
                       const SizedBox(height: 8),
-                      Text(
-                        trans(context, 'please_check'),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.values.first,
-                          color: const Color(0xFF303030),
-                          fontSize: 20,
-                        ),
-                      ),
-                      customcard(context, bolc),
+                      Text(trans(context, 'please_check'),
+                          textAlign: TextAlign.center,
+                          style: styles.pleazeCheck),
+                      customcard(context, mainProvider, auth),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 32, vertical: 16),
@@ -346,83 +308,27 @@ class _MyRegistrationState extends State<Registration>
                             onPressed: () async {
                               if (_isButtonEnabled) {
                                 if (_formKey.currentState.validate()) {
-                                  bolc.togelf(true);
+                                  mainProvider.togelf(true);
                                   setState(() {
                                     _isButtonEnabled = false;
                                   });
-                                  await dio.post<dynamic>("register",
-                                      data: <String, dynamic>{
-                                        "name": usernameController.text,
-                                        "password": passwordController.text,
-                                        "password_confirmation":
-                                            passwordController.text,
-                                        "birth_date": birthDateController.text,
-                                        "email": emailController.text,
-                                        "phone": countryCodeTemp +
-                                            mobileNoController.text,
-                                        "country_id": 1,
-                                        "city_id": 1,
-                                        "address":
-                                            config.locationController.text,
-                                        "longitude": config.long,
-                                        "latitude": config.lat
-                                      }).then((Response<dynamic> value) async {
-                                    setState(() {
-                                      _isButtonEnabled = true;
-                                    });
+                                  await auth.register(
+                                      context,
+                                      mainProvider,
+                                      usernameController.text,
+                                      passwordController.text,
+                                      birthDateController.text,
+                                      emailController.text,
+                                      mobileNoController.text,
+                                      countryCodeTemp);
 
-                                    if (value.statusCode == 422) {
-                                      value.data['errors']
-                                          .forEach((String k, dynamic vv) {
-                                        setState(() {
-                                          validationMap[k] = vv[0].toString();
-                                        });
-                                        print(validationMap);
-                                      });
-                                      _formKey.currentState.validate();
-                                      validationMap.updateAll(
-                                          (String key, String value) {
-                                        return null;
-                                      });
-                                    }
-                                    if (value.statusCode == 201) {
-                                      print(value.data);
-
-                                      Navigator.pushNamed(context, '/pin',
-                                          arguments: <String, String>{
-                                            'mobileNo': countryCodeTemp +
-                                                mobileNoController.text
-                                          });
-                                      config.locationController.clear();
-                                      await data.setData("id",
-                                          value.data['data']['id'].toString());
-                                      data.setData(
-                                          "email", emailController.text);
-                                      data.setData(
-                                          "username", usernameController.text);
-                                      data.setData(
-                                          "password", passwordController.text);
-                                      data.setData(
-                                          "phone",
-                                          countryCodeTemp +
-                                              mobileNoController.text);
-                                      data.setData(
-                                          "lat", config.lat.toString());
-                                      data.setData(
-                                          "long", config.long.toString());
-                                      data.setData(
-                                          "address",
-                                          config.locationController.text
-                                              .toString());
-                                    }
-                                    bolc.togelf(false);
-                                  });
+                                  _formKey.currentState.validate();
                                 }
                               }
                             },
                             color: Colors.deepOrangeAccent,
                             textColor: colors.white,
-                            child: bolc
+                            child: mainProvider
                                 .returnchild(trans(context, 'regisration'))),
                       ),
                       const Padding(
@@ -451,7 +357,7 @@ class _MyRegistrationState extends State<Registration>
 
   void _onCountryChange(CountryCode countryCode) {
     final MainProvider bolc = Provider.of<MainProvider>(context);
-    bolc.saveCountryCode(countryCode.code,countryCode.dialCode);
+    bolc.saveCountryCode(countryCode.code, countryCode.dialCode);
 
     setState(() {
       countryCodeTemp = countryCode.dialCode;

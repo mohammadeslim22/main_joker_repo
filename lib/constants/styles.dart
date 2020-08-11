@@ -15,8 +15,8 @@ class Styles {
 
   TextStyle smallButton =
       TextStyle(fontSize: 12, color: colors.black, fontWeight: FontWeight.w100);
-      TextStyle smallButtonactivated =
-      TextStyle(fontSize: 12, color: colors.orange, fontWeight: FontWeight.w100);
+  TextStyle smallButtonactivated = TextStyle(
+      fontSize: 12, color: colors.orange, fontWeight: FontWeight.w100);
   TextStyle mylight = const TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.grey,
@@ -27,30 +27,31 @@ class Styles {
     color: Colors.grey,
     fontSize: 12,
   );
-  TextStyle mysmall = const TextStyle(
-    fontWeight: FontWeight.w100,
-    color: Colors.black,
-    fontSize: 13,
-    height: 1.7
+  TextStyle pleazeCheck = TextStyle(
+    fontWeight: FontWeight.values.first,
+    color: const Color(0xFF303030),
+    fontSize: 20,
   );
-    TextStyle mysmallforgridview = const TextStyle(
+  TextStyle mysmall = const TextStyle(
+      fontWeight: FontWeight.w100,
+      color: Colors.black,
+      fontSize: 13,
+      height: 1.7);
+  TextStyle mysmallforgridview = const TextStyle(
     fontWeight: FontWeight.w100,
-    
     fontSize: 13,
   );
   TextStyle mystyle = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.black,
       fontSize: 15,
-      height: 1.7
-      );
+      height: 1.7);
 
-        TextStyle myredstyle = const TextStyle(
+  TextStyle myredstyle = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.red,
       fontSize: 15,
-      height: 1.7
-      );
+      height: 1.7);
   TextStyle mystyle2 = const TextStyle(
     fontWeight: FontWeight.bold,
     color: Colors.black,
@@ -71,7 +72,7 @@ class Styles {
     color: Colors.white,
     fontSize: 20,
   );
-    TextStyle saleScreenBottomBar = const TextStyle(
+  TextStyle saleScreenBottomBar = const TextStyle(
     fontWeight: FontWeight.w600,
     color: Colors.orangeAccent,
     fontSize: 20,
@@ -86,15 +87,15 @@ class Styles {
     color: Colors.red,
     fontSize: 12,
   );
-    TextStyle redstyleForSaleScreen = const TextStyle(
+  TextStyle redstyleForSaleScreen = const TextStyle(
     fontWeight: FontWeight.w900,
     color: Colors.red,
-    fontSize:24,
+    fontSize: 24,
   );
-      TextStyle redstyleForminiSaleScreen = const TextStyle(
+  TextStyle redstyleForminiSaleScreen = const TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.red,
-    fontSize:16,
+    fontSize: 16,
   );
   TextStyle mywhitestyle = const TextStyle(
     fontWeight: FontWeight.w100,
@@ -109,12 +110,12 @@ class Styles {
     height: 1.5,
     decoration: TextDecoration.none,
   );
-    TextStyle memberShipBottomSheet = const TextStyle(
+  TextStyle memberShipBottomSheet = const TextStyle(
     fontWeight: FontWeight.w600,
     color: Colors.white,
     fontSize: 15,
   );
-      TextStyle memberShipBottomSheetmercahnt = TextStyle(
+  TextStyle memberShipBottomSheetmercahnt = TextStyle(
     fontWeight: FontWeight.w200,
     color: colors.grey,
     fontSize: 15,

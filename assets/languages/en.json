@@ -192,7 +192,12 @@
     "are_u_sure":"Are you sure ?",
     "do_u_want_to_exit":"Do you want to exit ?",
     "p_enter_u_mobile":"please enter your mobile Number",
-    "p_enter_password":"please enter your password"
-
+    "p_enter_password":"please enter your password",
+    "username_more_than_3":"username must be more than 3 letters",
+    "plz_enter_valid_email":"please enter a valid email ",
+    "pass_must_more_6":"password must be more than 6 letters",
+    "plz_enter_birthdate":"please enter your Birth Date",
+    "tab_set_ur_location":"Tap to set my location",
+    "plz_set_ur_location":"please specify you Location :)"
 
 }

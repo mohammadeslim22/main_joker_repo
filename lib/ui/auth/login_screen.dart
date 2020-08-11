@@ -62,8 +62,8 @@ class _MyLoginScreenState extends State<LoginScreen>
               readOnly: false,
               suffixicon: CountryCodePicker(
                 onChanged: _onCountryChange,
-                initialSelection: mainProvider.countryCode,
-                favorite: const <String>['+90', 'TR'],
+                initialSelection: mainProvider.dialCodeFav,
+                favorite:const  <String>['+39','FR'],
                 showFlagDialog: true,
                 showFlag: false,
                 padding: isRTL == true

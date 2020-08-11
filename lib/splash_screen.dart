@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/util/functions.dart';
@@ -6,6 +8,8 @@ import 'package:joker/util/data.dart';
 import 'providers/language.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:provider/provider.dart';
+
+// import 'package:joker/util/country_code.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
@@ -16,6 +20,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool locationTurnOn;
+
+  String _platformVersion = 'Unknown';
   Future<void> askUser(Language lang, MainProvider bolc) async {
     data.getData("countryCodeTemp").then((String value1) {
       data.getData("countryDialCodeTemp").then((String value2) {
@@ -41,12 +47,32 @@ class _SplashScreenState extends State<SplashScreen> {
         });
   }
 
+  Future<void> initPlatformState(MainProvider mainProvider) async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await FlutterSimCountryCode.simCountryCode;
+      print("platform country code : $platformVersion");
+      mainProvider.dialCodeFav = platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     final Language lang = Provider.of<Language>(context, listen: false);
     final MainProvider bolc = Provider.of<MainProvider>(context, listen: false);
     askUser(lang, bolc);
+    initPlatformState(bolc);
   }
 
   @override
