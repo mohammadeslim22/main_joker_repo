@@ -34,20 +34,23 @@ class Loader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Merchant>(
-        future: getMerchantData(merchentid),
-        builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return SaleDetailPage(
-              saleData: saleData,
-              merchant: merchant,
-            );
-          } else {
-            return const Center(
-                child: CircularProgressIndicator(
-                    backgroundColor: Colors.transparent));
-          }
-        });
+    return Container(
+      color:colors.white,
+      child: FutureBuilder<Merchant>(
+          future: getMerchantData(merchentid),
+          builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return SaleDetailPage(
+                saleData: saleData,
+                merchant: merchant,
+              );
+            } else {
+              return const Center(
+                  child: CircularProgressIndicator(
+                      backgroundColor: Colors.transparent));
+            }
+          }),
+    );
   }
 }
 
@@ -162,7 +165,6 @@ class ShopDetailsPage extends State<SaleDetailPage>
                 elevation: 0,
                 backgroundColor: Colors.transparent,
                 stretch: true,
-                title: Text(trans(context, 'slae_details')),
                 flexibleSpace: FlexibleSpaceBar(
                   background: InkWell(
                     onTap: () {

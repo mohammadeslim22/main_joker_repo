@@ -163,6 +163,7 @@ class _HOMEMAPState extends State<HOMEMAP> {
                             zoom: 13,
                           ),
                           onCameraMove: (CameraPosition pos) {
+                            print("specId  :$specId");
                             setState(() {
                               lat = pos.target.latitude;
                               long = pos.target.longitude;
@@ -277,12 +278,15 @@ class _HOMEMAPState extends State<HOMEMAP> {
                                                 : colors.black,
                                             onPressed: () {
                                               setState(() {
-                                                specId = item.id;
-                                                selectedOptions.clear();
                                                 if (!selectedOptions
                                                     .add(item.id)) {
                                                   selectedOptions
                                                       .remove(item.id);
+                                                  specId = null;
+                                                } else {
+                                                  selectedOptions.clear();
+                                                  specId = item.id;
+                                                  selectedOptions.add(item.id);
                                                 }
                                                 getIt<HOMEMAProvider>()
                                                     .showHorizentalListOrHideIt(
@@ -339,7 +343,7 @@ class _HOMEMAPState extends State<HOMEMAP> {
                           Positioned(
                               bottom: 40,
                               child: Container(
-                                height: 140,
+                                height: 145,
                                 width: MediaQuery.of(context).size.width,
                                 child: ListView(
                                   scrollDirection: Axis.horizontal,
@@ -402,7 +406,7 @@ class _HOMEMAPState extends State<HOMEMAP> {
                 Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                  height: 60,
+                  height: 65,
                   width: 60,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
@@ -413,78 +417,79 @@ class _HOMEMAPState extends State<HOMEMAP> {
                         fit: BoxFit.cover),
                   ),
                 ),
-                Column(
-                  children: <Widget>[
-                    Text(mb.name,
-                        textAlign: TextAlign.center, style: styles.underHead),
-                    Container(
-                      color: colors.white,
-                      child: Column(children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('${e.name}'),
-                            const SizedBox(width: 80),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  e.newPrice ?? "",
-                                  style: styles.redstyleForSaleScreen,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  e.oldPrice,
-                                  style: TextStyle(
-                                      decoration: TextDecoration.lineThrough),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: <Widget>[
-                                Text(
-                                  trans(context, 'starting_date'),
-                                  style: styles.mysmalllight,
-                                ),
-                                const SizedBox(width: 3),
-                                Text(e.startAt, style: styles.mystyle)
-                              ],
-                            ),
-                            const SizedBox(width: 40),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: <Widget>[
-                                Text(
-                                  trans(context, 'end_date'),
-                                  style: styles.mysmalllight,
-                                ),
-                                const SizedBox(
-                                  width: 3,
-                                ),
-                                Text(e.endAt, style: styles.mystyle)
-                              ],
-                            ),
-                          ],
-                        ),
-                      ]),
-                    ),
-                    FlatButton(
-                        onPressed: () {
-                          getIt<NavigationService>().navigateToNamed(
-                            "/MerchantDetails",
-                            <String, dynamic>{
-                              "merchantId": mb.merchant.id,
-                              "branchId": mb.id
-                            },
-                          );
-                        },
-                        child: Text(trans(context, "show_more")))
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Column(
+                    children: <Widget>[
+                      Text(mb.name,
+                          textAlign: TextAlign.center, style: styles.underHead),
+                      Container(
+                        color: colors.white,
+                        child: Column(children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text('${e.name}'),
+                              const SizedBox(width: 80),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    e.newPrice ?? "",
+                                    style: styles.redstyleForSaleScreen,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    e.oldPrice,
+                                    style: TextStyle(
+                                        decoration: TextDecoration.lineThrough),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    trans(context, 'starting_date'),
+                                    style: styles.mysmalllight,
+                                  ),
+                                  const SizedBox(width: 3),
+                                  Text(e.startAt, style: styles.mystyle)
+                                ],
+                              ),
+                              const SizedBox(width: 40),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    trans(context, 'end_date'),
+                                    style: styles.mysmalllight,
+                                  ),
+                                  const SizedBox(width: 3),
+                                  Text(e.endAt, style: styles.mystyle)
+                                ],
+                              ),
+                            ],
+                          ),
+                        ]),
+                      ),
+                      FlatButton(
+                          onPressed: () {
+                            getIt<NavigationService>().navigateToNamed(
+                              "/MerchantDetails",
+                              <String, dynamic>{
+                                "merchantId": mb.merchant.id,
+                                "branchId": mb.id
+                              },
+                            );
+                          },
+                          child: Text(trans(context, "show_more")))
+                    ],
+                  ),
                 )
               ],
             )

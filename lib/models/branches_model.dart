@@ -32,11 +32,12 @@ class BranchData {
   BranchData.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'] as String;
-    latitude = json['latitude'] as double;
-    longitude = json['longitude'] as double;
+    latitude =double.parse( json['latitude'].toString());
+    
+    longitude = double.parse( json['longitude'].toString());
     address = json['address'] as String;
     phone = json['phone'] as String;
-    salesCount = json['sales'] as int;
+   // salesCount = json['sales'] as int;
     merchant =
         MerchantfromBranch.fromJson(json['merchant'] as Map<String, dynamic>);
     isliked = json['isliked'] as int;
