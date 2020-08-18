@@ -14,7 +14,7 @@ class Config {
 
   // TODO(fahjan): api key for onesignal push notifications
   String onesignal = "bc4208c6-1-48c0-b4d5-390029a340dc"; // ca9a
-
+  String qRCodeUrl = "https://www.space.co.ps/joker/ar/qr-code/";
   // default country code prefix mobile number
   String countryCode = '+970';
 

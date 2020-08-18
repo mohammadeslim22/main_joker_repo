@@ -17,6 +17,7 @@ import 'main/merchant_list.dart';
 import 'main/sales_list.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:joker/constants/config.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key, this.filterData}) : super(key: key);
@@ -30,6 +31,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   AnimationController _hide;
   GlobalKey<ScaffoldState> _scaffoldkey;
   PersistentBottomSheetController<dynamic> _errorController;
+  FilterData filterData;
+
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification.depth == 0) {
       if (notification is UserScrollNotification) {
@@ -49,8 +52,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return false;
   }
 
-  String tapTitle = "";
-  FilterData filterData;
   @override
   void initState() {
     super.initState();
@@ -107,7 +108,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   bolc.bottomNavIndex == 0
                                       ? '${trans(context, 'sales')}'
                                       : '${trans(context, 'merchants')}',
-                                  //  tapTitle,
                                   style: styles.saleTitle,
                                 ),
                               ),

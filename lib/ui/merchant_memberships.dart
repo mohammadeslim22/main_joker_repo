@@ -116,17 +116,22 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                             queryParameters: <String, dynamic>{
                               "membership_id": memFromMerchant.id
                             }).then((Response<dynamic> value) {
-                          showToastWidget(
-                              IconToastWidget.success(
-                                  msg: trans(context, 'request_sent_successfully')),
-                              context: context,
-                              position: StyledToastPosition.center,
-                              animation: StyledToastAnimation.slideFromTop,
-                              reverseAnimation: StyledToastAnimation.fade,
-                              duration: const Duration(seconds: 4),
-                              animDuration: const Duration(seconds: 1),
-                              curve: Curves.elasticOut,
-                              reverseCurve: Curves.linear);
+                          if (value.statusCode == 200) {
+                            if (value.data.toString() == "true") {
+                              showToastWidget(
+                                  IconToastWidget.success(
+                                      msg: trans(context,
+                                          'request_sent_successfully')),
+                                  context: context,
+                                  position: StyledToastPosition.center,
+                                  animation: StyledToastAnimation.slideFromTop,
+                                  reverseAnimation: StyledToastAnimation.fade,
+                                  duration: const Duration(seconds: 4),
+                                  animDuration: const Duration(seconds: 1),
+                                  curve: Curves.elasticOut,
+                                  reverseCurve: Curves.linear);
+                            }
+                          }
                         });
                       },
                       child: Text(trans(context, 'join'),

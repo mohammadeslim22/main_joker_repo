@@ -56,6 +56,7 @@ class Membership {
       this.type,
       this.status,
       this.createdAt,
+      this.merchantId,
       this.merchant});
 
   Membership.fromJson(dynamic json) {
@@ -68,6 +69,7 @@ class Membership {
     status = json['status'].toString();
     createdAt = json['created_at'].toString();
     merchant = json['merchant'].toString();
+    merchantId = json['merchant_id'] as int;
   }
   int id;
   String title;
@@ -77,6 +79,7 @@ class Membership {
   String type;
   String status;
   String createdAt;
+  int merchantId;
   String merchant;
 }
 

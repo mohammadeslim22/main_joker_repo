@@ -9,6 +9,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:joker/constants/config.dart';
 
 class MyMemberShip extends StatefulWidget {
   @override
@@ -104,7 +106,7 @@ class MyMemberShipState extends State<MyMemberShip>
                 Column(
                   children: <Widget>[
                     Text(
-                     memberShip.membership.merchant,
+                      memberShip.membership.merchant,
                       style: styles.underHead,
                     ),
                     const SizedBox(
@@ -113,23 +115,45 @@ class MyMemberShipState extends State<MyMemberShip>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(
-                          "${memberShip.startAt}".split(' ')[0],
-                          style: styles.mysmall,
-                        ),
+                        Text("${memberShip.startAt}".split(' ')[0],
+                            style: styles.mysmall),
                         Icon(Icons.arrow_forward,
                             color: Colors.orange, size: 12),
                         Text("${memberShip.endAt}".split(' ')[0],
-                            style: styles.mysmall),
+                            style: styles.mysmall)
                       ],
                     )
                   ],
                 ),
                 Flexible(
-                    child: Image.asset(
-                  "assets/images/qrcode.png",
-                  scale: 2,
-                ))
+                  child: CachedNetworkImage(
+                    placeholderFadeInDuration:
+                        const Duration(milliseconds: 300),
+                    imageUrl: "${config.qRCodeUrl}${memberShip.membership.merchantId}" ?? "",
+                    
+                    // imageBuilder:
+                    //     (BuildContext context, ImageProvider imageProvider) =>
+                    //         Container(
+                    //   decoration: BoxDecoration(
+                    //     shape: BoxShape.circle,
+                    //     image: DecorationImage(
+                    //         image: imageProvider,
+                    //         fit: BoxFit.cover,
+                    //         colorFilter: const ColorFilter.mode(
+                    //             Colors.white, BlendMode.colorBurn)),
+                    //   ),
+                    // ),
+                    placeholder: (BuildContext context, String url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget:
+                        (BuildContext context, String url, dynamic error) =>
+                            Icon(Icons.error),
+                  ),
+                  //     Image.asset(
+                  //   "assets/images/qrcode.png",
+                  //   scale: 2,
+                  // )
+                )
               ],
             ),
           ),

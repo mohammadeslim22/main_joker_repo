@@ -106,6 +106,7 @@ class _MyRegistrationState extends State<Registration>
                     }
                     return auth.regValidationMap['name'];
                   }),
+                 // 0595388810
               TextFormInput(
                   text: trans(context, 'email'),
                   cController: emailController,

@@ -18,7 +18,7 @@ class IconToastWidget extends StatefulWidget {
 
   factory IconToastWidget.success({String msg}) => IconToastWidget(
         message: msg,
-        assetName: 'assets/ic_success.png',
+        assetName: 'assets/images/ic_success.png',
       );
 
   final Color backgroundColor;

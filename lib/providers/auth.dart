@@ -14,7 +14,7 @@ class Auth with ChangeNotifier {
   Auth() {
     // TODO(ahmed): do login by dio library
   }
-  
+
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
     'phone',
@@ -139,12 +139,12 @@ class Auth with ChangeNotifier {
         data.setData("long", config.long.toString());
         data.setData("address", config.locationController.text.toString());
         res = true;
-      }
-      else{
+      } else {
         res = false;
       }
       mainProv.togelf(false);
     });
+    notifyListeners();
     return res;
   }
 
