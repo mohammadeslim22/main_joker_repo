@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
@@ -134,9 +135,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                           "${trans(context, 'filter')}",
                                           style: styles.smallButton,
                                         ),
-                                        const SizedBox(
-                                          width: 4,
-                                        ),
+                                        const SizedBox(width: 4),
                                         SvgPicture.asset(
                                           'assets/images/location.svg',
                                           height: 16,
@@ -154,23 +153,23 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   automaticallyImplyLeading: true,
                   actions: <Widget>[
                     IconButton(
-                      icon: Icon(Icons.map,color: colors.orange,),
+                      icon: Icon(
+                        Icons.map,
+                        color: colors.jokerBlue,
+                      ),
                       onPressed: () {
                         if (_errorController != null) {
                           Navigator.pop(context);
                           Navigator.pop(context);
-
                         } else {
                           Navigator.pop(context);
-
                         }
                       },
                     ),
                     IconButton(
-                      icon: SvgPicture.asset(
-                        'assets/images/filter.svg',
-                        height: 16,
-                        width: 16,
+                      icon: Icon(
+                        Icons.clear,
+                        color: colors.jokerBlue,
                       ),
                       onPressed: () {
                         AwesomeDialog(
@@ -188,21 +187,28 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.search, color: colors.orange),
+                      icon: Icon(Icons.search, color: colors.jokerBlue),
                       onPressed: () {
                         Navigator.pushNamed(context, "/AdvancedSearch");
                       },
                     ),
-                    Badge(
-                      position: BadgePosition.topRight(top: 16, right: 10),
-                      badgeColor: colors.yellow,
-                      child: IconButton(
-                        icon: Icon(Icons.notifications_none,
-                            color: colors.orange),
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/Notifications");
-                        },
-                      ),
+                    // Badge(
+                    //   position: BadgePosition.topRight(top: 16, right: 10),
+                    //   badgeColor: colors.yellow,
+                    //   child: IconButton(
+                    //     icon: Icon(Icons.notifications_none,
+                    //         color: colors.orange),
+                    //     onPressed: () {
+                    //       Navigator.pushNamed(context, "/Notifications");
+                    //     },
+                    //   ),
+                    // ),
+                    IconButton(
+                      icon: Icon(Icons.camera, color: colors.jokerBlue),
+                      onPressed: () async {
+                        final ScanResult result = await BarcodeScanner.scan();
+                        Fluttertoast.showToast(msg: result.rawContent);
+                      },
                     ),
                   ],
                   leading: IconButton(
@@ -243,8 +249,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: Colors.black.withOpacity(.1),
-                border: const Border(
-                    top: BorderSide(color: Colors.orange, width: 7.0))),
+                border:  Border(
+                    top: BorderSide(color: colors.blue, width: 7.0))),
             child: Text(
               "${trans(context, 'use_current_location')}",
               textAlign: TextAlign.center,

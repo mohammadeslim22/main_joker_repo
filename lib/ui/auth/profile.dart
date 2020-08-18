@@ -40,7 +40,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
     ),
   );
   SpinKitRing spinkit = const SpinKitRing(
-    color: Colors.orange,
+    color: Colors.blue,
     size: 30.0,
     lineWidth: 3,
   );
@@ -137,7 +137,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(trans(context, "my_account")),
+          title: Text(trans(context, "my_account"),style: styles.appBars),
           centerTitle: true,
         ),
         body: Builder(
@@ -156,7 +156,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                     ClipPath(
                       clipper: HeaderColor(),
                       child: Container(
-                        color: Colors.orange[300].withOpacity(0.3),
+                        color: Colors.blue[300].withOpacity(0.3),
                       ),
                     ),
                     ListView(children: <Widget>[
@@ -175,7 +175,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   placeHolder:
                                       (BuildContext context, String url) =>
                                           const CircularProgressIndicator(),
-                                  borderColor: Colors.orange,
+                                  borderColor: colors.blue,
                                   cacheImage: true,
                                 ),
                                 tag: "generate_a_unique_tag",
@@ -263,7 +263,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   focusNode: focus,
                                   suffixicon: IconButton(
                                     icon:
-                                        Icon(Icons.edit, color: Colors.orange),
+                                        Icon(Icons.edit, color: colors.blue),
                                     onPressed: () {},
                                   ),
                                   onTab: () {},
@@ -295,7 +295,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   },
                                   suffixicon: IconButton(
                                     icon:
-                                        Icon(Icons.edit, color: Colors.orange),
+                                        Icon(Icons.edit, color: colors.blue),
                                     onPressed: () {
                                       print(mobileNoController.text);
                                     },
@@ -321,7 +321,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                     _selectDate(context);
                                   },
                                   suffixicon: IconButton(
-                                    color: Colors.orange,
+                                    color: colors.blue,
                                     icon: Icon(Icons.calendar_today),
                                     onPressed: () {
                                       //   _selectDate(context);
@@ -371,7 +371,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   },
                                   suffixicon: IconButton(
                                     icon: Icon(Icons.add_location,
-                                        color: Colors.orange),
+                                        color: colors.blue),
                                     onPressed: () {
                                       Navigator.pushNamed(
                                           context, '/AutoLocate',
@@ -412,7 +412,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: colors.orange)),
+                                side: BorderSide(color: colors.jokerBlue)),
                             onPressed: () async {
                               if (_isButtonEnabled) {
                                 if (_formKey.currentState.validate()) {
@@ -425,7 +425,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                 }
                               }
                             },
-                            color: Colors.deepOrangeAccent,
+                            color: colors.blue,
                             textColor: Colors.white,
                             child: Text(
                               trans(context, 'save_changes'),
@@ -531,7 +531,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                         ),
                         const SizedBox(height: 15),
                         RaisedButton(
-                            color: colors.orange,
+                            color: colors.jokerBlue,
                             child: Text(trans(context, "ok"),
                                 style: styles.underHeadwhite),
                             onPressed: () {

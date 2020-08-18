@@ -10,6 +10,7 @@ import 'package:joker/ui/widgets/fadein.dart';
 import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
+import 'package:joker/constants/colors.dart';
 
 class FavoritDiscountsList extends StatefulWidget {
   const FavoritDiscountsList({Key key}) : super(key: key);
@@ -57,8 +58,8 @@ class _DiscountsListState extends State<FavoritDiscountsList> {
     return SmartRefresher(
       enablePullDown: false,
       enablePullUp: true,
-      header: const WaterDropHeader(
-        waterDropColor: Colors.orange,
+      header:  WaterDropHeader(
+        waterDropColor: colors.blue,
       ),
       footer: CustomFooter(
         builder: (BuildContext context, LoadStatus mode) {

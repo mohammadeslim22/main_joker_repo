@@ -198,6 +198,7 @@
     "pass_must_more_6":"password must be more than 6 letters",
     "plz_enter_birthdate":"please enter your Birth Date",
     "tab_set_ur_location":"Tap to set my location",
-    "plz_set_ur_location":"please specify you Location :)"
+    "plz_set_ur_location":"please specify you Location :)",
+    "contact_us":"Contact Us"
 
 }

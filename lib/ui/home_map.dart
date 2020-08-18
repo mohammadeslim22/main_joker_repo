@@ -267,14 +267,14 @@ class _HOMEMAPState extends State<HOMEMAP> {
                                               side: BorderSide(
                                                 color: selectedOptions
                                                         .contains(item.id)
-                                                    ? colors.orange
+                                                    ? colors.jokerBlue
                                                     : colors.ggrey,
                                               ),
                                             ),
                                             color: colors.white,
                                             textColor: selectedOptions
                                                     .contains(item.id)
-                                                ? colors.orange
+                                                ? colors.jokerBlue
                                                 : colors.black,
                                             onPressed: () {
                                               setState(() {

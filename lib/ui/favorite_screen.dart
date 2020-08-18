@@ -7,6 +7,7 @@ import 'main/favorits_merchant_list.dart';
 import 'main/favorits_sales_list.dart';
 import 'widgets/favoritetab_bar.dart';
 import '../constants/colors.dart';
+import '../constants/styles.dart';
 
 class Favorite extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class _MyFavState extends State<Favorite> with SingleTickerProviderStateMixin {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-              trans(context, "fav"),
+              trans(context, "fav"),style: styles.appBars,
             ),
             centerTitle: true,
             bottom: PreferredSize(

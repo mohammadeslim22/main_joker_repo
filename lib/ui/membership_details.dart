@@ -287,7 +287,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                         side: BorderSide(
                                           color: selectedOptions.contains(
                                                   options.indexOf(item))
-                                              ? colors.orange
+                                              ? colors.jokerBlue
                                               : colors.grey,
                                         ),
                                       ),
@@ -297,7 +297,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                           : colors.white.withOpacity(.45),
                                       textColor: selectedOptions
                                               .contains(options.indexOf(item))
-                                          ? colors.orange
+                                          ? colors.jokerBlue
                                           : colors.white,
                                       onPressed: () {
                                         _errorController.setState(() {

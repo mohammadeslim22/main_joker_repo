@@ -146,7 +146,7 @@ class _MyLoginScreenState extends State<LoginScreen>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w300,
-                color: colors.orange,
+                color: colors.jokerBlue,
                 fontSize: 20,
               ),
             ),
@@ -174,7 +174,7 @@ class _MyLoginScreenState extends State<LoginScreen>
               child: RaisedButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: colors.orange)),
+                      side: BorderSide(color: colors.jokerBlue)),
                   onPressed: () async {
                     if (_isButtonEnabled) {
                       if (_formKey.currentState.validate()) {

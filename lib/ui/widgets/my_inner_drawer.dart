@@ -56,7 +56,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
         dio.get<dynamic>("user").then((Response<dynamic> value) {
           print(value.data['data']['name'].toString());
           setState(() {
-            username= value.data['data']['name'].toString();
+            username = value.data['data']['name'].toString();
             config.username = value.data['data']['name'].toString();
             config.profileUrl = value.data['data']['image'].toString().trim();
           });
@@ -122,9 +122,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                           child: CircleAvatar(
                         maxRadius: 40,
                         minRadius: 30,
-                        child: 
-
-                            CachedNetworkImage(
+                        child: CachedNetworkImage(
                           placeholderFadeInDuration:
                               const Duration(milliseconds: 300),
                           imageUrl: config.profileUrl.trim() ?? "",
@@ -189,7 +187,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 leading: SvgPicture.asset("assets/images/vip.svg"),
                 onTap: () {
                   Navigator.pushNamed(
-                    context, "/Membership",
+                    context,
+                    "/Membership",
                   );
                   toggle();
                 },

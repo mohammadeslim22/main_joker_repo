@@ -534,7 +534,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                         Radius.circular(8)),
                                     color: index != tab.id
                                         ? tabBackgroundColor
-                                        : colors.orange,
+                                        : colors.jokerBlue,
                                   ),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 8),
@@ -575,7 +575,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                   Column(
                     children: <Widget>[
                       RaisedButton(
-                          color: colors.orange,
+                          color: colors.jokerBlue,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 12),
                           child: Text(
@@ -584,7 +584,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                           ),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: colors.orange)),
+                              side: BorderSide(color: colors.jokerBlue)),
                           onPressed: () async {
                             Navigator.pushNamed(
                                 context, "/MemberShipsForMerchant",

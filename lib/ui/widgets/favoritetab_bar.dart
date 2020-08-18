@@ -80,11 +80,11 @@ class FavoritBar extends StatelessWidget {
                           opacity: bolc.visible2 ? 1.0 : 0.0,
                           duration:const Duration(milliseconds: 800),
                           child: Container(
-                            decoration:const BoxDecoration(
-                              borderRadius:  BorderRadius.only(
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(12),
                                   topRight: Radius.circular(12)),
-                                  color:Colors.orange
+                                  color:colors.jokerBlue
                             ),
                             alignment: Alignment.bottomCenter,
                             height: 5,

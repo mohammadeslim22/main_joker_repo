@@ -16,7 +16,7 @@ class Styles {
   TextStyle smallButton =
       TextStyle(fontSize: 12, color: colors.black, fontWeight: FontWeight.w100);
   TextStyle smallButtonactivated = TextStyle(
-      fontSize: 12, color: colors.orange, fontWeight: FontWeight.w100);
+      fontSize: 12, color: colors.jokerBlue, fontWeight: FontWeight.w100);
   TextStyle mylight = const TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.grey,
@@ -36,6 +36,11 @@ class Styles {
       fontWeight: FontWeight.w100,
       color: Colors.black,
       fontSize: 13,
+      height: 1.7);
+        TextStyle appBars = const TextStyle(
+      fontWeight: FontWeight.w100,
+      color: Colors.black,
+      fontSize: 18,
       height: 1.7);
   TextStyle mysmallforgridview = const TextStyle(
     fontWeight: FontWeight.w100,
@@ -74,7 +79,7 @@ class Styles {
   );
   TextStyle saleScreenBottomBar = const TextStyle(
     fontWeight: FontWeight.w600,
-    color: Colors.orangeAccent,
+    color: Colors.blueAccent,
     fontSize: 20,
   );
   TextStyle resend = const TextStyle(

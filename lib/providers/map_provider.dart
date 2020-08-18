@@ -58,7 +58,7 @@ class HOMEMAProvider with ChangeNotifier {
   Future<void> _addMarker(
       GlobalKey<ScaffoldState> _scaffoldkey, MapBranch element) async {
     final Uint8List markerIcon =
-        await getBytesFromAsset('assets/images/locationmarker.png', 100);
+        await getBytesFromAsset('assets/images/locationMarkerblue.png', 100);
     final Marker marker = Marker(
         markerId: MarkerId(element.id.toString()),
         position: LatLng(element.latitude, element.longitude),

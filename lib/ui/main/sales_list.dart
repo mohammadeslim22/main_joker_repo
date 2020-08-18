@@ -12,6 +12,7 @@ import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+import 'package:joker/constants/colors.dart';
 
 class DiscountsList extends StatefulWidget {
   const DiscountsList({Key key, this.filterData}) : super(key: key);
@@ -73,7 +74,7 @@ class _DiscountsListState extends State<DiscountsList> {
       enablePullUp: true,
       header: WaterDropHeader(
         complete: Container(),
-        waterDropColor: Colors.orange,
+        waterDropColor: colors.blue,
       ),
       footer: CustomFooter(
         builder: (BuildContext context, LoadStatus mode) {

@@ -3,7 +3,7 @@ import 'colors.dart';
 
 ThemeData mainThemeData() {
   return ThemeData(
-    primaryColor: colors.orange,
+    primaryColor: colors.jokerBlue,
     primaryTextTheme: const TextTheme(),
     scaffoldBackgroundColor: colors.grey,
     appBarTheme: AppBarTheme(
@@ -14,7 +14,7 @@ ThemeData mainThemeData() {
     ),
     fontFamily: "Almarai",
     canvasColor: Colors.white,
-    cursorColor: colors.orange,
+    cursorColor: colors.jokerBlue,
     hintColor: colors.black,
    // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
     textTheme: TextTheme(
@@ -27,7 +27,7 @@ ThemeData mainThemeData() {
 }
 ThemeData mainThemeDatadark() {
   return ThemeData(
-    primaryColor: colors.orange,
+    primaryColor: colors.jokerBlue,
     primaryTextTheme: const TextTheme(),
     scaffoldBackgroundColor: const Color(0xFF2B2B2B),
     appBarTheme: AppBarTheme(
@@ -38,7 +38,7 @@ ThemeData mainThemeDatadark() {
     ),
     fontFamily: "Almarai",
     canvasColor:const Color(0xFF666666),
-    cursorColor: colors.orange,
+    cursorColor: colors.jokerBlue,
     hintColor: colors.black,
    // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
     textTheme: TextTheme(

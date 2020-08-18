@@ -111,8 +111,8 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
       calendarController: _calendarController,
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
-        selectedColor: Colors.deepOrange[400],
-        todayColor: Colors.deepOrange[200],
+        selectedColor: Colors.deepPurple[400],
+        todayColor: Colors.deepPurple[200],
         markersColor: Colors.brown[700],
         outsideDaysVisible: false,
       ),
@@ -120,7 +120,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
         formatButtonTextStyle:
             const TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
         formatButtonDecoration: BoxDecoration(
-          color: Colors.deepOrange[400],
+          color: Colors.deepPurple[400],
           borderRadius: BorderRadius.circular(16.0),
         ),
       ),
@@ -199,13 +199,13 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(38.0),
                     side: BorderSide(
                       color: selectedOptions.contains(item.id)
-                          ? colors.orange
+                          ? colors.jokerBlue
                           : colors.ggrey,
                     ),
                   ),
                   color: colors.white,
                   textColor: selectedOptions.contains(item.id)
-                      ? colors.orange
+                      ? colors.jokerBlue
                       : colors.black,
                   onPressed: () {
                     setState(() {
@@ -221,7 +221,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,
                         backgroundColor: Colors.grey[300],
-                        textColor: colors.orange,
+                        textColor: colors.jokerBlue,
                         fontSize: 16.0);
                   },
                   child: Text(item.name, style: styles.mysmallforgridview));
@@ -271,7 +271,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                 rangeSlider: true,
                 max: 500,
                 trackBar: FlutterSliderTrackBar(
-                  activeTrackBar: BoxDecoration(color: colors.orange),
+                  activeTrackBar: BoxDecoration(color: colors.jokerBlue),
                   activeTrackBarDraggable: true,
                   inactiveTrackBarHeight: 2,
                   activeTrackBarHeight: 3,
@@ -314,7 +314,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
               Text(startDate),
               Icon(
                 Icons.arrow_forward,
-                color: colors.orange,
+                color: colors.jokerBlue,
               ),
               Text(endDate),
             ],
@@ -425,7 +425,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 25),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
-                  side: const BorderSide(color: Colors.red)),
+                  side:  BorderSide(color: Colors.blue[900])),
               onPressed: () {
                 Navigator.pushNamed(context, "/Home",
                     arguments: <String, dynamic>{
@@ -442,7 +442,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                       )
                     });
               },
-              color: Colors.red,
+              color: Colors.blue[600],
               textColor: colors.white,
               child:
                   Text(trans(context, "search"), style: styles.notificationNO),

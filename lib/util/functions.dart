@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/util/dio.dart';
@@ -91,8 +92,8 @@ SnackBar snackBar = SnackBar(
     onPressed: () {},
   ),
 );
-SpinKitRing spinkit = const SpinKitRing(
-  color: Colors.orange,
+SpinKitRing spinkit =  SpinKitRing(
+  color: colors.jokerBlue,
   size: 30.0,
   lineWidth: 3,
 );

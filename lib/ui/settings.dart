@@ -109,8 +109,8 @@ class MySettingState extends State<SettingsScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: ToggleButtons(
                     color: Colors.grey,
-                    fillColor: Colors.orange[100],
-                    selectedColor: Colors.orange,
+                    fillColor: Colors.blue[100],
+                    selectedColor: colors.blue,
                     children: <Widget>[
                       Icon(Icons.notifications_active),
                       Icon(Icons.notifications_paused),
@@ -136,7 +136,7 @@ class MySettingState extends State<SettingsScreen> {
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            color: Colors.white,
+            color: colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -145,7 +145,7 @@ class MySettingState extends State<SettingsScreen> {
                   style: styles.mystyle,
                 ),
                 Switch(
-                  activeColor: Colors.orange,
+                  activeColor: colors.blue,
                   onChanged: (bool value) {
                     dio.post<dynamic>("settings", data: <String, dynamic>{
                       'recieve_notify': value ? "on" : "off"
@@ -159,7 +159,7 @@ class MySettingState extends State<SettingsScreen> {
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            color: Colors.white,
+            color: colors.white,
             child: Row(
               children: <Widget>[
                 Text(trans(context, "language"), style: styles.mystyle),
@@ -188,7 +188,7 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
   return Flexible(
       fit: FlexFit.tight,
       child: FlatButton(
-          textColor: Colors.black,
+          textColor: colors.black,
           disabledColor: Colors.grey,
           padding: const EdgeInsets.all(0),
           splashColor: colors.trans,
@@ -221,11 +221,11 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
                   opacity: list[index] ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 800),
                   child: Container(
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
+                    decoration:  BoxDecoration(
+                        borderRadius:const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             topRight: Radius.circular(12)),
-                        color: Colors.orange),
+                        color: colors.blue),
                     alignment: Alignment.bottomCenter,
                     height: 3,
                     width: MediaQuery.of(context).size.width * .15,
@@ -233,22 +233,6 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
             ],
           )));
 }
-
-// Widget fontBar(BuildContext context) {
-//   final MyCounter bolc = Provider.of<MyCounter>(context);
-
-//   return Container(
-//     child: Row(
-//       children: <Widget>[
-//         fontBarChoice(context, "large", 0, bolc.fontlist, "font", () {}),
-//         verticalDiv(),
-//         fontBarChoice(context, "meduim", 1, bolc.fontlist, "font", () {}),
-//         verticalDiv(),
-//         fontBarChoice(context, "small", 2, bolc.fontlist, "font", () {}),
-//       ],
-//     ),
-//   );
-// }
 
 Widget languagBar(BuildContext context) {
   final MainProvider bolc = Provider.of<MainProvider>(context);

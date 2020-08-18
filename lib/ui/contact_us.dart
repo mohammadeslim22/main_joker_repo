@@ -18,7 +18,7 @@ class ContactUs extends StatelessWidget {
           maxLines: maxLines,
           decoration: InputDecoration(
             filled: true,
-            fillColor: Colors.white70,
+            fillColor: colors.white,
             hintText: text,
             hintStyle: TextStyle(
               color: colors.ggrey,
@@ -38,7 +38,7 @@ class ContactUs extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Contact Us"),
+        title:  Text(trans(context,'contact_us'),style: styles.appBars,),
         centerTitle: true,
       ),
       body: ListView(
@@ -93,10 +93,10 @@ class ContactUs extends StatelessWidget {
             child: RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: colors.orange)),
+                    side: BorderSide(color: colors.jokerBlue)),
                 onPressed: () async {},
-                color: Colors.deepOrangeAccent,
-                textColor: Colors.white,
+                color: colors.blue,
+                textColor: colors.white,
                 child: Text(trans(context, 'send'))),
           ),
           Row(

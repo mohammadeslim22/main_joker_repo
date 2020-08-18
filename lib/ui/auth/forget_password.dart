@@ -203,7 +203,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                         child: RaisedButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: colors.orange)),
+                                side: BorderSide(color: colors.jokerBlue)),
                             onPressed: () async {
                               if (_isButtonEnabled) {
                                 if (_formKey.currentState.validate()) {

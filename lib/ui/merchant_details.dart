@@ -34,7 +34,7 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(trans(context, "shop_details")),
+          title: Text(trans(context, "shop_details"),style: styles.appBars),
           centerTitle: true,
           actions: <Widget>[
             Padding(
@@ -272,7 +272,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                               const BorderRadius.all(Radius.circular(8)),
                           color: index != tab.id
                               ? tabBackgroundColor
-                              : colors.orange,
+                              : colors.jokerBlue,
                         ),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 5, vertical: 8),

@@ -152,7 +152,7 @@ class _MyResetPasswordState extends State<ResetPassword>
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: colors.orange)),
+                          side: BorderSide(color: colors.jokerBlue)),
                       onPressed: () async {
                         if (_isButtonEnabled) {
                           if (newpasswordController.text.trim() !=
@@ -166,7 +166,7 @@ class _MyResetPasswordState extends State<ResetPassword>
                                 animDuration: const Duration(seconds: 1),
                                 duration: const Duration(seconds: 2),
                                 curve: Curves.elasticOut,
-                                backgroundColor: colors.orange,
+                                backgroundColor: colors.jokerBlue,
                                 reverseCurve: Curves.decelerate);
                           } else {
                             if (_formKey.currentState.validate()) {

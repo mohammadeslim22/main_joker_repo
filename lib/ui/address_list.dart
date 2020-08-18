@@ -107,7 +107,7 @@ class AddressListState extends State<AddressList> {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 36),
               child: RaisedButton(
-                  color: colors.orange,
+                  color: colors.jokerBlue,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
