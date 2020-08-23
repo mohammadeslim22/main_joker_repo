@@ -6,6 +6,7 @@ import 'constants/config.dart';
 import 'services/navigationService.dart';
 import 'util/dio.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/merchantsProvider.dart';
 import 'package:provider/provider.dart';
 import 'constants/route.dart';
 import 'constants/themes.dart';
@@ -41,8 +42,8 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
-        ChangeNotifierProvider<Auth>(
-          create: (_) => Auth(),
+      ChangeNotifierProvider<Auth>.value(
+          value: getIt<Auth>(),
         ),
         ChangeNotifierProvider<Language>(
           create: (_) => Language(),
@@ -52,6 +53,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<HOMEMAProvider>.value(
           value: getIt<HOMEMAProvider>(),
+        ),
+      ChangeNotifierProvider<MerchantProvider>.value(
+          value: getIt<MerchantProvider>(),
         ),
       ],
       child: MyApp(),

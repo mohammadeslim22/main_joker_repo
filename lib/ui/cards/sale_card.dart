@@ -68,10 +68,10 @@ class _SalesCardState extends State<SalesCard> {
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12)),
                 image: DecorationImage(
-                  fit: BoxFit.cover,
+                    fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
-                  saledata.cropedImage,
-                )),
+                      saledata.cropedImage,
+                    )),
               ),
               child: saledata.isfavorite != 0
                   ? Stack(children: <Widget>[
@@ -105,7 +105,7 @@ class _SalesCardState extends State<SalesCard> {
                               children: <Widget>[
                                 Text(saledata.status, style: styles.mylight),
                                 const SizedBox(width: 5),
-                                CircleAvatar(
+                                const CircleAvatar(
                                     backgroundColor: Colors.green, radius: 6)
                               ],
                             ),

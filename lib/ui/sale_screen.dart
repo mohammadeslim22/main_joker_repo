@@ -2,8 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/util/service_locator.dart';
 import '../constants/styles.dart';
-import '../models/Merchant.dart';
+import '../models/merchant.dart';
 import '../util/dio.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'package:rating_dialog/rating_dialog.dart';
@@ -21,28 +23,21 @@ import 'package:dio/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 
 class Loader extends StatelessWidget {
-  Loader({this.merchentid, this.saleData});
+  const Loader({this.merchentid, this.saleData});
   final int merchentid;
   final SaleData saleData;
-  Merchant merchant;
-  Future<Merchant> getMerchantData(int merchentid) async {
-    final Response<dynamic> mercantResult =
-        await dio.get<dynamic>("merchants/$merchentid");
-    merchant = Merchant.fromJson(mercantResult.data);
-    return merchant;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      color:colors.white,
-      child: FutureBuilder<Merchant>(
-          future: getMerchantData(merchentid),
-          builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
+      color: colors.white,
+      child: FutureBuilder<void>(
+          future:
+              getIt<MerchantProvider>().getMerchantData(merchentid, "click"),
+          builder: (BuildContext ctx, AsyncSnapshot<void> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return SaleDetailPage(
                 saleData: saleData,
-                merchant: merchant,
+                merchant: getIt<MerchantProvider>().merchant,
               );
             } else {
               return const Center(
@@ -527,7 +522,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                     index = i + merchant.mydata.branches[0].id;
                               });
                             },
-                            tabs: merchant.mydata.branches.map((Branches tab) {
+                            tabs: merchant.mydata.branches.map((MerchantBranches tab) {
                               return Container(
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(
@@ -552,7 +547,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                         height: 96,
                         child: TabBarView(
                             children:
-                                merchant.mydata.branches.map((Branches tab) {
+                                merchant.mydata.branches.map((MerchantBranches tab) {
                           return Column(
                             children: <Widget>[
                               Row(children: <Widget>[
@@ -824,6 +819,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
     getHeight();
   }
 }
+
 // ignore: must_be_immutable
 class BottomWidgetForSliver extends StatefulWidget {
   BottomWidgetForSliver(

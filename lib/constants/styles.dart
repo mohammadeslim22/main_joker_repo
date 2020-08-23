@@ -37,7 +37,7 @@ class Styles {
       color: Colors.black,
       fontSize: 13,
       height: 1.7);
-        TextStyle appBars = const TextStyle(
+  TextStyle appBars = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.black,
       fontSize: 18,
@@ -45,6 +45,11 @@ class Styles {
   TextStyle mysmallforgridview = const TextStyle(
     fontWeight: FontWeight.w100,
     fontSize: 13,
+  );
+  TextStyle pinCodePhone = const TextStyle(
+    fontWeight: FontWeight.bold,
+    color: Colors.green,
+    fontSize: 18,
   );
   TextStyle mystyle = const TextStyle(
       fontWeight: FontWeight.w100,

@@ -6,6 +6,7 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/auth.dart';
+import 'package:joker/ui/widgets/countryCodePicker.dart';
 import '../widgets/buttonTouse.dart';
 import '../widgets/text_form_input.dart';
 import 'package:location/location.dart';
@@ -30,7 +31,7 @@ class _MyRegistrationState extends State<Registration>
   bool _isButtonEnabled;
 
   bool _obscureText = false;
-  bool loading = false;
+  // bool loading = false;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileNoController = TextEditingController();
@@ -106,7 +107,7 @@ class _MyRegistrationState extends State<Registration>
                     }
                     return auth.regValidationMap['name'];
                   }),
-                 // 0595388810
+              // 0595388810
               TextFormInput(
                   text: trans(context, 'email'),
                   cController: emailController,
@@ -135,16 +136,19 @@ class _MyRegistrationState extends State<Registration>
                   obscureText: false,
                   readOnly: false,
                   onTab: () {},
-                  suffixicon: CountryCodePicker(
-                    onChanged: _onCountryChange,
-                    initialSelection:'IL',
-                    favorite: <String>[mainProvider.dialCodeFav],
-                    showFlagDialog: true,
-                    showFlag: false,
-                    padding: isRTL == true
-                        ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                        : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                  ),
+                  suffixicon: CountryPickerCode(
+                      onCountryChange: _onCountryChange, isRTL: isRTL),
+
+                  // CountryCodePicker(
+                  //   onChanged: _onCountryChange,
+                  //   initialSelection: 'IL',
+                  //   favorite: <String>[mainProvider.dialCodeFav],
+                  //   showFlagDialog: true,
+                  //   showFlag: false,
+                  //   padding: isRTL == true
+                  //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+                  //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
+                  // ),
                   focusNode: focus1,
                   onFieldSubmitted: () {
                     focus2.requestFocus();
@@ -167,6 +171,7 @@ class _MyRegistrationState extends State<Registration>
                       (_obscureText == false)
                           ? Icons.visibility
                           : Icons.visibility_off,
+                      color: colors.blue,
                     ),
                     onPressed: () {
                       setState(() {
@@ -198,6 +203,7 @@ class _MyRegistrationState extends State<Registration>
                       // icon:
                       Icon(
                     Icons.calendar_today,
+                    color: colors.blue,
                   ),
                   // onPressed: () {},
                   // ),
@@ -241,7 +247,7 @@ class _MyRegistrationState extends State<Registration>
                     }
                   },
                   suffixicon: IconButton(
-                    icon: Icon(Icons.add_location, color: Colors.orange),
+                    icon: Icon(Icons.add_location, color: Colors.blue),
                     onPressed: () {
                       Navigator.pushNamed(context, '/AutoLocate',
                           arguments: <String, double>{
@@ -259,9 +265,7 @@ class _MyRegistrationState extends State<Registration>
                     return auth.regValidationMap['location'];
                   }),
               Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                ),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: mainProvider.visibilityObs
                     ? Row(
                         children: <Widget>[
@@ -278,80 +282,84 @@ class _MyRegistrationState extends State<Registration>
   @override
   Widget build(BuildContext context) {
     final MainProvider mainProvider = Provider.of<MainProvider>(context);
-    final Auth auth = Provider.of<Auth>(context);
     return Scaffold(
         appBar: AppBar(),
         body: Builder(
-            builder: (BuildContext context) => GestureDetector(
-                  onTap: () {
-                    SystemChannels.textInput
-                        .invokeMethod<String>('TextInput.hide');
-                  },
-                  child: ListView(
-                    children: <Widget>[
-                      const SizedBox(height: 16),
-                      Text(trans(context, 'account_creation'),
-                          textAlign: TextAlign.center, style: styles.mystyle2),
-                      const SizedBox(height: 8),
-                      Text(trans(context, 'please_check'),
-                          textAlign: TextAlign.center,
-                          style: styles.pleazeCheck),
-                      customcard(context, mainProvider, auth),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
-                        child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                side: const BorderSide(color: Colors.orange)),
-                            onPressed: () async {
-                              if (_isButtonEnabled) {
-                                if (_formKey.currentState.validate()) {
-                                  mainProvider.togelf(true);
-                                  setState(() {
-                                    _isButtonEnabled = false;
-                                  });
-                                  await auth.register(
-                                      context,
-                                      mainProvider,
-                                      usernameController.text,
-                                      passwordController.text,
-                                      birthDateController.text,
-                                      emailController.text,
-                                      mobileNoController.text,
-                                      countryCodeTemp);
+          builder: (BuildContext context) => GestureDetector(
+            onTap: () {
+              SystemChannels.textInput.invokeMethod<String>('TextInput.hide');
+            },
+            child: Consumer<Auth>(
+                builder: (BuildContext context, Auth auth, Widget child) {
+              return ListView(
+                children: <Widget>[
+                  const SizedBox(height: 16),
+                  Text(trans(context, 'account_creation'),
+                      textAlign: TextAlign.center, style: styles.mystyle2),
+                  const SizedBox(height: 8),
+                  Text(trans(context, 'please_check'),
+                      textAlign: TextAlign.center, style: styles.pleazeCheck),
+                  customcard(context, mainProvider, auth),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 16),
+                    child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: const BorderSide(color: Colors.blue)),
+                        onPressed: () async {
+                          if (_isButtonEnabled) {
+                            if (_formKey.currentState.validate()) {
+                              mainProvider.togelf(true);
+                              setState(() {
+                                _isButtonEnabled = false;
+                              });
+                              await auth.register(
+                                  context,
+                                  mainProvider,
+                                  usernameController.text,
+                                  passwordController.text,
+                                  birthDateController.text,
+                                  emailController.text,
+                                  mobileNoController.text,
+                                  countryCodeTemp);
 
-                                  _formKey.currentState.validate();
-                                }
-                              }
-                            },
-                            color: Colors.deepOrangeAccent,
-                            textColor: colors.white,
-                            child: mainProvider
-                                .returnchild(trans(context, 'regisration'))),
+                              _formKey.currentState.validate();
+                            }
+                          }
+                          setState(() {
+                            _isButtonEnabled = true;
+                          });
+                        },
+                        color: colors.blue,
+                        textColor: colors.white,
+                        child: mainProvider
+                            .returnchild(trans(context, 'regisration'))),
+                  ),
+                  const Padding(
+                      padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
+                      child: Divider(color: Colors.black)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Flexible(
+                        child: Text(
+                          trans(context, 'problem_in_regisration'),
+                          style: styles.mystyle,
+                        ),
                       ),
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
-                          child: Divider(color: Colors.black)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              trans(context, 'problem_in_regisration'),
-                              style: styles.mystyle,
-                            ),
-                          ),
-                          ButtonToUse(
-                            trans(context, 'tech_support'),
-                            fontWait: FontWeight.bold,
-                            fontColors: Colors.green,
-                          ),
-                        ],
+                      ButtonToUse(
+                        trans(context, 'tech_support'),
+                        fontWait: FontWeight.bold,
+                        fontColors: Colors.green,
                       ),
                     ],
                   ),
-                )));
+                ],
+              );
+            }),
+          ),
+        ));
   }
 
   void _onCountryChange(CountryCode countryCode) {

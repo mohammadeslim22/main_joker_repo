@@ -18,6 +18,7 @@ import 'package:joker/constants/colors.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/util/dio.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:joker/ui/widgets/countryCodePicker.dart';
 
 class PinCodeForProfile extends StatefulWidget {
   const PinCodeForProfile({Key key, this.mobileNo}) : super(key: key);
@@ -212,19 +213,20 @@ class _MyHomePageState extends State<PinCodeForProfile>
                 obscureText: false,
                 readOnly: false,
                 // onTab: () {},
-                suffixicon: CountryCodePicker(
-                  onChanged: _onCountryChange,
-                  initialSelection: bolc.countryCode,
-                  favorite: const <String>['+972', 'IS'],
-                  showFlagDialog: true,
-                  showFlag: false,
-                  showCountryOnly: false,
-                  showOnlyCountryWhenClosed: false,
-                  alignLeft: false,
-                  padding: isRTL == true
-                      ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                      : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                ),
+                suffixicon:CountryPickerCode(onCountryChange:_onCountryChange,isRTL:isRTL),
+                //  CountryCodePicker(
+                //   onChanged: _onCountryChange,
+                //   initialSelection: bolc.countryCode,
+                //   favorite: const <String>['+972', 'IS'],
+                //   showFlagDialog: true,
+                //   showFlag: false,
+                //   showCountryOnly: false,
+                //   showOnlyCountryWhenClosed: false,
+                //   alignLeft: false,
+                //   padding: isRTL == true
+                //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+                //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
+                // ),
                 // focusNode: focus2,
                 // onFieldSubmitted: () {
                 //   SystemChannels.textInput

@@ -24,7 +24,7 @@ class HOMEMAProvider with ChangeNotifier {
       GlobalKey<ScaffoldState> _scaffoldkey, double lat, double long,int specId) async {
     await getSpecializationsData();
     final Response<dynamic> response =
-        await dio.get<dynamic>("branches/map?long=$long&lat=$lat&specialization_id=$specId");
+        await dio.get<dynamic>("map?long=$long&lat=$lat&specialization_id=$specId");
     branches = MapBranches.fromJson(response.data);
     print("new branches ${branches.mapBranches.length}");
     markers.clear();

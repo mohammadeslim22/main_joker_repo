@@ -105,7 +105,7 @@ class MainProvider extends ChangeNotifier {
     loginbase = login;
     if (loading) {
       f = Padding(
-          padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+          padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
           child: Text(loginbase,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,

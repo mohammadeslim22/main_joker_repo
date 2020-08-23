@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -9,7 +8,8 @@ import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/providers/mainprovider.dart';
-
+import 'package:joker/services/navigationService.dart';
+import 'package:joker/util/service_locator.dart';
 class Auth with ChangeNotifier {
   Auth() {
     // TODO(ahmed): do login by dio library
@@ -51,9 +51,9 @@ class Auth with ChangeNotifier {
         value.data['errors'].forEach((String k, dynamic vv) {
           validationMap[k] = vv[0].toString();
         });
-        validationMap.updateAll((String key, String value) {
-          return null;
-        });
+        // validationMap.updateAll((String key, String value) {
+        //   return null;
+        // });
         res = false;
       }
 
@@ -87,7 +87,7 @@ class Auth with ChangeNotifier {
         res = false;
       }
     });
-
+    notifyListeners();
     return res;
   }
 
@@ -119,9 +119,9 @@ class Auth with ChangeNotifier {
           regValidationMap[k] = vv[0].toString();
         });
 
-        regValidationMap.updateAll((String key, String value) {
-          return null;
-        });
+        // regValidationMap.updateAll((String key, String value) {
+        //   return null;
+        // });
         res = false;
       }
       if (value.statusCode == 201) {
@@ -166,5 +166,8 @@ class Auth with ChangeNotifier {
 
   void signInAnonymously() {}
 
-  void signOut() {}
+  void signOut() {
+      data.setData('authorization', "");
+           getIt<NavigationService>().navigateTo('/login',null);
+  }
 }

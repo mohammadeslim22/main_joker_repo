@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/ui/widgets/countryCodePicker.dart';
 import '../widgets/buttonTouse.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -169,11 +170,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
               const SizedBox(height: 15),
               Text("${widget.mobileNo}",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                    fontSize: 18,
-                  )),
+                  style: styles.pinCodePhone),
               Container(
                 alignment: Alignment.center,
                 child: ListTile(
@@ -208,21 +205,23 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                     obscureText: false,
                                     readOnly: false,
                                     onTab: () {},
-                                    suffixicon: CountryCodePicker(
-                                      onChanged: _onCountryChange,
-                                      initialSelection: bolc.countryCode,
-                                      favorite: const <String>['+966', 'SA'],
-                                      showFlagDialog: true,
-                                      showFlag: false,
-                                      showCountryOnly: false,
-                                      showOnlyCountryWhenClosed: false,
-                                      alignLeft: false,
-                                      padding: isRTL == true
-                                          ? const EdgeInsets.fromLTRB(
-                                              0, 0, 32, 0)
-                                          : const EdgeInsets.fromLTRB(
-                                              32, 0, 0, 0),
-                                    ),
+                                    suffixicon:CountryPickerCode(onCountryChange:_onCountryChange,isRTL:isRTL),
+                                    
+                                    //  CountryCodePicker(
+                                    //   onChanged: _onCountryChange,
+                                    //   initialSelection: bolc.countryCode,
+                                    //   favorite: const <String>['+966', 'SA'],
+                                    //   showFlagDialog: true,
+                                    //   showFlag: false,
+                                    //   showCountryOnly: false,
+                                    //   showOnlyCountryWhenClosed: false,
+                                    //   alignLeft: false,
+                                    //   padding: isRTL == true
+                                    //       ? const EdgeInsets.fromLTRB(
+                                    //           0, 0, 32, 0)
+                                    //       : const EdgeInsets.fromLTRB(
+                                    //           32, 0, 0, 0),
+                                    // ),
                                     focusNode: focus1,
                                     onFieldSubmitted: () {
                                       sendPinNewPhone(countryCodeTemp +

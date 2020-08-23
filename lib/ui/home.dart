@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'dart:convert';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_svg/svg.dart';
@@ -207,7 +208,24 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       icon: Icon(Icons.camera, color: colors.jokerBlue),
                       onPressed: () async {
                         final ScanResult result = await BarcodeScanner.scan();
-                        Fluttertoast.showToast(msg: result.rawContent);
+
+                        try {
+                          final Map<String, dynamic> map =
+                              json.decode(result.rawContent)
+                                  as Map<String, dynamic>;
+
+                          Navigator.pushNamed(context, "/MerchantDetails",
+                              arguments: <String, dynamic>{
+                                "merchantId":
+                                    int.parse(map['merchant_id'].toString()),
+                                "branchId": int.parse(map['id'].toString()),
+                                "source": "qr"
+                              });
+                          print(result.rawContent);
+                          Fluttertoast.showToast(msg: result.rawContent);
+                        } catch (e) {
+                          Fluttertoast.showToast(msg: trans(context,'use_right_qr_code'));
+                        }
                       },
                     ),
                   ],
@@ -249,8 +267,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: Colors.black.withOpacity(.1),
-                border:  Border(
-                    top: BorderSide(color: colors.blue, width: 7.0))),
+                border:
+                    Border(top: BorderSide(color: colors.blue, width: 7.0))),
             child: Text(
               "${trans(context, 'use_current_location')}",
               textAlign: TextAlign.center,

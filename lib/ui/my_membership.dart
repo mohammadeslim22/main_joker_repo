@@ -33,7 +33,8 @@ class MyMemberShipState extends State<MyMemberShip>
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          trans(context, "my_membership"),style: styles.appBars,
+          trans(context, "my_membership"),
+          style: styles.appBars,
         ),
         centerTitle: true,
       ),
@@ -130,9 +131,8 @@ class MyMemberShipState extends State<MyMemberShip>
                   child: CachedNetworkImage(
                     placeholderFadeInDuration:
                         const Duration(milliseconds: 300),
-                    imageUrl:
-                        "${config.qRCodeUrl}${memberShip.membership.merchantId}" ??
-                            "",
+                    imageUrl: "",
+                    fit: BoxFit.cover,
 
                     // imageBuilder:
                     //     (BuildContext context, ImageProvider imageProvider) =>

@@ -9,32 +9,33 @@ import 'package:joker/util/functions.dart';
 import 'package:like_button/like_button.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'main/merchant_sales_list.dart';
+import '../util/service_locator.dart';
+import 'package:joker/providers/merchantsProvider.dart';
 
 class ShopDetails extends StatefulWidget {
-  const ShopDetails({Key key, this.merchantId, this.branchId})
+  const ShopDetails({Key key, this.merchantId, this.branchId, this.source})
       : super(key: key);
 
   final int merchantId;
   final int branchId;
-
+  final String source;
   @override
   ShopDetailsPage createState() => ShopDetailsPage();
 }
 
 class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
-  Merchant merchant;
+  // Merchant merchant;
 
-  Future<Merchant> getMerchantData(int id) async {
-    final dynamic response = await dio.get<dynamic>("merchants/$id");
-    merchant = Merchant.fromJson(response.data);
-    return merchant;
-  }
-
+  // Future<Merchant> getMerchantData(int id) async {
+  //   final dynamic response = await dio.get<dynamic>("merchants/$id");
+  //   merchant = Merchant.fromJson(response.data);
+  //   return merchant;
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(trans(context, "shop_details"),style: styles.appBars),
+          title: Text(trans(context, "shop_details"), style: styles.appBars),
           centerTitle: true,
           actions: <Widget>[
             Padding(
@@ -55,17 +56,21 @@ class ShopDetailsPage extends State<ShopDetails> with TickerProviderStateMixin {
                 onChanged: (dynamic value) {
                   Navigator.pushNamed(context, "/MemberShipsForMerchant",
                       arguments: <String, dynamic>{
-                        "merchantId": merchant.mydata.id
+                        "merchantId":
+                            getIt<MerchantProvider>().merchant.mydata.id
                       });
                 },
               ),
             )
           ]),
-      body: FutureBuilder<Merchant>(
-        future: getMerchantData(widget.merchantId),
-        builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
+      body: FutureBuilder<void>(
+        future: getIt<MerchantProvider>()
+            .getMerchantData(widget.merchantId, widget.source),
+        builder: (BuildContext ctx, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Page(merchant: merchant, branchId: widget.branchId);
+            return Page(
+                merchant: getIt<MerchantProvider>().merchant,
+                branchId: widget.branchId);
           } else {
             return const Center(
                 child: CircularProgressIndicator(
@@ -264,7 +269,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                     });
                   },
                   controller: _tabController,
-                  tabs: merchant.mydata.branches.map((Branches tab) {
+                  tabs: merchant.mydata.branches.map((MerchantBranches tab) {
                     print(tab.id);
                     return Container(
                         decoration: BoxDecoration(
@@ -293,7 +298,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
               height: 96,
               child: TabBarView(
                   controller: _tabController,
-                  children: merchant.mydata.branches.map((Branches tab) {
+                  children: merchant.mydata.branches.map((MerchantBranches tab) {
                     return Column(
                       children: <Widget>[
                         Row(children: <Widget>[

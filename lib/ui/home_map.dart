@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:joker/models/specializations.dart';
 import '../constants/styles.dart';
 import 'package:joker/services/navigationService.dart';
-import 'package:joker/util/data.dart';
+import 'package:joker/providers/auth.dart';
 
 class HOMEMAP extends StatefulWidget {
   const HOMEMAP({Key key, this.long, this.lat}) : super(key: key);
@@ -317,9 +317,7 @@ class _HOMEMAPState extends State<HOMEMAP> {
                                               "FilterData": null
                                             });
                                       } else {
-                                        data.setData('authorization', null);
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context, '/login', (_) => false);
+                                     getIt<Auth>().signOut();
                                       }
                                     },
                                     icon: Icon(Icons.more_vert,

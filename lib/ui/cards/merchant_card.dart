@@ -40,7 +40,8 @@ class _MerchantCardState extends State<MerchantCard> {
           Navigator.pushNamed(context, "/MerchantDetails",
               arguments: <String, dynamic>{
                 "merchantId": branchData.merchant.id,
-                "branchId":branchData.id
+                "branchId":branchData.id,
+                "source":"click"
               });
         },
         child: Column(

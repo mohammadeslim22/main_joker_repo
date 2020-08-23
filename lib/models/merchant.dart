@@ -29,9 +29,9 @@ class Data {
     name = json['name'].toString();
     logo = json['logo'].toString();
     if (json['branches'] != null) {
-      branches = <Branches>[];
+      branches = <MerchantBranches>[];
       json['branches'].forEach((dynamic v) {
-        branches.add(Branches.fromJson(v));
+        branches.add(MerchantBranches.fromJson(v));
       });
     }
     if (json['sales_count'] != null) {
@@ -60,7 +60,7 @@ class Data {
   int id;
   String name;
   String logo;
-  List<Branches> branches;
+  List<MerchantBranches> branches;
   int salesCount;
   int likesCount;
   int ratesCount;
@@ -69,8 +69,8 @@ class Data {
   int isfavorite;
 }
 
-class Branches {
-  Branches(
+class MerchantBranches {
+  MerchantBranches(
       {this.id,
       this.name,
       this.countryId,
@@ -78,7 +78,7 @@ class Branches {
       this.address,
       this.phone});
 
-  Branches.fromJson(dynamic json) {
+  MerchantBranches.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'].toString();
     countryId = json['country_id'] != null

@@ -99,7 +99,8 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       page = PageTransition<PageController>(
         child: ShopDetails(
             merchantId: args['merchantId'] as int,
-            branchId: args['branchId'] as int),
+            branchId: args['branchId'] as int,
+            source:args['source'].toString()),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;

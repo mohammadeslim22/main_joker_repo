@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/util/data.dart';
+import 'package:joker/ui/widgets/countryCodePicker.dart';
 
 class ForgetPassword extends StatefulWidget {
   @override
@@ -101,19 +102,20 @@ class _MyForgetPassState extends State<ForgetPassword>
                             obscureText: false,
                             readOnly: false,
                             onTab: () {},
-                            suffixicon: CountryCodePicker(
-                              onChanged: _onCountryChange,
-                              initialSelection: 'TR',
-                              favorite: const <String>['+966', 'SA'],
-                              showFlagDialog: true,
-                              showFlag: false,
-                              showCountryOnly: false,
-                              showOnlyCountryWhenClosed: false,
-                              alignLeft: false,
-                              padding: isRTL == true
-                                  ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                                  : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                            ),
+                            suffixicon: CountryPickerCode(onCountryChange:_onCountryChange,isRTL:isRTL),
+                            // CountryCodePicker(
+                            //   onChanged: _onCountryChange,
+                            //   initialSelection: 'TR',
+                            //   favorite: const <String>['+966', 'SA'],
+                            //   showFlagDialog: true,
+                            //   showFlag: false,
+                            //   showCountryOnly: false,
+                            //   showOnlyCountryWhenClosed: false,
+                            //   alignLeft: false,
+                            //   padding: isRTL == true
+                            //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+                            //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
+                            // ),
                             onFieldSubmitted: () {},
                             validator: (String value) {
                               if (value.isEmpty) {
@@ -250,8 +252,8 @@ class _MyForgetPassState extends State<ForgetPassword>
                                 }
                               }
                             },
-                            color: Colors.deepOrangeAccent,
-                            textColor: Colors.white,
+                            color: colors.jokerBlue,
+                            textColor: colors.white,
                             child: bolc
                                 .returnchild(trans(context, mainButtonkey))),
                       ),
@@ -259,8 +261,8 @@ class _MyForgetPassState extends State<ForgetPassword>
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                             side: const BorderSide(color: Colors.black)),
-                        color: Colors.white,
-                        textColor: Colors.orange,
+                        color: colors.white,
+                        textColor: colors.blue,
                         padding: const EdgeInsets.symmetric(
                             vertical: 8.0, horizontal: 28),
                         onPressed: () {},

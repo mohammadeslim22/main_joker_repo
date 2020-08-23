@@ -5,6 +5,7 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:joker/ui/widgets/countryCodePicker.dart';
 
 class ContactUs extends StatelessWidget {
   @override
@@ -38,7 +39,7 @@ class ContactUs extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text(trans(context,'contact_us'),style: styles.appBars,),
+        title:  Text(trans(context,'contact_us'),style: styles.appBars),
         centerTitle: true,
       ),
       body: ListView(
@@ -70,19 +71,20 @@ class ContactUs extends StatelessWidget {
             1,
             3,
             "Mobile Number",
-            sufixIcon: CountryCodePicker(
-              onChanged: _onCountryChange,
-              initialSelection: 'SA',
-              favorite: const <String>['+966', 'SA'],
-              showFlagDialog: true,
-              showFlag: false,
-              showCountryOnly: false,
-              showOnlyCountryWhenClosed: false,
-              alignLeft: false,
-              padding: isRTL == true
-                  ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                  : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-            ),
+            sufixIcon:CountryPickerCode(onCountryChange:_onCountryChange,isRTL:isRTL),
+            //  CountryCodePicker(
+            //   onChanged: _onCountryChange,
+            //   initialSelection: 'SA',
+            //   favorite: const <String>['+966', 'SA'],
+            //   showFlagDialog: true,
+            //   showFlag: false,
+            //   showCountryOnly: false,
+            //   showOnlyCountryWhenClosed: false,
+            //   alignLeft: false,
+            //   padding: isRTL == true
+            //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+            //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
+            // ),
           ),
           const SizedBox(height: 12),
           simpleForm(1, 3, "Address"),

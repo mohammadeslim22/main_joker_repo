@@ -11,6 +11,8 @@ import '../../constants/colors.dart';
 import 'package:joker/util/data.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/util/dio.dart';
+import 'package:joker/providers/auth.dart';
+import 'package:joker/util/service_locator.dart';
 
 class MyInnerDrawer extends StatefulWidget {
   const MyInnerDrawer({this.scaffold, this.drawerKey});
@@ -246,9 +248,10 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
             title: Text("${trans(context, 'logout')}"),
             leading: SvgPicture.asset("assets/images/logout.svg"),
             onTap: () {
-              data.setData('authorization', null);
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/login', (_) => false);
+              getIt<Auth>().signOut();
+              // data.setData('authorization', "");
+              // Navigator.pushNamedAndRemoveUntil(
+              //     context, '/login', (_) => false);
             },
           ),
         ],

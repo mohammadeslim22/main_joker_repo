@@ -209,8 +209,8 @@ class _MyChangePasswordState extends State<ChangePassword>
                           }
                         }
                       },
-                      color: Colors.deepOrangeAccent,
-                      textColor: Colors.white,
+                      color: colors.jokerBlue,
+                      textColor: colors.white,
                       child: bolc
                           .returnchild(trans(context, 'change_my_password'))),
                 ),
