@@ -13,8 +13,10 @@ import 'package:joker/providers/mainprovider.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
-import 'package:joker/util/dio.dart';
 import 'package:joker/util/data.dart';
+import 'package:joker/providers/locationProvider.dart';
+import 'package:joker/util/service_locator.dart';
+import 'package:joker/constants/styles.dart';
 
 class AutoLocate extends StatefulWidget {
   const AutoLocate({Key key, this.long, this.lat}) : super(key: key);
@@ -82,7 +84,8 @@ class _AutoLocateState extends State<AutoLocate> {
   }
 
   Future<bool> _willPopCallback() async {
-    Provider.of<MainProvider>(context, listen: false).togelocationloading(false);
+    Provider.of<MainProvider>(context, listen: false)
+        .togelocationloading(false);
     Navigator.pop(context);
     return true;
   }
@@ -107,7 +110,7 @@ class _AutoLocateState extends State<AutoLocate> {
         child: Stack(
           children: <Widget>[
             Scaffold(
-              appBar: AppBar(title: Text(trans(context, 'set_ur_location'))),
+              appBar: AppBar(title: Text(trans(context, 'set_ur_location'),style: styles.appBars)),
               key: _scaffoldKey,
               resizeToAvoidBottomInset: false,
               body: Stack(
@@ -193,14 +196,10 @@ class _AutoLocateState extends State<AutoLocate> {
                                 ),
                                 trailing: IconButton(
                                   onPressed: () {
-                                    dio.post<dynamic>("locations",
-                                        data: <String, dynamic>{
-                                          'address':
-                                              address.addressLine.toString() ??
-                                                  "Unknown",
-                                          'latitude': lat,
-                                          'longitude': long
-                                        });
+                                    getIt<LocationProvider>().saveLocation(
+                                        address.addressLine.toString(),
+                                        lat,
+                                        long);
                                   },
                                   icon: Icon(Icons.bookmark),
                                 ),
@@ -395,9 +394,11 @@ class _AutoLocateState extends State<AutoLocate> {
                         : address.addressLine ?? "unkown";
                   });
                   print("${config.lat},${config.long}");
+                  getIt<LocationProvider>().pagewiseLocationController.reset();
                   Navigator.pop(context);
                   Provider.of<MainProvider>(context, listen: false)
-                      .togelocationloading(false);                },
+                      .togelocationloading(false);
+                },
                 color: Colors.blue,
                 textColor: Colors.white,
                 child: Text(trans(context, 'pick'))),

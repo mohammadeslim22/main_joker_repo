@@ -3,11 +3,12 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/models/locations.dart';
-import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:joker/util/data.dart';
+import 'package:joker/providers/locationProvider.dart';
+import 'package:joker/util/service_locator.dart';
 
 class AddressList extends StatefulWidget {
   const AddressList({Key key}) : super(key: key);
@@ -18,14 +19,7 @@ class AddressList extends StatefulWidget {
 
 class AddressListState extends State<AddressList> {
   Locations locations;
-  Future<List<LocationsData>> getAddressData(int page) async {
-    final dynamic response =
-        await dio.get<dynamic>("locations", queryParameters: <String, dynamic>{
-      'page': page + 1,
-    });
-    locations = Locations.fromJson(response.data);
-    return locations.data;
-  }
+  // PagewiseLoadController<dynamic> pagewiseLocationController;
 
   String currentAddress;
   String lat;
@@ -46,27 +40,33 @@ class AddressListState extends State<AddressList> {
     data.getData("address").then((String value) {
       setState(() {
         currentAddress = value;
-      });  
+      });
     });
     data.getData("lat").then((String value) {
       setState(() {
-         lat = value;
+        lat = value;
       });
-     
     });
     data.getData("long").then((String value) {
       setState(() {
         long = value;
       });
-      
     });
+    getIt<LocationProvider>().pagewiseLocationController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 15,
+            pageFuture: (int pageIndex) async {
+              return getIt<LocationProvider>().getAddressData(
+                pageIndex,
+              );
+            });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(trans(context, 'address_List')),
+          title: Text(trans(context, 'address_List'), style: styles.appBars),
           centerTitle: true,
         ),
         body: Padding(
@@ -135,26 +135,24 @@ class AddressListState extends State<AddressList> {
             ),
             Expanded(
               child: PagewiseListView<dynamic>(
-                  physics: const ScrollPhysics(),
-                  shrinkWrap: true,
-                  loadingBuilder: (BuildContext context) {
-                    return const Center(
-                        child: CircularProgressIndicator(
-                      backgroundColor: Colors.transparent,
-                    ));
-                  },
-                  pageSize: 10,
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  itemBuilder:
-                      (BuildContext context, dynamic entry, int index) {
-                    return FadeIn(child: showItem(entry as LocationsData));
-                  },
-                  noItemsFoundBuilder: (BuildContext context) {
-                    return Text(trans(context, "noting_to_show"));
-                  },
-                  pageFuture: (int pageIndex) {
-                    return getAddressData(pageIndex);
-                  }),
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                loadingBuilder: (BuildContext context) {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    backgroundColor: Colors.transparent,
+                  ));
+                },
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                itemBuilder: (BuildContext context, dynamic entry, int index) {
+                  return FadeIn(child: showItem(entry as LocationsData));
+                },
+                noItemsFoundBuilder: (BuildContext context) {
+                  return Text(trans(context, "noting_to_show"));
+                },
+                pageLoadController:
+                    getIt<LocationProvider>().pagewiseLocationController,
+              ),
             ),
           ]),
         ));

@@ -21,4 +21,5 @@ class MerchantProvider with ChangeNotifier {
     branches = Branches.fromJson(response.data);
     return branches.data;
   }
+  
 }

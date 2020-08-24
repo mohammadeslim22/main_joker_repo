@@ -322,14 +322,15 @@ class _MyRegistrationState extends State<Registration>
                                   birthDateController.text,
                                   emailController.text,
                                   mobileNoController.text,
-                                  countryCodeTemp);
+                                    auth.myCountryCode);
 
                               _formKey.currentState.validate();
-                            }
-                          }
-                          setState(() {
+                                 setState(() {
                             _isButtonEnabled = true;
                           });
+                            }
+                          }
+                       
                         },
                         color: colors.blue,
                         textColor: colors.white,

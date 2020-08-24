@@ -121,7 +121,6 @@ class _MyLoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     final MainProvider mainProvider = Provider.of<MainProvider>(context);
-    // final Auth auht = Provider.of<Auth>(context);
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
     return Scaffold(
@@ -143,23 +142,23 @@ class _MyLoginScreenState extends State<LoginScreen>
             return Column(
               children: <Widget>[
                 // TODO(mohammed): rename mystyle2.
-                Text(trans(context, 'joker'),
-                    textAlign: TextAlign.center, style: styles.mystyle2),
-                const SizedBox(height: 5),
-                Text(
-                  trans(context, 'all_you_need'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    color: colors.jokerBlue,
-                    fontSize: 20,
-                  ),
-                ),
-                const SizedBox(height: 30),
-                Text(trans(context, 'hello'), style: styles.mystyle2),
-                const SizedBox(height: 10),
-                Text(trans(context, 'enter_login_information'),
-                    style: styles.mystyle),
+               // Text(trans(context, 'joker'),
+               //     textAlign: TextAlign.center, style: styles.mystyle2),
+                // const SizedBox(height: 5),
+                // Text(
+                //   trans(context, 'all_you_need'),
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(
+                //     fontWeight: FontWeight.w300,
+                //     color: colors.jokerBlue,
+                //     fontSize: 20,
+                //   ),
+                // ),
+                // const SizedBox(height: 30),
+                // Text(trans(context, 'hello'), style: styles.mystyle2),
+                // const SizedBox(height: 10),
+                // Text(trans(context, 'enter_login_information'),
+                //     style: styles.mystyle),
                 customcard(context,
                     mainProvider: mainProvider, isRTL: isRTL, auht: auth),
                 Container(
@@ -190,7 +189,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                             });
 
                             if (await auth.login(
-                                countryCodeTemp,
+                              auth.myCountryCode,
                                 _usernameController.text,
                                 _passwordController.text,
                                 context)) {

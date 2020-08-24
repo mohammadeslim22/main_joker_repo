@@ -76,7 +76,8 @@ class MerchantBranches {
       this.countryId,
       this.cityId,
       this.address,
-      this.phone});
+      this.phone,
+      this.rateAverage});
 
   MerchantBranches.fromJson(dynamic json) {
     id = json['id'] as int;
@@ -87,6 +88,7 @@ class MerchantBranches {
     cityId = json['city_id'] != null ? CityId.fromJson(json['city_id']) : null;
     address = json['address'].toString();
     phone = json['phone'].toString();
+    rateAverage = double.parse(json['rates_average'].toString());
   }
   int id;
   String name;
@@ -94,6 +96,7 @@ class MerchantBranches {
   CityId cityId;
   String address;
   String phone;
+  double rateAverage;
 }
 
 class CountryId {

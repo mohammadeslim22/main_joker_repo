@@ -10,11 +10,13 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:country_provider/country_provider.dart';
+
 class Auth with ChangeNotifier {
   Auth() {
     // TODO(ahmed): do login by dio library
   }
-
+  String myCountryCode;
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
     'phone',
@@ -40,6 +42,13 @@ class Auth with ChangeNotifier {
       Map<String, String>.fromIterables(regkeys, registervalidators);
   Map<String, String> validationMap =
       Map<String, String>.fromIterables(keys, validators);
+
+  Future<void> getCountry(String countryCode) async {
+    final Country result = await CountryProvider.getCountryByCode(countryCode);
+    myCountryCode = result.callingCodes.first;
+    print("numricCode:    ${result.callingCodes}");
+  }
+
   Future<bool> login(String countryCode, String username, String pass,
       BuildContext context) async {
     bool res;
@@ -167,7 +176,7 @@ class Auth with ChangeNotifier {
   void signInAnonymously() {}
 
   void signOut() {
-      data.setData('authorization', "");
-           getIt<NavigationService>().navigateTo('/login',null);
+    data.setData('authorization', "");
+    getIt<NavigationService>().navigateTo('/login', null);
   }
 }

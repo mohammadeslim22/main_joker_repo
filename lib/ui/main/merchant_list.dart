@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:joker/models/branches_model.dart';
-import 'package:joker/providers/mainprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/ui/widgets/fadein.dart';

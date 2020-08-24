@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/config.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/data.dart';
 import 'providers/language.dart';
@@ -44,13 +45,14 @@ class _SplashScreenState extends State<SplashScreen> {
         });
   }
 
-  Future<void> initPlatformState(MainProvider mainProvider) async {
+  Future<void> initPlatformState(MainProvider mainProvider, Auth auth) async {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await FlutterSimCountryCode.simCountryCode;
       print("platform country code : $platformVersion");
       mainProvider.dialCodeFav = platformVersion;
+      auth.getCountry(platformVersion);
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -68,8 +70,10 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     final Language lang = Provider.of<Language>(context, listen: false);
     final MainProvider bolc = Provider.of<MainProvider>(context, listen: false);
+    final Auth auth = Provider.of<Auth>(context, listen: false);
+
     askUser(lang, bolc);
-    initPlatformState(bolc);
+    initPlatformState(bolc,auth);
   }
 
   @override
@@ -78,7 +82,10 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
           color: Colors.white,
           alignment: Alignment.center,
-          child: SvgPicture.asset("assets/images/Layer.svg",width: 200,)),
+          child: SvgPicture.asset(
+            "assets/images/Layer.svg",
+            width: 200,
+          )),
     );
   }
 }

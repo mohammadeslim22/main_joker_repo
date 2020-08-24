@@ -64,9 +64,6 @@ class ShopDetailsPage extends State<SaleDetailPage>
     with AfterLayoutMixin<SaleDetailPage>, TickerProviderStateMixin {
   Merchant merchant;
   SaleData sale;
-
-  // final AsyncMemoizer<Merchant> _memoizer = AsyncMemoizer<Merchant>();
-  int myindex = 0;
   double clientRatingStar = 0;
   bool hasMemberShip = false;
 
@@ -89,16 +86,6 @@ class ShopDetailsPage extends State<SaleDetailPage>
       GlobalKey<BottomWidgetForSliverState>();
   AnimationController rotationController;
 
-  // Future<Merchant> getMerchantData(int merchentid) async {
-  //   return _memoizer.runOnce(() async {
-  //     final dynamic mercantResult =
-  //         await dio.get<dynamic>("merchants/$merchentid");
-  //     merchant = Merchant.fromJson(mercantResult.data);
-  //     index += merchant.mydata.branches[0].id;
-  //     return merchant;
-  //   });
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -119,9 +106,6 @@ class ShopDetailsPage extends State<SaleDetailPage>
     isbottomSheetOpened = false;
     pageIndexx = 1;
     index += merchant.mydata.branches[0].id;
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   getHeight();
-    // });
   }
 
   Future<List<SimpleSalesData>> getSimpleSalesData(int pageIndex) async {
@@ -518,11 +502,11 @@ class ShopDetailsPage extends State<SaleDetailPage>
                             isScrollable: true,
                             onTap: (int i) {
                               setState(() {
-                                index =
-                                    index = i + merchant.mydata.branches[0].id;
+                                index += i + merchant.mydata.branches[0].id;
                               });
                             },
-                            tabs: merchant.mydata.branches.map((MerchantBranches tab) {
+                            tabs: merchant.mydata.branches
+                                .map((MerchantBranches tab) {
                               return Container(
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(
@@ -546,8 +530,8 @@ class ShopDetailsPage extends State<SaleDetailPage>
                         width: MediaQuery.of(context).size.width,
                         height: 96,
                         child: TabBarView(
-                            children:
-                                merchant.mydata.branches.map((MerchantBranches tab) {
+                            children: merchant.mydata.branches
+                                .map((MerchantBranches tab) {
                           return Column(
                             children: <Widget>[
                               Row(children: <Widget>[
@@ -949,9 +933,9 @@ class _CurasolSliderState extends State<CurasolSlider> {
             autoPlayCurve: Curves.fastOutSlowIn,
             scrollDirection: Axis.horizontal,
             onPageChanged: (int index, CarouselPageChangedReason reason) {
-              // setState(() {
-              //   widget.myindex = index;
-              // });
+              setState(() {
+                widget.myindex = index;
+              });
             },
             pageViewKey: const PageStorageKey<dynamic>('carousel_slider'),
           ),

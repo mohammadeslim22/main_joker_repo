@@ -4,7 +4,8 @@ import 'package:joker/providers/mainprovider.dart';
 import 'package:provider/provider.dart';
 
 class CountryPickerCode extends StatelessWidget {
-  const CountryPickerCode({Key key, this.onCountryChange, this.isRTL}) : super(key: key);
+  const CountryPickerCode({Key key, this.onCountryChange, this.isRTL})
+      : super(key: key);
   final Function(CountryCode) onCountryChange;
   final bool isRTL;
   @override
@@ -13,7 +14,7 @@ class CountryPickerCode extends StatelessWidget {
 
     return CountryCodePicker(
       onChanged: onCountryChange,
-      initialSelection: bolc.countryCode,
+      initialSelection: bolc.dialCodeFav,
       favorite: const <String>['+966', 'SA'],
       showFlagDialog: true,
       showFlag: false,
