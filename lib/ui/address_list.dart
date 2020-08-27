@@ -19,8 +19,6 @@ class AddressList extends StatefulWidget {
 
 class AddressListState extends State<AddressList> {
   Locations locations;
-  // PagewiseLoadController<dynamic> pagewiseLocationController;
-
   String currentAddress;
   String lat;
   String long;
@@ -198,74 +196,3 @@ class AddressListState extends State<AddressList> {
     );
   }
 }
-
-// class AddressListItem extends StatefulWidget {
-//   const AddressListItem({Key key, this.locationData, this.currentId = 0})
-//       : super(key: key);
-//   final LocationsData locationData;
-//   final int currentId;
-//   @override
-//   AddressListItemState createState() => AddressListItemState();
-// }
-
-// class AddressListItemState extends State<AddressListItem> {
-//   LocationsData locationData;
-//   @override
-//   void initState() {
-//     super.initState();
-//     locationData = widget.locationData;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Slidable(
-//       actionPane: const SlidableDrawerActionPane(),
-//       actionExtentRatio: 0.25,
-//       actions: actions,
-//       secondaryActions: actions,
-//       child: AnimatedContainer(
-//         duration: const Duration(milliseconds: 1000),
-//         child: Card(
-//           child: InkWell(
-//               onTap: () {},
-//               child: ListTile(
-//                 contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-//                 selected: locationData.id == widget.currentId,
-//                 title: Text(locationData.address, style: styles.underHeadblack),
-//                 subtitle: Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                   children: <Widget>[
-//                     Text(
-//                         "${trans(context, 'latitude')}   ${locationData.latitude.toStringAsFixed(3)}"),
-//                     Text(
-//                         "${trans(context, 'longitue')}   ${locationData.longitude.toStringAsFixed(3)}"),
-//                   ],
-//                 ),
-//                 onTap: () {
-//                   setState(() {});
-//                 },
-//               )
-
-//               // Container(
-//               //   padding:
-//               //   child: Column(
-//               //     children: <Widget>[
-//               //       Text(locationData.address, style: styles.underHeadblack),
-//               //       Row(
-//               //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               //         children: <Widget>[
-//               //           Text(
-//               //               "${trans(context, 'latitude')}   ${locationData.latitude.toStringAsFixed(3)}"),
-//               //           Text(
-//               //               "${trans(context, 'longitue')}   ${locationData.longitude.toStringAsFixed(3)}"),
-//               //         ],
-//               //       )
-//               //     ],
-//               //   ),
-//               // ),
-//               ),
-//         ),
-//       ),
-//     );
-//   }
-// }

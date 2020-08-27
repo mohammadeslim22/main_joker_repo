@@ -17,7 +17,6 @@ class MerchantCard extends StatefulWidget {
 }
 
 class _MerchantCardState extends State<MerchantCard> {
-  bool isliked = false;
   BranchData branchData;
 
   @override

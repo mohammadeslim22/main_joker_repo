@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
@@ -13,9 +14,11 @@ import 'package:joker/localization/trans.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:joker/models/profile.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
@@ -118,17 +121,17 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
     return;
   }
 
-  static List<String> validators = <String>[null, null, null, null, null, null];
-  static List<String> keys = <String>[
-    'name',
-    'email',
-    'phone',
-    'password',
-    'birthdate',
-    'location'
-  ];
-  Map<String, String> validationMap =
-      Map<String, String>.fromIterables(keys, validators);
+  // static List<String> validators = <String>[null, null, null, null, null, null];
+  // static List<String> keys = <String>[
+  //   'name',
+  //   'email',
+  //   'phone',
+  //   'password',
+  //   'birthdate',
+  //   'location'
+  // ];
+  // Map<String, String> auth.validationMap =
+  //     Map<String, String>.fromIterables(keys, validators);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -137,7 +140,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(trans(context, "my_account"),style: styles.appBars),
+          title: Text(trans(context, "my_account"), style: styles.appBars),
           centerTitle: true,
         ),
         body: Builder(
@@ -208,14 +211,14 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                           child: Column(
                             children: <Widget>[
                               FlatButton(
-                                  child: Text('Take A Photo',
+                                  child: Text(trans(context, 'open_gallery'),
                                       style: styles.mysmall),
                                   onPressed: () async {
                                     getImage(ImageSource.camera, bolc);
                                   }),
                               FlatButton(
-                                child:
-                                    Text('Open Gallery', style: styles.mysmall),
+                                child: Text(trans(context, "take_photo"),
+                                    style: styles.mysmall),
                                 onPressed: () async {
                                   getImage(ImageSource.gallery, bolc);
                                 },
@@ -230,181 +233,186 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                       else
                         Container(),
                       const SizedBox(height: 24),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 34),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            children: <Widget>[
-                              TextFormInput(
-                                  text: trans(context, 'name'),
-                                  cController: usernameController,
-                                  prefixIcon: Icons.person_outline,
-                                  kt: TextInputType.visiblePassword,
-                                  obscureText: false,
-                                  readOnly: false,
-                                  onFieldSubmitted: () {
-                                    focus.requestFocus();
-                                  },
-                                  onTab: () {},
-                                  validator: (String value) {
-                                    if (value.length < 3) {
-                                      return "username must be more than 3 letters";
-                                    }
-                                    return validationMap['name'];
-                                  }),
-                              TextFormInput(
-                                  text: trans(context, 'email'),
-                                  cController: emailController,
-                                  prefixIcon: Icons.mail_outline,
-                                  kt: TextInputType.emailAddress,
-                                  obscureText: false,
-                                  readOnly: true,
-                                  focusNode: focus,
-                                  suffixicon: IconButton(
-                                    icon:
-                                        Icon(Icons.edit, color: colors.blue),
-                                    onPressed: () {},
-                                  ),
-                                  onTab: () {},
-                                  onFieldSubmitted: () {
-                                    focus1.requestFocus();
-                                  },
-                                  validator: (String value) {
-                                    if (value.isEmpty) {
-                                      return "please enter a valid email ";
-                                    }
-                                    return validationMap['email'];
-                                  }),
-                              TextFormInput(
-                                  text: trans(context, 'mobile_no'),
-                                  cController: mobileNoController,
-                                  prefixIcon: Icons.phone,
-                                  kt: TextInputType.phone,
-                                  obscureText: false,
-                                  readOnly: true,
-                                  onTab: () {
-                                    print(mobileNoController.text);
-                                    Navigator.pushNamed(
-                                      context,
-                                      '/pinForProfile',
-                                      arguments: <String, String>{
-                                        'mobileNo': mobileNoController.text
+                      Consumer<Auth>(
+                        builder:
+                            (BuildContext context, Auth auth, Widget child) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 34),
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: <Widget>[
+                                  TextFormInput(
+                                      text: trans(context, 'name'),
+                                      cController: usernameController,
+                                      prefixIcon: Icons.person_outline,
+                                      kt: TextInputType.visiblePassword,
+                                      obscureText: false,
+                                      readOnly: false,
+                                      onFieldSubmitted: () {
+                                        focus.requestFocus();
                                       },
-                                    );
-                                  },
-                                  suffixicon: IconButton(
-                                    icon:
-                                        Icon(Icons.edit, color: colors.blue),
-                                    onPressed: () {
-                                      print(mobileNoController.text);
-                                    },
-                                  ),
-                                  focusNode: focus1,
-                                  onFieldSubmitted: () {
-                                    focus2.requestFocus();
-                                  },
-                                  validator: (String value) {
-                                    if (value.isEmpty) {
-                                      return "please enter your mobile Number  ";
-                                    }
-                                    return validationMap['phone'];
-                                  }),
-                              TextFormInput(
-                                  text: trans(context, 'birth_date'),
-                                  cController: birthDateController,
-                                  prefixIcon: Icons.date_range,
-                                  kt: TextInputType.visiblePassword,
-                                  obscureText: false,
-                                  readOnly: true,
-                                  onTab: () {
-                                    _selectDate(context);
-                                  },
-                                  suffixicon: IconButton(
-                                    color: colors.blue,
-                                    icon: Icon(Icons.calendar_today),
-                                    onPressed: () {
-                                      //   _selectDate(context);
-                                    },
-                                  ),
-                                  focusNode: focus3,
-                                  validator: (String value) {
-                                    if (value.isEmpty) {
-                                      return "please enter your Birth Date ";
-                                    }
-                                    return validationMap['birthdate'];
-                                  }),
-                              TextFormInput(
-                                  text: trans(context, 'get_location'),
-                                  cController: config.locationController,
-                                  prefixIcon: Icons.my_location,
-                                  kt: TextInputType.visiblePassword,
-                                  readOnly: true,
-                                  onTab: () async {
-                                    try {
-                                      bolc.togelocationloading(true);
+                                      onTab: () {},
+                                      validator: (String value) {
+                                        if (value.length < 3) {
+                                          return "username must be more than 3 letters";
+                                        }
+                                        return auth.validationMap['name'];
+                                      }),
+                                  TextFormInput(
+                                      text: trans(context, 'email'),
+                                      cController: emailController,
+                                      prefixIcon: Icons.mail_outline,
+                                      kt: TextInputType.emailAddress,
+                                      obscureText: false,
+                                      readOnly: true,
+                                      focusNode: focus,
+                                      suffixicon: IconButton(
+                                        icon: Icon(Icons.edit,
+                                            color: colors.blue),
+                                        onPressed: () {},
+                                      ),
+                                      onTab: () {},
+                                      onFieldSubmitted: () {
+                                        focus1.requestFocus();
+                                      },
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "please enter a valid email ";
+                                        }
+                                        return auth.validationMap['email'];
+                                      }),
+                                  TextFormInput(
+                                      text: trans(context, 'mobile_no'),
+                                      cController: mobileNoController,
+                                      prefixIcon: Icons.phone,
+                                      kt: TextInputType.phone,
+                                      obscureText: false,
+                                      readOnly: true,
+                                      onTab: () {
+                                        print(mobileNoController.text);
+                                        Navigator.pushNamed(
+                                          context,
+                                          '/pinForProfile',
+                                          arguments: <String, String>{
+                                            'mobileNo': mobileNoController.text
+                                          },
+                                        );
+                                      },
+                                      suffixicon: IconButton(
+                                        icon: Icon(Icons.edit,
+                                            color: colors.blue),
+                                        onPressed: () {
+                                          print(mobileNoController.text);
+                                        },
+                                      ),
+                                      focusNode: focus1,
+                                      onFieldSubmitted: () {
+                                        focus2.requestFocus();
+                                      },
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "please enter your mobile Number  ";
+                                        }
+                                        return auth.validationMap['phone'];
+                                      }),
+                                  TextFormInput(
+                                      text: trans(context, 'birth_date'),
+                                      cController: birthDateController,
+                                      prefixIcon: Icons.date_range,
+                                      kt: TextInputType.visiblePassword,
+                                      obscureText: false,
+                                      readOnly: true,
+                                      onTab: () {
+                                        _selectDate(context);
+                                      },
+                                      suffixicon: IconButton(
+                                        color: colors.blue,
+                                        icon: Icon(Icons.calendar_today),
+                                        onPressed: () {
+                                          //   _selectDate(context);
+                                        },
+                                      ),
+                                      focusNode: focus3,
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "please enter your Birth Date ";
+                                        }
+                                        return auth.validationMap['birthdate'];
+                                      }),
+                                  TextFormInput(
+                                      text: trans(context, 'get_location'),
+                                      cController: config.locationController,
+                                      prefixIcon: Icons.my_location,
+                                      kt: TextInputType.visiblePassword,
+                                      readOnly: true,
+                                      onTab: () async {
+                                        try {
+                                          bolc.togelocationloading(true);
 
-                                      if (await updateLocation) {
-                                        await getLocationName();
-                                        bolc.togelocationloading(false);
-                                      } else {
-                                        Vibration.vibrate(duration: 400);
-                                        bolc.togelocationloading(false);
+                                          if (await updateLocation) {
+                                            await getLocationName();
+                                            bolc.togelocationloading(false);
+                                          } else {
+                                            Vibration.vibrate(duration: 400);
+                                            bolc.togelocationloading(false);
 
-                                        Scaffold.of(context)
-                                            .showSnackBar(snackBar);
-                                        setState(() {
-                                          config.locationController.text =
-                                              "Tap to set my location";
-                                        });
-                                      }
-                                    } catch (e) {
-                                      Vibration.vibrate(duration: 400);
-                                      bolc.togelocationloading(false);
-                                      Scaffold.of(context)
-                                          .showSnackBar(snackBar);
-                                      setState(() {
-                                        config.locationController.text =
-                                            "Tap to set my location";
-                                      });
-                                    }
-                                  },
-                                  suffixicon: IconButton(
-                                    icon: Icon(Icons.add_location,
-                                        color: colors.blue),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, '/AutoLocate',
-                                          arguments: <String, double>{
-                                            "lat": 51.0,
-                                            "long": 9.6
+                                            Scaffold.of(context)
+                                                .showSnackBar(snackBar);
+                                            setState(() {
+                                              config.locationController.text =
+                                                  "Tap to set my location";
+                                            });
+                                          }
+                                        } catch (e) {
+                                          Vibration.vibrate(duration: 400);
+                                          bolc.togelocationloading(false);
+                                          Scaffold.of(context)
+                                              .showSnackBar(snackBar);
+                                          setState(() {
+                                            config.locationController.text =
+                                                "Tap to set my location";
                                           });
-                                    },
+                                        }
+                                      },
+                                      suffixicon: IconButton(
+                                        icon: Icon(Icons.add_location,
+                                            color: colors.blue),
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, '/AutoLocate',
+                                              arguments: <String, double>{
+                                                "lat": 51.0,
+                                                "long": 9.6
+                                              });
+                                        },
+                                      ),
+                                      obscureText: false,
+                                      focusNode: focus4,
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "please specify you Location :)";
+                                        }
+                                        return auth.validationMap['location'];
+                                      }),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: bolc.visibilityObs
+                                        ? Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: spinkit,
+                                              ),
+                                            ],
+                                          )
+                                        : Container(),
                                   ),
-                                  obscureText: false,
-                                  focusNode: focus4,
-                                  validator: (String value) {
-                                    if (value.isEmpty) {
-                                      return "please specify you Location :)";
-                                    }
-                                    return validationMap['location'];
-                                  }),
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: bolc.visibilityObs
-                                    ? Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: spinkit,
-                                          ),
-                                        ],
-                                      )
-                                    : Container(),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 70),
@@ -420,8 +428,99 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   setState(() {
                                     _isButtonEnabled = false;
                                   });
-
-                                  login(bolc);
+                                  await getIt<Auth>()
+                                      .updateProfile(
+                                          usernameController.text,
+                                          birthDateController.text,
+                                          emailController.text)
+                                      .then((bool value) {
+                                    setState(() {
+                                      _isButtonEnabled = true;
+                                    });
+                                    if (value) {
+                                      showGeneralDialog<dynamic>(
+                                        barrierLabel: "Label",
+                                        barrierDismissible: true,
+                                        barrierColor:
+                                            Colors.black.withOpacity(0.73),
+                                        transitionDuration:
+                                            const Duration(milliseconds: 350),
+                                        context: context,
+                                        pageBuilder: (BuildContext context,
+                                            Animation<double> anim1,
+                                            Animation<double> anim2) {
+                                          return Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Container(
+                                              height: 360,
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 160,
+                                                  left: 24,
+                                                  right: 24),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(40),
+                                              ),
+                                              child: Material(
+                                                type: MaterialType.transparency,
+                                                child: SizedBox.expand(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      SvgPicture.asset(
+                                                          'assets/images/checkdone.svg'),
+                                                      const SizedBox(
+                                                          height: 15),
+                                                      Flexible(
+                                                        child: Text(
+                                                            trans(context,
+                                                                "information_updated_successfully"),
+                                                            style: styles
+                                                                .underHeadblack),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 15),
+                                                      RaisedButton(
+                                                          color:
+                                                              colors.jokerBlue,
+                                                          child: Text(
+                                                              trans(context,
+                                                                  "ok"),
+                                                              style: styles
+                                                                  .underHeadwhite),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          })
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        transitionBuilder:
+                                            (BuildContext context,
+                                                Animation<double> anim1,
+                                                Animation<double> anim2,
+                                                Widget child) {
+                                          return SlideTransition(
+                                            position: Tween<Offset>(
+                                                    begin: const Offset(0, 1),
+                                                    end: const Offset(0, 0))
+                                                .animate(anim1),
+                                            child: child,
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      _formKey.currentState.validate();
+                                    }
+                                    bolc.togelf(false);
+                                  });
                                 }
                               }
                             },
@@ -443,120 +542,21 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
       final FormData formData = FormData.fromMap(<String, dynamic>{
         "avatar": await MultipartFile.fromFile(image.path)
       });
-      dio
-          .post<dynamic>(
-        "avatar",
-        data: formData,
-        onSendProgress: (int sent, int total) {},
-      )
-          .then((dynamic result) {
+      getIt<Auth>().changeProfilePic(formData).then((dynamic result) {
         print(result.data);
         if (result.statusCode == 200) {
           bolc.changeImageUrl(result.data['image'].toString());
           data.setData('profile_pic', result.data['image'].toString());
 
           setState(() {
+            showImageOptions = !showImageOptions;
             config.profileUrl = result.data['image'].toString();
           });
+        } else {
+          Fluttertoast.showToast(msg: trans(context, "error_happened"));
         }
       });
     }
-  }
-
-  Future<void> login(MainProvider bolc) async {
-    await dio.post<dynamic>("update", data: <String, dynamic>{
-      "name": usernameController.text,
-      "birth_date": birthDateController.text,
-      "email": emailController.text,
-      "country_id": 1,
-      "city_id": 1,
-      "address": config.locationController.text,
-      "longitude": config.long,
-      "latitude": config.lat
-    }).then((Response<dynamic> value) {
-      setState(() {
-        _isButtonEnabled = true;
-      });
-      print(value.data);
-      if (value.statusCode == 422) {
-        value.data['errors'].forEach((String k, dynamic vv) {
-          setState(() {
-            validationMap[k] = vv[0].toString();
-          });
-          print(validationMap);
-        });
-        _formKey.currentState.validate();
-        validationMap.updateAll((String key, String value) {
-          return null;
-        });
-        print(validationMap);
-      }
-      if (value.statusCode == 200) {
-        data.setData("email", emailController.text);
-        data.setData("username", usernameController.text);
-        data.setData("lat", config.lat.toString());
-        data.setData("long", config.long.toString());
-        data.setData("address", config.locationController.text.toString());
-
-        showGeneralDialog<dynamic>(
-          barrierLabel: "Label",
-          barrierDismissible: true,
-          barrierColor: Colors.black.withOpacity(0.73),
-          transitionDuration: const Duration(milliseconds: 350),
-          context: context,
-          pageBuilder: (BuildContext context, Animation<double> anim1,
-              Animation<double> anim2) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 360,
-                margin: const EdgeInsets.only(bottom: 160, left: 24, right: 24),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: SizedBox.expand(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        SvgPicture.asset('assets/images/checkdone.svg'),
-                        const SizedBox(height: 15),
-                        Flexible(
-                          child: Text(
-                              trans(
-                                  context, "information_updated_successfully"),
-                              style: styles.underHeadblack),
-                        ),
-                        const SizedBox(height: 15),
-                        RaisedButton(
-                            color: colors.jokerBlue,
-                            child: Text(trans(context, "ok"),
-                                style: styles.underHeadwhite),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            })
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-          transitionBuilder: (BuildContext context, Animation<double> anim1,
-              Animation<double> anim2, Widget child) {
-            return SlideTransition(
-              position: Tween<Offset>(
-                      begin: const Offset(0, 1), end: const Offset(0, 0))
-                  .animate(anim1),
-              child: child,
-            );
-          },
-        );
-      }
-      bolc.togelf(false);
-    });
   }
 
   @override

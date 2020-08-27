@@ -42,7 +42,24 @@ class Auth with ChangeNotifier {
       Map<String, String>.fromIterables(regkeys, registervalidators);
   Map<String, String> validationMap =
       Map<String, String>.fromIterables(keys, validators);
-
+  static List<String> profileValidators = <String>[
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ];
+  static List<String> profilekeys = <String>[
+    'name',
+    'email',
+    'phone',
+    'password',
+    'birthdate',
+    'location'
+  ];
+  Map<String, String> profileValidationMap =
+      Map<String, String>.fromIterables(keys, validators);
   Future<void> getCountry(String countryCode) async {
     final Country result = await CountryProvider.getCountryByCode(countryCode);
     myCountryCode = result.callingCodes.first;
@@ -178,5 +195,49 @@ class Auth with ChangeNotifier {
   void signOut() {
     data.setData('authorization', "");
     getIt<NavigationService>().navigateTo('/login', null);
+  }
+
+  Future<bool> updateProfile(
+      String username, String birthDate, String email) async {
+    final Response<dynamic> response =
+        await dio.post<dynamic>("update", data: <String, dynamic>{
+      "name": username,
+      "birth_date": birthDate,
+      "email": email,
+      "country_id": 1,
+      "city_id": 1,
+      "address": config.locationController.text,
+      "longitude": config.long,
+      "latitude": config.lat
+    });
+    if (response.statusCode == 422) {
+      response.data['errors'].forEach((String k, dynamic vv) {
+        profileValidationMap[k] = vv[0].toString();
+      });
+      profileValidationMap.updateAll((String key, String value) {
+        return null;
+      });
+      return false;
+    } else {
+      if (response.statusCode == 200) {
+        data.setData("email", email);
+        data.setData("username", username);
+        data.setData("lat", config.lat.toString());
+        data.setData("long", config.long.toString());
+        data.setData("address", config.locationController.text.toString());
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  Future<dynamic> changeProfilePic(dynamic formData) async {
+    final Response<dynamic> response = await dio.post<dynamic>(
+      "avatar",
+      data: formData,
+      onSendProgress: (int sent, int total) {},
+    );
+    return response;
   }
 }
