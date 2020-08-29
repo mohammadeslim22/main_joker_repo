@@ -21,7 +21,6 @@ class MainProvider extends ChangeNotifier {
   List<bool> notificationSit = <bool>[true, false];
   String countryCode;
   String countryDialCode;
-  String dialCodeFav;
   void saveCountryCode(String code, String dialCode) {
     countryCode = code;
     countryDialCode = dialCode;

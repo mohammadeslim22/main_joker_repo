@@ -17,6 +17,9 @@ class Auth with ChangeNotifier {
     // TODO(ahmed): do login by dio library
   }
   String myCountryCode;
+  String myCountryDialCode;
+    String dialCodeFav;
+
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
     'phone',
@@ -60,10 +63,28 @@ class Auth with ChangeNotifier {
   ];
   Map<String, String> profileValidationMap =
       Map<String, String>.fromIterables(keys, validators);
+
+  static List<String> pinCodeProfileValidators = <String>[null, null];
+  static List<String> pinCodeProfilekeys = <String>[
+    'phone',
+    'password',
+  ];
+  Map<String, String> pinCodeProfileValidationMap =
+      Map<String, String>.fromIterables(keys, validators);
+
   Future<void> getCountry(String countryCode) async {
     final Country result = await CountryProvider.getCountryByCode(countryCode);
     myCountryCode = result.callingCodes.first;
     print("numricCode:    ${result.callingCodes}");
+  }
+
+  void saveCountryCode(String code, String dialCode) {
+    myCountryCode = dialCode;
+    myCountryDialCode = code;
+    data.setData("countryCodeTemp", code);
+    data.setData("countryDialCodeTemp", dialCode);
+
+    notifyListeners();
   }
 
   Future<bool> login(String countryCode, String username, String pass,
@@ -239,5 +260,45 @@ class Auth with ChangeNotifier {
       onSendProgress: (int sent, int total) {},
     );
     return response;
+  }
+
+  Future<bool> getPinCode(String code, String mobile) async {
+    final Response<dynamic> correct = await dio.put<dynamic>("save_phone",
+        data: <String, dynamic>{
+          "new_phone": myCountryCode + mobile,
+          "verfiy_code": code
+        });
+    print(correct.data);
+    if (correct.data == "false") {
+      print(correct.data);
+      return false;
+    } else {
+      print(correct.data);
+      return true;
+    }
+  }
+
+  Future<bool> verifyNewPhone(String password, String mobile) async {
+    final Response<dynamic> response = await dio.put<dynamic>("update_phone",
+        queryParameters: <String, dynamic>{
+          "password": password,
+          "new_phone": myCountryCode + mobile
+        });
+
+    if (response.statusCode == 422) {
+      response.data['errors'].forEach((String k, dynamic vv) {
+        pinCodeProfileValidationMap[k] = vv[0].toString();
+      });
+      pinCodeProfileValidationMap.updateAll((String key, String value) {
+        return null;
+      });
+      return false;
+    }
+    if (response.statusCode == 200) {
+      data.setData("phone", myCountryCode + mobile);
+      return true;
+    } else {
+      return false;
+    }
   }
 }

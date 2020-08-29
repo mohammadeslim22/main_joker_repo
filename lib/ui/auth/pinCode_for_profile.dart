@@ -3,20 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/services.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/ui/widgets/text_form_input.dart';
-import 'package:joker/util/data.dart';
+import 'package:joker/util/service_locator.dart';
 import '../widgets/buttonTouse.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:dio/dio.dart';
-import 'package:joker/util/dio.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:joker/ui/widgets/countryCodePicker.dart';
 
@@ -33,7 +31,6 @@ class _MyHomePageState extends State<PinCodeForProfile>
   AnimationController controller;
   String currentText = "0000";
   bool showTimer = true;
-  String countryCodeTemp = "+90";
 
   @override
   void initState() {
@@ -45,27 +42,6 @@ class _MyHomePageState extends State<PinCodeForProfile>
     setState(() {
       config.prifleNoVerfiyVisit = true;
     });
-    data.getData("countryDialCodeTemp").then((String value) {
-      setState(() {
-        countryCodeTemp = value;
-      });
-    });
-  }
-
-  Future<bool> getPinCode(String code) async {
-    final Response<dynamic> correct = await dio.put<dynamic>("save_phone",
-        data: <String, dynamic>{
-          "new_phone": countryCodeTemp + mobileNoController.text,
-          "verfiy_code": code
-        });
-    print(correct.data);
-    if (correct.data == "false") {
-      print(correct.data);
-      return false;
-    } else {
-      print(correct.data);
-      return true;
-    }
   }
 
   bool enabeld = false;
@@ -102,7 +78,8 @@ class _MyHomePageState extends State<PinCodeForProfile>
                 fieldWidth: 30,
                 onCompleted: (String v) async {
                   bolc.togelf(true);
-                  if (await getPinCode(v.trim())) {
+                  if (await getIt<Auth>()
+                      .getPinCode(v.trim(), mobileNoController.text)) {
                     setState(() {
                       config.prifleNoVerfiyDone = true;
                     });
@@ -131,13 +108,13 @@ class _MyHomePageState extends State<PinCodeForProfile>
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  static List<String> validators = <String>[null, null];
-  static List<String> keys = <String>[
-    'phone',
-    'password',
-  ];
-  Map<String, String> validationMap =
-      Map<String, String>.fromIterables(keys, validators);
+  // static List<String> validators = <String>[null, null];
+  // static List<String> keys = <String>[
+  //   'phone',
+  //   'password',
+  // ];
+  // Map<String, String> validationMap =
+  //     Map<String, String>.fromIterables(keys, validators);
 
   @override
   Widget build(BuildContext context) {
@@ -170,77 +147,83 @@ class _MyHomePageState extends State<PinCodeForProfile>
               const SizedBox(height: 15),
               Form(
                 key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    TextFormInput(
-                        text: trans(context, 'password'),
-                        cController: passwordController,
-                        prefixIcon: Icons.lock_outline,
-                        kt: TextInputType.visiblePassword,
-                        readOnly: false,
-                        onTab: () {},
-                        suffixicon: IconButton(
-                          icon: Icon(
-                            (_obscureText == false)
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
+                child: Consumer<Auth>(
+                  builder: (BuildContext context, Auth auth, Widget child) {
+                    return Column(
+                      children: <Widget>[
+                        TextFormInput(
+                            text: trans(context, 'password'),
+                            cController: passwordController,
+                            prefixIcon: Icons.lock_outline,
+                            kt: TextInputType.visiblePassword,
+                            readOnly: false,
+                            onTab: () {},
+                            suffixicon: IconButton(
+                              icon: Icon(
+                                (_obscureText == false)
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              },
+                            ),
+                            obscureText: _obscureText,
+                            focusNode: focus,
+                            onFieldSubmitted: () async {
+                              focus2.requestFocus();
+                            },
+                            validator: (String value) {
+                              if (passwordController.text.length < 6) {
+                                return "password must be more than 6 letters";
+                              }
+                              return auth
+                                  .pinCodeProfileValidationMap['password'];
+                            }),
+                        TextFormInput(
+                          text: trans(context, 'new_mobile_no'),
+                          cController: mobileNoController,
+                          prefixIcon: Icons.phone,
+                          kt: TextInputType.phone,
+                          obscureText: false,
+                          readOnly: false,
+                          // onTab: () {},
+                          suffixicon: CountryPickerCode(
+                              onCountryChange: _onCountryChange, isRTL: isRTL),
+                          //  CountryCodePicker(
+                          //   onChanged: _onCountryChange,
+                          //   initialSelection: bolc.countryCode,
+                          //   favorite: const <String>['+972', 'IS'],
+                          //   showFlagDialog: true,
+                          //   showFlag: false,
+                          //   showCountryOnly: false,
+                          //   showOnlyCountryWhenClosed: false,
+                          //   alignLeft: false,
+                          //   padding: isRTL == true
+                          //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
+                          //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
+                          // ),
+                          // focusNode: focus2,
+                          // onFieldSubmitted: () {
+                          //   SystemChannels.textInput
+                          //       .invokeMethod<dynamic>('TextInput.hide');
+                          // },
+                          validator: (String value) {
+                            // print("==== $value");
+                            if (mobileNoController.text.isEmpty) {
+                              return "please enter your mobile Number";
+                            } else
+                              //   return "dfgsdf";
+
+                              return auth.pinCodeProfileValidationMap['phone'];
                           },
                         ),
-                        obscureText: _obscureText,
-                        focusNode: focus,
-                        onFieldSubmitted: () async {
-                          focus2.requestFocus();
-                        },
-                        validator: (String value) {
-                          if (passwordController.text.length < 6) {
-                            return "password must be more than 6 letters";
-                          }
-                          return validationMap['password'];
-                        }),
-                  ],
+                      ],
+                    );
+                  },
                 ),
-              ),
-              TextFormInput(
-                text: trans(context, 'new_mobile_no'),
-                cController: mobileNoController,
-                prefixIcon: Icons.phone,
-                kt: TextInputType.phone,
-                obscureText: false,
-                readOnly: false,
-                // onTab: () {},
-                suffixicon:CountryPickerCode(onCountryChange:_onCountryChange,isRTL:isRTL),
-                //  CountryCodePicker(
-                //   onChanged: _onCountryChange,
-                //   initialSelection: bolc.countryCode,
-                //   favorite: const <String>['+972', 'IS'],
-                //   showFlagDialog: true,
-                //   showFlag: false,
-                //   showCountryOnly: false,
-                //   showOnlyCountryWhenClosed: false,
-                //   alignLeft: false,
-                //   padding: isRTL == true
-                //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                // ),
-                // focusNode: focus2,
-                // onFieldSubmitted: () {
-                //   SystemChannels.textInput
-                //       .invokeMethod<dynamic>('TextInput.hide');
-                // },
-                validator: (String value) {
-                  // print("==== $value");
-                  // if (mobileNoController.text.isEmpty) {
-                  //   return "please enter your mobile Number";
-                  // } else
-                  return "dfgsdf";
-
-                  // return validationMap['phone'];
-                },
               ),
               Padding(
                   padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
@@ -317,13 +300,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
   }
 
   void _onCountryChange(CountryCode countryCode) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
-    bolc.saveCountryCode(countryCode.code, countryCode.dialCode);
-
-    setState(() {
-      countryCodeTemp = countryCode.dialCode;
-    });
-
+    getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
@@ -332,29 +309,15 @@ class _MyHomePageState extends State<PinCodeForProfile>
     } else {
       print(" == ${mobileNoController.text}");
 
-      dio.put<dynamic>("update_phone", queryParameters: <String, dynamic>{
-        "password": passwordController.text,
-        "new_phone": countryCodeTemp + mobileNoController.text
-      }).then((Response<dynamic> value) {
-        if (value.statusCode == 422) {
-          value.data['errors'].forEach((String k, dynamic vv) {
-            setState(() {
-              validationMap[k] = vv[0].toString();
-            });
-            print(validationMap);
-          });
-          _formKey.currentState.validate();
-          validationMap.updateAll((String key, String value) {
-            return null;
-          });
-        }
-        if (value.statusCode == 200) {
+      getIt<Auth>()
+          .verifyNewPhone(passwordController.text, mobileNoController.text)
+          .then((bool value) {
+        _formKey.currentState.validate();
+        if (value) {
           setState(() {
             enabeld = true;
           });
-          data.setData("phone", countryCodeTemp + mobileNoController.text);
         }
-        print(value.data);
       });
     }
   }

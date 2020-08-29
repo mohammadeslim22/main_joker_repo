@@ -45,13 +45,13 @@ class _SplashScreenState extends State<SplashScreen> {
         });
   }
 
-  Future<void> initPlatformState(MainProvider mainProvider, Auth auth) async {
+  Future<void> initPlatformState(Auth auth) async {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await FlutterSimCountryCode.simCountryCode;
       print("platform country code : $platformVersion");
-      mainProvider.dialCodeFav = platformVersion;
+      auth.dialCodeFav = platformVersion;
       auth.getCountry(platformVersion);
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final Auth auth = Provider.of<Auth>(context, listen: false);
 
     askUser(lang, bolc);
-    initPlatformState(bolc,auth);
+    initPlatformState(auth);
   }
 
   @override
