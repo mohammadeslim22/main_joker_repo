@@ -7,11 +7,8 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/ui/widgets/countryCodePicker.dart';
-import 'package:joker/util/service_locator.dart';
 import '../widgets/buttonTouse.dart';
 import '../widgets/text_form_input.dart';
-import 'package:location/location.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
@@ -27,12 +24,8 @@ class Registration extends StatefulWidget {
 class _MyRegistrationState extends State<Registration>
     with TickerProviderStateMixin {
   List<String> location2;
-  Location location = Location();
-
   bool _isButtonEnabled;
-
   bool _obscureText = false;
-  // bool loading = false;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileNoController = TextEditingController();
@@ -135,18 +128,7 @@ class _MyRegistrationState extends State<Registration>
                   readOnly: false,
                   onTab: () {},
                   suffixicon: CountryPickerCode(
-                      onCountryChange: _onCountryChange, isRTL: isRTL),
-
-                  // CountryCodePicker(
-                  //   onChanged: _onCountryChange,
-                  //   initialSelection: 'IL',
-                  //   favorite: <String>[mainProvider.dialCodeFav],
-                  //   showFlagDialog: true,
-                  //   showFlag: false,
-                  //   padding: isRTL == true
-                  //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                  //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                  // ),
+                      context: context, isRTL: isRTL),
                   focusNode: focus1,
                   onFieldSubmitted: () {
                     focus2.requestFocus();
@@ -359,11 +341,5 @@ class _MyRegistrationState extends State<Registration>
             }),
           ),
         ));
-  }
-
-  void _onCountryChange(CountryCode countryCode) {
- getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
-
-    FocusScope.of(context).requestFocus(FocusNode());
   }
 }

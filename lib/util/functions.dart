@@ -8,12 +8,14 @@ import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:joker/util/data.dart';
 
+
+final Location location = Location();
+
 Future<List<String>> getLocation() async {
   bool serviceEnabled;
   PermissionStatus permissionGranted;
   LocationData locationData;
   final List<String> locaion = <String>[];
-  final Location location = Location();
   serviceEnabled = await location.serviceEnabled();
   if (!serviceEnabled) {
     serviceEnabled = await location.requestService();
@@ -86,7 +88,7 @@ Future<void> getLocationName() async {
 }
 
 SnackBar snackBar = SnackBar(
-  content: const Text("Location Service was not aloowed  !"),
+  content: const Text("Location Service was not alowed  !"),
   action: SnackBarAction(
     label: 'Ok !',
     onPressed: () {},

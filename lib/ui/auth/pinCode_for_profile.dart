@@ -15,7 +15,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:joker/ui/widgets/countryCodePicker.dart';
 
 class PinCodeForProfile extends StatefulWidget {
@@ -108,14 +107,6 @@ class _MyHomePageState extends State<PinCodeForProfile>
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // static List<String> validators = <String>[null, null];
-  // static List<String> keys = <String>[
-  //   'phone',
-  //   'password',
-  // ];
-  // Map<String, String> validationMap =
-  //     Map<String, String>.fromIterables(keys, validators);
-
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -189,34 +180,13 @@ class _MyHomePageState extends State<PinCodeForProfile>
                           kt: TextInputType.phone,
                           obscureText: false,
                           readOnly: false,
-                          // onTab: () {},
                           suffixicon: CountryPickerCode(
-                              onCountryChange: _onCountryChange, isRTL: isRTL),
-                          //  CountryCodePicker(
-                          //   onChanged: _onCountryChange,
-                          //   initialSelection: bolc.countryCode,
-                          //   favorite: const <String>['+972', 'IS'],
-                          //   showFlagDialog: true,
-                          //   showFlag: false,
-                          //   showCountryOnly: false,
-                          //   showOnlyCountryWhenClosed: false,
-                          //   alignLeft: false,
-                          //   padding: isRTL == true
-                          //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                          //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                          // ),
-                          // focusNode: focus2,
-                          // onFieldSubmitted: () {
-                          //   SystemChannels.textInput
-                          //       .invokeMethod<dynamic>('TextInput.hide');
-                          // },
+                              context: context, isRTL: isRTL),
+                     
                           validator: (String value) {
-                            // print("==== $value");
                             if (mobileNoController.text.isEmpty) {
-                              return "please enter your mobile Number";
+                              return trans(context,'p_enter_u_mobile');
                             } else
-                              //   return "dfgsdf";
-
                               return auth.pinCodeProfileValidationMap['phone'];
                           },
                         ),
@@ -299,16 +269,9 @@ class _MyHomePageState extends State<PinCodeForProfile>
             ])));
   }
 
-  void _onCountryChange(CountryCode countryCode) {
-    getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
-    FocusScope.of(context).requestFocus(FocusNode());
-  }
-
   void verifyanewPhone() {
     if (_formKey.currentState.validate()) {
     } else {
-      print(" == ${mobileNoController.text}");
-
       getIt<Auth>()
           .verifyNewPhone(passwordController.text, mobileNoController.text)
           .then((bool value) {

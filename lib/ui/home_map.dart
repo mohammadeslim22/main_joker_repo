@@ -15,6 +15,8 @@ import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
 import 'package:joker/models/specializations.dart';
+import 'package:joker/util/functions.dart';
+
 import '../constants/styles.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/providers/auth.dart';
@@ -30,7 +32,6 @@ class HOMEMAP extends StatefulWidget {
 class _HOMEMAPState extends State<HOMEMAP> {
   StreamSubscription<dynamic> getPositionSubscription;
   GoogleMapController mapController;
-  Location location = Location();
   double lat;
   double long;
   bool serviceEnabled;

@@ -1,19 +1,20 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/providers/auth.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
 
 class CountryPickerCode extends StatelessWidget {
-  const CountryPickerCode({Key key, this.onCountryChange, this.isRTL})
+  const CountryPickerCode({Key key, this.isRTL, this.context})
       : super(key: key);
-  final Function(CountryCode) onCountryChange;
+  final BuildContext context;
   final bool isRTL;
   @override
   Widget build(BuildContext context) {
     final Auth auth = Provider.of<Auth>(context);
 
     return CountryCodePicker(
-      onChanged: onCountryChange,
+      onChanged: _onCountryChange,
       initialSelection: auth.dialCodeFav,
       favorite: const <String>['+966', 'SA'],
       showFlagDialog: true,
@@ -25,5 +26,11 @@ class CountryPickerCode extends StatelessWidget {
           ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
           : const EdgeInsets.fromLTRB(32, 0, 0, 0),
     );
+  }
+    void _onCountryChange(CountryCode countryCode) {
+  getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
+
+
+    FocusScope.of(context).requestFocus(FocusNode());
   }
 }

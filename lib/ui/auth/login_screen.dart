@@ -7,12 +7,10 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/util/functions.dart';
-import 'package:joker/util/service_locator.dart';
 import '../widgets/text_form_input.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
 import '../widgets/buttonTouse.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:joker/ui/widgets/countryCodePicker.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -54,7 +52,7 @@ class _MyLoginScreenState extends State<LoginScreen>
               obscureText: false,
               readOnly: false,
               suffixicon: CountryPickerCode(
-                  onCountryChange: _onCountryChange, isRTL: isRTL),
+                   context: context, isRTL: isRTL),
               // CountryCodePicker(
               //   onChanged: _onCountryChange,
               //   initialSelection: mainProvider.dialCodeFav,
@@ -234,12 +232,5 @@ class _MyLoginScreenState extends State<LoginScreen>
         ),
       ]),
     ));
-  }
-
-  void _onCountryChange(CountryCode countryCode) {
-  getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
-
-
-    FocusScope.of(context).requestFocus(FocusNode());
   }
 }

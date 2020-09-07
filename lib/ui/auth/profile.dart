@@ -3,7 +3,6 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +18,6 @@ import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/service_locator.dart';
-import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 import 'package:joker/ui/widgets/text_form_input.dart';
@@ -34,18 +32,12 @@ class MyAccount extends StatefulWidget {
 
 class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   List<String> location2;
-  Location location = Location();
   SnackBar snackBar = SnackBar(
     content: const Text("Location Service was not aloowed  !"),
     action: SnackBarAction(
       label: 'Ok !',
       onPressed: () {},
     ),
-  );
-  SpinKitRing spinkit = const SpinKitRing(
-    color: Colors.blue,
-    size: 30.0,
-    lineWidth: 3,
   );
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -114,24 +106,11 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
         reverseEndOffset: const Offset(0.0, 3.0),
         position: StyledToastPosition.bottom,
         duration: const Duration(seconds: 4),
-        //Animation duration   animDuration * 2 <= duration
         animDuration: const Duration(seconds: 1),
         curve: Curves.elasticOut,
         reverseCurve: Curves.fastOutSlowIn);
     return;
   }
-
-  // static List<String> validators = <String>[null, null, null, null, null, null];
-  // static List<String> keys = <String>[
-  //   'name',
-  //   'email',
-  //   'phone',
-  //   'password',
-  //   'birthdate',
-  //   'location'
-  // ];
-  // Map<String, String> auth.validationMap =
-  //     Map<String, String>.fromIterables(keys, validators);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override

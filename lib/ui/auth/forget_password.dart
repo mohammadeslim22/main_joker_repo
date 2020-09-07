@@ -90,21 +90,8 @@ class _MyForgetPassState extends State<ForgetPassword>
                             readOnly: false,
                             onTab: () {},
                             suffixicon: CountryPickerCode(
-                                onCountryChange: _onCountryChange,
+                                context: context,
                                 isRTL: isRTL),
-                            // CountryCodePicker(
-                            //   onChanged: _onCountryChange,
-                            //   initialSelection: 'TR',
-                            //   favorite: const <String>['+966', 'SA'],
-                            //   showFlagDialog: true,
-                            //   showFlag: false,
-                            //   showCountryOnly: false,
-                            //   showOnlyCountryWhenClosed: false,
-                            //   alignLeft: false,
-                            //   padding: isRTL == true
-                            //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-                            //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                            // ),
                             onFieldSubmitted: () {},
                             validator: (String value) {
                               if (value.isEmpty) {
@@ -222,12 +209,5 @@ class _MyForgetPassState extends State<ForgetPassword>
                 ]),
           )),
     );
-  }
-
-  void _onCountryChange(CountryCode countryCode) {
-getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
-
-
-    FocusScope.of(context).requestFocus(FocusNode());
   }
 }

@@ -12,7 +12,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import '../widgets/text_form_input.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
@@ -146,7 +145,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                     readOnly: false,
                                     onTab: () {},
                                     suffixicon: CountryPickerCode(
-                                        onCountryChange: _onCountryChange,
+                                        context: context,
                                         isRTL: isRTL),
                                     focusNode: focus1,
                                     onFieldSubmitted: () async {
@@ -278,11 +277,5 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
             ]);
           },
         )));
-  }
-
-  void _onCountryChange(CountryCode countryCode) {
-    getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
-
-    FocusScope.of(context).requestFocus(FocusNode());
   }
 }

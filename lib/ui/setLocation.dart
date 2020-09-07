@@ -29,7 +29,7 @@ class AutoLocate extends StatefulWidget {
 class _AutoLocateState extends State<AutoLocate> {
   StreamSubscription<dynamic> getPositionSubscription;
   GoogleMapController mapController;
-  Location location = Location();
+  // Location location = ();
   double lat;
   double long;
   bool serviceEnabled;

@@ -9,14 +9,12 @@ import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/models/specializations.dart';
-import 'package:location/location.dart';
 import 'package:joker/constants/config.dart';
 
 class HOMEMAProvider with ChangeNotifier {
   bool dataloaded = false;
   MapBranches branches;
   MapBranch inFocusBranch;
-  Location location = Location();
   bool horizentalListOn = false;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   List<Specializations> specializations = <Specializations>[];
