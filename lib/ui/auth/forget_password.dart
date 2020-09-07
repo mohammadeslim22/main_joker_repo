@@ -1,16 +1,15 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../widgets/text_form_input.dart';
 import 'package:provider/provider.dart';
-import 'package:joker/util/dio.dart';
-import 'package:dio/dio.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/ui/widgets/countryCodePicker.dart';
 
@@ -22,15 +21,8 @@ class ForgetPassword extends StatefulWidget {
 class _MyForgetPassState extends State<ForgetPassword>
     with TickerProviderStateMixin {
   String gotCode;
-  String countryCodeTemp = "+90";
-
   bool _isButtonEnabled = true;
-  static List<String> validators = <String>[null];
-  static List<String> keys = <String>[
-    'phone',
-  ];
-  Map<String, String> validationMap =
-      Map<String, String>.fromIterables(keys, validators);
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -58,15 +50,11 @@ class _MyForgetPassState extends State<ForgetPassword>
   final TextEditingController mobileController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String currentText = "0000";
-@override
+  @override
   void initState() {
     super.initState();
-        data.getData("countryDialCodeTemp").then((String value) {
-      setState(() {
-        countryCodeTemp = value;
-      });
-    });
   }
+
   @override
   Widget build(BuildContext context) {
     final MainProvider bolc = Provider.of<MainProvider>(context);
@@ -102,7 +90,9 @@ class _MyForgetPassState extends State<ForgetPassword>
                             obscureText: false,
                             readOnly: false,
                             onTab: () {},
-                            suffixicon: CountryPickerCode(onCountryChange:_onCountryChange,isRTL:isRTL),
+                            suffixicon: CountryPickerCode(
+                                onCountryChange: _onCountryChange,
+                                isRTL: isRTL),
                             // CountryCodePicker(
                             //   onChanged: _onCountryChange,
                             //   initialSelection: 'TR',
@@ -124,7 +114,8 @@ class _MyForgetPassState extends State<ForgetPassword>
                               if (value.length < 6) {
                                 return "mobile_number must be more than 3 letters";
                               }
-                              return validationMap['phone'];
+                              return getIt<Auth>()
+                                  .forgetPassValidationMap['phone'];
                             }),
                       ),
                       const SizedBox(height: 36),
@@ -161,33 +152,8 @@ class _MyForgetPassState extends State<ForgetPassword>
                                   fieldHeight: 40,
                                   fieldWidth: 30,
                                   onCompleted: (String v) async {
-                                    final Response<dynamic> correct = await dio
-                                        .post<dynamic>("verfiy",
-                                            data: <String, dynamic>{
-                                          "phone":
-                                              mobileController.text.toString(),
-                                          "verfiy_code": v
-                                        });
-                                    print(correct.data);
-                                    if (correct.data == "false") {
-                                      showToast(
-                                          'The Code You Enterd Was Not Correct',
-                                          context: context,
-                                          textStyle: styles.underHeadblack,
-                                          animation: StyledToastAnimation.scale,
-                                          reverseAnimation:
-                                              StyledToastAnimation.fade,
-                                          position: StyledToastPosition.center,
-                                          animDuration:
-                                              const Duration(seconds: 1),
-                                          duration: const Duration(seconds: 4),
-                                          curve: Curves.elasticOut,
-                                          backgroundColor: colors.white,
-                                          reverseCurve: Curves.decelerate);
-                                    } else {
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context, '/Reset_pass', (_) => false);
-                                    }
+                                    getIt<Auth>().verifyCode(
+                                        mobileController.text, v, context);
                                   },
                                   onChanged: (String value) {
                                     setState(() {
@@ -215,31 +181,12 @@ class _MyForgetPassState extends State<ForgetPassword>
                                     setState(() {
                                       _isButtonEnabled = false;
                                     });
-                                    dio.post<dynamic>("resend",
-                                        data: <String, dynamic>{
-                                          "phone":
-                                              mobileController.text.toString()
-                                        }).then(
-                                        (Response<dynamic> value) async {
-                                      setState(() {
-                                        _isButtonEnabled = true;
-                                      });
-                                      if (value.statusCode == 422) {
-                                        value.data['errors']
-                                            .forEach((String k, dynamic vv) {
-                                          setState(() {
-                                            validationMap[k] = vv[0].toString();
-                                          });
-                                        });
-                                        _formKey.currentState.validate();
-                                        validationMap.updateAll(
-                                            (String key, String value) {
-                                          return null;
-                                        });
-                                      } else if (value.statusCode == 200) {
-                                        await data.setData("phone",
-                                            mobileController.text.toString());
-                                        print(value.data);
+
+                                    await getIt<Auth>()
+                                        .resendCode(
+                                            mobileController.text.toString())
+                                        .then((bool value) {
+                                      if (value) {
                                         setState(() {
                                           codeArrived = true;
                                           mainButtonkey = "submet";
@@ -279,13 +226,8 @@ class _MyForgetPassState extends State<ForgetPassword>
   }
 
   void _onCountryChange(CountryCode countryCode) {
-        final MainProvider bolc = Provider.of<MainProvider>(context);
-bolc.saveCountryCode(countryCode.code,countryCode.dialCode);
- 
+getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
 
-    setState(() {
-      countryCodeTemp = countryCode.dialCode;
-    });
 
     FocusScope.of(context).requestFocus(FocusNode());
   }

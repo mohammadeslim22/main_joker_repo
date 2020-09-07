@@ -20,10 +20,10 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   bool locationTurnOn;
 
-  Future<void> askUser(Language lang, MainProvider bolc) async {
+  Future<void> askUser(Language lang, Auth auth) async {
     data.getData("countryCodeTemp").then((String value1) {
       data.getData("countryDialCodeTemp").then((String value2) {
-        bolc.saveCountryCode(value1, value2);
+        auth.saveCountryCode(value1, value2);
       });
     });
     data.getData("lang").then((String value) async {
@@ -69,11 +69,10 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     final Language lang = Provider.of<Language>(context, listen: false);
-    final MainProvider bolc = Provider.of<MainProvider>(context, listen: false);
     final Auth auth = Provider.of<Auth>(context, listen: false);
-
-    askUser(lang, bolc);
+    askUser(lang, auth);
     initPlatformState(auth);
+
   }
 
   @override

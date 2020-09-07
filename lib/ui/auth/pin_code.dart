@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/ui/widgets/countryCodePicker.dart';
+import 'package:joker/util/service_locator.dart';
 import '../widgets/buttonTouse.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:dio/dio.dart';
-import 'package:joker/util/dio.dart';
 import 'package:joker/util/data.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import '../widgets/text_form_input.dart';
@@ -40,66 +40,10 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
       vsync: this,
       duration: const Duration(seconds: 30),
     );
-        data.getData("countryDialCodeTemp").then((String value) {
-      setState(() {
-        countryCodeTemp = value;
-      });
-    });
+
   }
 
-  Future<bool> getPinCode(String code) async {
-    final String phone = await data.getData("phone");
-    print(phone);
-    final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
-        data: <String, dynamic>{"phone": phone, "verfiy_code": code});
-    print("$code  $phone");
-    print(correct.data);
-    if (correct.data == "false") {
-      print(correct.data);
-      return false;
-    } else {
-      print(correct.data);
-      return true;
-    }
-  }
-
-  Future<void> sendPinNewPhone(String newPhone) async {
-    final String phone = await data.getData("phone");
-    final String id = await data.getData("id");
-    final String email = await data.getData("email");
-    print(phone);
-    final Response<dynamic> correct = await dio.put<dynamic>("change_phone",
-        data: <String, dynamic>{
-          "id": id,
-          "phone": phone,
-          "email": email,
-          "new_phone": newPhone
-        });
-    if (correct.statusCode == 422) {
-      setState(() {
-        errorMessage = correct.data['errors']['new_phone'][0].toString();
-        showToast(errorMessage,
-            context: context,
-            textStyle: styles.underHeadblack,
-            animation: StyledToastAnimation.scale,
-            reverseAnimation: StyledToastAnimation.fade,
-            position: StyledToastPosition.center,
-            animDuration: const Duration(seconds: 1),
-            duration: const Duration(seconds: 4),
-            curve: Curves.elasticOut,
-            backgroundColor: colors.white,
-            reverseCurve: Curves.decelerate);
-      });
-    } else if (correct.statusCode == 200) {
-      setState(() {
-        buttonChangeMoEnabeld = false;
-      });
-      Navigator.pop(context);
-    }
-    data.setData("phone", correct.data['phone'].toString());
-  }
-
-  Widget pinCode(MainProvider bolc) {
+  Widget pinCode(MainProvider bolc, Auth auth) {
     return SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -131,7 +75,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                 fieldWidth: 30,
                 onCompleted: (String v) async {
                   bolc.togelf(true);
-                  if (await getPinCode(v.trim())) {
+                  if (await auth.getPinCode(v.trim())) {
                     Navigator.pushNamed(context, '/login');
                   }
                   bolc.togelf(false);
@@ -156,11 +100,11 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
     return Scaffold(
         key: _scaffoldkey,
         appBar: AppBar(),
-        body: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-            child: ListView(children: <Widget>[
+        body: GestureDetector(onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        }, child: Consumer<Auth>(
+          builder: (BuildContext context, Auth auth, Widget child) {
+            return ListView(children: <Widget>[
               const SizedBox(height: 20),
               Text(trans(context, 'pin_code'),
                   textAlign: TextAlign.center, style: styles.mystyle2),
@@ -169,8 +113,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                   textAlign: TextAlign.center, style: styles.underHead),
               const SizedBox(height: 15),
               Text("${widget.mobileNo}",
-                  textAlign: TextAlign.center,
-                  style: styles.pinCodePhone),
+                  textAlign: TextAlign.center, style: styles.pinCodePhone),
               Container(
                 alignment: Alignment.center,
                 child: ListTile(
@@ -205,33 +148,19 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                     obscureText: false,
                                     readOnly: false,
                                     onTab: () {},
-                                    suffixicon:CountryPickerCode(onCountryChange:_onCountryChange,isRTL:isRTL),
-                                    
-                                    //  CountryCodePicker(
-                                    //   onChanged: _onCountryChange,
-                                    //   initialSelection: bolc.countryCode,
-                                    //   favorite: const <String>['+966', 'SA'],
-                                    //   showFlagDialog: true,
-                                    //   showFlag: false,
-                                    //   showCountryOnly: false,
-                                    //   showOnlyCountryWhenClosed: false,
-                                    //   alignLeft: false,
-                                    //   padding: isRTL == true
-                                    //       ? const EdgeInsets.fromLTRB(
-                                    //           0, 0, 32, 0)
-                                    //       : const EdgeInsets.fromLTRB(
-                                    //           32, 0, 0, 0),
-                                    // ),
+                                    suffixicon: CountryPickerCode(
+                                        onCountryChange: _onCountryChange,
+                                        isRTL: isRTL),
                                     focusNode: focus1,
                                     onFieldSubmitted: () {
-                                      sendPinNewPhone(countryCodeTemp +
-                                          mobileNoController.text);
+                                    getIt<Auth>().sendPinNewPhone(
+                                          mobileNoController.text,context);
                                     },
                                     validator: (String value) {
                                       if (value.isEmpty) {
                                         return "please enter your mobile Number  ";
                                       }
-                                      return "";
+                                      return trans(context,'p_enter_u_mobile');
                                     }),
                                 Padding(
                                     padding: const EdgeInsets.fromLTRB(
@@ -243,8 +172,8 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                             side: const BorderSide(
                                                 color: Colors.orange)),
                                         onPressed: () {
-                                          sendPinNewPhone(countryCodeTemp +
-                                              mobileNoController.text);
+                                       getIt<Auth>().sendPinNewPhone(
+                                          mobileNoController.text,context);
                                         },
                                         color: Colors.deepOrangeAccent,
                                         textColor: Colors.white,
@@ -275,7 +204,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                 ),
               ),
               const SizedBox(height: 15),
-              pinCode(bolc),
+              pinCode(bolc,auth),
               CircularPercentIndicator(
                   radius: 130.0,
                   progressColor: Colors.orange[300],
@@ -341,19 +270,13 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-            ])));
+            ]);
+          },
+        )));
   }
 
-  String countryCodeTemp = "+90";
-
   void _onCountryChange(CountryCode countryCode) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
-    bolc.saveCountryCode(countryCode.code,countryCode.dialCode);
-    
-
-    setState(() {
-      countryCodeTemp = countryCode.dialCode;
-    });
+ getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
 
     FocusScope.of(context).requestFocus(FocusNode());
   }

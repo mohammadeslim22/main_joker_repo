@@ -8,6 +8,7 @@ import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
+import 'package:joker/util/service_locator.dart';
 import '../widgets/text_form_input.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
@@ -29,17 +30,10 @@ class _MyLoginScreenState extends State<LoginScreen>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _focus1 = FocusNode();
   final FocusNode _focus2 = FocusNode();
-
-  String countryCodeTemp = "+90";
-
   @override
   void initState() {
     super.initState();
-    data.getData("countryDialCodeTemp").then((String value) {
-      setState(() {
-        countryCodeTemp = value;
-      });
-    });
+
   }
 
   Widget customcard(BuildContext context,
@@ -189,7 +183,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                             });
 
                             if (await auth.login(
-                              auth.myCountryCode,
+                              auth.myCountryDialCode,
                                 _usernameController.text,
                                 _passwordController.text,
                                 context)) {
@@ -244,11 +238,8 @@ class _MyLoginScreenState extends State<LoginScreen>
   }
 
   void _onCountryChange(CountryCode countryCode) {
-    final MainProvider mainProvider = Provider.of<MainProvider>(context);
-    mainProvider.saveCountryCode(countryCode.code, countryCode.dialCode);
-    setState(() {
-      countryCodeTemp = countryCode.dialCode;
-    });
+  getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
+
 
     FocusScope.of(context).requestFocus(FocusNode());
   }

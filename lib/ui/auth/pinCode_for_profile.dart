@@ -79,7 +79,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                 onCompleted: (String v) async {
                   bolc.togelf(true);
                   if (await getIt<Auth>()
-                      .getPinCode(v.trim(), mobileNoController.text)) {
+                      .getPinCodeSave(v.trim(), mobileNoController.text)) {
                     setState(() {
                       config.prifleNoVerfiyDone = true;
                     });

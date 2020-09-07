@@ -3,12 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
-import 'package:joker/util/data.dart';
+import 'package:joker/util/service_locator.dart';
 import '../widgets/text_form_input.dart';
-import 'package:joker/util/dio.dart';
 import 'package:provider/provider.dart';
-import 'package:dio/dio.dart';
 
 class ChangePassword extends StatefulWidget {
   @override
@@ -36,12 +35,6 @@ class _MyChangePasswordState extends State<ChangePassword>
         )) ??
         false;
   }
-
-  static List<String> validators = <String>[null, null];
-  static List<String> keys = <String>['old_passwoed', 'new_password'];
-  Map<String, String> validationMap =
-      Map<String, String>.fromIterables(keys, validators);
-
   bool _obscureText = false;
   final TextEditingController oldpasswordController = TextEditingController();
   final TextEditingController newpasswordController = TextEditingController();
@@ -72,7 +65,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                   focus1.requestFocus();
                 },
                 validator: (String value) {
-                  return validationMap['old_passwoed'];
+                  return getIt<Auth>().changePassValidationMap['old_passwoed'];
                 }),
             TextFormInput(
                 text: trans(context, 'new_password'),
@@ -102,7 +95,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                   if (value.length < 6) {
                     return "password must be more than 5 letters";
                   }
-                  return validationMap['new_password'];
+                  return getIt<Auth>().changePassValidationMap['new_password'];
                 }),
             TextFormInput(
                 text: trans(context, 'new_password'),
@@ -130,7 +123,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                   if (value.length < 6) {
                     return "password must be more than 5 letters";
                   }
-                  return validationMap['newpassword2'];
+                  return getIt<Auth>().changePassValidationMap['newpassword2'];
                 }),
           ],
         ),
@@ -177,34 +170,15 @@ class _MyChangePasswordState extends State<ChangePassword>
                             setState(() {
                               _isButtonEnabled = false;
                             });
-                            await dio.post<dynamic>("changepassword",
-                                data: <String, dynamic>{
-                                  'old_password':
-                                      oldpasswordController.text.trim(),
-                                  'new_password':
-                                      newpasswordController.text.trim()
-                                }).then((Response<dynamic> value) async {
-                              print("${value.data}  is it null change pass ? ");
-                              if (value.statusCode == 422) {
-                                value.data['errors']
-                                    .forEach((String k, dynamic vv) {
-                                  setState(() {
-                                    validationMap[k] = vv[0].toString();
-                                  });
-                                });
+                            await getIt<Auth>()
+                                .changePassword(oldpasswordController.text,
+                                    newpasswordController.text, context)
+                                .then((bool value) {
+                              if (!value) {
                                 _formKey.currentState.validate();
-                                validationMap
-                                    .updateAll((String key, String value) {
-                                  return null;
-                                });
-                                print(validationMap);
-                              }
-                              if (value.statusCode == 200) {
-                                data.setData("password",
-                                    newpasswordController.text.trim());
-                                Navigator.pushNamed(context, '/login');
                               }
                             });
+
                             bolc.togelf(false);
                           }
                         }

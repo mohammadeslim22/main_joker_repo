@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:joker/constants/colors.dart';
+import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/ui/widgets/custom_toast_widget.dart';
 import 'package:joker/util/data.dart';
@@ -18,8 +20,8 @@ class Auth with ChangeNotifier {
   }
   String myCountryCode;
   String myCountryDialCode;
-    String dialCodeFav;
-
+  String dialCodeFav;
+  String errorMessage;
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
     'phone',
@@ -72,18 +74,29 @@ class Auth with ChangeNotifier {
   Map<String, String> pinCodeProfileValidationMap =
       Map<String, String>.fromIterables(keys, validators);
 
+  static List<String> changePassValidators = <String>[null, null];
+  static List<String> changePasskeys = <String>['old_passwoed', 'new_password'];
+  Map<String, String> changePassValidationMap =
+      Map<String, String>.fromIterables(keys, validators);
+
+  static List<String> forgetPassValidators = <String>[null];
+  static List<String> forgetPasskeys = <String>[
+    'phone',
+  ];
+  Map<String, String> forgetPassValidationMap =
+      Map<String, String>.fromIterables(keys, validators);
+
   Future<void> getCountry(String countryCode) async {
     final Country result = await CountryProvider.getCountryByCode(countryCode);
-    myCountryCode = result.callingCodes.first;
+    myCountryDialCode = result.callingCodes.first;
     print("numricCode:    ${result.callingCodes}");
   }
 
   void saveCountryCode(String code, String dialCode) {
-    myCountryCode = dialCode;
-    myCountryDialCode = code;
+    myCountryCode = code;
+    myCountryDialCode = dialCode;
     data.setData("countryCodeTemp", code);
     data.setData("countryDialCodeTemp", dialCode);
-
     notifyListeners();
   }
 
@@ -218,6 +231,80 @@ class Auth with ChangeNotifier {
     getIt<NavigationService>().navigateTo('/login', null);
   }
 
+  Future<bool> changePassword(
+      String oldpassword, String newpassword, BuildContext context) async {
+    final Response<dynamic> response = await dio.post<dynamic>("changepassword",
+        data: <String, dynamic>{
+          'old_password': oldpassword.trim(),
+          'new_password': newpassword.trim()
+        });
+    if (response.statusCode == 200) {
+      data.setData("password", newpassword.trim());
+      Navigator.pushNamed(context, '/login');
+      return true;
+    } else {
+      if (response.statusCode == 422) {
+        response.data['errors'].forEach((String k, dynamic vv) {
+          changePassValidationMap[k] = vv[0].toString();
+        });
+        changePassValidationMap.updateAll((String key, String value) {
+          return null;
+        });
+      }
+      return false;
+    }
+  }
+
+  Future<bool> resendCode(String mobile) async {
+    final Response<dynamic> response = await dio.post<dynamic>("resend",
+        data: <String, dynamic>{"phone": mobile.toString()});
+
+    if (response.statusCode == 200) {
+      await data.setData("phone", mobile.toString());
+      return true;
+    } else {
+      response.data['errors'].forEach((String k, dynamic vv) {
+        forgetPassValidationMap[k] = vv[0].toString();
+      });
+      forgetPassValidationMap.updateAll((String key, String value) {
+        return null;
+      });
+      return false;
+    }
+  }
+
+  Future<void> verifyCode(String mobile, String v, BuildContext context) async {
+    final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
+        data: <String, dynamic>{"phone": mobile, "verfiy_code": v});
+    print(correct.data);
+    if (correct.data == "false") {
+      showToast('The Code You Enterd Was Not Correct',
+          context: context,
+          textStyle: styles.underHeadblack,
+          animation: StyledToastAnimation.scale,
+          reverseAnimation: StyledToastAnimation.fade,
+          position: StyledToastPosition.center,
+          animDuration: const Duration(seconds: 1),
+          duration: const Duration(seconds: 4),
+          curve: Curves.elasticOut,
+          backgroundColor: colors.white,
+          reverseCurve: Curves.decelerate);
+    } else {
+      Navigator.pushNamedAndRemoveUntil(context, '/Reset_pass', (_) => false);
+    }
+  }
+
+  Future<bool> getPinCode(String code) async {
+    final String phone = await data.getData("phone");
+    final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
+        data: <String, dynamic>{"phone": phone, "verfiy_code": code});
+    if (correct.data == "false") {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   Future<bool> updateProfile(
       String username, String birthDate, String email) async {
     final Response<dynamic> response =
@@ -262,18 +349,15 @@ class Auth with ChangeNotifier {
     return response;
   }
 
-  Future<bool> getPinCode(String code, String mobile) async {
+  Future<bool> getPinCodeSave(String code, String mobile) async {
     final Response<dynamic> correct = await dio.put<dynamic>("save_phone",
         data: <String, dynamic>{
-          "new_phone": myCountryCode + mobile,
+          "new_phone": myCountryDialCode + mobile,
           "verfiy_code": code
         });
-    print(correct.data);
     if (correct.data == "false") {
-      print(correct.data);
       return false;
     } else {
-      print(correct.data);
       return true;
     }
   }
@@ -282,7 +366,7 @@ class Auth with ChangeNotifier {
     final Response<dynamic> response = await dio.put<dynamic>("update_phone",
         queryParameters: <String, dynamic>{
           "password": password,
-          "new_phone": myCountryCode + mobile
+          "new_phone": myCountryDialCode + mobile
         });
 
     if (response.statusCode == 422) {
@@ -295,10 +379,45 @@ class Auth with ChangeNotifier {
       return false;
     }
     if (response.statusCode == 200) {
-      data.setData("phone", myCountryCode + mobile);
+      data.setData("phone", myCountryDialCode + mobile);
       return true;
     } else {
       return false;
     }
+  }
+
+  Future<bool> sendPinNewPhone(String newPhone, BuildContext context) async {
+    final String phone = await data.getData("phone");
+    final String id = await data.getData("id");
+    final String email = await data.getData("email");
+    final Response<dynamic> correct = await dio.put<dynamic>("change_phone",
+        data: <String, dynamic>{
+          "id": id,
+          "phone": phone,
+          "email": email,
+          "new_phone": myCountryDialCode+newPhone
+        });
+    if (correct.statusCode == 422) {
+      errorMessage = correct.data['errors']['new_phone'][0].toString();
+      showToast(errorMessage,
+          context: context,
+          textStyle: styles.underHeadblack,
+          animation: StyledToastAnimation.scale,
+          reverseAnimation: StyledToastAnimation.fade,
+          position: StyledToastPosition.center,
+          animDuration: const Duration(seconds: 1),
+          duration: const Duration(seconds: 4),
+          curve: Curves.elasticOut,
+          backgroundColor: colors.white,
+          reverseCurve: Curves.decelerate);
+      return false;
+    } else if (correct.statusCode == 200) {
+       data.setData("phone", correct.data['phone'].toString());
+      Navigator.pop(context);
+      return true;
+    } else {
+      return false;
+    }
+   
   }
 }

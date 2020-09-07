@@ -7,6 +7,7 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/ui/widgets/countryCodePicker.dart';
+import 'package:joker/util/service_locator.dart';
 import '../widgets/buttonTouse.dart';
 import '../widgets/text_form_input.dart';
 import 'package:location/location.dart';
@@ -38,7 +39,6 @@ class _MyRegistrationState extends State<Registration>
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
   static DateTime today = DateTime.now();
-  String countryCodeTemp = "+90";
   DateTime firstDate = DateTime(today.year - 90, today.month, today.day);
   DateTime lastDate = DateTime(today.year - 18, today.month, today.day);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -48,9 +48,7 @@ class _MyRegistrationState extends State<Registration>
     super.initState();
     _isButtonEnabled = true;
     data.getData("countryDialCodeTemp").then((String value) {
-      setState(() {
-        countryCodeTemp = value;
-      });
+
     });
   }
 
@@ -322,7 +320,7 @@ class _MyRegistrationState extends State<Registration>
                                   birthDateController.text,
                                   emailController.text,
                                   mobileNoController.text,
-                                    auth.myCountryCode);
+                                    auth.myCountryDialCode);
 
                               _formKey.currentState.validate();
                                  setState(() {
@@ -364,12 +362,7 @@ class _MyRegistrationState extends State<Registration>
   }
 
   void _onCountryChange(CountryCode countryCode) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
-    bolc.saveCountryCode(countryCode.code, countryCode.dialCode);
-
-    setState(() {
-      countryCodeTemp = countryCode.dialCode;
-    });
+ getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
 
     FocusScope.of(context).requestFocus(FocusNode());
   }

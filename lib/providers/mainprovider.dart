@@ -19,25 +19,25 @@ class MainProvider extends ChangeNotifier {
   bool __visible = false;
   bool visibilityObs = false;
   List<bool> notificationSit = <bool>[true, false];
-  String countryCode;
-  String countryDialCode;
-  void saveCountryCode(String code, String dialCode) {
-    countryCode = code;
-    countryDialCode = dialCode;
-    data.setData("countryCodeTemp", code);
-    data.setData("countryDialCodeTemp", dialCode);
+  // String countryCode;
+  // String countryDialCode;
+  // void saveCountryCode(String code, String dialCode) {
+  //   countryCode = code;
+  //   countryDialCode = dialCode;
+  //   data.setData("countryCodeTemp", code);
+  //   data.setData("countryDialCodeTemp", dialCode);
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
-  void onCountryChange(CountryCode countryCodee, BuildContext context) {
-    saveCountryCode(countryCodee.code, countryCodee.dialCode);
+  // void onCountryChange(CountryCode countryCodee, BuildContext context) {
+  //   saveCountryCode(countryCodee.code, countryCodee.dialCode);
 
-    countryDialCode = countryCodee.dialCode;
-    notifyListeners();
+  //   countryDialCode = countryCodee.dialCode;
+  //   notifyListeners();
 
-    FocusScope.of(context).requestFocus(FocusNode());
-  }
+  //   FocusScope.of(context).requestFocus(FocusNode());
+  // }
 
   int get bottomNavIndex => _currentIndex;
   bool get visible1 => _visible;
