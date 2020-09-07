@@ -17,6 +17,7 @@ import 'package:joker/util/data.dart';
 import 'package:joker/providers/locationProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/constants/styles.dart';
+import 'package:joker/util/functions.dart';
 
 class AutoLocate extends StatefulWidget {
   const AutoLocate({Key key, this.long, this.lat}) : super(key: key);
