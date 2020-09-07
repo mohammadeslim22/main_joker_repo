@@ -6,7 +6,6 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
-import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/service_locator.dart';
 import '../widgets/text_form_input.dart';

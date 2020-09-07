@@ -12,7 +12,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/util/data.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import '../widgets/text_form_input.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -32,7 +31,6 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
   bool buttonChangeMoEnabeld = true;
   final TextEditingController mobileNoController = TextEditingController();
   PersistentBottomSheetController<dynamic> bottomSheetController;
-  String errorMessage;
   @override
   void initState() {
     super.initState();
@@ -40,7 +38,6 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
       vsync: this,
       duration: const Duration(seconds: 30),
     );
-
   }
 
   Widget pinCode(MainProvider bolc, Auth auth) {
@@ -152,15 +149,19 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                         onCountryChange: _onCountryChange,
                                         isRTL: isRTL),
                                     focusNode: focus1,
-                                    onFieldSubmitted: () {
-                                    getIt<Auth>().sendPinNewPhone(
-                                          mobileNoController.text,context);
+                                    onFieldSubmitted: () async {
+                                      if (await getIt<Auth>().sendPinNewPhone(
+                                          mobileNoController.text, context)) {
+                                        setState(() {
+                                          buttonChangeMoEnabeld = false;
+                                        });
+                                      }
                                     },
                                     validator: (String value) {
                                       if (value.isEmpty) {
                                         return "please enter your mobile Number  ";
                                       }
-                                      return trans(context,'p_enter_u_mobile');
+                                      return trans(context, 'p_enter_u_mobile');
                                     }),
                                 Padding(
                                     padding: const EdgeInsets.fromLTRB(
@@ -171,9 +172,13 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                                 BorderRadius.circular(18.0),
                                             side: const BorderSide(
                                                 color: Colors.orange)),
-                                        onPressed: () {
-                                       getIt<Auth>().sendPinNewPhone(
-                                          mobileNoController.text,context);
+                                        onPressed: () async{
+                                           if (await getIt<Auth>().sendPinNewPhone(
+                                          mobileNoController.text, context)) {
+                                        setState(() {
+                                          buttonChangeMoEnabeld = false;
+                                        });
+                                      }
                                         },
                                         color: Colors.deepOrangeAccent,
                                         textColor: Colors.white,
@@ -204,7 +209,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                 ),
               ),
               const SizedBox(height: 15),
-              pinCode(bolc,auth),
+              pinCode(bolc, auth),
               CircularPercentIndicator(
                   radius: 130.0,
                   progressColor: Colors.orange[300],
@@ -276,7 +281,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
   }
 
   void _onCountryChange(CountryCode countryCode) {
- getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
+    getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
 
     FocusScope.of(context).requestFocus(FocusNode());
   }

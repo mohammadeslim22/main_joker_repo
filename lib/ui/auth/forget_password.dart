@@ -10,7 +10,6 @@ import 'package:joker/util/service_locator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../widgets/text_form_input.dart';
 import 'package:provider/provider.dart';
-import 'package:joker/util/data.dart';
 import 'package:joker/ui/widgets/countryCodePicker.dart';
 
 class ForgetPassword extends StatefulWidget {

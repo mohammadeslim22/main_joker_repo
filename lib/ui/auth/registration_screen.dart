@@ -320,7 +320,7 @@ class _MyRegistrationState extends State<Registration>
                                   birthDateController.text,
                                   emailController.text,
                                   mobileNoController.text,
-                                    auth.myCountryDialCode);
+                                 );
 
                               _formKey.currentState.validate();
                                  setState(() {

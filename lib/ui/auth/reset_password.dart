@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/util/service_locator.dart';
 import '../widgets/text_form_input.dart';
-import 'package:joker/util/dio.dart';
 import 'package:provider/provider.dart';
-import 'package:dio/dio.dart';
 import 'package:joker/util/data.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -19,12 +19,7 @@ class ResetPassword extends StatefulWidget {
 
 class _MyResetPasswordState extends State<ResetPassword>
     with TickerProviderStateMixin {
-  static List<String> validators = <String>[null];
-  static List<String> keys = <String>[
-    'password',
-  ];
-  Map<String, String> validationMap =
-      Map<String, String>.fromIterables(keys, validators);
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -59,69 +54,73 @@ class _MyResetPasswordState extends State<ResetPassword>
         onWillPop: () {
           return _onWillPop();
         },
-        child: Column(
-          children: <Widget>[
-            TextFormInput(
-                text: trans(context, 'new_password'),
-                cController: newpasswordController,
-                prefixIcon: Icons.lock_outline,
-                kt: TextInputType.visiblePassword,
-                readOnly: false,
-                onTab: () {},
-                suffixicon: IconButton(
-                  icon: Icon(
-                    (_obscureText == false)
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
-                ),
-                onFieldSubmitted: () {
-                  focus2.requestFocus();
-                },
-                obscureText: _obscureText,
-                focusNode: focus1,
-                validator: (String value) {
-                  if (value.length < 3) {
-                    return "username must be more than 3 letters";
-                  }
-                  return validationMap['password'];
-                }),
-            TextFormInput(
-                text: trans(context, 'new_password'),
-                cController: newpasswordController2,
-                prefixIcon: Icons.lock_outline,
-                kt: TextInputType.visiblePassword,
-                readOnly: false,
-                onTab: () {},
-                suffixicon: IconButton(
-                  icon: Icon(
-                    (_obscureText == false)
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
-                ),
-                onFieldSubmitted: () {
-                  focus2.requestFocus();
-                },
-                obscureText: _obscureText,
-                focusNode: focus2,
-                validator: (String value) {
-                  if (value.length < 3) {
-                    return "username must be more than 3 letters";
-                  }
-                  return validationMap['password'];
-                }),
-          ],
+        child: Consumer<Auth>(
+          builder: (BuildContext context, Auth auth, Widget child) {
+            return Column(
+              children: <Widget>[
+                TextFormInput(
+                    text: trans(context, 'new_password'),
+                    cController: newpasswordController,
+                    prefixIcon: Icons.lock_outline,
+                    kt: TextInputType.visiblePassword,
+                    readOnly: false,
+                    onTab: () {},
+                    suffixicon: IconButton(
+                      icon: Icon(
+                        (_obscureText == false)
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    ),
+                    onFieldSubmitted: () {
+                      focus2.requestFocus();
+                    },
+                    obscureText: _obscureText,
+                    focusNode: focus1,
+                    validator: (String value) {
+                      if (value.length < 3) {
+                        return "username must be more than 3 letters";
+                      }
+                      return auth.resetPassValidationMap['password'];
+                    }),
+                TextFormInput(
+                    text: trans(context, 'new_password'),
+                    cController: newpasswordController2,
+                    prefixIcon: Icons.lock_outline,
+                    kt: TextInputType.visiblePassword,
+                    readOnly: false,
+                    onTab: () {},
+                    suffixicon: IconButton(
+                      icon: Icon(
+                        (_obscureText == false)
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    ),
+                    onFieldSubmitted: () {
+                      focus2.requestFocus();
+                    },
+                    obscureText: _obscureText,
+                    focusNode: focus2,
+                    validator: (String value) {
+                      if (value.length < 3) {
+                        return "username must be more than 3 letters";
+                      }
+                      return auth.resetPassValidationMap['password'];
+                    }),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -171,53 +170,30 @@ class _MyResetPasswordState extends State<ResetPassword>
                           } else {
                             if (_formKey.currentState.validate()) {
                               final String phone = await data.getData("phone");
-                              print(phone);
                               bolc.togelf(true);
-                              await dio.post<dynamic>("resetpassword",
-                                  data: <String, dynamic>{
-                                    'phone': phone,
-                                    'password':
-                                        newpasswordController.text.trim()
-                                  }).then((Response<dynamic> value) async {
-                                if (value.statusCode == 422) {
-                                  value.data['errors']
-                                      .forEach((String k, dynamic vv) {
-                                    setState(() {
-                                      validationMap[k] = vv[0].toString();
-                                    });
-                                    print(validationMap);
-                                  });
-                                  _formKey.currentState.validate();
-                                  validationMap
-                                      .updateAll((String key, String value) {
-                                    return null;
-                                  });
-                                }
-                                if (value.statusCode == 200) {
-                                  if (value.data == "true") {
-                                    print(value.data);
-                                    AwesomeDialog(
-                                        context: context,
-                                        animType: AnimType.TOPSLIDE,
-                                        headerAnimationLoop: false,
-                                        dialogType: DialogType.SUCCES,
-                                        title: trans(context, 'success'),
-                                        desc: trans(context,
-                                            'password_has_changed_successfully'),
-                                        btnOkOnPress: () {
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context, '/login', (_) => false);
-                                        },
-                                        btnOkIcon: Icons.check_circle,
-                                        onDissmissCallback: () {
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context, '/login', (_) => false);
-                                        }).show();
-                                  } else {
-                                    print(value.data);
-                                  }
-                                }
-                              });
+                              if (await getIt<Auth>().resetpassword(
+                                  phone, newpasswordController.text)) {
+                                AwesomeDialog(
+                                    context: context,
+                                    animType: AnimType.TOPSLIDE,
+                                    headerAnimationLoop: false,
+                                    dialogType: DialogType.SUCCES,
+                                    title: trans(context, 'success'),
+                                    desc: trans(context,
+                                        'password_has_changed_successfully'),
+                                    btnOkOnPress: () {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, '/login', (_) => false);
+                                    },
+                                    btnOkIcon: Icons.check_circle,
+                                    onDissmissCallback: () {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, '/login', (_) => false);
+                                    }).show();
+                              } else {
+                                _formKey.currentState.validate();
+                              }
+
                               bolc.togelf(false);
                             }
                           }

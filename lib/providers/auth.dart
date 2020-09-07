@@ -85,7 +85,12 @@ class Auth with ChangeNotifier {
   ];
   Map<String, String> forgetPassValidationMap =
       Map<String, String>.fromIterables(keys, validators);
-
+  static List<String> resetPassValidators = <String>[null];
+  static List<String> resetPasskeys = <String>[
+    'password',
+  ];
+  Map<String, String> resetPassValidationMap =
+      Map<String, String>.fromIterables(keys, validators);
   Future<void> getCountry(String countryCode) async {
     final Country result = await CountryProvider.getCountryByCode(countryCode);
     myCountryDialCode = result.callingCodes.first;
@@ -152,14 +157,14 @@ class Auth with ChangeNotifier {
   }
 
   Future<bool> register(
-      BuildContext context,
-      MainProvider mainProv,
-      String username,
-      String pass,
-      String birth,
-      String email,
-      String mobile,
-      String countryCodeTemp) async {
+    BuildContext context,
+    MainProvider mainProv,
+    String username,
+    String pass,
+    String birth,
+    String email,
+    String mobile,
+  ) async {
     bool res;
     await dio.post<dynamic>("register", data: <String, dynamic>{
       "name": username,
@@ -167,7 +172,7 @@ class Auth with ChangeNotifier {
       "password_confirmation": pass,
       "birth_date": birth,
       "email": email,
-      "phone": countryCodeTemp + mobile,
+      "phone": myCountryDialCode + mobile,
       "country_id": 1,
       "city_id": 1,
       "address": config.locationController.text,
@@ -187,14 +192,15 @@ class Auth with ChangeNotifier {
       if (value.statusCode == 201) {
         print(value.data);
 
-        Navigator.pushNamed(context, '/pin',
-            arguments: <String, String>{'mobileNo': countryCodeTemp + mobile});
+        Navigator.pushNamed(context, '/pin', arguments: <String, String>{
+          'mobileNo': myCountryDialCode + mobile
+        });
         config.locationController.clear();
         await data.setData("id", value.data['data']['id'].toString());
         data.setData("email", email);
         data.setData("username", username);
         data.setData("password", pass);
-        data.setData("phone", countryCodeTemp + mobile);
+        data.setData("phone", myCountryDialCode + mobile);
         data.setData("lat", config.lat.toString());
         data.setData("long", config.long.toString());
         data.setData("address", config.locationController.text.toString());
@@ -239,6 +245,7 @@ class Auth with ChangeNotifier {
           'new_password': newpassword.trim()
         });
     if (response.statusCode == 200) {
+      notifyListeners();
       data.setData("password", newpassword.trim());
       Navigator.pushNamed(context, '/login');
       return true;
@@ -251,16 +258,20 @@ class Auth with ChangeNotifier {
           return null;
         });
       }
+      notifyListeners();
       return false;
     }
   }
 
   Future<bool> resendCode(String mobile) async {
     final Response<dynamic> response = await dio.post<dynamic>("resend",
-        data: <String, dynamic>{"phone": mobile.toString()});
+        data: <String, dynamic>{
+          "phone": myCountryDialCode + mobile.toString()
+        });
 
     if (response.statusCode == 200) {
-      await data.setData("phone", mobile.toString());
+      await data.setData("phone", myCountryDialCode + mobile.toString());
+      notifyListeners();
       return true;
     } else {
       response.data['errors'].forEach((String k, dynamic vv) {
@@ -269,6 +280,7 @@ class Auth with ChangeNotifier {
       forgetPassValidationMap.updateAll((String key, String value) {
         return null;
       });
+      notifyListeners();
       return false;
     }
   }
@@ -289,7 +301,9 @@ class Auth with ChangeNotifier {
           curve: Curves.elasticOut,
           backgroundColor: colors.white,
           reverseCurve: Curves.decelerate);
+          notifyListeners();
     } else {
+      
       Navigator.pushNamedAndRemoveUntil(context, '/Reset_pass', (_) => false);
     }
   }
@@ -299,8 +313,10 @@ class Auth with ChangeNotifier {
     final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
         data: <String, dynamic>{"phone": phone, "verfiy_code": code});
     if (correct.data == "false") {
+      notifyListeners();
       return false;
     } else {
+      notifyListeners();
       return true;
     }
   }
@@ -325,6 +341,7 @@ class Auth with ChangeNotifier {
       profileValidationMap.updateAll((String key, String value) {
         return null;
       });
+      notifyListeners();
       return false;
     } else {
       if (response.statusCode == 200) {
@@ -333,8 +350,10 @@ class Auth with ChangeNotifier {
         data.setData("lat", config.lat.toString());
         data.setData("long", config.long.toString());
         data.setData("address", config.locationController.text.toString());
+        notifyListeners();
         return true;
       } else {
+        notifyListeners();
         return false;
       }
     }
@@ -356,8 +375,10 @@ class Auth with ChangeNotifier {
           "verfiy_code": code
         });
     if (correct.data == "false") {
+      notifyListeners();
       return false;
     } else {
+      notifyListeners();
       return true;
     }
   }
@@ -380,8 +401,10 @@ class Auth with ChangeNotifier {
     }
     if (response.statusCode == 200) {
       data.setData("phone", myCountryDialCode + mobile);
+      notifyListeners();
       return true;
     } else {
+      notifyListeners();
       return false;
     }
   }
@@ -390,13 +413,13 @@ class Auth with ChangeNotifier {
     final String phone = await data.getData("phone");
     final String id = await data.getData("id");
     final String email = await data.getData("email");
-    final Response<dynamic> correct = await dio.put<dynamic>("change_phone",
-        data: <String, dynamic>{
-          "id": id,
-          "phone": phone,
-          "email": email,
-          "new_phone": myCountryDialCode+newPhone
-        });
+    final Response<dynamic> correct =
+        await dio.put<dynamic>("change_phone", data: <String, dynamic>{
+      "id": id,
+      "phone": phone,
+      "email": email,
+      "new_phone": myCountryDialCode + newPhone
+    });
     if (correct.statusCode == 422) {
       errorMessage = correct.data['errors']['new_phone'][0].toString();
       showToast(errorMessage,
@@ -412,12 +435,46 @@ class Auth with ChangeNotifier {
           reverseCurve: Curves.decelerate);
       return false;
     } else if (correct.statusCode == 200) {
-       data.setData("phone", correct.data['phone'].toString());
+      notifyListeners();
+      data.setData("phone", correct.data['phone'].toString());
       Navigator.pop(context);
+      
       return true;
     } else {
+      notifyListeners();
       return false;
     }
-   
+  }
+
+  Future<bool> resetpassword(String phone, String newPassword) async {
+    final Response<dynamic> response = await dio.post<dynamic>("resetpassword",
+        data: <String, dynamic>{
+          'phone': phone,
+          'password': newPassword.trim()
+        });
+    if (response.statusCode == 422) {
+      response.data['errors'].forEach((String k, dynamic vv) {
+        resetPassValidationMap[k] = vv[0].toString();
+      });
+      resetPassValidationMap.updateAll((String key, String value) {
+        return null;
+      });
+      notifyListeners();
+      return false;
+    } else {
+      if (response.statusCode == 200) {
+        if (response.data == "true") {
+          notifyListeners();
+          return true;
+        } else {
+          notifyListeners();
+          return false;
+        }
+      } else {
+        notifyListeners();
+        return false;
+      }
+      
+    }
   }
 }

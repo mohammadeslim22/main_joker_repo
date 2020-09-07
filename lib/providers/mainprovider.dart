@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:joker/util/data.dart';
-import 'package:country_code_picker/country_code_picker.dart';
+
 
 class MainProvider extends ChangeNotifier {
   bool darkthemeIson = false;
