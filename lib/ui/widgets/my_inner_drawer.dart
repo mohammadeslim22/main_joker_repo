@@ -226,8 +226,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 title: Text("${trans(context, 'privacy')}"),
                 leading: SvgPicture.asset("assets/images/privacy.svg"),
                 onTap: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/AboutUs', (_) => false);
+                  Navigator.pushNamed(
+                      context, '/AboutUs');
                   toggle();
                 },
               ),

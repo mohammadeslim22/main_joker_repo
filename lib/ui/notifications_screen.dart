@@ -23,7 +23,7 @@ class _NotifcationsState extends State<Notifcations> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(trans(context, 'notifications')),
+          title: Text(trans(context, 'notifications'),style: styles.appBars),
           centerTitle: true,
         ),
         body: FutureBuilder<String>(

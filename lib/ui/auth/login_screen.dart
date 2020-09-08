@@ -30,7 +30,6 @@ class _MyLoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
-
   }
 
   Widget customcard(BuildContext context,
@@ -51,18 +50,7 @@ class _MyLoginScreenState extends State<LoginScreen>
               kt: TextInputType.phone,
               obscureText: false,
               readOnly: false,
-              suffixicon: CountryPickerCode(
-                   context: context, isRTL: isRTL),
-              // CountryCodePicker(
-              //   onChanged: _onCountryChange,
-              //   initialSelection: mainProvider.dialCodeFav,
-              //   favorite: const <String>['+39', 'FR'],
-              //   showFlagDialog: true,
-              //   showFlag: false,
-              //   padding: isRTL == true
-              //       ? const EdgeInsets.fromLTRB(0, 0, 32, 0)
-              //       : const EdgeInsets.fromLTRB(32, 0, 0, 0),
-              // ),
+              suffixicon: CountryPickerCode(context: context, isRTL: isRTL),
               onFieldSubmitted: () {
                 _focus1.requestFocus();
               },
@@ -119,116 +107,98 @@ class _MyLoginScreenState extends State<LoginScreen>
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
-      child: ListView(shrinkWrap: true, children: <Widget>[
+      child: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 12),
+          padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
           child: SvgPicture.asset(
             "assets/images/Layer.svg",
             width: 120.0,
             height: 120.0,
           ),
         ),
-        Consumer<Auth>(
-          builder: (BuildContext context, Auth auth, Widget child) {
-            return Column(
-              children: <Widget>[
-                // TODO(mohammed): rename mystyle2.
-               // Text(trans(context, 'joker'),
-               //     textAlign: TextAlign.center, style: styles.mystyle2),
-                // const SizedBox(height: 5),
-                // Text(
-                //   trans(context, 'all_you_need'),
-                //   textAlign: TextAlign.center,
-                //   style: TextStyle(
-                //     fontWeight: FontWeight.w300,
-                //     color: colors.jokerBlue,
-                //     fontSize: 20,
-                //   ),
-                // ),
-                // const SizedBox(height: 30),
-                // Text(trans(context, 'hello'), style: styles.mystyle2),
-                // const SizedBox(height: 10),
-                // Text(trans(context, 'enter_login_information'),
-                //     style: styles.mystyle),
-                customcard(context,
-                    mainProvider: mainProvider, isRTL: isRTL, auht: auth),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  alignment:
-                      isRTL ? Alignment.centerLeft : Alignment.centerRight,
-                  child: ButtonToUse(
-                    trans(context, 'forget_password'),
-                    fontWait: FontWeight.w500,
-                    fontColors: colors.black,
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/forget_pass');
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: colors.jokerBlue)),
-                      onPressed: () async {
-                        if (_isButtonEnabled) {
-                          if (_formKey.currentState.validate()) {
-                            mainProvider.togelf(true);
-                            setState(() {
-                              _isButtonEnabled = false;
-                            });
-
-                            if (await auth.login(
-                              auth.myCountryDialCode,
-                                _usernameController.text,
-                                _passwordController.text,
-                                context)) {
-                            } else {
-                              _formKey.currentState.validate();
-                            }
-                            setState(() {
-                              _isButtonEnabled = true;
-                            });
-
-                            mainProvider.togelf(false);
-                          }
-                        }
+        Expanded(
+          child: Consumer<Auth>(
+            builder: (BuildContext context, Auth auth, Widget child) {
+              return Column(
+                children: <Widget>[
+                  customcard(context,
+                      mainProvider: mainProvider, isRTL: isRTL, auht: auth),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    alignment:
+                        isRTL ? Alignment.centerLeft : Alignment.centerRight,
+                    child: ButtonToUse(
+                      trans(context, 'forget_password'),
+                      fontWait: FontWeight.w500,
+                      fontColors: colors.black,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/forget_pass');
                       },
-                      color: colors.blue,
-                      textColor: colors.white,
-                      child: mainProvider.returnchild(trans(context, 'login'))),
-                ),
-                const SizedBox(height: 80),
-                Text(trans(context, 'dont_have_account'),
-                    style: styles.mystyle),
-                ButtonToUse(trans(context, 'create_account'),
-                    fontWait: FontWeight.bold,
-                    fontColors: Colors.black,
-                    width: MediaQuery.of(context).size.width, onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/Registration', (_) => false);
-                }),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(trans(context, 'you_have_shop'),
-                          style: styles.mystyle),
-                      Expanded(
-                        child: ButtonToUse(
-                          trans(context, 'click_here'),
-                          fontWait: FontWeight.bold,
-                          fontColors: colors.green,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: colors.jokerBlue)),
+                        onPressed: () async {
+                          if (_isButtonEnabled) {
+                            if (_formKey.currentState.validate()) {
+                              mainProvider.togelf(true);
+                              setState(() {
+                                _isButtonEnabled = false;
+                              });
+                              if (await auth.login(_usernameController.text,
+                                  _passwordController.text, context)) {
+                              } else {
+                                _formKey.currentState.validate();
+                              }
+                              setState(() {
+                                _isButtonEnabled = true;
+                              });
+                              mainProvider.togelf(false);
+                            }
+                          }
+                        },
+                        color: colors.blue,
+                        textColor: colors.white,
+                        child:
+                            mainProvider.returnchild(trans(context, 'login'))),
+                  ),
+                  const SizedBox(
+                    height: 60,
+                  ),
+                  Text(trans(context, 'dont_have_account'),
+                      style: styles.mystyle),
+                  ButtonToUse(trans(context, 'create_account'),
+                      fontWait: FontWeight.bold,
+                      fontColors: Colors.black,
+                      width: MediaQuery.of(context).size.width, onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/Registration', (_) => false);
+                  }),
+                ],
+              );
+            },
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(trans(context, 'you_have_shop'), style: styles.mystyle),
+              Expanded(
+                child: ButtonToUse(
+                  trans(context, 'click_here'),
+                  fontWait: FontWeight.bold,
+                  fontColors: colors.green,
                 ),
-              ],
-            );
-          },
+              ),
+            ],
+          ),
         ),
       ]),
     ));

@@ -105,21 +105,22 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> login(String countryCode, String username, String pass,
-      BuildContext context) async {
+  Future<bool> login(String username, String pass, BuildContext context) async {
+    print("loging info:${myCountryDialCode + username.toString()}");
     bool res;
     await dio.post<dynamic>("login", data: <String, dynamic>{
-      "phone": countryCode + username.toString().trim(),
+      "phone": myCountryDialCode + username.toString().trim(),
       "password": pass.toString()
     }).then((Response<dynamic> value) async {
       if (value.statusCode == 422) {
         value.data['errors'].forEach((String k, dynamic vv) {
           validationMap[k] = vv[0].toString();
         });
-        // validationMap.updateAll((String key, String value) {
-        //   return null;
-        // });
+        validationMap.updateAll((String key, String value) {
+          return null;
+        });
         res = false;
+        notifyListeners();
       }
 
       if (value.statusCode == 200) {
@@ -136,11 +137,20 @@ class Auth with ChangeNotifier {
           res = true;
         } else {
           showToastWidget(
-              IconToastWidget.fail(msg: trans(context, 'wrong_user_or_pass')),
+            Row(
+              children: <Widget>[
+                Image.asset("assets/images/ic_fail.png"),
+                const SizedBox(width: 12),
+                Text(trans(context, 'wrong_user_or_pass')),
+              ],
+            ),
+              // IconToastWidget.fail(msg: trans(context, 'wrong_user_or_pass')),
               context: context,
+              
               position: StyledToastPosition.center,
               animation: StyledToastAnimation.scale,
               reverseAnimation: StyledToastAnimation.fade,
+
               duration: const Duration(seconds: 4),
               animDuration: const Duration(seconds: 1),
               curve: Curves.elasticOut,
@@ -301,9 +311,8 @@ class Auth with ChangeNotifier {
           curve: Curves.elasticOut,
           backgroundColor: colors.white,
           reverseCurve: Curves.decelerate);
-          notifyListeners();
+      notifyListeners();
     } else {
-      
       Navigator.pushNamedAndRemoveUntil(context, '/Reset_pass', (_) => false);
     }
   }
@@ -438,7 +447,7 @@ class Auth with ChangeNotifier {
       notifyListeners();
       data.setData("phone", correct.data['phone'].toString());
       Navigator.pop(context);
-      
+
       return true;
     } else {
       notifyListeners();
@@ -474,7 +483,6 @@ class Auth with ChangeNotifier {
         notifyListeners();
         return false;
       }
-      
     }
   }
 }

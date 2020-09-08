@@ -65,7 +65,7 @@ class Styles {
   TextStyle mystyle2 = const TextStyle(
     fontWeight: FontWeight.bold,
     color: Colors.black,
-    fontSize: 40,
+    fontSize: 36,
   );
   TextStyle underHead = const TextStyle(
       fontWeight: FontWeight.w100,
@@ -89,7 +89,7 @@ class Styles {
   );
   TextStyle resend = const TextStyle(
     fontWeight: FontWeight.w100,
-    color: Colors.orange,
+    color: Colors.blueAccent,
     fontSize: 20,
   );
   TextStyle redstyle = const TextStyle(

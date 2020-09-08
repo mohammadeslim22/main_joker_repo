@@ -2,6 +2,7 @@ import 'package:animated_card/animated_card.dart';
 import 'package:dio/dio.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/models/merchant_memberships.dart';
 import 'package:joker/util/dio.dart';
@@ -30,8 +31,8 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(trans(context, 'Merchant MemberShips')),
-      ),
+        title: Text(trans(context, 'Merchant MemberShips'),style: styles.appBars
+      )),
       body: FutureBuilder<List<MemFromMerchant>>(
           future: getMemebershipsData(widget.merchantId),
           builder: (BuildContext ctx,
@@ -73,7 +74,7 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
         child: ExpandableNotifier(
             controller: exp,
             child: ExpandablePanel(
-              iconColor: Colors.orange,
+              iconColor: colors.blue,
               controller: exp,
               header: Padding(
                 padding: const EdgeInsets.all(8.0),

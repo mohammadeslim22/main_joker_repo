@@ -193,13 +193,13 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   child: Text(trans(context, 'open_gallery'),
                                       style: styles.mysmall),
                                   onPressed: () async {
-                                    getImage(ImageSource.camera, bolc);
+                                    getImage(ImageSource.gallery, bolc);
                                   }),
                               FlatButton(
                                 child: Text(trans(context, "take_photo"),
                                     style: styles.mysmall),
                                 onPressed: () async {
-                                  getImage(ImageSource.gallery, bolc);
+                                  getImage(ImageSource.camera, bolc);
                                 },
                               ),
                               if (myimage == null)

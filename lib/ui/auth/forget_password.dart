@@ -175,7 +175,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                                       if (value) {
                                         setState(() {
                                           codeArrived = true;
-                                          mainButtonkey = "submet";
+                                          mainButtonkey = trans(context, 'submet');
                                         });
                                       }
                                     });
@@ -190,10 +190,11 @@ class _MyForgetPassState extends State<ForgetPassword>
                             child: bolc
                                 .returnchild(trans(context, mainButtonkey))),
                       ),
+                      const SizedBox(height: 36),
                       FlatButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            side: const BorderSide(color: Colors.black)),
+                            side:  BorderSide(color: colors.black)),
                         color: colors.white,
                         textColor: colors.blue,
                         padding: const EdgeInsets.symmetric(

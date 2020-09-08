@@ -32,10 +32,7 @@ class MyMemberShipState extends State<MyMemberShip>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          trans(context, "my_membership"),
-          style: styles.appBars,
-        ),
+        title: Text(trans(context, "my_membership"), style: styles.appBars),
         centerTitle: true,
       ),
       body: PagewiseListView<dynamic>(
