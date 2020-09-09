@@ -1,0 +1,171 @@
+PODS:
+  - barcode_scan (0.0.1):
+    - Flutter
+    - MTBBarcodeScanner
+    - SwiftProtobuf
+  - Flutter (1.0.0)
+  - flutter_country_picker (0.0.1):
+    - Flutter
+  - flutter_plugin_android_lifecycle (0.0.1):
+    - Flutter
+  - flutter_secure_storage (3.3.1):
+    - Flutter
+  - flutter_sim_country_code (0.0.1):
+    - Flutter
+  - fluttertoast (0.0.2):
+    - Flutter
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - geocoder (0.0.1):
+    - Flutter
+  - google_maps_flutter (0.0.1):
+    - Flutter
+    - GoogleMaps
+  - GoogleMaps (2.7.0):
+    - GoogleMaps/Maps (= 2.7.0)
+  - GoogleMaps/Base (2.7.0)
+  - GoogleMaps/Maps (2.7.0):
+    - GoogleMaps/Base
+  - image_picker (0.0.1):
+    - Flutter
+  - location (0.0.1):
+    - Flutter
+  - location_web (0.0.1):
+    - Flutter
+  - MTBBarcodeScanner (5.0.11)
+  - OneSignal (2.14.2)
+  - onesignal_flutter (2.5.0):
+    - Flutter
+    - OneSignal (= 2.14.2)
+  - package_info (0.0.1):
+    - Flutter
+  - path_provider (0.0.1):
+    - Flutter
+  - path_provider_macos (0.0.1):
+    - Flutter
+  - share (0.0.1):
+    - Flutter
+  - shared_preferences (0.0.1):
+    - Flutter
+  - shared_preferences_macos (0.0.1):
+    - Flutter
+  - shared_preferences_web (0.0.1):
+    - Flutter
+  - sqflite (0.0.1):
+    - Flutter
+    - FMDB (~> 2.7.2)
+  - SwiftProtobuf (1.10.2)
+  - vibration (1.2.4):
+    - Flutter
+
+DEPENDENCIES:
+  - barcode_scan (from `.symlinks/plugins/barcode_scan/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_country_picker (from `.symlinks/plugins/flutter_country_picker/ios`)
+  - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
+  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - flutter_sim_country_code (from `.symlinks/plugins/flutter_sim_country_code/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - geocoder (from `.symlinks/plugins/geocoder/ios`)
+  - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
+  - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - location (from `.symlinks/plugins/location/ios`)
+  - location_web (from `.symlinks/plugins/location_web/ios`)
+  - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
+  - share (from `.symlinks/plugins/share/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - shared_preferences_macos (from `.symlinks/plugins/shared_preferences_macos/ios`)
+  - shared_preferences_web (from `.symlinks/plugins/shared_preferences_web/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - vibration (from `.symlinks/plugins/vibration/ios`)
+
+SPEC REPOS:
+  trunk:
+    - FMDB
+    - GoogleMaps
+    - MTBBarcodeScanner
+    - OneSignal
+    - SwiftProtobuf
+
+EXTERNAL SOURCES:
+  barcode_scan:
+    :path: ".symlinks/plugins/barcode_scan/ios"
+  Flutter:
+    :path: Flutter
+  flutter_country_picker:
+    :path: ".symlinks/plugins/flutter_country_picker/ios"
+  flutter_plugin_android_lifecycle:
+    :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
+  flutter_secure_storage:
+    :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  flutter_sim_country_code:
+    :path: ".symlinks/plugins/flutter_sim_country_code/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  geocoder:
+    :path: ".symlinks/plugins/geocoder/ios"
+  google_maps_flutter:
+    :path: ".symlinks/plugins/google_maps_flutter/ios"
+  image_picker:
+    :path: ".symlinks/plugins/image_picker/ios"
+  location:
+    :path: ".symlinks/plugins/location/ios"
+  location_web:
+    :path: ".symlinks/plugins/location_web/ios"
+  onesignal_flutter:
+    :path: ".symlinks/plugins/onesignal_flutter/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  path_provider_macos:
+    :path: ".symlinks/plugins/path_provider_macos/ios"
+  share:
+    :path: ".symlinks/plugins/share/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
+  shared_preferences_macos:
+    :path: ".symlinks/plugins/shared_preferences_macos/ios"
+  shared_preferences_web:
+    :path: ".symlinks/plugins/shared_preferences_web/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
+  vibration:
+    :path: ".symlinks/plugins/vibration/ios"
+
+SPEC CHECKSUMS:
+  barcode_scan: a5c27959edfafaa0c771905bad0b29d6d39e4479
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_country_picker: b73efbc3f1b01519adb99bf8635865737b9422df
+  flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
+  flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
+  flutter_sim_country_code: 364e91e71f067cdec1dd1228eb4d1f13ab1a54e5
+  fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  geocoder: 3cfab70531a0b367e917bafe82df4c30f6d4c45a
+  google_maps_flutter: df4e7de95264aa0a2f11aac0fc7e313acb8ffc7e
+  GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
+  image_picker: 66aa71bc96850a90590a35d4c4a2907b0d823109
+  location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  location_web: b94e7433cfe28c0f7c8923c2ee482824b32e55a7
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
+  OneSignal: 1dcb1fd96f9c15a5c352dcfcab9106a7c15eced7
+  onesignal_flutter: 950630e409caa80d1d3a2653e41e4b9f98ce1a63
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
+  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
+  shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
+  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
+  SwiftProtobuf: bec1ae7d686ff73dd09d79866154f4970b891410
+  vibration: f0c5bb486671fb81e973bfb451d89f8efd07c9c9
+
+PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
+
+COCOAPODS: 1.9.3
