@@ -116,9 +116,9 @@ class Auth with ChangeNotifier {
         value.data['errors'].forEach((String k, dynamic vv) {
           validationMap[k] = vv[0].toString();
         });
-        validationMap.updateAll((String key, String value) {
-          return null;
-        });
+        // validationMap.updateAll((String key, String value) {
+        //   return null;
+        // });
         res = false;
         notifyListeners();
       }
@@ -198,9 +198,9 @@ class Auth with ChangeNotifier {
           regValidationMap[k] = vv[0].toString();
         });
 
-        regValidationMap.updateAll((String key, String value) {
-          return null;
-        });
+        // regValidationMap.updateAll((String key, String value) {
+        //   return null;
+        // });
         res = false;
       }
       if (value.statusCode == 201) {
