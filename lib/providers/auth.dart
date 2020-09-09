@@ -116,9 +116,9 @@ class Auth with ChangeNotifier {
         value.data['errors'].forEach((String k, dynamic vv) {
           validationMap[k] = vv[0].toString();
         });
-        validationMap.updateAll((String key, String value) {
-          return null;
-        });
+        // validationMap.updateAll((String key, String value) {
+        //   return null;
+        // });
         res = false;
         notifyListeners();
       }
@@ -198,9 +198,9 @@ class Auth with ChangeNotifier {
           regValidationMap[k] = vv[0].toString();
         });
 
-        regValidationMap.updateAll((String key, String value) {
-          return null;
-        });
+        // regValidationMap.updateAll((String key, String value) {
+        //   return null;
+        // });
         res = false;
       }
       if (value.statusCode == 201) {
@@ -268,9 +268,9 @@ class Auth with ChangeNotifier {
         response.data['errors'].forEach((String k, dynamic vv) {
           changePassValidationMap[k] = vv[0].toString();
         });
-        changePassValidationMap.updateAll((String key, String value) {
-          return null;
-        });
+        // changePassValidationMap.updateAll((String key, String value) {
+        //   return null;
+        // });
       }
       notifyListeners();
       return false;
@@ -291,9 +291,9 @@ class Auth with ChangeNotifier {
       response.data['errors'].forEach((String k, dynamic vv) {
         forgetPassValidationMap[k] = vv[0].toString();
       });
-      forgetPassValidationMap.updateAll((String key, String value) {
-        return null;
-      });
+      // forgetPassValidationMap.updateAll((String key, String value) {
+      //   return null;
+      // });
       notifyListeners();
       return false;
     }
@@ -354,9 +354,9 @@ class Auth with ChangeNotifier {
       response.data['errors'].forEach((String k, dynamic vv) {
         profileValidationMap[k] = vv[0].toString();
       });
-      profileValidationMap.updateAll((String key, String value) {
-        return null;
-      });
+      // profileValidationMap.updateAll((String key, String value) {
+      //   return null;
+      // });
       notifyListeners();
       return false;
     } else {
@@ -410,9 +410,9 @@ class Auth with ChangeNotifier {
       response.data['errors'].forEach((String k, dynamic vv) {
         pinCodeProfileValidationMap[k] = vv[0].toString();
       });
-      pinCodeProfileValidationMap.updateAll((String key, String value) {
-        return null;
-      });
+      // pinCodeProfileValidationMap.updateAll((String key, String value) {
+      //   return null;
+      // });
       return false;
     }
     if (response.statusCode == 200) {
@@ -472,9 +472,9 @@ class Auth with ChangeNotifier {
       response.data['errors'].forEach((String k, dynamic vv) {
         resetPassValidationMap[k] = vv[0].toString();
       });
-      resetPassValidationMap.updateAll((String key, String value) {
-        return null;
-      });
+      // resetPassValidationMap.updateAll((String key, String value) {
+      //   return null;
+      // });
       notifyListeners();
       return false;
     } else {
