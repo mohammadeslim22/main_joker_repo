@@ -268,7 +268,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                                     "We are so happy to hear :)",
                                                 negativeComment:
                                                     "We're sad to hear :(",
-                                                accentColor: Colors.orange,
+                                                accentColor: colors.blue,
                                                 onSubmitPressed:
                                                     (int rating) async {
                                                   await dio.post<dynamic>(
@@ -360,7 +360,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                               isHalfAllowed: true,
                               filledColor: Colors.amberAccent,
                               emptyColor: Colors.grey,
-                              halfFilledColor: Colors.orange[300],
+                              halfFilledColor: Colors.blue[300],
                               size: 26,
                             ),
                             const SizedBox(height: 12),
@@ -374,7 +374,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                   const SizedBox(width: 12),
                                   Icon(
                                     Icons.arrow_forward,
-                                    color: Colors.orange,
+                                    color: colors.blue,
                                     size: 20,
                                   ),
                                 ],
@@ -392,7 +392,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     const SizedBox(width: 12),
-                    Container(height: 30, width: 3, color: Colors.orange),
+                    Container(height: 30, width: 3, color: colors.blue),
                     const SizedBox(width: 12),
                     Column(
                       children: <Widget>[
@@ -863,14 +863,14 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
                     .showBottomSheet<dynamic>((BuildContext context) {
                   return Container(
                     padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-                    decoration: const BoxDecoration(
+                    decoration:  BoxDecoration(
                       border: Border(
-                        top: BorderSide(color: Colors.orange, width: 7.0),
-                        bottom: BorderSide(color: Colors.orange, width: 7.0),
-                        right: BorderSide(color: Colors.orange, width: 7.0),
-                        left: BorderSide(color: Colors.orange, width: 7.0),
+                        top: BorderSide(color: colors.blue, width: 7.0),
+                        bottom: BorderSide(color: colors.blue, width: 7.0),
+                        right: BorderSide(color: colors.blue, width: 7.0),
+                        left: BorderSide(color: colors.blue, width: 7.0),
                       ),
-                      borderRadius: BorderRadius.all(
+                      borderRadius:const BorderRadius.all(
                         Radius.circular(24),
                       ),
                       color: Colors.white,

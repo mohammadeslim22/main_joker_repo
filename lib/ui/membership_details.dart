@@ -327,9 +327,9 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                       Icons.power_settings_new,
                                       Icons.blur_off
                                     ],
-                                    activeColors: const <Color>[
-                                      Colors.orange,
-                                      Colors.orange
+                                    activeColors:  <Color>[
+                                      colors.blue,
+                                      colors.blue,
                                     ],
                                     onToggle: (int index) {
 
@@ -345,11 +345,11 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                       vertical: 12, horizontal: 25),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
-                                      side: const BorderSide(
-                                          color: Colors.orange)),
+                                      side:  BorderSide(
+                                          color: colors.blue,)),
                                   onPressed: () {},
-                                  color: Colors.orange,
-                                  textColor: Colors.white,
+                                  color: colors.blue,
+                                  textColor: colors.white,
                                   child: Text(trans(context, "search"),
                                       style: styles.notificationNO),
                                 ),

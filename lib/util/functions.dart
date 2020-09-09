@@ -8,7 +8,6 @@ import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:joker/util/data.dart';
 
-
 final Location location = Location();
 
 Future<List<String>> getLocation() async {
@@ -51,7 +50,7 @@ Future<bool> get updateLocation async {
 
   final List<String> loglat = await getLocation();
   if (loglat.isEmpty) {
-    res = false;
+    return false;
   } else {
     config.lat = double.parse(loglat.elementAt(0));
     config.long = double.parse(loglat.elementAt(1));
@@ -66,6 +65,7 @@ Future<bool> get updateLocation async {
     data.setData('address', first.toString());
   } catch (e) {
     data.setData('address', "Unkown Location");
+    return false;
   }
 
   return res;
@@ -94,7 +94,7 @@ SnackBar snackBar = SnackBar(
     onPressed: () {},
   ),
 );
-SpinKitRing spinkit =  SpinKitRing(
+SpinKitRing spinkit = SpinKitRing(
   color: colors.jokerBlue,
   size: 30.0,
   lineWidth: 3,
@@ -131,24 +131,25 @@ Future<bool> favFunction(String model, int favoriteId) async {
 
   return res;
 }
-  Future<bool> onWillPop(BuildContext context) async {
-    return (await showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title:  Text(trans(context,'are_u_sure')),
-            content:  Text(trans(context,'do_u_want_to_exit')),
-            actionsOverflowButtonSpacing: 50,
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child:  Text(trans(context,'cancel')),
-              ),
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child:  Text(trans(context,'ok')),
-              ),
-            ],
-          ),
-        )) ??
-        false;
-  }
+
+Future<bool> onWillPop(BuildContext context) async {
+  return (await showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text(trans(context, 'are_u_sure')),
+          content: Text(trans(context, 'do_u_want_to_exit')),
+          actionsOverflowButtonSpacing: 50,
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(trans(context, 'cancel')),
+            ),
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(trans(context, 'ok')),
+            ),
+          ],
+        ),
+      )) ??
+      false;
+}

@@ -200,19 +200,19 @@ class _MyHomePageState extends State<PinCodeForProfile>
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: const BorderSide(color: Colors.orange)),
+                          side: const BorderSide(color: Colors.deepPurpleAccent)),
                       onPressed: () {
                         verifyanewPhone();
                       },
-                      color: Colors.deepOrangeAccent,
-                      textColor: Colors.white,
+                      color: Colors.deepPurpleAccent,
+                      textColor: colors.white,
                       child: bolc.returnchild(trans(context, 'send_code')))),
               pinCode(bolc),
               const SizedBox(height: 15),
               if (enabeld)
                 CircularPercentIndicator(
                     radius: 130.0,
-                    progressColor: Colors.orange[300],
+                    progressColor: Colors.blue[300],
                     circularStrokeCap: CircularStrokeCap.round,
                     animation: true,
                     animationDuration: 31500,
@@ -236,8 +236,8 @@ class _MyHomePageState extends State<PinCodeForProfile>
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                       side: const BorderSide(color: Colors.black)),
-                  color: Colors.white,
-                  textColor: Colors.orange,
+                  color: colors.white,
+                  textColor: Colors.blue,
                   padding: const EdgeInsets.all(8.0),
                   onPressed: () {},
                   child: Text(

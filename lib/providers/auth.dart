@@ -137,20 +137,24 @@ class Auth with ChangeNotifier {
           res = true;
         } else {
           showToastWidget(
-            Row(
-              children: <Widget>[
-                Image.asset("assets/images/ic_fail.png"),
-                const SizedBox(width: 12),
-                Text(trans(context, 'wrong_user_or_pass')),
-              ],
-            ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                color: colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset("assets/images/ic_fail.png",
+                        height: 60, width: 60, color: colors.ggrey),
+                    const SizedBox(width: 12),
+                    Text(trans(context, 'wrong_user_or_pass')),
+                  ],
+                ),
+              ),
               // IconToastWidget.fail(msg: trans(context, 'wrong_user_or_pass')),
               context: context,
-              
               position: StyledToastPosition.center,
               animation: StyledToastAnimation.scale,
               reverseAnimation: StyledToastAnimation.fade,
-
               duration: const Duration(seconds: 4),
               animDuration: const Duration(seconds: 1),
               curve: Curves.elasticOut,
@@ -194,9 +198,9 @@ class Auth with ChangeNotifier {
           regValidationMap[k] = vv[0].toString();
         });
 
-        // regValidationMap.updateAll((String key, String value) {
-        //   return null;
-        // });
+        regValidationMap.updateAll((String key, String value) {
+          return null;
+        });
         res = false;
       }
       if (value.statusCode == 201) {
@@ -297,7 +301,10 @@ class Auth with ChangeNotifier {
 
   Future<void> verifyCode(String mobile, String v, BuildContext context) async {
     final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
-        data: <String, dynamic>{"phone": mobile, "verfiy_code": v});
+        data: <String, dynamic>{
+          "phone": myCountryDialCode + mobile,
+          "verfiy_code": v
+        });
     print(correct.data);
     if (correct.data == "false") {
       showToast('The Code You Enterd Was Not Correct',

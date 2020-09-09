@@ -40,9 +40,7 @@ class _MyRegistrationState extends State<Registration>
   void initState() {
     super.initState();
     _isButtonEnabled = true;
-    data.getData("countryDialCodeTemp").then((String value) {
-
-    });
+    data.getData("countryDialCodeTemp").then((String value) {});
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -127,8 +125,7 @@ class _MyRegistrationState extends State<Registration>
                   obscureText: false,
                   readOnly: false,
                   onTab: () {},
-                  suffixicon: CountryPickerCode(
-                      context: context, isRTL: isRTL),
+                  suffixicon: CountryPickerCode(context: context, isRTL: isRTL),
                   focusNode: focus1,
                   onFieldSubmitted: () {
                     focus2.requestFocus();
@@ -177,16 +174,10 @@ class _MyRegistrationState extends State<Registration>
                   onTab: () {
                     _selectDate(context);
                   },
-                  suffixicon:
-                      // IconButton(
-                      // color: Colors.orange,
-                      // icon:
-                      Icon(
+                  suffixicon: Icon(
                     Icons.calendar_today,
                     color: colors.blue,
                   ),
-                  // onPressed: () {},
-                  // ),
                   focusNode: focus3,
                   validator: (String value) {
                     if (value.isEmpty) {
@@ -295,22 +286,21 @@ class _MyRegistrationState extends State<Registration>
                                 _isButtonEnabled = false;
                               });
                               await auth.register(
-                                  context,
-                                  mainProvider,
-                                  usernameController.text,
-                                  passwordController.text,
-                                  birthDateController.text,
-                                  emailController.text,
-                                  mobileNoController.text,
-                                 );
+                                context,
+                                mainProvider,
+                                usernameController.text,
+                                passwordController.text,
+                                birthDateController.text,
+                                emailController.text,
+                                mobileNoController.text,
+                              );
 
                               _formKey.currentState.validate();
-                                 setState(() {
-                            _isButtonEnabled = true;
-                          });
+                              setState(() {
+                                _isButtonEnabled = true;
+                              });
                             }
                           }
-                       
                         },
                         color: colors.blue,
                         textColor: colors.white,

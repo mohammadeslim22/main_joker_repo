@@ -199,7 +199,7 @@ class _MyResetPasswordState extends State<ResetPassword>
                           }
                         }
                       },
-                      color: Colors.deepOrangeAccent,
+                      color: Colors.deepPurpleAccent,
                       textColor: Colors.white,
                       child: bolc.returnchild(trans(context, 'restore'))),
                 ),

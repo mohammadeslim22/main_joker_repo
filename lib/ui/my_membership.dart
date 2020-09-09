@@ -117,7 +117,7 @@ class MyMemberShipState extends State<MyMemberShip>
                         Text("${memberShip.startAt}".split(' ')[0],
                             style: styles.mysmall),
                         Icon(Icons.arrow_forward,
-                            color: Colors.orange, size: 12),
+                            color: colors.blue, size: 12),
                         Text("${memberShip.endAt}".split(' ')[0],
                             style: styles.mysmall)
                       ],

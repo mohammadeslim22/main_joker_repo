@@ -175,7 +175,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                                       if (value) {
                                         setState(() {
                                           codeArrived = true;
-                                          mainButtonkey = trans(context, 'submet');
+                                          mainButtonkey = trans(context, '   ');
                                         });
                                       }
                                     });

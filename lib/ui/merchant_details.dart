@@ -331,7 +331,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                     isHalfAllowed: true,
                                     filledColor: Colors.amberAccent,
                                     emptyColor: Colors.grey,
-                                    halfFilledColor: Colors.orange[300],
+                                    halfFilledColor: Colors.blue[300],
                                     size: 30,
                                   ),
                                   InkWell(
@@ -341,7 +341,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                             style: styles.mystyle),
                                         Icon(
                                           Icons.arrow_forward,
-                                          color: Colors.orange,
+                                          color: colors.blue,
                                           size: 20,
                                         ),
                                       ],

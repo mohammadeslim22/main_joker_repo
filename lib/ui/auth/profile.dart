@@ -504,7 +504,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                               }
                             },
                             color: colors.blue,
-                            textColor: Colors.white,
+                            textColor: colors.white,
                             child: Text(
                               trans(context, 'save_changes'),
                               style: styles.notificationNO,

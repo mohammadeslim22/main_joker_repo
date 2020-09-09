@@ -169,8 +169,8 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(18.0),
-                                            side: const BorderSide(
-                                                color: Colors.orange)),
+                                            side:  BorderSide(
+                                                color: colors.blue)),
                                         onPressed: () async{
                                            if (await getIt<Auth>().sendPinNewPhone(
                                           mobileNoController.text, context)) {
@@ -179,8 +179,8 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                         });
                                       }
                                         },
-                                        color: Colors.deepOrangeAccent,
-                                        textColor: Colors.white,
+                                        color: Colors.deepPurpleAccent,
+                                        textColor: colors.white,
                                         child: bolc.returnchild(
                                             trans(context, 'send_code')))),
                               ],
@@ -211,7 +211,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
               pinCode(bolc, auth),
               CircularPercentIndicator(
                   radius: 130.0,
-                  progressColor: Colors.orange[300],
+                  progressColor: Colors.blue[300],
                   circularStrokeCap: CircularStrokeCap.round,
                   animation: true,
                   animationDuration: 31500,
@@ -228,9 +228,9 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: const BorderSide(color: Colors.orange)),
+                          side: const BorderSide(color: Colors.blue)),
                       onPressed: () {},
-                      color: Colors.deepOrangeAccent,
+                      color: Colors.deepPurpleAccent,
                       textColor: Colors.white,
                       child: bolc.returnchild(trans(context, 'aprove')))),
               const SizedBox(height: 15),
@@ -243,7 +243,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(20.0),
                       side: const BorderSide(color: Colors.black)),
                   color: Colors.white,
-                  textColor: Colors.orange,
+                  textColor: colors.blue,
                   padding: const EdgeInsets.all(8.0),
                   onPressed: () {
                     print(mobileNoController.text);

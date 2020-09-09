@@ -365,7 +365,7 @@ class _AutoLocateState extends State<AutoLocate> {
             RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
-                    side: const BorderSide(color: Colors.orange)),
+                    side: const BorderSide(color: Colors.blue)),
                 onPressed: () {
                   config.locationController.text =
                       "Tap to get your Location...";

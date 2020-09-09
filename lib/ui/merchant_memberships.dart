@@ -110,7 +110,7 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                   children: <Widget>[
                     Text(memFromMerchant.message),
                     FlatButton(
-                      color: Colors.orange,
+                      color: colors.blue,
                       onPressed: () {
                         exp.toggle();
                         dio.post<dynamic>("usermemberships",
