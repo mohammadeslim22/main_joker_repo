@@ -243,6 +243,7 @@ class Auth with ChangeNotifier {
   Future<void> signOut() async {
     await data.setData('authorization', null);
     dio.options.headers['authorization'] = "";
+    config.loggedin = false;
     getIt<NavigationService>().navigateTo('/login', null);
   }
 

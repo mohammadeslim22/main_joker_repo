@@ -20,6 +20,9 @@ import 'main/sales_list.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:joker/constants/config.dart';
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:joker/providers/salesProvider.dart';
+import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/util/service_locator.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key, this.filterData}) : super(key: key);
@@ -271,7 +274,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 border:
                     Border(top: BorderSide(color: colors.blue, width: 7.0))),
             child: Text(
-              "${trans(context, 'use_current_location')}",
+              "${trans(context, 'location_setting')}",
               textAlign: TextAlign.center,
               style: styles.underHead,
             ),
@@ -303,21 +306,27 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             // TODO(iSLEEM): CHECK IF ITS WORKING WITHOUT SETSTATE
             final List<String> loglat = await getLocation();
             if (loglat.isEmpty) {
+              print("no location found");
             } else {
               setState(() {
                 config.lat = double.parse(loglat.elementAt(0));
                 config.long = double.parse(loglat.elementAt(1));
               });
+              Navigator.pop(context);
+              if (getIt<MerchantProvider>().pagewiseBranchesController != null)
+                getIt<MerchantProvider>().pagewiseBranchesController.reset();
+              if (getIt<SalesProvider>().pagewiseSalesController != null)
+                getIt<SalesProvider>().pagewiseSalesController.reset();
             }
           }
         },
       ),
       ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-        title: Text("${trans(context, 'add_location')}"),
+        title: Text("${trans(context, 'set_from_map')}"),
         trailing: Icon(
           Icons.add,
-          color: Colors.black,
+          color: colors.black,
         ),
         onTap: () async {
           config.amIcomingFromHome = true;
@@ -327,9 +336,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           long = await data.getData("long");
 
           await Navigator.pushNamed(context, '/AutoLocate',
-              arguments: <String, double>{
+              arguments: <String, dynamic>{
                 "lat": double.parse(lat) ?? 10.176,
-                "long": double.parse(long) ?? 51.6565
+                "long": double.parse(long) ?? 51.6565,
+                "choice": 1
               });
         },
       ),

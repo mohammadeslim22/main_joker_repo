@@ -367,7 +367,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                               context, '/AutoLocate',
                                               arguments: <String, double>{
                                                 "lat": 51.0,
-                                                "long": 9.6
+                                                "long": 9.6,
+                                                "choice":0
                                               });
                                         },
                                       ),

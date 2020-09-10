@@ -5,6 +5,7 @@ import 'package:joker/models/sales.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../ui/cards/sale_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:joker/constants/colors.dart';
+import 'package:joker/providers/salesProvider.dart';
 
 class DiscountsList extends StatefulWidget {
   const DiscountsList({Key key, this.filterData}) : super(key: key);
@@ -53,18 +55,18 @@ class _DiscountsListState extends State<DiscountsList> {
     return sale.data;
   }
 
-  PagewiseLoadController<dynamic> _pagewiseController;
-
   @override
   void initState() {
-    _pagewiseController = PagewiseLoadController<dynamic>(
-        pageSize: 3,
-        pageFuture: (int pageIndex) async {
-          return (widget.filterData != null)
-              ? getSalesDataFilterd(pageIndex, widget.filterData)
-              : getSalesData(pageIndex);
-        });
     super.initState();
+      print("are we alone ? sales ");
+    getIt<SalesProvider>().pagewiseSalesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 3,
+            pageFuture: (int pageIndex) async {
+              return (widget.filterData != null)
+                  ? getSalesDataFilterd(pageIndex, widget.filterData)
+                  : getSalesData(pageIndex);
+            });
   }
 
   @override
@@ -98,7 +100,7 @@ class _DiscountsListState extends State<DiscountsList> {
       ),
       controller: _refreshController,
       onRefresh: () async {
-        _pagewiseController.reset();
+        getIt<SalesProvider>().pagewiseSalesController.reset();
         _refreshController.refreshCompleted();
       },
       onLoading: () async {
@@ -117,7 +119,7 @@ class _DiscountsListState extends State<DiscountsList> {
             backgroundColor: Colors.transparent,
           ));
         },
-        pageLoadController: _pagewiseController,
+        pageLoadController: getIt<SalesProvider>().pagewiseSalesController,
         padding: const EdgeInsets.all(15.0),
         itemBuilder: (BuildContext context, dynamic entry, int index) {
           return FadeIn(

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../constants/colors.dart';
 
 
 class MainProvider extends ChangeNotifier {
@@ -97,7 +98,7 @@ class MainProvider extends ChangeNotifier {
   }
 
   final SpinKitDoubleBounce spinkit = SpinKitDoubleBounce(
-      color: Colors.white, size: 50.0, controller: _controller);
+      color: colors.white, size: 50.0, controller: _controller);
   Widget f;
   void changechild(String login) {
     loginbase = login;

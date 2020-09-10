@@ -10,6 +10,7 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/merchantsProvider.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
@@ -18,11 +19,14 @@ import 'package:joker/providers/locationProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/util/functions.dart';
+import 'package:joker/providers/salesProvider.dart';
 
 class AutoLocate extends StatefulWidget {
-  const AutoLocate({Key key, this.long, this.lat}) : super(key: key);
+  const AutoLocate({Key key, this.long, this.lat, this.choice})
+      : super(key: key);
   final double long;
   final double lat;
+  final int choice;
   @override
   _AutoLocateState createState() => _AutoLocateState();
 }
@@ -30,7 +34,6 @@ class AutoLocate extends StatefulWidget {
 class _AutoLocateState extends State<AutoLocate> {
   StreamSubscription<dynamic> getPositionSubscription;
   GoogleMapController mapController;
-  // Location location = ();
   double lat;
   double long;
   bool serviceEnabled;
@@ -62,7 +65,9 @@ class _AutoLocateState extends State<AutoLocate> {
     super.initState();
     lat = widget.lat;
     long = widget.long;
-    // tryToAnimate();
+    functions.add(setFromRegister);
+    functions.add(setFromSetFromMap);
+    functions.add(setFromAddLocation);
   }
 
   @override
@@ -111,7 +116,9 @@ class _AutoLocateState extends State<AutoLocate> {
         child: Stack(
           children: <Widget>[
             Scaffold(
-              appBar: AppBar(title: Text(trans(context, 'set_ur_location'),style: styles.appBars)),
+              appBar: AppBar(
+                  title: Text(trans(context, 'set_ur_location'),
+                      style: styles.appBars)),
               key: _scaffoldKey,
               resizeToAvoidBottomInset: false,
               body: Stack(
@@ -374,8 +381,8 @@ class _AutoLocateState extends State<AutoLocate> {
                       .togelocationloading(false);
                   Scaffold.of(context).hideCurrentSnackBar();
                 },
-                color: Colors.red,
-                textColor: Colors.white,
+                color: colors.red,
+                textColor: colors.white,
                 child: Text(trans(context, 'cancel'))),
             const SizedBox(
               width: 30,
@@ -390,22 +397,42 @@ class _AutoLocateState extends State<AutoLocate> {
                   setState(() {
                     config.lat = lat;
                     config.long = long;
-                    config.locationController.text = address == null
-                        ? "unkown"
-                        : address.addressLine ?? "unkown";
                   });
                   print("${config.lat},${config.long}");
-                  getIt<LocationProvider>().pagewiseLocationController.reset();
+                  functions[widget.choice].call();
                   Navigator.pop(context);
-                  Provider.of<MainProvider>(context, listen: false)
-                      .togelocationloading(false);
+                  
                 },
-                color: Colors.blue,
-                textColor: Colors.white,
+                color: colors.blue,
+                textColor: colors.white,
                 child: Text(trans(context, 'pick'))),
           ],
         ),
       ),
     );
+  }
+
+  final List<Function> functions = <Function>[];
+  void setFromAddLocation() {
+    getIt<LocationProvider>()
+        .saveLocation(address.addressLine.toString(), lat, long);
+    if (getIt<LocationProvider>().pagewiseLocationController != null)
+      getIt<LocationProvider>().pagewiseLocationController.reset();
+  }
+
+  void setFromSetFromMap() {
+    if (getIt<MerchantProvider>().pagewiseBranchesController != null)
+      getIt<MerchantProvider>().pagewiseBranchesController.reset();
+    if (getIt<SalesProvider>().pagewiseSalesController != null)
+      getIt<SalesProvider>().pagewiseSalesController.reset();
+
+      Navigator.pop(context);
+  }
+
+  void setFromRegister() {
+    config.locationController.text =
+        address == null ? "unkown" : address.addressLine ?? "unkown";
+    Provider.of<MainProvider>(context, listen: false)
+        .togelocationloading(false);
   }
 }

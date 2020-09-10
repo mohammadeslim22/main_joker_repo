@@ -7,6 +7,7 @@ import 'services/navigationService.dart';
 import 'util/dio.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/providers/salesProvider.dart';
 import 'package:provider/provider.dart';
 import 'constants/route.dart';
 import 'constants/themes.dart';
@@ -42,7 +43,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
-      ChangeNotifierProvider<Auth>.value(
+        ChangeNotifierProvider<Auth>.value(
           value: getIt<Auth>(),
         ),
         ChangeNotifierProvider<Language>(
@@ -54,8 +55,11 @@ Future<void> main() async {
         ChangeNotifierProvider<HOMEMAProvider>.value(
           value: getIt<HOMEMAProvider>(),
         ),
-      ChangeNotifierProvider<MerchantProvider>.value(
+        ChangeNotifierProvider<MerchantProvider>.value(
           value: getIt<MerchantProvider>(),
+        ),
+        ChangeNotifierProvider<SalesProvider>.value(
+          value: getIt<SalesProvider>(),
         ),
       ],
       child: MyApp(),
@@ -109,7 +113,6 @@ class _MyAppState extends State<MyApp> {
             return supportedLocale;
           }
         }
-
 
         data.setData("initlang", supportedLocales.first.countryCode);
         return supportedLocales.first;

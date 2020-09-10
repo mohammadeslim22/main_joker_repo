@@ -208,7 +208,9 @@
     "open_gallery":"اختيار من الألبوم",
     "take_photo":"التقط صورة",
     "back_to_map":"عودة إلى الخريطة",
-    "submet":"تأكيد"
+    "submet":"تأكيد",
+    "location_setting":"إعدادات الموقع",
+    "set_from_map":"تعيين من الخريطة"
 
 
 }

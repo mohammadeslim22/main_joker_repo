@@ -85,6 +85,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         child: AutoLocate(
           lat: args['lat'] as double,
           long: args['long'] as double,
+          choice: args['choice'] as int,
         ),
         type: PageTransitionType.rightToLeftWithFade,
       );

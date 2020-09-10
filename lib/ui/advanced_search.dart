@@ -237,7 +237,8 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
             Navigator.pushNamed(context, '/AutoLocate',
                 arguments: <String, double>{
                   "lat": config.lat,
-                  "long": config.long
+                  "long": config.long,
+                  "choice":1
                 });
           },
           obscureText: false,

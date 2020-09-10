@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/models/merchant.dart';
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
@@ -7,6 +8,7 @@ import 'package:joker/models/branches_model.dart';
 class MerchantProvider with ChangeNotifier {
   Merchant merchant;
   Branches branches;
+  PagewiseLoadController<dynamic>pagewiseBranchesController;
 
   Future<void> getMerchantData(int id, String source) async {
     final dynamic response = await dio.get<dynamic>("merchants/$id",

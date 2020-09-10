@@ -16,16 +16,17 @@ class ShopList extends StatefulWidget {
 class _ShopListState extends State<ShopList> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  PagewiseLoadController<dynamic> _pagewiseController;
 
   @override
   void initState() {
     super.initState();
-    _pagewiseController = PagewiseLoadController<dynamic>(
-        pageSize: 5,
-        pageFuture: (int pageIndex) async {
-          return getIt<MerchantProvider>().getBranchesData(pageIndex);
-        });
+    print("are we alone ? ");
+    getIt<MerchantProvider>().pagewiseBranchesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 5,
+            pageFuture: (int pageIndex) async {
+              return getIt<MerchantProvider>().getBranchesData(pageIndex);
+            });
   }
 
   @override
@@ -56,7 +57,7 @@ class _ShopListState extends State<ShopList> {
       ),
       controller: _refreshController,
       onRefresh: () async {
-        _pagewiseController.reset();
+        getIt<MerchantProvider>().pagewiseBranchesController.reset();
         _refreshController.refreshCompleted();
       },
       onLoading: () async {
@@ -76,9 +77,10 @@ class _ShopListState extends State<ShopList> {
           ));
         },
         itemBuilder: (BuildContext context, dynamic entry, int index) {
-          return  FadeIn(child: MerchantCard(branchData: entry as BranchData));
+          return FadeIn(child: MerchantCard(branchData: entry as BranchData));
         },
-        pageLoadController: _pagewiseController,
+        pageLoadController:
+            getIt<MerchantProvider>().pagewiseBranchesController,
       ),
     );
   }

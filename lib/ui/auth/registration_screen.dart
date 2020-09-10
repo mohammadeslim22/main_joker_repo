@@ -223,7 +223,8 @@ class _MyRegistrationState extends State<Registration>
                       Navigator.pushNamed(context, '/AutoLocate',
                           arguments: <String, double>{
                             "lat": 51.0,
-                            "long": 9.6
+                            "long": 9.6,
+                            "choice":0
                           });
                     },
                   ),
@@ -277,7 +278,7 @@ class _MyRegistrationState extends State<Registration>
                     child: RaisedButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
-                            side: const BorderSide(color: Colors.blue)),
+                            side: BorderSide(color: colors.blue)),
                         onPressed: () async {
                           if (_isButtonEnabled) {
                             if (_formKey.currentState.validate()) {

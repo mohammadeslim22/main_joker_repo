@@ -9,6 +9,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/providers/locationProvider.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:joker/providers/salesProvider.dart';
+import 'package:joker/constants/config.dart';
+import 'package:joker/providers/merchantsProvider.dart';
 
 class AddressList extends StatefulWidget {
   const AddressList({Key key}) : super(key: key);
@@ -27,7 +30,7 @@ class AddressListState extends State<AddressList> {
   List<Widget> actions = <Widget>[
     IconSlideAction(
       caption: 'Delete',
-      color: Colors.red,
+      color: colors.red,
       icon: Icons.delete,
       onTap: () {},
     ),
@@ -125,9 +128,10 @@ class AddressListState extends State<AddressList> {
                     long = await data.getData("long");
 
                     await Navigator.pushNamed(context, '/AutoLocate',
-                        arguments: <String, double>{
+                        arguments: <String, dynamic>{
                           "lat": double.parse(lat) ?? 10.176,
-                          "long": double.parse(long) ?? 51.6565
+                          "long": double.parse(long) ?? 51.6565,
+                          "choice": 2
                         });
                   }),
             ),
@@ -186,8 +190,17 @@ class AddressListState extends State<AddressList> {
               ),
               onTap: () {
                 setState(() {
+                  config.lat = locationData.latitude;
+                  config.long = locationData.longitude;
                   currentId = locationData.id;
                 });
+                if (getIt<MerchantProvider>().pagewiseBranchesController !=
+                    null)
+                  getIt<MerchantProvider>().pagewiseBranchesController.reset();
+                if (getIt<SalesProvider>().pagewiseSalesController != null)
+                  getIt<SalesProvider>().pagewiseSalesController.reset();
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
             ),
           ),
