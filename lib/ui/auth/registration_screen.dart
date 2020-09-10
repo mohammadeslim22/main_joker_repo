@@ -72,9 +72,9 @@ class _MyRegistrationState extends State<Registration>
         padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
         child: Form(
             key: _formKey,
-            onWillPop: () {
-              return onWillPop(context);
-            },
+            // onWillPop: () {
+            //   return onWillPop(context);
+            // },
             child: Column(children: <Widget>[
               TextFormInput(
                   text: trans(context, 'name'),

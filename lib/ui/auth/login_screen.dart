@@ -38,9 +38,10 @@ class _MyLoginScreenState extends State<LoginScreen>
       padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
       child: Form(
         key: _formKey,
-        onWillPop: () {
-          return onWillPop(context);
-        },
+        // onWillPop: () {
+        //   return null;
+        //   //onWillPop(context);
+        // },
         child: Column(
           children: <Widget>[
             TextFormInput(
@@ -108,8 +109,25 @@ class _MyLoginScreenState extends State<LoginScreen>
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
+        const SizedBox(height: 20),
+        InkWell(
+          onTap: () {
+            goToMap(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(trans(context, 'back_to_map')),
+                const SizedBox(width: 16),
+                Icon(Icons.keyboard_return, color: colors.jokerBlue)
+              ],
+            ),
+          ),
+        ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
+          padding: const EdgeInsets.all(16),
           child: SvgPicture.asset(
             "assets/images/Layer.svg",
             width: 120.0,
@@ -121,22 +139,6 @@ class _MyLoginScreenState extends State<LoginScreen>
             builder: (BuildContext context, Auth auth, Widget child) {
               return Column(
                 children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      goToMap(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(trans(context, 'back_to_map')),
-                          const SizedBox(width: 16),
-                          Icon(Icons.keyboard_return, color: colors.jokerBlue)
-                        ],
-                      ),
-                    ),
-                  ),
                   customcard(context,
                       mainProvider: mainProvider, isRTL: isRTL, auht: auth),
                   Container(
@@ -153,7 +155,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                     child: RaisedButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
@@ -182,9 +184,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                         child:
                             mainProvider.returnchild(trans(context, 'login'))),
                   ),
-                  const SizedBox(
-                    height: 60,
-                  ),
+                  const SizedBox(height: 40),
                   Text(trans(context, 'dont_have_account'),
                       style: styles.mystyle),
                   ButtonToUse(trans(context, 'create_account'),

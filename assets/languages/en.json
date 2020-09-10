@@ -203,7 +203,8 @@
     "use_right_qr_code":"User a Proper QR Code",
     "error_happened":"Sorry, Error Happened",
     "open_gallery":"Open Gallery",
-    "take_photo":"Take Photo"
+    "take_photo":"Take Photo",
+    "back_to_map":"Back to Map"
 
 
 }

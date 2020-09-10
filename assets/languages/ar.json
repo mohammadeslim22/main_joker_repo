@@ -206,7 +206,8 @@
     "use_right_qr_code":"استخدم كود صحيح من فضلك",
     "error_happened":"حدث خطأ",
     "open_gallery":"اختيار من الألبوم",
-    "take_photo":"التقط صورة"
+    "take_photo":"التقط صورة",
+    "back_to_map":"عودة إلى الخريطة"
 
 
 }

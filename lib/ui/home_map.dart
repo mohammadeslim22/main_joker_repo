@@ -318,7 +318,7 @@ class _HOMEMAPState extends State<HOMEMAP> {
                                               "FilterData": null
                                             });
                                       } else {
-                                     getIt<Auth>().signOut();
+                                        getIt<Auth>().signOut();
                                       }
                                     },
                                     icon: Icon(Icons.more_vert,
@@ -476,17 +476,19 @@ class _HOMEMAPState extends State<HOMEMAP> {
                           ),
                         ]),
                       ),
-                      FlatButton(
-                          onPressed: () {
-                            getIt<NavigationService>().navigateToNamed(
-                              "/MerchantDetails",
-                              <String, dynamic>{
-                                "merchantId": mb.merchant.id,
-                                "branchId": mb.id
-                              },
-                            );
-                          },
-                          child: Text(trans(context, "show_more")))
+                      Flexible(
+                        child: FlatButton(
+                            onPressed: () {
+                              getIt<NavigationService>().navigateToNamed(
+                                "/MerchantDetails",
+                                <String, dynamic>{
+                                  "merchantId": mb.merchant.id,
+                                  "branchId": mb.id
+                                },
+                              );
+                            },
+                            child: Text(trans(context, "show_more"))),
+                      )
                     ],
                   ),
                 )
