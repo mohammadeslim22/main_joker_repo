@@ -248,8 +248,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
             contentPadding: const EdgeInsets.only(left: 0),
             title: Text("${trans(context, 'logout')}"),
             leading: SvgPicture.asset("assets/images/logout.svg"),
-            onTap: () {
-              getIt<Auth>().signOut();
+            onTap: () async {
+            await  getIt<Auth>().signOut();
               // data.setData('authorization', "");
               // Navigator.pushNamedAndRemoveUntil(
               //     context, '/login', (_) => false);

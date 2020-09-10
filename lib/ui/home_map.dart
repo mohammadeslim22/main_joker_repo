@@ -464,10 +464,8 @@ class _HOMEMAPState extends State<HOMEMAP> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: <Widget>[
-                                  Text(
-                                    trans(context, 'end_date'),
-                                    style: styles.mysmalllight,
-                                  ),
+                                  Text(trans(context, 'end_date'),
+                                      style: styles.mysmalllight),
                                   const SizedBox(width: 3),
                                   Text(e.endAt, style: styles.mystyle)
                                 ],
@@ -476,19 +474,17 @@ class _HOMEMAPState extends State<HOMEMAP> {
                           ),
                         ]),
                       ),
-                      Flexible(
-                        child: FlatButton(
-                            onPressed: () {
-                              getIt<NavigationService>().navigateToNamed(
-                                "/MerchantDetails",
-                                <String, dynamic>{
-                                  "merchantId": mb.merchant.id,
-                                  "branchId": mb.id
-                                },
-                              );
-                            },
-                            child: Text(trans(context, "show_more"))),
-                      )
+                      FlatButton(
+                          onPressed: () {
+                            getIt<NavigationService>().navigateToNamed(
+                              "/MerchantDetails",
+                              <String, dynamic>{
+                                "merchantId": mb.merchant.id,
+                                "branchId": mb.id
+                              },
+                            );
+                          },
+                          child: Text(trans(context, "show_more")))
                     ],
                   ),
                 )

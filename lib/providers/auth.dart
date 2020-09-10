@@ -246,8 +246,9 @@ class Auth with ChangeNotifier {
 
   void signInAnonymously() {}
 
-  void signOut() {
-    data.setData('authorization', "");
+  Future<void> signOut() async {
+    await data.setData('authorization', null);
+    dio.options.headers['authorization'] = "";
     getIt<NavigationService>().navigateTo('/login', null);
   }
 
