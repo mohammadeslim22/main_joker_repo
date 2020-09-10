@@ -14,12 +14,18 @@ class MerchantProvider with ChangeNotifier {
     merchant = Merchant.fromJson(response.data);
     notifyListeners();
   }
-    Future<List<BranchData>> getBranchesData(int pageIndex) async {
+
+  Future<List<BranchData>> getBranchesData(int pageIndex) async {
     final Response<dynamic> response = await dio.get<dynamic>("branches",
         queryParameters: <String, dynamic>{'page': pageIndex + 1});
     print(response.data);
     branches = Branches.fromJson(response.data);
     return branches.data;
   }
-  
+
+  void setFav(int branchId) {
+    branches.data.firstWhere((BranchData element) {
+      return element.id == branchId;
+    }).isfavorite=1;
+  }
 }

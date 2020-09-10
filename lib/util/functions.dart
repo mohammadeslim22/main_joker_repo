@@ -7,6 +7,8 @@ import 'package:joker/util/dio.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:joker/util/data.dart';
+import 'package:joker/util/service_locator.dart';
+import 'package:joker/providers/merchantsProvider.dart';
 
 final Location location = Location();
 
@@ -50,7 +52,7 @@ Future<bool> get updateLocation async {
 
   final List<String> loglat = await getLocation();
   if (loglat.isEmpty) {
-    return false;
+    res = false;
   } else {
     config.lat = double.parse(loglat.elementAt(0));
     config.long = double.parse(loglat.elementAt(1));
@@ -65,7 +67,6 @@ Future<bool> get updateLocation async {
     data.setData('address', first.toString());
   } catch (e) {
     data.setData('address', "Unkown Location");
-    return false;
   }
 
   return res;
@@ -123,6 +124,7 @@ Future<bool> favFunction(String model, int favoriteId) async {
     'favoritable_id': favoriteId
   }).then((dynamic value) {
     if (value.data == "true") {
+      getIt<MerchantProvider>().setFav(favoriteId);
       res = true;
     } else {
       res = false;
@@ -153,3 +155,10 @@ Future<bool> onWillPop(BuildContext context) async {
       )) ??
       false;
 }
+  void goToMap(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(context, "/HomeMap", (_) => false,
+        arguments: <String, dynamic>{
+          "home_map_lat": config.lat ?? 0.0,
+          "home_map_long": config.long ?? 0.0
+        });
+  }

@@ -201,7 +201,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                 isLiked: merchant.mydata.isfavorite != 0,
                                 countPostion: CountPostion.bottom,
                                 circleColor: CircleColor(
-                                    start: Colors.blue, end: Colors.purple),
+                                    start: colors.blue, end: Colors.purple),
                                 onTap: (bool loved) async {
                                   favFunction("App\\Branch", widget.branchId);
                                   isloved = !isloved;

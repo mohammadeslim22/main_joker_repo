@@ -161,9 +161,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       onPressed: () {
                         if (_errorController != null) {
                           Navigator.pop(context);
-                          Navigator.pop(context);
+                          goToMap(context);
                         } else {
-                          Navigator.pop(context);
+                          goToMap(context);
                         }
                       },
                     ),
@@ -224,7 +224,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           print(result.rawContent);
                           Fluttertoast.showToast(msg: result.rawContent);
                         } catch (e) {
-                          Fluttertoast.showToast(msg: trans(context,'use_right_qr_code'));
+                          Fluttertoast.showToast(
+                              msg: trans(context, 'use_right_qr_code'));
                         }
                       },
                     ),

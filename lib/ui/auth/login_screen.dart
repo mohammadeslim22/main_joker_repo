@@ -121,6 +121,22 @@ class _MyLoginScreenState extends State<LoginScreen>
             builder: (BuildContext context, Auth auth, Widget child) {
               return Column(
                 children: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      goToMap(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(trans(context, 'back_to_map')),
+                          const SizedBox(width: 16),
+                          Icon(Icons.keyboard_return, color: colors.jokerBlue)
+                        ],
+                      ),
+                    ),
+                  ),
                   customcard(context,
                       mainProvider: mainProvider, isRTL: isRTL, auht: auth),
                   Container(
@@ -175,15 +191,13 @@ class _MyLoginScreenState extends State<LoginScreen>
                       fontWait: FontWeight.bold,
                       fontColors: Colors.black,
                       width: MediaQuery.of(context).size.width, onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/Registration', (_) => false);
+                    Navigator.pushNamed(context, '/Registration');
                   }),
                 ],
               );
             },
           ),
         ),
-
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
