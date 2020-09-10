@@ -47,27 +47,29 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
     } else {
       username = config.username;
     }
-    print(config.profileUrl);
-    data.getData("profile_pic").then((String value) {
-      print("profile drawer pic:   $value");
-      setState(() {
-        config.profileUrl = value;
-      });
-      if (value.isEmpty) {
-        print("error here ?");
-        dio.get<dynamic>("user").then((Response<dynamic> value) {
-          print(value.data['data']['name'].toString());
-          setState(() {
-            username = value.data['data']['name'].toString();
-            config.username = value.data['data']['name'].toString();
-            config.profileUrl = value.data['data']['image'].toString().trim();
-          });
-
-          data.setData("profile_pic", value.data['data']['image'].toString());
-          data.setData("username", value.data['data']['name'].toString());
+    print("profile pic ${config.profileUrl}");
+    if (config.loggedin) {
+      data.getData("profile_pic").then((String value) {
+        print("profile drawer pic:   $value");
+        setState(() {
+          config.profileUrl = value;
         });
-      }
-    });
+        if (value.isEmpty) {
+          print("error here ?");
+          dio.get<dynamic>("user").then((Response<dynamic> value) {
+            print(value.data['data']['name'].toString());
+            setState(() {
+              username = value.data['data']['name'].toString();
+              config.username = value.data['data']['name'].toString();
+              config.profileUrl = value.data['data']['image'].toString().trim();
+            });
+
+            data.setData("profile_pic", value.data['data']['image'].toString());
+            data.setData("username", value.data['data']['name'].toString());
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -226,8 +228,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 title: Text("${trans(context, 'privacy')}"),
                 leading: SvgPicture.asset("assets/images/privacy.svg"),
                 onTap: () {
-                  Navigator.pushNamed(
-                      context, '/AboutUs');
+                  Navigator.pushNamed(context, '/AboutUs');
                   toggle();
                 },
               ),

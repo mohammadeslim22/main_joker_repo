@@ -108,7 +108,9 @@ class _MyLoginScreenState extends State<LoginScreen>
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
-      child: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
+      child: ListView(
+        shrinkWrap: true,
+        children: <Widget>[
         const SizedBox(height: 20),
         InkWell(
           onTap: () {
@@ -134,69 +136,67 @@ class _MyLoginScreenState extends State<LoginScreen>
             height: 120.0,
           ),
         ),
-        Expanded(
-          child: Consumer<Auth>(
-            builder: (BuildContext context, Auth auth, Widget child) {
-              return Column(
-                children: <Widget>[
-                  customcard(context,
-                      mainProvider: mainProvider, isRTL: isRTL, auht: auth),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    alignment:
-                        isRTL ? Alignment.centerLeft : Alignment.centerRight,
-                    child: ButtonToUse(
-                      trans(context, 'forget_password'),
-                      fontWait: FontWeight.w500,
-                      fontColors: colors.black,
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/forget_pass');
-                      },
-                    ),
+        Consumer<Auth>(
+          builder: (BuildContext context, Auth auth, Widget child) {
+            return Column(
+              children: <Widget>[
+                customcard(context,
+                    mainProvider: mainProvider, isRTL: isRTL, auht: auth),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  alignment:
+                      isRTL ? Alignment.centerLeft : Alignment.centerRight,
+                  child: ButtonToUse(
+                    trans(context, 'forget_password'),
+                    fontWait: FontWeight.w500,
+                    fontColors: colors.black,
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/forget_pass');
+                    },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                    child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: colors.jokerBlue)),
-                        onPressed: () async {
-                          if (_isButtonEnabled) {
-                            if (_formKey.currentState.validate()) {
-                              mainProvider.togelf(true);
-                              setState(() {
-                                _isButtonEnabled = false;
-                              });
-                              if (await auth.login(_usernameController.text,
-                                  _passwordController.text, context)) {
-                              } else {
-                                _formKey.currentState.validate();
-                              }
-                              setState(() {
-                                _isButtonEnabled = true;
-                              });
-                              mainProvider.togelf(false);
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                  child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(color: colors.jokerBlue)),
+                      onPressed: () async {
+                        if (_isButtonEnabled) {
+                          if (_formKey.currentState.validate()) {
+                            mainProvider.togelf(true);
+                            setState(() {
+                              _isButtonEnabled = false;
+                            });
+                            if (await auth.login(_usernameController.text,
+                                _passwordController.text, context)) {
+                            } else {
+                              _formKey.currentState.validate();
                             }
+                            setState(() {
+                              _isButtonEnabled = true;
+                            });
+                            mainProvider.togelf(false);
                           }
-                        },
-                        color: colors.blue,
-                        textColor: colors.white,
-                        child:
-                            mainProvider.returnchild(trans(context, 'login'))),
-                  ),
-                  const SizedBox(height: 40),
-                  Text(trans(context, 'dont_have_account'),
-                      style: styles.mystyle),
-                  ButtonToUse(trans(context, 'create_account'),
-                      fontWait: FontWeight.bold,
-                      fontColors: Colors.black,
-                      width: MediaQuery.of(context).size.width, onPressed: () {
-                    Navigator.pushNamed(context, '/Registration');
-                  }),
-                ],
-              );
-            },
-          ),
+                        }
+                      },
+                      color: colors.blue,
+                      textColor: colors.white,
+                      child:
+                          mainProvider.returnchild(trans(context, 'login'))),
+                ),
+                const SizedBox(height: 40),
+                Text(trans(context, 'dont_have_account'),
+                    style: styles.mystyle),
+                ButtonToUse(trans(context, 'create_account'),
+                    fontWait: FontWeight.bold,
+                    fontColors: Colors.black,
+                    width: MediaQuery.of(context).size.width, onPressed: () {
+                  Navigator.pushNamed(context, '/Registration');
+                }),
+              ],
+            );
+          },
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),

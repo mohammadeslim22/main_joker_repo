@@ -1,4 +1,3 @@
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:joker/constants/colors.dart';
@@ -175,7 +174,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                                       if (value) {
                                         setState(() {
                                           codeArrived = true;
-                                          mainButtonkey = trans(context, '   ');
+                                          mainButtonkey = trans(context, 'submet');
                                         });
                                       }
                                     });

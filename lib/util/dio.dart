@@ -41,9 +41,11 @@ void dioDefaults() {
     print("status code: ${response.statusCode}");
     // print("error : ${response.realUri.toString()}");
     if (response.statusCode == 200) {
+      print("sales are okay ");
     } else if (response.statusCode == 401) {
-      Fluttertoast.showToast(msg:"Login please");
-      getIt<NavigationService>().navigateTo('/login',null);
+      
+      Fluttertoast.showToast(msg: "Login please");
+      getIt<NavigationService>().navigateTo('/login', null);
     }
     return response; // continue
   }, onError: (DioError e) async {

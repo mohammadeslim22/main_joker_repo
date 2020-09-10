@@ -26,7 +26,7 @@ Future<void> main() async {
   setupLocator();
   dioDefaults();
   await data.getData('authorization').then<dynamic>((String auth) {
-    print("auth  :$auth");
+    print("auth what :$auth");
     if (auth.isEmpty) {
       config.loggedin = false;
     } else {

@@ -204,7 +204,8 @@
     "error_happened":"Sorry, Error Happened",
     "open_gallery":"Open Gallery",
     "take_photo":"Take Photo",
-    "back_to_map":"Back to Map"
+    "back_to_map":"Back to Map",
+    "submet":"submit"
 
 
 }
