@@ -45,7 +45,7 @@ class Auth with ChangeNotifier {
   ];
   Map<String, String> regValidationMap =
       Map<String, String>.fromIterables(regkeys, registervalidators);
-  Map<String, String> validationMap =
+  Map<String, String> loginValidationMap =
       Map<String, String>.fromIterables(keys, validators);
   static List<String> profileValidators = <String>[
     null,
@@ -64,7 +64,7 @@ class Auth with ChangeNotifier {
     'location'
   ];
   Map<String, String> profileValidationMap =
-      Map<String, String>.fromIterables(keys, validators);
+      Map<String, String>.fromIterables(profilekeys, profileValidators);
 
   static List<String> pinCodeProfileValidators = <String>[null, null];
   static List<String> pinCodeProfilekeys = <String>[
@@ -72,25 +72,25 @@ class Auth with ChangeNotifier {
     'password',
   ];
   Map<String, String> pinCodeProfileValidationMap =
-      Map<String, String>.fromIterables(keys, validators);
+      Map<String, String>.fromIterables(pinCodeProfilekeys, pinCodeProfileValidators);
 
   static List<String> changePassValidators = <String>[null, null];
   static List<String> changePasskeys = <String>['old_passwoed', 'new_password'];
   Map<String, String> changePassValidationMap =
-      Map<String, String>.fromIterables(keys, validators);
+      Map<String, String>.fromIterables(changePasskeys, changePassValidators);
 
   static List<String> forgetPassValidators = <String>[null];
   static List<String> forgetPasskeys = <String>[
     'phone',
   ];
   Map<String, String> forgetPassValidationMap =
-      Map<String, String>.fromIterables(keys, validators);
+      Map<String, String>.fromIterables(forgetPasskeys, forgetPassValidators);
   static List<String> resetPassValidators = <String>[null];
   static List<String> resetPasskeys = <String>[
     'password',
   ];
   Map<String, String> resetPassValidationMap =
-      Map<String, String>.fromIterables(keys, validators);
+      Map<String, String>.fromIterables(resetPasskeys, resetPassValidators);
   Future<void> getCountry(String countryCode) async {
     final Country result = await CountryProvider.getCountryByCode(countryCode);
     myCountryDialCode = result.callingCodes.first;
@@ -114,11 +114,9 @@ class Auth with ChangeNotifier {
     }).then((Response<dynamic> value) async {
       if (value.statusCode == 422) {
         value.data['errors'].forEach((String k, dynamic vv) {
-          validationMap[k] = vv[0].toString();
+          loginValidationMap[k] = vv[0].toString();
         });
-        // validationMap.updateAll((String key, String value) {
-        //   return null;
-        // });
+
         res = false;
         notifyListeners();
       }
@@ -197,10 +195,6 @@ class Auth with ChangeNotifier {
         value.data['errors'].forEach((String k, dynamic vv) {
           regValidationMap[k] = vv[0].toString();
         });
-
-        // regValidationMap.updateAll((String key, String value) {
-        //   return null;
-        // });
         res = false;
       }
       if (value.statusCode == 201) {
@@ -269,9 +263,6 @@ class Auth with ChangeNotifier {
         response.data['errors'].forEach((String k, dynamic vv) {
           changePassValidationMap[k] = vv[0].toString();
         });
-        // changePassValidationMap.updateAll((String key, String value) {
-        //   return null;
-        // });
       }
       notifyListeners();
       return false;
@@ -292,9 +283,7 @@ class Auth with ChangeNotifier {
       response.data['errors'].forEach((String k, dynamic vv) {
         forgetPassValidationMap[k] = vv[0].toString();
       });
-      // forgetPassValidationMap.updateAll((String key, String value) {
-      //   return null;
-      // });
+
       notifyListeners();
       return false;
     }
@@ -355,9 +344,7 @@ class Auth with ChangeNotifier {
       response.data['errors'].forEach((String k, dynamic vv) {
         profileValidationMap[k] = vv[0].toString();
       });
-      // profileValidationMap.updateAll((String key, String value) {
-      //   return null;
-      // });
+
       notifyListeners();
       return false;
     } else {
@@ -411,9 +398,6 @@ class Auth with ChangeNotifier {
       response.data['errors'].forEach((String k, dynamic vv) {
         pinCodeProfileValidationMap[k] = vv[0].toString();
       });
-      // pinCodeProfileValidationMap.updateAll((String key, String value) {
-      //   return null;
-      // });
       return false;
     }
     if (response.statusCode == 200) {
@@ -473,9 +457,6 @@ class Auth with ChangeNotifier {
       response.data['errors'].forEach((String k, dynamic vv) {
         resetPassValidationMap[k] = vv[0].toString();
       });
-      // resetPassValidationMap.updateAll((String key, String value) {
-      //   return null;
-      // });
       notifyListeners();
       return false;
     } else {

@@ -111,6 +111,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
         reverseCurve: Curves.fastOutSlowIn);
     return;
   }
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -236,7 +237,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                         if (value.length < 3) {
                                           return "username must be more than 3 letters";
                                         }
-                                        return auth.validationMap['name'];
+                                        return auth
+                                            .profileValidationMap['name'];
                                       }),
                                   TextFormInput(
                                       text: trans(context, 'email'),
@@ -259,7 +261,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                         if (value.isEmpty) {
                                           return "please enter a valid email ";
                                         }
-                                        return auth.validationMap['email'];
+                                        return auth
+                                            .profileValidationMap['email'];
                                       }),
                                   TextFormInput(
                                       text: trans(context, 'mobile_no'),
@@ -293,7 +296,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                         if (value.isEmpty) {
                                           return "please enter your mobile Number  ";
                                         }
-                                        return auth.validationMap['phone'];
+                                        return auth
+                                            .profileValidationMap['phone'];
                                       }),
                                   TextFormInput(
                                       text: trans(context, 'birth_date'),
@@ -317,7 +321,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                         if (value.isEmpty) {
                                           return "please enter your Birth Date ";
                                         }
-                                        return auth.validationMap['birthdate'];
+                                        return auth
+                                            .profileValidationMap['birthdate'];
                                       }),
                                   TextFormInput(
                                       text: trans(context, 'get_location'),
@@ -372,7 +377,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                         if (value.isEmpty) {
                                           return "please specify you Location :)";
                                         }
-                                        return auth.validationMap['location'];
+                                        return auth
+                                            .profileValidationMap['location'];
                                       }),
                                   Container(
                                     margin: const EdgeInsets.symmetric(
@@ -498,6 +504,11 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                     } else {
                                       _formKey.currentState.validate();
                                     }
+                                    getIt<Auth>()
+                                        .profileValidationMap
+                                        .updateAll((String key, String value) {
+                                      return null;
+                                    });
                                     bolc.togelf(false);
                                   });
                                 }

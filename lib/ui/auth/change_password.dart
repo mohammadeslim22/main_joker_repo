@@ -35,6 +35,7 @@ class _MyChangePasswordState extends State<ChangePassword>
         )) ??
         false;
   }
+
   bool _obscureText = false;
   final TextEditingController oldpasswordController = TextEditingController();
   final TextEditingController newpasswordController = TextEditingController();
@@ -177,6 +178,11 @@ class _MyChangePasswordState extends State<ChangePassword>
                               if (!value) {
                                 _formKey.currentState.validate();
                               }
+                              getIt<Auth>()
+                                  .changePassValidationMap
+                                  .updateAll((String key, String value) {
+                                return null;
+                              });
                             });
 
                             bolc.togelf(false);

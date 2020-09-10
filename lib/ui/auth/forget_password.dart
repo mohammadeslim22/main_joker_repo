@@ -89,8 +89,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                             readOnly: false,
                             onTab: () {},
                             suffixicon: CountryPickerCode(
-                                context: context,
-                                isRTL: isRTL),
+                                context: context, isRTL: isRTL),
                             onFieldSubmitted: () {},
                             validator: (String value) {
                               if (value.isEmpty) {
@@ -174,9 +173,16 @@ class _MyForgetPassState extends State<ForgetPassword>
                                       if (value) {
                                         setState(() {
                                           codeArrived = true;
-                                          mainButtonkey = trans(context, 'submet');
+                                          mainButtonkey =
+                                              trans(context, 'submet');
                                         });
                                       }
+                                      getIt<Auth>()
+                                          .forgetPassValidationMap
+                                          .updateAll(
+                                              (String key, String value) {
+                                        return null;
+                                      });
                                     });
                                   }
 
@@ -193,7 +199,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                       FlatButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            side:  BorderSide(color: colors.black)),
+                            side: BorderSide(color: colors.black)),
                         color: colors.white,
                         textColor: colors.blue,
                         padding: const EdgeInsets.symmetric(

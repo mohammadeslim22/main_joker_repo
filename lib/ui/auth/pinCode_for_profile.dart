@@ -180,12 +180,11 @@ class _MyHomePageState extends State<PinCodeForProfile>
                           kt: TextInputType.phone,
                           obscureText: false,
                           readOnly: false,
-                          suffixicon: CountryPickerCode(
-                              context: context, isRTL: isRTL),
-                     
+                          suffixicon:
+                              CountryPickerCode(context: context, isRTL: isRTL),
                           validator: (String value) {
                             if (mobileNoController.text.isEmpty) {
-                              return trans(context,'p_enter_u_mobile');
+                              return trans(context, 'p_enter_u_mobile');
                             } else
                               return auth.pinCodeProfileValidationMap['phone'];
                           },
@@ -200,7 +199,8 @@ class _MyHomePageState extends State<PinCodeForProfile>
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: const BorderSide(color: Colors.deepPurpleAccent)),
+                          side:
+                              const BorderSide(color: Colors.deepPurpleAccent)),
                       onPressed: () {
                         verifyanewPhone();
                       },
@@ -281,6 +281,11 @@ class _MyHomePageState extends State<PinCodeForProfile>
             enabeld = true;
           });
         }
+      });
+      getIt<Auth>()
+          .pinCodeProfileValidationMap
+          .updateAll((String key, String value) {
+        return null;
       });
     }
   }

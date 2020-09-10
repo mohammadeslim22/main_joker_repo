@@ -342,7 +342,7 @@ class _HOMEMAPState extends State<HOMEMAP> {
                           Positioned(
                               bottom: 40,
                               child: Container(
-                                height: 148,
+                                height: 168,
                                 width: MediaQuery.of(context).size.width,
                                 child: ListView(
                                   scrollDirection: Axis.horizontal,

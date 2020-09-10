@@ -145,11 +145,10 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                     readOnly: false,
                                     onTab: () {},
                                     suffixicon: CountryPickerCode(
-                                        context: context,
-                                        isRTL: isRTL),
+                                        context: context, isRTL: isRTL),
                                     focusNode: focus1,
                                     onFieldSubmitted: () async {
-                                      if (await getIt<Auth>().sendPinNewPhone(
+                                      if (await auth.sendPinNewPhone(
                                           mobileNoController.text, context)) {
                                         setState(() {
                                           buttonChangeMoEnabeld = false;
@@ -169,15 +168,16 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(18.0),
-                                            side:  BorderSide(
-                                                color: colors.blue)),
-                                        onPressed: () async{
-                                           if (await getIt<Auth>().sendPinNewPhone(
-                                          mobileNoController.text, context)) {
-                                        setState(() {
-                                          buttonChangeMoEnabeld = false;
-                                        });
-                                      }
+                                            side:
+                                                BorderSide(color: colors.blue)),
+                                        onPressed: () async {
+                                          if (await auth.sendPinNewPhone(
+                                              mobileNoController.text,
+                                              context)) {
+                                            setState(() {
+                                              buttonChangeMoEnabeld = false;
+                                            });
+                                          }
                                         },
                                         color: Colors.deepPurpleAccent,
                                         textColor: colors.white,

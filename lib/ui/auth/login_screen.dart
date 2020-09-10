@@ -59,7 +59,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                 if (value.isEmpty) {
                   return trans(context, 'p_enter_u_mobile');
                 }
-                return auht.validationMap['phone'];
+                return auht.loginValidationMap['phone'];
               },
             ),
             TextFormInput(
@@ -89,7 +89,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                 if (value.isEmpty) {
                   return trans(context, 'p_enter_password');
                 }
-                return auht.validationMap['password'];
+                return auht.loginValidationMap['password'];
               },
             ),
           ],
@@ -108,9 +108,7 @@ class _MyLoginScreenState extends State<LoginScreen>
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
-      child: ListView(
-        shrinkWrap: true,
-        children: <Widget>[
+      child: ListView(shrinkWrap: true, children: <Widget>[
         const SizedBox(height: 20),
         InkWell(
           onTap: () {
@@ -170,9 +168,14 @@ class _MyLoginScreenState extends State<LoginScreen>
                             });
                             if (await auth.login(_usernameController.text,
                                 _passwordController.text, context)) {
+
                             } else {
                               _formKey.currentState.validate();
                             }
+                            auth.loginValidationMap
+                                .updateAll((String key, String value) {
+                              return null;
+                            });
                             setState(() {
                               _isButtonEnabled = true;
                             });
@@ -182,8 +185,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                       },
                       color: colors.blue,
                       textColor: colors.white,
-                      child:
-                          mainProvider.returnchild(trans(context, 'login'))),
+                      child: mainProvider.returnchild(trans(context, 'login'))),
                 ),
                 const SizedBox(height: 40),
                 Text(trans(context, 'dont_have_account'),

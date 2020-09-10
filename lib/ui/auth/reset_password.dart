@@ -19,7 +19,6 @@ class ResetPassword extends StatefulWidget {
 
 class _MyResetPasswordState extends State<ResetPassword>
     with TickerProviderStateMixin {
-
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -193,6 +192,11 @@ class _MyResetPasswordState extends State<ResetPassword>
                               } else {
                                 _formKey.currentState.validate();
                               }
+                              getIt<Auth>()
+                                  .resetPassValidationMap
+                                  .updateAll((String key, String value) {
+                                return null;
+                              });
 
                               bolc.togelf(false);
                             }
