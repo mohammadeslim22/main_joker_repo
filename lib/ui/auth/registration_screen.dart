@@ -296,10 +296,16 @@ class _MyRegistrationState extends State<Registration>
                               );
 
                               _formKey.currentState.validate();
-                              setState(() {
-                                _isButtonEnabled = true;
+
+                              auth.regValidationMap
+                                  .updateAll((String key, String value) {
+                                return null;
                               });
                             }
+                            setState(() {
+                              print("fuck u all");
+                              _isButtonEnabled = true;
+                            });
                           }
                         },
                         color: colors.blue,
