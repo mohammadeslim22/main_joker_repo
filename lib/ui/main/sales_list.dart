@@ -28,7 +28,7 @@ class _DiscountsListState extends State<DiscountsList> {
   MainProvider bolc;
 
   Future<List<SaleData>> getSalesData(int pageIndex) async {
-    final Response<dynamic> response = await dio.get<dynamic>("Psales",
+    final Response<dynamic> response = await dio.get<dynamic>("psales",
         queryParameters: <String, dynamic>{'page': pageIndex + 1});
     sale = Sales.fromJson(response.data);
     return sale.data;
