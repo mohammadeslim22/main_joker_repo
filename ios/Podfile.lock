@@ -34,10 +34,6 @@ PODS:
   - location_web (0.0.1):
     - Flutter
   - MTBBarcodeScanner (5.0.11)
-  - OneSignal (2.14.2)
-  - onesignal_flutter (2.5.0):
-    - Flutter
-    - OneSignal (= 2.14.2)
   - package_info (0.0.1):
     - Flutter
   - path_provider (0.0.1):
@@ -72,7 +68,6 @@ DEPENDENCIES:
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - location_web (from `.symlinks/plugins/location_web/ios`)
-  - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
@@ -88,7 +83,6 @@ SPEC REPOS:
     - FMDB
     - GoogleMaps
     - MTBBarcodeScanner
-    - OneSignal
     - SwiftProtobuf
 
 EXTERNAL SOURCES:
@@ -116,8 +110,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/location/ios"
   location_web:
     :path: ".symlinks/plugins/location_web/ios"
-  onesignal_flutter:
-    :path: ".symlinks/plugins/onesignal_flutter/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
@@ -153,8 +145,6 @@ SPEC CHECKSUMS:
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   location_web: b94e7433cfe28c0f7c8923c2ee482824b32e55a7
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
-  OneSignal: 1dcb1fd96f9c15a5c352dcfcab9106a7c15eced7
-  onesignal_flutter: 950630e409caa80d1d3a2653e41e4b9f98ce1a63
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
