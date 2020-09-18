@@ -16,6 +16,8 @@ import 'localization/localization_delegate.dart';
 import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
 import 'util/service_locator.dart';
+import 'package:joker/providers/globalVars.dart';
+
 //import 'package:flutter/scheduler.dart';
 // import 'package:joker/models/user.dart';
 
@@ -36,9 +38,9 @@ Future<void> main() async {
     dio.options.headers['authorization'] = '$auth';
   });
 
-  data.getData("lang").then((String value) {
-    config.userLnag = Locale(value);
-  });
+  //  data.getData("lang").then((String value) {
+  //   config.userLnag = Locale(value);
+  // });
 
   runApp(
     MultiProvider(
@@ -60,6 +62,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<SalesProvider>.value(
           value: getIt<SalesProvider>(),
+        ),
+        ChangeNotifierProvider<GlobalVars>.value(
+          value: getIt<GlobalVars>(),
         ),
       ],
       child: MyApp(),

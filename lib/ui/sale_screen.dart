@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import '../constants/styles.dart';
 import '../models/merchant.dart';
@@ -19,7 +20,6 @@ import '../models/simplesales.dart';
 import 'package:after_layout/after_layout.dart';
 import 'dart:math';
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 
 class Loader extends StatelessWidget {
@@ -32,7 +32,7 @@ class Loader extends StatelessWidget {
       color: colors.white,
       child: FutureBuilder<void>(
           future:
-              getIt<MerchantProvider>().getMerchantData(merchentid, "click"),
+              getIt<MerchantProvider>().getMerchantData(merchentid, "click", 1),
           builder: (BuildContext ctx, AsyncSnapshot<void> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return SaleDetailPage(
@@ -71,7 +71,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
 
   final GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   PersistentBottomSheetController<dynamic> bottomSheetController;
-  SimpleSales merchantSales;
+  // SimpleSales merchantSales;
   Color tabBackgroundColor = colors.trans;
   TextEditingController controller = TextEditingController();
 
@@ -89,6 +89,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
   @override
   void initState() {
     super.initState();
+    getIt<SalesProvider>().getSale(widget.saleData.id);
     sale = widget.saleData;
     merchant = widget.merchant;
     controller.addListener(() {
@@ -107,18 +108,6 @@ class ShopDetailsPage extends State<SaleDetailPage>
     pageIndexx = 1;
     index += merchant.mydata.branches[0].id;
   }
-
-  Future<List<SimpleSalesData>> getSimpleSalesData(int pageIndex) async {
-    final Response<dynamic> response = await dio.get<dynamic>(
-        "simplesales?merchant_id=${merchant.mydata.id}",
-        queryParameters: <String, dynamic>{'page': pageIndex});
-
-    merchantSales = SimpleSales.fromJson(response.data);
-    print("${merchant.mydata.id} merchant second id");
-
-    return merchantSales.data;
-  }
-
   void getHeight() {
     final State state = key.currentState;
     print("current state ${key.currentState}");
@@ -158,8 +147,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                         Stack(
                           children: <Widget>[
                             ///////////////// my whole widget
-                            CurasolSlider(
-                                sale: sale, merchant: merchant, myindex: index),
+                            CurasolSlider(sale: sale, myindex: index),
                             Positioned(
                               left: 6,
                               top: 250,
@@ -779,7 +767,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                               );
                             },
                             pageFuture: (int pageIndex) {
-                              return getSimpleSalesData(pageIndexx);
+                              return getIt<SalesProvider>().getSimpleSalesData(pageIndexx,merchant.mydata.id);
                             }),
                       );
                     },
@@ -850,10 +838,7 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Text(
-                      trans(context, "show_more"),
-                      style: const TextStyle(color: Colors.blue),
-                    ),
+                    Text(trans(context, "show_more"), style: styles.showMore),
                   ],
                 ),
               ),
@@ -863,17 +848,17 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
                     .showBottomSheet<dynamic>((BuildContext context) {
                   return Container(
                     padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-                    decoration:  BoxDecoration(
+                    decoration: BoxDecoration(
                       border: Border(
                         top: BorderSide(color: colors.blue, width: 7.0),
                         bottom: BorderSide(color: colors.blue, width: 7.0),
                         right: BorderSide(color: colors.blue, width: 7.0),
                         left: BorderSide(color: colors.blue, width: 7.0),
                       ),
-                      borderRadius:const BorderRadius.all(
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(24),
                       ),
-                      color: Colors.white,
+                      color: colors.white,
                     ),
                     child: Text(widget.mytext, style: styles.mystyle),
                   );
@@ -890,11 +875,9 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
 
 // ignore: must_be_immutable
 class CurasolSlider extends StatefulWidget {
-  CurasolSlider({Key key, this.sale, this.myindex, this.merchant})
-      : super(key: key);
+  CurasolSlider({Key key, this.sale, this.myindex}) : super(key: key);
   final SaleData sale;
   int myindex;
-  final Merchant merchant;
   @override
   _CurasolSliderState createState() => _CurasolSliderState();
 }

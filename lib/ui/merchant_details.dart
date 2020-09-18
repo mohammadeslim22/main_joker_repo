@@ -23,7 +23,7 @@ class ShopDetails extends StatelessWidget {
     return Container(
       color: colors.white,
       child: FutureBuilder<void>(
-        future: getIt<MerchantProvider>().getMerchantData(merchantId, source),
+        future: getIt<MerchantProvider>().getMerchantData(merchantId, source,0),
         builder: (BuildContext ctx, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Page(

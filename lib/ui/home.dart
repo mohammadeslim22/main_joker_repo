@@ -5,7 +5,6 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
 import 'package:joker/util/data.dart';
@@ -23,10 +22,10 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:joker/providers/globalVars.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key, this.filterData}) : super(key: key);
-  final FilterData filterData;
+  const Home({Key key}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
@@ -36,7 +35,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   AnimationController _hide;
   GlobalKey<ScaffoldState> _scaffoldkey;
   PersistentBottomSheetController<dynamic> _errorController;
-  FilterData filterData;
 
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification.depth == 0) {
@@ -66,7 +64,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 350),
     );
     _hide.forward();
-    filterData = widget.filterData;
   }
 
   @override
@@ -185,7 +182,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           desc: 'Clearing Filter Data',
                           btnCancelOnPress: () {},
                           btnOkOnPress: () {
-                            filterData = null;
+                            getIt<GlobalVars>().filterData = null;
                           },
                         ).show();
                       },
@@ -247,7 +244,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               child: Container(
                   color: colors.grey,
                   child: (bolc.bottomNavIndex == 0)
-                      ? DiscountsList(filterData: filterData)
+                      ? const DiscountsList()
                       : ShopList()),
             )),
         bottomNavigationBar: SizeTransition(

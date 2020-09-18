@@ -4,8 +4,11 @@ import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/providers/auth.dart';
+import 'package:joker/providers/map_provider.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/data.dart';
+import 'package:joker/util/service_locator.dart';
+import 'package:location/location.dart';
 import 'providers/language.dart';
 import 'package:provider/provider.dart';
 
@@ -36,12 +39,17 @@ class _SplashScreenState extends State<SplashScreen> {
     });
 
     locationTurnOn = await updateLocation;
-
-    Navigator.pushNamedAndRemoveUntil(context, "/HomeMap", (_) => false,
-        arguments: <String, dynamic>{
-          "home_map_lat": config.lat ?? 0.0,
-          "home_map_long": config.long ?? 0.0
-        });
+    location.onLocationChanged.listen((LocationData event) {
+      config.lat = event.latitude;
+      config.long = event.longitude;
+      getIt<HOMEMAProvider>().setRotation(event.heading);
+    });
+    Navigator.pushNamedAndRemoveUntil(context, "/WhereToGo", (_) => false);
+    // Navigator.pushNamedAndRemoveUntil(context, "/HomeMap", (_) => false,
+    //     arguments: <String, dynamic>{
+    //       "home_map_lat": config.lat ?? 0.0,
+    //       "home_map_long": config.long ?? 0.0
+    //     });
   }
 
   Future<void> initPlatformState(Auth auth) async {
@@ -71,7 +79,6 @@ class _SplashScreenState extends State<SplashScreen> {
     final Auth auth = Provider.of<Auth>(context, listen: false);
     askUser(lang, auth);
     initPlatformState(auth);
-
   }
 
   @override

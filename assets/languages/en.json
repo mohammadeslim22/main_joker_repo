@@ -207,7 +207,11 @@
     "back_to_map":"Back to Map",
     "submet":"submit",
     "location_setting":"Location Setting",
-    "set_from_map":"Set from Map"
+    "set_from_map":"Set from Map",
+    "where_do_u_want_to_go":"Where Do you Want to Go ?",
+    "open_in_list":"Open As List",
+    "show_on_map":"Open On Map",
+    "more_info":"More Info"
 
 
 }

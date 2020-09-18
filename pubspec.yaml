@@ -25,7 +25,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  # onesignal_flutter: ^2.4.1
+
+  sliding_up_panel: ^1.0.2
   shared_preferences: ^0.5.7+1
   share: ^0.6.4+1
   cached_network_image: ^2.2.0+1
@@ -38,7 +39,6 @@ dependencies:
   provider: ^4.1.0
   toggle_switch: ^0.1.4
   flutter_spinkit: ^4.1.2+1
-  flutter_secure_storage: ^3.3.3
   flutter_inner_drawer: ^0.5.5+3
   badges: ^1.1.1
   simple_animations: ^2.2.0
@@ -65,11 +65,8 @@ dependencies:
   awesome_dialog: ^1.1.0
   carousel_slider: ^2.1.0
   flutter_xlider: ^3.4.0
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   flutter_styled_toast: ^1.3.2
-  flare_flutter: ^2.0.3
   rating_dialog: ^1.0.0
   after_layout: ^1.0.7+2
   expandable: ^4.1.4
@@ -77,6 +74,7 @@ dependencies:
   flutter_sim_country_code: ^0.0.3
   barcode_scan: ^3.0.1
   country_provider: ^0.0.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

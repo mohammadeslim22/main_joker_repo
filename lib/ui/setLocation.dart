@@ -333,10 +333,13 @@ class _AutoLocateState extends State<AutoLocate> {
         )));
         getPositionSubscription =
             location.onLocationChanged.listen((LocationData value) {
+         
           final Marker marker = Marker(
             markerId: MarkerId('current_location'),
             position: LatLng(value.latitude, value.longitude),
             icon: BitmapDescriptor.fromBytes(markerIcon),
+            flat: true,
+            anchor: const Offset(0.5, 0.5),
           );
           _addMarker(marker);
         });
@@ -401,7 +404,6 @@ class _AutoLocateState extends State<AutoLocate> {
                   print("${config.lat},${config.long}");
                   functions[widget.choice].call();
                   Navigator.pop(context);
-                  
                 },
                 color: colors.blue,
                 textColor: colors.white,
@@ -426,7 +428,7 @@ class _AutoLocateState extends State<AutoLocate> {
     if (getIt<SalesProvider>().pagewiseSalesController != null)
       getIt<SalesProvider>().pagewiseSalesController.reset();
 
-      Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   void setFromRegister() {

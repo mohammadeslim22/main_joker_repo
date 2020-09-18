@@ -262,7 +262,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
       key: widget.drawerKey,
       onTapClose: false, // default false
       swipe: true, // default true
-      colorTransition: Colors.black, // default Color.black54
+      colorTransitionScaffold: colors.black, 
+      // colorTransition: // default Color.black54
       tapScaffoldEnabled: true,
 
       //When setting the vertical offset, be sure to use only top or bottom
@@ -277,8 +278,9 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
       borderRadius: 16,
       leftAnimationType: InnerDrawerAnimation.static, // default static
       rightAnimationType: InnerDrawerAnimation.quadratic,
-      backgroundColor:
-          colors.grey, // default  Theme.of(context).backgroundColor
+      backgroundDecoration: BoxDecoration(color: colors.grey,),
+      // backgroundColor:
+          // default  Theme.of(context).backgroundColor
 
       // TODO(ahmed): no need NOW
       //when a pointer that is in contact with the screen and moves to the right or left

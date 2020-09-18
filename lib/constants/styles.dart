@@ -46,6 +46,10 @@ class Styles {
     fontWeight: FontWeight.w100,
     fontSize: 13,
   );
+    TextStyle maingridview = const TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 18,
+  );
   TextStyle pinCodePhone = const TextStyle(
     fontWeight: FontWeight.bold,
     color: Colors.green,
@@ -130,6 +134,9 @@ class Styles {
     color: colors.grey,
     fontSize: 15,
   );
+  TextStyle showMore = const TextStyle(color: Colors.blue);
+    TextStyle moreInfo = const TextStyle(color: Colors.black,fontWeight:FontWeight.w600,fontSize: 15 );
+
   TextStyle memberSipMessageText = const TextStyle(fontSize: 12.0, height: 1.7);
 
   TextStyle memberShipMessage = TextStyle(fontSize: 15.0, color: colors.green);

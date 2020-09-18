@@ -62,12 +62,12 @@ class MerchantfromBranch {
     id = json['id'] as int;
     name = json['name'].toString();
     logo = json['logo'] as String;
-    rateAverage = json['rates_average'] as int;
+    rateAverage =double.parse(json['rates_average'].toString());
   }
   int id;
   String name;
   String logo;
-  int rateAverage;
+  double rateAverage;
 }
 
 class Links {

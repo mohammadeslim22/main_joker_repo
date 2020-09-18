@@ -61,8 +61,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                   style: styles.memberShipMessage,
                 ),
                 const SizedBox(height: 6),
-                Text(
-                   mermbershipData.membership.meesage,
+                Text(mermbershipData.membership.meesage,
                     textWidthBasis: TextWidthBasis.parent,
                     style: styles.memberSipMessageText),
               ],
@@ -124,7 +123,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                             style: styles.smallButton,
                           ),
                           Text(
-                           mermbershipData.membership.ageStage,
+                            mermbershipData.membership.ageStage,
                             style: styles.smallButton,
                           ),
                         ],
@@ -319,21 +318,22 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                     minWidth: 90.0,
                                     cornerRadius: 20,
                                     activeBgColor: Colors.white,
-                                    activeTextColor: Colors.white,
+                                    // activeTextColor: Colors.white,
                                     inactiveBgColor: Colors.grey,
-                                    inactiveTextColor: Colors.white,
-                                    labels:  <String>[trans(context, 'activated'),trans(context, 'deactivated')],
+                                    // inactiveTextColor: Colors.white,
+                                    labels: <String>[
+                                      trans(context, 'activated'),
+                                      trans(context, 'deactivated')
+                                    ],
                                     icons: <IconData>[
                                       Icons.power_settings_new,
                                       Icons.blur_off
                                     ],
-                                    activeColors:  <Color>[
+                                    activeBgColors: <Color>[
                                       colors.blue,
                                       colors.blue,
                                     ],
-                                    onToggle: (int index) {
-
-                                    }),
+                                    onToggle: (int index) {}),
                               ],
                             ),
                             const SizedBox(height: 42),
@@ -345,8 +345,9 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                       vertical: 12, horizontal: 25),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
-                                      side:  BorderSide(
-                                          color: colors.blue,)),
+                                      side: BorderSide(
+                                        color: colors.blue,
+                                      )),
                                   onPressed: () {},
                                   color: colors.blue,
                                   textColor: colors.white,

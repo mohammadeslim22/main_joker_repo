@@ -8,6 +8,7 @@ import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/models/specializations.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/util/dio.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -17,6 +18,7 @@ import 'widgets/text_form_input.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/util/functions.dart';
 import 'package:flutter/services.dart';
+import 'package:joker/providers/globalVars.dart';
 
 class AdvancedSearch extends StatefulWidget {
   const AdvancedSearch({Key key}) : super(key: key);
@@ -238,15 +240,13 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                 arguments: <String, double>{
                   "lat": config.lat,
                   "long": config.long,
-                  "choice":1
+                  "choice": 1
                 });
           },
           obscureText: false,
         ),
         Container(
-          margin: const EdgeInsets.symmetric(
-            horizontal: 16,
-          ),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
           child: bolc.visibilityObs
               ? Row(
                   children: <Widget>[
@@ -426,21 +426,21 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 25),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
-                  side:  BorderSide(color: Colors.blue[900])),
+                  side: BorderSide(color: Colors.blue[900])),
               onPressed: () {
+                getIt<GlobalVars>().filterData = FilterData(
+                  merchantName.text,
+                  saleName.text,
+                  starttoday,
+                  endtoday,
+                  _ratingStar,
+                  List<int>.from(selectedOptions),
+                  startingPrive,
+                  endingPrive,
+                );
                 Navigator.pushNamed(context, "/Home",
                     arguments: <String, dynamic>{
                       "salesDataFilter": true,
-                      "FilterData": FilterData(
-                        merchantName.text,
-                        saleName.text,
-                        starttoday,
-                        endtoday,
-                        _ratingStar,
-                        List<int>.from(selectedOptions),
-                        startingPrive,
-                        endingPrive,
-                      )
                     });
               },
               color: Colors.blue[600],

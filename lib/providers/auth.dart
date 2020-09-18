@@ -5,7 +5,6 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/ui/widgets/custom_toast_widget.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/constants/config.dart';
@@ -72,7 +71,8 @@ class Auth with ChangeNotifier {
     'password',
   ];
   Map<String, String> pinCodeProfileValidationMap =
-      Map<String, String>.fromIterables(pinCodeProfilekeys, pinCodeProfileValidators);
+      Map<String, String>.fromIterables(
+          pinCodeProfilekeys, pinCodeProfileValidators);
 
   static List<String> changePassValidators = <String>[null, null];
   static List<String> changePasskeys = <String>['old_passwoed', 'new_password'];
@@ -109,7 +109,7 @@ class Auth with ChangeNotifier {
     print("loging info:${myCountryDialCode + username.toString()}");
     bool res;
     await dio.post<dynamic>("login", data: <String, dynamic>{
-      "phone": myCountryDialCode + username.toString().trim(),
+      "phone": myCountryDialCode + username.replaceAll("^0+", "").toString().trim(),
       "password": pass.toString()
     }).then((Response<dynamic> value) async {
       if (value.statusCode == 422) {
@@ -184,7 +184,7 @@ class Auth with ChangeNotifier {
       "password_confirmation": pass,
       "birth_date": birth,
       "email": email,
-      "phone": myCountryDialCode + mobile,
+      "phone": myCountryDialCode + mobile.replaceAll("^0+", ""),
       "country_id": 1,
       "city_id": 1,
       "address": config.locationController.text,
@@ -201,14 +201,14 @@ class Auth with ChangeNotifier {
         print(value.data);
 
         Navigator.pushNamed(context, '/pin', arguments: <String, String>{
-          'mobileNo': myCountryDialCode + mobile
+          'mobileNo': myCountryDialCode + mobile.replaceAll("^0+", "")
         });
         config.locationController.clear();
         await data.setData("id", value.data['data']['id'].toString());
         data.setData("email", email);
         data.setData("username", username);
         data.setData("password", pass);
-        data.setData("phone", myCountryDialCode + mobile);
+        data.setData("phone", myCountryDialCode + mobile.replaceAll("^0+", ""));
         data.setData("lat", config.lat.toString());
         data.setData("long", config.long.toString());
         data.setData("address", config.locationController.text.toString());

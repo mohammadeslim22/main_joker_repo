@@ -2,70 +2,41 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
-import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../ui/cards/sale_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';
-import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
-import 'package:dio/dio.dart';
-import 'package:intl/intl.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/providers/salesProvider.dart';
+import 'package:joker/providers/globalVars.dart';
 
 class DiscountsList extends StatefulWidget {
-  const DiscountsList({Key key, this.filterData}) : super(key: key);
-  final FilterData filterData;
+  const DiscountsList({Key key}) : super(key: key);
+  // final FilterData filterData;
   @override
   _DiscountsListState createState() => _DiscountsListState();
 }
 
 class _DiscountsListState extends State<DiscountsList> {
-  Sales sale;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   MainProvider bolc;
 
-  Future<List<SaleData>> getSalesData(int pageIndex) async {
-    final Response<dynamic> response = await dio.get<dynamic>("psales",
-        queryParameters: <String, dynamic>{'page': pageIndex + 1});
-    sale = Sales.fromJson(response.data);
-    return sale.data;
-  }
-
-  Future<List<SaleData>> getSalesDataFilterd(
-      int pageIndex, FilterData filterData) async {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String startDate = formatter.format(filterData.startingdate);
-    final String endDate = formatter.format(filterData.endingdate);
-    final Response<dynamic> response =
-        await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
-      'page': pageIndex + 1,
-      'merchant_name': filterData.merchantNameOrPartOfit,
-      'name': filterData.saleNameOrPartOfit,
-      'from_date': startDate,
-      'to_date': endDate,
-      'rate': filterData.rating,
-      'specifications': filterData.specifications
-    });
-    sale = Sales.fromJson(response.data);
-    return sale.data;
-  }
-
   @override
   void initState() {
     super.initState();
-      print("are we alone ? sales ");
+    print("are we alone ? sales ");
     getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
             pageSize: 3,
             pageFuture: (int pageIndex) async {
-              return (widget.filterData != null)
-                  ? getSalesDataFilterd(pageIndex, widget.filterData)
-                  : getSalesData(pageIndex);
+              return (getIt<GlobalVars>().filterData != null)
+                  ? getIt<SalesProvider>().getSalesDataFilterd(
+                      pageIndex, getIt<GlobalVars>().filterData)
+                  : getIt<SalesProvider>().getSalesData(pageIndex);
             });
   }
 
