@@ -113,9 +113,9 @@ class HOMEMAProvider with ChangeNotifier {
       return element.id == selectedSpecialize;
     }).name;
   }
-
+  final PanelController pc = PanelController();
   PersistentBottomSheetController<dynamic> errorController;
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
-    final PanelController pc = PanelController();
-
+  
+  
 }

@@ -6,10 +6,12 @@ import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/models/simplesales.dart';
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
+import 'package:joker/constants/config.dart';
 
 class SalesProvider with ChangeNotifier {
   PagewiseLoadController<dynamic> pagewiseSalesController;
   Future<void> getSale(int saleId) async {
+    if(config.loggedin)
     dio.get<dynamic>("sales/$saleId").then((Response<dynamic> value) {});
   }
 

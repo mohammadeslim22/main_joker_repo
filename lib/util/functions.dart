@@ -157,9 +157,9 @@ Future<bool> onWillPop(BuildContext context) async {
 }
 
 void goToMap(BuildContext context) {
-  Navigator.pushNamedAndRemoveUntil(context, "/HomeMap", (_) => false,
-      arguments: <String, dynamic>{
-        "home_map_lat": config.lat ?? 0.0,
-        "home_map_long": config.long ?? 0.0
-      });
+  Navigator.pushNamedAndRemoveUntil(context, "/WhereToGo", (_) => false);
+  // arguments: <String, dynamic>{
+  //   "home_map_lat": config.lat ?? 0.0,
+  //   "home_map_long": config.long ?? 0.0
+  // });
 }

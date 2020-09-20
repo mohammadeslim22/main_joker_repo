@@ -36,11 +36,9 @@ class _MapAsHomeState extends State<MapAsHome> {
   GlobalKey<ScaffoldState> _scaffoldkey;
   int specId;
 
-  double _panelHeightOpen;
-  double _panelHeightClosed = 200.0;
+  // double _panelHeightOpen;
+  // final double _panelHeightClosed = 100.0;
 
-  bool opened = false;
-  bool downAfterMap = false;
 
   @override
   void initState() {
@@ -51,7 +49,7 @@ class _MapAsHomeState extends State<MapAsHome> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey, lat, long, specId);
-      getIt<HOMEMAProvider>().pc.animatePanelToPosition(.3);
+      // getIt<HOMEMAProvider>().pc.animatePanelToPosition(.3);
     });
   }
 
@@ -63,7 +61,7 @@ class _MapAsHomeState extends State<MapAsHome> {
 
   @override
   Widget build(BuildContext context) {
-    _panelHeightOpen = MediaQuery.of(context).size.height * .80;
+    // _panelHeightOpen = MediaQuery.of(context).size.height * .80;
 
     return Scaffold(
       key: getIt<HOMEMAProvider>().scaffoldkey,
@@ -74,113 +72,100 @@ class _MapAsHomeState extends State<MapAsHome> {
             resizeToAvoidBottomInset: false,
             body: Consumer<HOMEMAProvider>(builder:
                 (BuildContext context, HOMEMAProvider value, Widget child) {
-              if (value.dataloaded) {
-                return Stack(
-                  alignment: Alignment.topCenter,
-                  children: <Widget>[
-                    SlidingUpPanel(
-                      maxHeight: _panelHeightOpen,
-                      minHeight: _panelHeightClosed,
-                      parallaxEnabled: true,
-                      parallaxOffset: .5,
-                      controller: value.pc,
-                      backdropColor: colors.trans,
-                      backdropOpacity: .7,
-                      backdropEnabled: true,
-                      header: Container(
-                        color: colors.white,
-                        width: MediaQuery.of(context).size.width,
-                        child: FlatButton(
-                          onPressed: () {
-                            if (downAfterMap) {
-                              value.pc.close();
-                              setState(() {
-                                downAfterMap = false;
-                                opened = false;
-                              });
-                            } else {
-                              if (opened) {
-                                value.pc.close();
-                                setState(() {
-                                  opened = false;
-                                });
-                              } else {
-                                value.pc.open();
-                                setState(() {
-                                  opened = true;
-                                });
-                              }
-                            }
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              const SizedBox(height: 12.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Container(
-                                    width: 48,
-                                    height: 5,
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(12.0))),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "Explore ${getIt<HOMEMAProvider>().getSpecializationName()} Nearby",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 24.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12.0),
-                              const Divider(thickness: 1)
-                            ],
-                          ),
-                        ),
-                      ),
-                      body: _body(lat, long, value),
-                      panelBuilder: (ScrollController sc) => _panel(sc),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(18.0),
-                          topRight: Radius.circular(18.0)),
-                      onPanelSlide: (double pos) => setState(() {
-                        _panelHeightClosed = 200;
-                        downAfterMap = false;
-                      }),
-                    ),
-                    Positioned(
-                      left: 20.0,
-                      top: 40,
-                      child: FloatingActionButton(
-                        isExtended: false,
-                        mini: true,
-                        child: Icon(
-                          Icons.close,
-                          size: 30,
-                          color: Theme.of(context).primaryColor,
-                        ),
+              // if (value.dataloaded) {
+              return Stack(
+                alignment: Alignment.topCenter,
+                children: <Widget>[
+                  SlidingUpPanel(
+                    // maxHeight: _panelHeightOpen,
+                    // minHeight: _panelHeightClosed,
+                    parallaxEnabled: true,
+                    parallaxOffset: .5,
+                    controller: value.pc,
+                    backdropColor: colors.trans,
+                    backdropOpacity: .7,
+                    backdropEnabled: true,
+                    header: Container(
+                      decoration: BoxDecoration(
+                          color: colors.white,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(18.0))),
+                      width: MediaQuery.of(context).size.width,
+                      child: FlatButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          print(value.pc.isPanelOpen);
+                          if (value.pc.isPanelOpen) {
+                            value.pc.close();
+                          } else {
+                            value.pc.open();
+                          }
                         },
-                        backgroundColor: colors.white,
+                        child: Column(
+                          children: <Widget>[
+                            const SizedBox(height: 12.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  width: 48,
+                                  height: 5,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(12.0))),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "Explore ${getIt<HOMEMAProvider>().getSpecializationName()} Nearby",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 24.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12.0),
+                            const Divider(thickness: 1)
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
+                    body: _body(lat, long, value),
+                    panelBuilder: (ScrollController sc) => _panel(sc),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(18.0),
+                        topRight: Radius.circular(18.0)),
+                    onPanelSlide: (double pos) {},
+                  ),
+                  Positioned(
+                    left: 20.0,
+                    top: 40,
+                    child: FloatingActionButton(
+                      isExtended: false,
+                      mini: true,
+                      child: Icon(
+                        Icons.close,
+                        size: 30,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      backgroundColor: colors.white,
+                    ),
+                  ),
+                ],
+              );
+              // } else {
+              //   return const Center(
+              //     child: CircularProgressIndicator(),
+              //   );
+              // }
             }),
           ),
         ],
@@ -252,16 +237,6 @@ class _MapAsHomeState extends State<MapAsHome> {
     return Stack(
       children: <Widget>[
         GoogleMap(
-          circles: <Circle>{
-            Circle(
-                circleId: CircleId("id"),
-                center: LatLng(lat, long),
-                fillColor: Colors.blue.withOpacity(.3),
-                radius: 4000,
-                strokeColor: Colors.transparent,
-                zIndex: 20,
-                strokeWidth: 2)
-          },
           onMapCreated: (GoogleMapController controller) async {
             serviceEnabled = await location.serviceEnabled();
             permissionGranted = await location.hasPermission();
@@ -290,9 +265,6 @@ class _MapAsHomeState extends State<MapAsHome> {
           ),
           onCameraMove: (CameraPosition pos) {
             setState(() {
-              // value.setRotation(pos.bearing);
-              _panelHeightClosed = 70;
-              downAfterMap = true;
               lat = pos.target.latitude;
               long = pos.target.longitude;
             });
