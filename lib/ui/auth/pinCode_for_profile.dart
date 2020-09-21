@@ -66,15 +66,15 @@ class _MyHomePageState extends State<PinCodeForProfile>
               child: PinCodeTextField(
                 enabled: enabeld,
                 length: 4,
-                obsecureText: false,
+                obscureText: false,
                 animationType: AnimationType.fade,
-                shape: PinCodeFieldShape.box,
                 animationDuration: const Duration(milliseconds: 300),
-                borderRadius: BorderRadius.circular(5),
-                inactiveColor: Colors.grey,
-                textInputType: TextInputType.phone,
-                fieldHeight: 40,
-                fieldWidth: 30,
+                // shape: PinCodeFieldShape.box,
+                // borderRadius: BorderRadius.circular(5),
+                // inactiveColor: Colors.grey,
+                // fieldHeight: 40,
+                // fieldWidth: 30,
+                keyboardType: TextInputType.phone,
                 onCompleted: (String v) async {
                   bolc.togelf(true);
                   if (await getIt<Auth>()
@@ -91,6 +91,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                     currentText = value;
                   });
                 },
+                appContext: context,
               ),
             ),
           ],

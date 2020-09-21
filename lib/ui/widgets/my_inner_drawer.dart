@@ -249,7 +249,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
             title: Text("${trans(context, 'logout')}"),
             leading: SvgPicture.asset("assets/images/logout.svg"),
             onTap: () async {
-            await  getIt<Auth>().signOut();
+              await getIt<Auth>().signOut();
               // data.setData('authorization', "");
               // Navigator.pushNamedAndRemoveUntil(
               //     context, '/login', (_) => false);
@@ -262,7 +262,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
       key: widget.drawerKey,
       onTapClose: false, // default false
       swipe: true, // default true
-      colorTransitionScaffold: colors.black, 
+      colorTransitionScaffold: colors.black,
       // colorTransition: // default Color.black54
       tapScaffoldEnabled: true,
 
@@ -278,9 +278,11 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
       borderRadius: 16,
       leftAnimationType: InnerDrawerAnimation.static, // default static
       rightAnimationType: InnerDrawerAnimation.quadratic,
-      backgroundDecoration: BoxDecoration(color: colors.grey,),
+      backgroundDecoration: BoxDecoration(
+        color: colors.grey,
+      ),
       // backgroundColor:
-          // default  Theme.of(context).backgroundColor
+      // default  Theme.of(context).backgroundColor
 
       // TODO(ahmed): no need NOW
       //when a pointer that is in contact with the screen and moves to the right or left

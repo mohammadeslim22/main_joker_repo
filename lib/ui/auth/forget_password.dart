@@ -125,16 +125,17 @@ class _MyForgetPassState extends State<ForgetPassword>
                                 width: 140,
                                 child: PinCodeTextField(
                                   length: 4,
-                                  obsecureText: false,
+                                  obscureText: false,
                                   animationType: AnimationType.fade,
-                                  shape: PinCodeFieldShape.box,
                                   animationDuration:
                                       const Duration(milliseconds: 300),
-                                  borderRadius: BorderRadius.circular(5),
-                                  inactiveColor: Colors.grey,
-                                  textInputType: TextInputType.phone,
-                                  fieldHeight: 40,
-                                  fieldWidth: 30,
+                                  // borderRadius: BorderRadius.circular(5),
+                                  // shape: PinCodeFieldShape.box,
+                                  // inactiveColor: Colors.grey,
+                                  // fieldHeight: 40,
+                                  // fieldWidth: 30,
+                                    
+                                  keyboardType: TextInputType.phone,
                                   onCompleted: (String v) async {
                                     getIt<Auth>().verifyCode(
                                         mobileController.text, v, context);
@@ -144,6 +145,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                                       currentText = value;
                                     });
                                   },
+                                  appContext: context,
                                 ),
                               ),
                             ],
