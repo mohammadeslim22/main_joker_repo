@@ -42,15 +42,15 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-    case "/HomeMap":
-      page = PageTransition<PageController>(
-        child: HOMEMAP(
-          lat: args['home_map_lat'] as double,
-          long: args['home_map_long'] as double,
-        ),
-        type: PageTransitionType.rightToLeftWithFade,
-      );
-      break;
+    // case "/HomeMap":
+    //   page = PageTransition<PageController>(
+    //     child: HOMEMAP(
+    //       lat: args['home_map_lat'] as double,
+    //       long: args['home_map_long'] as double,
+    //     ),
+    //     type: PageTransitionType.rightToLeftWithFade,
+    //   );
+    //   break;
     case "/login":
       page = PageTransition<PageController>(
         child: LoginScreen(),
