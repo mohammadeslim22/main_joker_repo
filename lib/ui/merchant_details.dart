@@ -23,7 +23,8 @@ class ShopDetails extends StatelessWidget {
     return Container(
       color: colors.white,
       child: FutureBuilder<void>(
-        future: getIt<MerchantProvider>().getMerchantData(merchantId, source,0),
+        future:
+            getIt<MerchantProvider>().getMerchantData(merchantId, source, 0),
         builder: (BuildContext ctx, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Page(
@@ -98,7 +99,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
               child: DropdownButton<dynamic>(
                 elevation: 0,
                 isDense: false,
-                icon: Icon(Icons.more_vert),
+                icon: const Icon(Icons.more_vert),
                 items: <dynamic>[trans(context, "join")].map((dynamic value) {
                   return DropdownMenuItem<dynamic>(
                     value: value,
@@ -175,7 +176,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                             },
                             likeCount: likecount,
                             countPostion: CountPostion.bottom,
-                            circleColor: CircleColor(
+                            circleColor: const CircleColor(
                                 start: Colors.white, end: Colors.purple),
                             onTap: (bool loved) async {
                               likeFunction("App\\Merchant", merchant.mydata.id);
@@ -359,7 +360,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

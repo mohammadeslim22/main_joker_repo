@@ -129,7 +129,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
               const SizedBox(height: 15),
               Text("${widget.mobileNo}",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                     fontSize: 18,

@@ -116,8 +116,7 @@ class MyMemberShipState extends State<MyMemberShip>
                       children: <Widget>[
                         Text("${memberShip.startAt}".split(' ')[0],
                             style: styles.mysmall),
-                        Icon(Icons.arrow_forward,
-                            color: colors.blue, size: 12),
+                        Icon(Icons.arrow_forward, color: colors.blue, size: 12),
                         Text("${memberShip.endAt}".split(' ')[0],
                             style: styles.mysmall)
                       ],
@@ -147,7 +146,7 @@ class MyMemberShipState extends State<MyMemberShip>
                         const CircularProgressIndicator(),
                     errorWidget:
                         (BuildContext context, String url, dynamic error) =>
-                            Icon(Icons.error),
+                            const Icon(Icons.error),
                   ),
                   //     Image.asset(
                   //   "assets/images/qrcode.png",

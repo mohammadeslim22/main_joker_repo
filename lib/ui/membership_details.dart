@@ -325,7 +325,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                       trans(context, 'activated'),
                                       trans(context, 'deactivated')
                                     ],
-                                    icons: <IconData>[
+                                    icons:const  <IconData>[
                                       Icons.power_settings_new,
                                       Icons.blur_off
                                     ],

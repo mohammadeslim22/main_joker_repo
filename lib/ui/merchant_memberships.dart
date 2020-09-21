@@ -31,8 +31,8 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(trans(context, 'Merchant MemberShips'),style: styles.appBars
-      )),
+          title: Text(trans(context, 'Merchant MemberShips'),
+              style: styles.appBars)),
       body: FutureBuilder<List<MemFromMerchant>>(
           future: getMemebershipsData(widget.merchantId),
           builder: (BuildContext ctx,
@@ -74,7 +74,7 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
         child: ExpandableNotifier(
             controller: exp,
             child: ExpandablePanel(
-              iconColor: colors.blue,
+              theme: ExpandableThemeData(iconColor: colors.blue),
               controller: exp,
               header: Padding(
                 padding: const EdgeInsets.all(8.0),

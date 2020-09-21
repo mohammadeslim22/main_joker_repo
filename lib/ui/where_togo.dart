@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/constants/colors.dart';
@@ -19,7 +18,7 @@ class WhereToGo extends StatefulWidget {
 
 class _WhereToGoState extends State<WhereToGo> {
   GlobalKey<ScaffoldState> _scaffoldkey;
-  PersistentBottomSheetController<dynamic> _errorController;
+  PersistentBottomSheetController<dynamic> errorController;
   @override
   void initState() {
     super.initState();
@@ -78,7 +77,7 @@ class _WhereToGoState extends State<WhereToGo> {
                         ),
                         onPressed: () {
                           getIt<HOMEMAProvider>().setSlelectedSpec(item.id);
-                          _errorController = _scaffoldkey.currentState
+                          errorController = _scaffoldkey.currentState
                               .showBottomSheet<dynamic>(
                                   (BuildContext context) =>
                                       locationBottomSheet());

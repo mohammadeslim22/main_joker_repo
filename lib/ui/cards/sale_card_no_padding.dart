@@ -67,9 +67,11 @@ class _SalesCardState extends State<SalesCardNoPadding> {
                   backgroundColor: colors.white,
                   radius: 12,
                   child: InkWell(
-                      onTap: () { Navigator.pop(context);},
-                      child: Icon(Icons.arrow_back),
-                       ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(Icons.arrow_back),
+                  ),
                 ),
               ),
               Positioned(
@@ -142,7 +144,7 @@ class _SalesCardState extends State<SalesCardNoPadding> {
                       const SizedBox(width: 8),
                       Text(
                         widget.sale.oldPrice,
-                        style: TextStyle(
+                        style:const  TextStyle(
                             fontSize: 16,
                             decoration: TextDecoration.lineThrough),
                       ),
@@ -204,13 +206,9 @@ class _SalesCardState extends State<SalesCardNoPadding> {
           ),
         ),
         RaisedButton(
-          
             color: colors.yellow,
             padding: const EdgeInsets.symmetric(horizontal: 130),
-
-            child:
-                Text(trans(context, 'more_info'),style: styles.moreInfo),
-        
+            child: Text(trans(context, 'more_info'), style: styles.moreInfo),
             onPressed: () {
               Navigator.pushNamed(context, "/SaleLoader",
                   arguments: <String, dynamic>{

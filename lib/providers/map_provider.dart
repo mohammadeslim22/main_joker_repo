@@ -30,12 +30,18 @@ class HOMEMAProvider with ChangeNotifier {
         .get<dynamic>("map?long=$long&lat=$lat&specialization_id=$specId");
     branches = MapBranches.fromJson(response.data);
     markers.clear();
-    branches.mapBranches.forEach((MapBranch element) async {
+
+    // TODO(mIsleem): use for instead of forEach
+    for (final MapBranch mapBranch in branches.mapBranches) {
+      await _addMarker(_scaffoldkey, mapBranch);
+    }
+    /* branches.mapBranches.forEach((MapBranch element) async {
       await _addMarker(_scaffoldkey, element);
-    });
-    Uint8List markerIcon =
+    }); */
+
+    final Uint8List markerIcon =
         await getBytesFromAsset('assets/images/locationMarkerblue.png', 100);
-    Marker marker = Marker(
+    final Marker marker = Marker(
         markerId: MarkerId('current_location'),
         position: LatLng(config.lat ?? 0, config.long ?? 0),
         icon: BitmapDescriptor.fromBytes(markerIcon),
@@ -67,7 +73,7 @@ class HOMEMAProvider with ChangeNotifier {
       GlobalKey<ScaffoldState> _scaffoldkey, MapBranch element) async {
     final Uint8List markerIcon =
         await getBytesFromAsset('assets/images/locationMarkerblue.png', 100);
-    Marker marker = Marker(
+    final Marker marker = Marker(
         markerId: MarkerId(element.id.toString()),
         position: LatLng(element.latitude, element.longitude),
         icon: BitmapDescriptor.fromBytes(markerIcon),
@@ -113,9 +119,8 @@ class HOMEMAProvider with ChangeNotifier {
       return element.id == selectedSpecialize;
     }).name;
   }
+
   final PanelController pc = PanelController();
   PersistentBottomSheetController<dynamic> errorController;
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
-  
-  
 }

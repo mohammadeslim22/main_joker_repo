@@ -148,7 +148,7 @@ class _SalesCardState extends State<MapSalesCard> {
                             const SizedBox(width: 8),
                             Text(
                               widget.sale.oldPrice,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16,
                                   decoration: TextDecoration.lineThrough),
                             ),
@@ -185,8 +185,8 @@ class _SalesCardState extends State<MapSalesCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(saledata.startAt, style: styles.mystyle),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 4),
                               child: Icon(Icons.arrow_forward, size: 20),
                             ),
                             Text(saledata.endAt, style: styles.mystyle),
@@ -220,7 +220,7 @@ class _SalesCardState extends State<MapSalesCard> {
                           },
                           likeCount: saledata.id,
                           countPostion: CountPostion.bottom,
-                          circleColor: CircleColor(
+                          circleColor:const  CircleColor(
                               start: Colors.white, end: Colors.purple),
                           onTap: (bool loved) async {
                             likeFunction("App\\Sale", saledata.id);

@@ -218,7 +218,7 @@ class _MyRegistrationState extends State<Registration>
                     }
                   },
                   suffixicon: IconButton(
-                    icon: Icon(Icons.add_location, color: Colors.blue),
+                    icon: const Icon(Icons.add_location, color: Colors.blue),
                     onPressed: () {
                       Navigator.pushNamed(context, '/AutoLocate',
                           arguments: <String, double>{

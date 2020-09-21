@@ -158,9 +158,9 @@ class _AutoLocateState extends State<AutoLocate> {
                     alignment: Alignment.topCenter,
                     child: Container(
                       height: 170,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
-                          colors: const <Color>[
+                          colors: <Color>[
                             Color.fromARGB(1023, 249, 249, 249),
                             Color.fromARGB(0, 255, 255, 255)
                           ],
@@ -198,7 +198,7 @@ class _AutoLocateState extends State<AutoLocate> {
                                     ),
                                   ],
                                 ),
-                                leading: IconButton(
+                                leading: const IconButton(
                                   onPressed: null,
                                   icon: Icon(Icons.search),
                                 ),
@@ -209,7 +209,7 @@ class _AutoLocateState extends State<AutoLocate> {
                                         lat,
                                         long);
                                   },
-                                  icon: Icon(Icons.bookmark),
+                                  icon: const Icon(Icons.bookmark),
                                 ),
                               ),
                             ),
@@ -242,11 +242,11 @@ class _AutoLocateState extends State<AutoLocate> {
                             borderRadius: BorderRadius.circular(6),
                             onTap: () {},
                             child: GestureDetector(
-                              child: Center(
+                              child:const  Center(
                                 child: Icon(
                                   Icons.my_location,
                                   color:
-                                      const Color.fromARGB(1023, 150, 150, 150),
+                                       Color.fromARGB(1023, 150, 150, 150),
                                 ),
                               ),
                               onTap: () async {
@@ -333,7 +333,6 @@ class _AutoLocateState extends State<AutoLocate> {
         )));
         getPositionSubscription =
             location.onLocationChanged.listen((LocationData value) {
-         
           final Marker marker = Marker(
             markerId: MarkerId('current_location'),
             position: LatLng(value.latitude, value.longitude),

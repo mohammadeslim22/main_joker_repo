@@ -111,7 +111,7 @@ class MySettingState extends State<SettingsScreen> {
                     color: Colors.grey,
                     fillColor: Colors.blue[100],
                     selectedColor: colors.blue,
-                    children: <Widget>[
+                    children: const <Widget>[
                       Icon(Icons.notifications_active),
                       Icon(Icons.notifications_paused),
                     ],

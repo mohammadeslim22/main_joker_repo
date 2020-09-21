@@ -146,7 +146,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                               const CircularProgressIndicator(),
                           errorWidget: (BuildContext context, String url,
                                   dynamic error) =>
-                              Icon(Icons.error),
+                              const Icon(Icons.error),
                         ),
                       )),
                     ],

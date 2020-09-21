@@ -39,7 +39,6 @@ class _MapAsHomeState extends State<MapAsHome> {
   // double _panelHeightOpen;
   // final double _panelHeightClosed = 100.0;
 
-
   @override
   void initState() {
     super.initState();
@@ -122,7 +121,7 @@ class _MapAsHomeState extends State<MapAsHome> {
                               children: <Widget>[
                                 Text(
                                   "Explore ${getIt<HOMEMAProvider>().getSpecializationName()} Nearby",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.normal,
                                     fontSize: 24.0,
                                   ),
@@ -290,10 +289,10 @@ class _MapAsHomeState extends State<MapAsHome> {
                   borderRadius: BorderRadius.circular(6),
                   onTap: () {},
                   child: GestureDetector(
-                    child: Center(
+                    child:const  Center(
                       child: Icon(
                         Icons.my_location,
-                        color: const Color.fromARGB(1023, 150, 150, 150),
+                        color: Color.fromARGB(1023, 150, 150, 150),
                       ),
                     ),
                     onTap: () async {

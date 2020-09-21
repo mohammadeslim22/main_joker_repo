@@ -311,7 +311,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       },
                                       suffixicon: IconButton(
                                         color: colors.blue,
-                                        icon: Icon(Icons.calendar_today),
+                                        icon: const Icon(Icons.calendar_today),
                                         onPressed: () {
                                           //   _selectDate(context);
                                         },
@@ -368,7 +368,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                               arguments: <String, double>{
                                                 "lat": 51.0,
                                                 "long": 9.6,
-                                                "choice":0
+                                                "choice": 0
                                               });
                                         },
                                       ),
@@ -528,7 +528,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   }
 
   Future<void> getImage(ImageSource imageSource, MainProvider bolc) async {
-    final File image = await ImagePicker.pickImage(source: imageSource);
+    // TODO(mIsleem): try this
+    final PickedFile image = await ImagePicker().getImage(source: imageSource);
     if (image != null) {
       final FormData formData = FormData.fromMap(<String, dynamic>{
         "avatar": await MultipartFile.fromFile(image.path)

@@ -307,7 +307,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Icon(Icons.date_range),
+              const Icon(Icons.date_range),
               Text(
                 trans(context, "offer_history"),
                 style: styles.mysmalllight,

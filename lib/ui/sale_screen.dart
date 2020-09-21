@@ -108,6 +108,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
     pageIndexx = 1;
     index += merchant.mydata.branches[0].id;
   }
+
   void getHeight() {
     final State state = key.currentState;
     print("current state ${key.currentState}");
@@ -161,7 +162,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 3),
                                     countPostion: CountPostion.bottom,
-                                    circleColor: CircleColor(
+                                    circleColor: const CircleColor(
                                         start: Colors.blue, end: Colors.purple),
                                     isLiked: isloved,
                                     onTap: (bool loved) async {
@@ -208,7 +209,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                     },
                                     likeCount: sale.id,
                                     countPostion: CountPostion.bottom,
-                                    circleColor: CircleColor(
+                                    circleColor: const CircleColor(
                                         start: Colors.white,
                                         end: Colors.purple),
                                     onTap: (bool loved) async {
@@ -221,8 +222,8 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                     },
                                   ),
                                   InkWell(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(6.0),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(6.0),
                                         child: Icon(Icons.star_border),
                                       ),
                                       onTap: () {
@@ -726,7 +727,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                           const SizedBox(width: 8),
                                           Text(
                                             e.oldPrice,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 decoration:
                                                     TextDecoration.lineThrough),
                                           ),
@@ -767,7 +768,8 @@ class ShopDetailsPage extends State<SaleDetailPage>
                               );
                             },
                             pageFuture: (int pageIndex) {
-                              return getIt<SalesProvider>().getSimpleSalesData(pageIndexx,merchant.mydata.id);
+                              return getIt<SalesProvider>().getSimpleSalesData(
+                                  pageIndexx, merchant.mydata.id);
                             }),
                       );
                     },
@@ -989,7 +991,8 @@ class _CurasolSliderState extends State<CurasolSlider> {
                   const SizedBox(width: 8),
                   Text(
                     widget.sale.oldPrice,
-                    style: TextStyle(decoration: TextDecoration.lineThrough),
+                    style:
+                        const TextStyle(decoration: TextDecoration.lineThrough),
                   ),
                 ],
               ),

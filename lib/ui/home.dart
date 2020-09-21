@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:convert';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
-import 'package:badges/badges.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/providers/mainprovider.dart';
@@ -279,7 +278,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         title: Text("${trans(context, 'my_address_list')}"),
-        trailing: Icon(
+        trailing: const Icon(
           Icons.search,
           color: Colors.black,
         ),
@@ -290,7 +289,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         title: Text("${trans(context, 'use_current_location')}"),
-        trailing: Icon(
+        trailing:const  Icon(
           Icons.my_location,
           color: Colors.black,
         ),

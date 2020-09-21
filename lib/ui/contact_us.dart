@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:joker/ui/widgets/countryCodePicker.dart';
 
 class ContactUs extends StatelessWidget {
@@ -124,5 +123,5 @@ class ContactUs extends StatelessWidget {
     );
   }
 
-  void _onCountryChange(CountryCode value) {}
+  // void _onCountryChange(CountryCode value) {}
 }

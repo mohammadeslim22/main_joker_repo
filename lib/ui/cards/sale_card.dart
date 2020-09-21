@@ -139,7 +139,7 @@ class _SalesCardState extends State<SalesCard> {
                           const SizedBox(width: 8),
                           Text(
                             widget.sale.oldPrice,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16,
                                 decoration: TextDecoration.lineThrough),
                           ),
