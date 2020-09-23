@@ -198,7 +198,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       break;
     case "/WhereToGo":
       page = PageTransition<PageController>(
-        child: const WhereToGo(),
+        child: const LoadWhereToGo(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;

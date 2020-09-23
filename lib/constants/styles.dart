@@ -60,7 +60,11 @@ class Styles {
       color: Colors.black,
       fontSize: 15,
       height: 1.7);
-
+  TextStyle wheretogo = const TextStyle(
+      fontWeight: FontWeight.w900,
+      color: Colors.black,
+      fontSize: 18,
+      height: 1);
   TextStyle myredstyle = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.red,

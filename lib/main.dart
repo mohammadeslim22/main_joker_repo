@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:joker/constants/colors.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/splash_screen.dart';
 import 'constants/config.dart';
@@ -149,11 +150,11 @@ Widget errorScreen(dynamic detailsException) {
                   child: Text('Exeption Details: $detailsException'),
                 ),
                 FlatButton(
-                  color: Colors.blue,
-                  child: const Text(
+                  color: colors.blue,
+                  child: Text(
                     'Go Back',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: colors.white,
                     ),
                   ),
                   onPressed: () {

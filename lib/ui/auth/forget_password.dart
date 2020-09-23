@@ -144,8 +144,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                                     setState(() {
                                       currentText = value;
                                     });
-                                  },
-                                  appContext: context,
+                                  }, appContext: context,
                                 ),
                               ),
                             ],

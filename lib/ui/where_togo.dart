@@ -1,3 +1,5 @@
+import 'package:carousel_slider/carousel_options.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/constants/colors.dart';
@@ -8,6 +10,28 @@ import 'package:joker/models/specializations.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
+import "package:flutter/cupertino.dart";
+
+class LoadWhereToGo extends StatelessWidget {
+  const LoadWhereToGo({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    {
+      return FutureBuilder<dynamic>(
+        future: getIt<HOMEMAProvider>().getSpecializationsData(),
+        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return const WhereToGo();
+          } else {
+            return Container(
+                color: colors.white, child: const CupertinoActivityIndicator());
+          }
+        },
+      );
+    }
+  }
+}
 
 class WhereToGo extends StatefulWidget {
   const WhereToGo({Key key}) : super(key: key);
@@ -19,127 +43,224 @@ class WhereToGo extends StatefulWidget {
 class _WhereToGoState extends State<WhereToGo> {
   GlobalKey<ScaffoldState> _scaffoldkey;
   PersistentBottomSheetController<dynamic> errorController;
+  bool specSelected = false;
   @override
   void initState() {
     super.initState();
     _scaffoldkey = GlobalKey<ScaffoldState>();
-    getIt<HOMEMAProvider>().getSpecializationsData();
+    distributeOnList(getIt<HOMEMAProvider>().specializations);
   }
 
+  List<Widget> listviewWidgets = <Widget>[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldkey,
-        body: Column(
-          children: <Widget>[
-            const SizedBox(height: 60),
-            Text(trans(context, 'where_do_u_want_to_go'),
-                style: styles.appBars),
-            const SizedBox(height: 40),
-            Consumer<HOMEMAProvider>(builder:
-                (BuildContext context, HOMEMAProvider value, Widget child) {
-              return GridView.count(
-                  physics: const ScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  shrinkWrap: true,
-                  primary: true,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                  crossAxisCount: 2,
-                  childAspectRatio: 1,
-                  addRepaintBoundaries: true,
-                  children: getIt<HOMEMAProvider>()
-                      .specializations
-                      .map((Specializations item) {
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(color: colors.jokerBlue),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(16))),
-                      child: FlatButton(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            const SizedBox(height: 20),
-                            Text(item.name, style: styles.maingridview),
-                            Expanded(
-                                child: item.id % 2 == 1
-                                    ? Image.asset("assets/images/pizza.jpg")
-                                    : Image.asset("assets/images/cafe.jpg")
-
-                                // CachedNetworkImage(
-                                //     fit: BoxFit.cover,
-                                //     imageUrl:
-                                //         "https://pixabay.com/photos/pizza-food-italian-baked-cheese-3007395")
-
-                                )
-                          ],
+      key: _scaffoldkey,
+      body: NestedScrollView(
+        physics: const ScrollPhysics(),
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              centerTitle: true,
+              expandedHeight: 215,
+              elevation: 0,
+              backgroundColor: colors.trans,
+              stretch: true,
+              flexibleSpace: FlexibleSpaceBar(
+                background: InkWell(
+                  onTap: () {},
+                  child: Stack(
+                    children: <Widget>[
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          height: 240,
+                          viewportFraction: 1,
+                          initialPage: 0,
+                          enableInfiniteScroll: true,
+                          reverse: true,
+                          autoPlay: true,
+                          autoPlayInterval: const Duration(seconds: 3),
+                          autoPlayAnimationDuration:
+                              const Duration(milliseconds: 800),
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          scrollDirection: Axis.horizontal,
+                          onPageChanged:
+                              (int index, CarouselPageChangedReason reason) {},
+                          pageViewKey:
+                              const PageStorageKey<dynamic>('carousel_slider'),
                         ),
-                        onPressed: () {
-                          getIt<HOMEMAProvider>().setSlelectedSpec(item.id);
-                          errorController = _scaffoldkey.currentState
-                              .showBottomSheet<dynamic>(
-                                  (BuildContext context) =>
-                                      locationBottomSheet());
-                        },
-                        onLongPress: () {
-                          Fluttertoast.showToast(
-                              msg: item.name,
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.grey[300],
-                              textColor: colors.jokerBlue,
-                              fontSize: 16.0);
-                        },
+                        items: [1, 2, 3].map((int image) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                padding: EdgeInsets.zero,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        "https://thumbs.dreamstime.com/z/photo-beatch-photo-beatch-196011893.jpg"),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
                       ),
-                    );
-                  }).toList());
-            })
-          ],
-        ));
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: colors.white,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Text(trans(context, 'where_do_u_want_to_go'),
+                              style: styles.wheretogo),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ];
+        },
+        body: Consumer<HOMEMAProvider>(builder:
+            (BuildContext context, HOMEMAProvider value, Widget child) {
+          return Column(
+            children: <Widget>[
+              ListView(
+                padding: EdgeInsets.zero,
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                children: listviewWidgets,
+              ),
+              RaisedButton(
+                color: !specSelected ? colors.ggrey : colors.white,
+                onPressed: () {
+                  specSelected
+                      ? Navigator.pushNamed(context, "/Home",
+                          arguments: <String, dynamic>{
+                              "salesDataFilter": false,
+                              "FilterData": null
+                            })
+                      : print("");
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text("${trans(context, 'open_in_list')}"),
+                    Icon(Icons.list, color: colors.blue)
+                  ],
+                ),
+              ),
+              RaisedButton(
+                color: !specSelected ? colors.ggrey : colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text("${trans(context, 'show_on_map')}"),
+                    Icon(
+                      Icons.map,
+                      color: colors.blue,
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  specSelected
+                      ? Navigator.pushNamed(context, "/MapAsHome",
+                          arguments: <String, dynamic>{
+                              "home_map_lat": config.lat ?? 0.0,
+                              "home_map_long": config.long ?? 0.0
+                            })
+                      : print("");
+                },
+              )
+            ],
+          );
+        }),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: CircleAvatar(
+        backgroundColor: colors.white,
+        radius: 24,
+        child: IconButton(
+          padding: EdgeInsets.zero,
+          icon: const Icon(Icons.add),
+          color: colors.yellow,
+          onPressed: () {},
+        ),
+      ),
+    );
   }
 
-  Widget locationBottomSheet() {
-    return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-      const ClipPath(
-        clipper: ShapeBorderClipper(
-            shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(24),
-              bottomRight: Radius.circular(24)),
-        )),
-      ),
-      ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-        title: Text("${trans(context, 'open_in_list')}"),
-        trailing: Icon(
-          Icons.list,
-          color: colors.blue,
-        ),
-        onTap: () async {
-          Navigator.pushNamed(context, "/Home", arguments: <String, dynamic>{
-            "salesDataFilter": false,
-            "FilterData": null
-          });
-        },
-      ),
-      ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-        title: Text("${trans(context, 'show_on_map')}"),
-        trailing: Icon(
-          Icons.map,
-          color: colors.blue,
-        ),
-        onTap: () async {
-          Navigator.pushNamed(context, "/MapAsHome",
-              arguments: <String, dynamic>{
-                "home_map_lat": config.lat ?? 0.0,
-                "home_map_long": config.long ?? 0.0
+  void distributeOnList(List<Specializations> specializations) {
+    for (int i = 0; i < specializations.length; i += 2) {
+      listviewWidgets.add(Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          specButton(specializations[i]),
+          specButton(specializations[i + 1])
+        ],
+      ));
+      // listviewWidgets.add(const Divider(thickness: 1));
+      if (i == specializations.length - 3) {
+        listviewWidgets
+            .add(specButton(specializations[specializations.length - 1]));
+
+        break;
+      }
+      listviewWidgets.add(const SizedBox(height: 40));
+    }
+  }
+
+  Widget specButton(Specializations item) {
+    return Consumer<HOMEMAProvider>(
+      builder: (BuildContext context, HOMEMAProvider value, Widget child) {
+        return Expanded(
+          child: FlatButton(
+            color: value.selectedSpecialize == item.id
+                ? colors.ggrey
+                : colors.white,
+            shape:
+                RoundedRectangleBorder(side: BorderSide(color: colors.ggrey)),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(height: 10),
+                Text(item.name, style: styles.maingridview),
+                const SizedBox(height: 40),
+                if (item.id % 2 == 1)
+                  const Icon(Icons.restaurant)
+                else
+                  const Icon(Icons.local_cafe),
+                const SizedBox(height: 10),
+              ],
+            ),
+            onPressed: () {
+              getIt<HOMEMAProvider>().setSlelectedSpec(item.id);
+              setState(() {
+                if (value.selectedSpecialize != null) {
+                  specSelected = true;
+                } else {
+                  specSelected = false;
+                }
               });
-        },
-      ),
-      const SizedBox(height: 12),
-    ]);
+            },
+            onLongPress: () {
+              Fluttertoast.showToast(
+                  msg: item.name,
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.grey[300],
+                  textColor: colors.jokerBlue,
+                  fontSize: 16.0);
+            },
+          ),
+        );
+      },
+    );
   }
 }

@@ -110,7 +110,12 @@ class HOMEMAProvider with ChangeNotifier {
   }
 
   void setSlelectedSpec(int id) {
-    selectedSpecialize = id;
+    if (id == selectedSpecialize) {
+      selectedSpecialize = null;
+    } else {
+      selectedSpecialize = id;
+    }
+
     notifyListeners();
   }
 
