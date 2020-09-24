@@ -18,7 +18,9 @@ class LoadWhereToGo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     {
-      return FutureBuilder<dynamic>(
+      return !getIt<HOMEMAProvider>().specesLoaded?
+      
+      FutureBuilder<dynamic>(
         future: getIt<HOMEMAProvider>().getSpecializationsData(),
         builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -28,7 +30,7 @@ class LoadWhereToGo extends StatelessWidget {
                 color: colors.white, child: const CupertinoActivityIndicator());
           }
         },
-      );
+      ):const WhereToGo();
     }
   }
 }
@@ -43,7 +45,7 @@ class WhereToGo extends StatefulWidget {
 class _WhereToGoState extends State<WhereToGo> {
   GlobalKey<ScaffoldState> _scaffoldkey;
   PersistentBottomSheetController<dynamic> errorController;
-  bool specSelected = false;
+  
   @override
   void initState() {
     super.initState();
@@ -136,9 +138,9 @@ class _WhereToGoState extends State<WhereToGo> {
                 children: listviewWidgets,
               ),
               RaisedButton(
-                color: !specSelected ? colors.ggrey : colors.white,
+                color: !value.specSelected ? colors.ggrey : colors.white,
                 onPressed: () {
-                  specSelected
+                  value.specSelected
                       ? Navigator.pushNamed(context, "/Home",
                           arguments: <String, dynamic>{
                               "salesDataFilter": false,
@@ -155,7 +157,7 @@ class _WhereToGoState extends State<WhereToGo> {
                 ),
               ),
               RaisedButton(
-                color: !specSelected ? colors.ggrey : colors.white,
+                color: !value.specSelected ? colors.ggrey : colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
@@ -167,7 +169,7 @@ class _WhereToGoState extends State<WhereToGo> {
                   ],
                 ),
                 onPressed: () {
-                  specSelected
+                  value.specSelected
                       ? Navigator.pushNamed(context, "/MapAsHome",
                           arguments: <String, dynamic>{
                               "home_map_lat": config.lat ?? 0.0,
@@ -242,9 +244,9 @@ class _WhereToGoState extends State<WhereToGo> {
               getIt<HOMEMAProvider>().setSlelectedSpec(item.id);
               setState(() {
                 if (value.selectedSpecialize != null) {
-                  specSelected = true;
+                  value.specSelected = true;
                 } else {
-                  specSelected = false;
+                  value.specSelected = false;
                 }
               });
             },

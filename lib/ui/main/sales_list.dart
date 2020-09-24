@@ -28,7 +28,6 @@ class _DiscountsListState extends State<DiscountsList> {
   @override
   void initState() {
     super.initState();
-    print("are we alone ? sales ");
     getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
             pageSize: 3,

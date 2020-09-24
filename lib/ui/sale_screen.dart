@@ -130,7 +130,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
             return <Widget>[
               SliverAppBar(
                 centerTitle: true,
-                expandedHeight: 356 + extededPlus,
+                expandedHeight: 358 + extededPlus,
                 elevation: 0,
                 backgroundColor: Colors.transparent,
                 stretch: true,

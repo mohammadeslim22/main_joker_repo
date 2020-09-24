@@ -18,6 +18,7 @@ class HOMEMAProvider with ChangeNotifier {
   MapBranch inFocusBranch;
   bool horizentalListOn = false;
   double rotation;
+  bool specesLoaded = false;
   // Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   List<Marker> markers = <Marker>[];
   List<Specializations> specializations = <Specializations>[];
@@ -106,6 +107,7 @@ class HOMEMAProvider with ChangeNotifier {
     response.data.forEach((dynamic element) {
       specializations.add(Specializations.fromJson(element));
     });
+    specesLoaded = true;
     notifyListeners();
   }
 
@@ -128,4 +130,5 @@ class HOMEMAProvider with ChangeNotifier {
   final PanelController pc = PanelController();
   PersistentBottomSheetController<dynamic> errorController;
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
+  bool specSelected = false;
 }
