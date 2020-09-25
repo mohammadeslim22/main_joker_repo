@@ -109,9 +109,12 @@ class Auth with ChangeNotifier {
     print("loging info:${myCountryDialCode + username.toString()}");
     bool res;
     await dio.post<dynamic>("login", data: <String, dynamic>{
-      "phone": myCountryDialCode + username.replaceAll("^0+", "").toString().trim(),
+      "phone":
+          myCountryDialCode + username.replaceAll("^0+", "").toString().trim(),
       "password": pass.toString()
     }).then((Response<dynamic> value) async {
+      // print(value.data);
+
       if (value.statusCode == 422) {
         value.data['errors'].forEach((String k, dynamic vv) {
           loginValidationMap[k] = vv[0].toString();

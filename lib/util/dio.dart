@@ -5,11 +5,13 @@ import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
 
 String token;
+String baseUrl = config.baseUrl
+    .replaceFirst('/ar/', '/${config.userLnag.countryCode ?? 'ar'}/');
 
 BaseOptions options = BaseOptions(
   baseUrl: config.baseUrl,
-  // connectTimeout: 10000,
-  // receiveTimeout: 300000,
+  connectTimeout: 100000,
+  receiveTimeout: 3000000,
   headers: <String, String>{
     'X-Requested-With': 'XMLHttpRequest',
     'Accept': 'application/json',
@@ -43,7 +45,6 @@ void dioDefaults() {
     if (response.statusCode == 200) {
       print("sales are okay ");
     } else if (response.statusCode == 401) {
-      
       Fluttertoast.showToast(msg: "Login please");
       getIt<NavigationService>().navigateTo('/login', null);
     }

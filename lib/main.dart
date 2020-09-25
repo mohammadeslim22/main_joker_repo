@@ -23,8 +23,8 @@ import 'package:joker/providers/globalVars.dart';
 // import 'package:joker/models/user.dart';
 
 Future<void> main() async {
-  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>
-      errorScreen(flutterErrorDetails.exception);
+  // ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>
+  //     errorScreen(flutterErrorDetails.exception);
 
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();

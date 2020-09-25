@@ -27,7 +27,6 @@ class _MerchantCardState extends State<MerchantCard> {
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       margin: const EdgeInsets.fromLTRB(24, 0, 24, 8),
       shape: const RoundedRectangleBorder(
@@ -39,8 +38,8 @@ class _MerchantCardState extends State<MerchantCard> {
           Navigator.pushNamed(context, "/MerchantDetails",
               arguments: <String, dynamic>{
                 "merchantId": branchData.merchant.id,
-                "branchId":branchData.id,
-                "source":"click"
+                "branchId": branchData.id,
+                "source": "click"
               });
         },
         child: Column(
@@ -54,25 +53,28 @@ class _MerchantCardState extends State<MerchantCard> {
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(
                     branchData.merchant.logo,
+                      errorListener: () => print('error'),
+
                   ),
                   fit: BoxFit.cover,
                 ),
               ),
-              child: branchData.isfavorite!=0
+              child: branchData.isfavorite != 0
                   ? Stack(children: <Widget>[
-                Positioned(
-                  left: 8.0,
-                  top: 8.0,
-                  child: CircleAvatar(
-                    backgroundColor: colors.white,
-                    radius: 12,
-                    child: SvgPicture.asset('assets/images/loveicon.svg'),
-                  ),
-                ),
-              ]):Container(),
+                      Positioned(
+                        left: 8.0,
+                        top: 8.0,
+                        child: CircleAvatar(
+                          backgroundColor: colors.white,
+                          radius: 12,
+                          child: SvgPicture.asset('assets/images/loveicon.svg'),
+                        ),
+                      ),
+                    ])
+                  : Container(),
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(10,0,10,10),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[

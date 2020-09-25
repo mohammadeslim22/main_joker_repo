@@ -66,8 +66,8 @@ class _SalesCardState extends State<SalesCard> {
             Text(saledata.cropedImage),
             Container(
               height: MediaQuery.of(context).size.height * .2,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12)),
                 // image: DecorationImage(

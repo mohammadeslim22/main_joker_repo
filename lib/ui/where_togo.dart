@@ -18,19 +18,20 @@ class LoadWhereToGo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     {
-      return !getIt<HOMEMAProvider>().specesLoaded?
-      
-      FutureBuilder<dynamic>(
-        future: getIt<HOMEMAProvider>().getSpecializationsData(),
-        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return const WhereToGo();
-          } else {
-            return Container(
-                color: colors.white, child: const CupertinoActivityIndicator());
-          }
-        },
-      ):const WhereToGo();
+      return !getIt<HOMEMAProvider>().specesLoaded
+          ? FutureBuilder<dynamic>(
+              future: getIt<HOMEMAProvider>().getSpecializationsData(),
+              builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return const WhereToGo();
+                } else {
+                  return Container(
+                      color: colors.white,
+                      child: const CupertinoActivityIndicator());
+                }
+              },
+            )
+          : const WhereToGo();
     }
   }
 }
@@ -45,7 +46,7 @@ class WhereToGo extends StatefulWidget {
 class _WhereToGoState extends State<WhereToGo> {
   GlobalKey<ScaffoldState> _scaffoldkey;
   PersistentBottomSheetController<dynamic> errorController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -91,7 +92,7 @@ class _WhereToGoState extends State<WhereToGo> {
                           pageViewKey:
                               const PageStorageKey<dynamic>('carousel_slider'),
                         ),
-                        items: [1, 2, 3].map((int image) {
+                        items: <int>[1, 2, 3].map((int image) {
                           return Builder(
                             builder: (BuildContext context) {
                               return Container(

@@ -57,6 +57,7 @@ class _SalesCardState extends State<SalesCardNoPadding> {
                   fit: BoxFit.cover,
                   image: CachedNetworkImageProvider(
                     saledata.cropedImage,
+                    errorListener: () => print('error'),
                   )),
             ),
             child: Stack(children: <Widget>[
@@ -144,7 +145,7 @@ class _SalesCardState extends State<SalesCardNoPadding> {
                       const SizedBox(width: 8),
                       Text(
                         widget.sale.oldPrice,
-                        style:const  TextStyle(
+                        style: const TextStyle(
                             fontSize: 16,
                             decoration: TextDecoration.lineThrough),
                       ),

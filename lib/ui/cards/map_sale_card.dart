@@ -79,6 +79,7 @@ class _SalesCardState extends State<MapSalesCard> {
                     fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
                       saledata.cropedImage,
+                      errorListener: () => print('error'),
                     )),
               ),
               child: saledata.isfavorite != 0
@@ -220,7 +221,7 @@ class _SalesCardState extends State<MapSalesCard> {
                           },
                           likeCount: saledata.id,
                           countPostion: CountPostion.bottom,
-                          circleColor:const  CircleColor(
+                          circleColor: const CircleColor(
                               start: Colors.white, end: Colors.purple),
                           onTap: (bool loved) async {
                             likeFunction("App\\Sale", saledata.id);
