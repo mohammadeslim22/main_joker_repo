@@ -147,7 +147,6 @@ class ShopDetailsPage extends State<SaleDetailPage>
                       children: <Widget>[
                         Stack(
                           children: <Widget>[
-                            ///////////////// my whole widget
                             CurasolSlider(sale: sale, myindex: index),
                             Positioned(
                               left: 6,
@@ -278,11 +277,13 @@ class ShopDetailsPage extends State<SaleDetailPage>
                             ),
                           ],
                         ),
-                        BottomWidgetForSliver(
-                          key: key,
-                          bottomSheetController: bottomSheetController,
-                          mytext: mytext,
-                          scaffoldkey: scaffoldkey,
+                        Flexible(
+                          child: BottomWidgetForSliver(
+                            key: key,
+                            bottomSheetController: bottomSheetController,
+                            mytext: mytext,
+                            scaffoldkey: scaffoldkey,
+                          ),
                         )
                       ],
                     ),
@@ -292,7 +293,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
             ];
           },
           body: Container(
-            color: Colors.white,
+            color: colors.white,
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 0),
               children: <Widget>[

@@ -54,7 +54,7 @@
     "mobile_no": "Mobile number",
     "dont_have_account": "You Do not have an account ?",
     "create_account": "Crearte Account",
-    "you_have_shop": "you Own a shop & wanna join us ?",
+    "you_have_shop": "you own a shop & wanna join us ?",
     "click_here": "click here",
     "account_creation": "Create Account",
     "please_check": "Please make sure the data entered is correct",
@@ -209,8 +209,8 @@
     "location_setting":"Location Setting",
     "set_from_map":"Set from Map",
     "where_do_u_want_to_go":"Where Do you Want to Go ?",
-    "open_in_list":"Open As List",
-    "show_on_map":"Open On Map",
+    "open_in_list":"Recent Near Discounts",
+    "show_on_map":"Explore nearby places",
     "more_info":"More Info"
 
 

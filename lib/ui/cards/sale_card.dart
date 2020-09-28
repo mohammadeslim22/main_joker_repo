@@ -63,7 +63,6 @@ class _SalesCardState extends State<SalesCard> {
         },
         child: Column(
           children: <Widget>[
-            Text(saledata.cropedImage),
             Container(
               height: MediaQuery.of(context).size.height * .2,
               decoration: const BoxDecoration(

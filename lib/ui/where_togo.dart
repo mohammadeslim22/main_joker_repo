@@ -12,6 +12,9 @@ import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
 import "package:flutter/cupertino.dart";
 
+import 'main/sales_list.dart';
+import 'widgets/buttonTouse.dart';
+
 class LoadWhereToGo extends StatelessWidget {
   const LoadWhereToGo({Key key}) : super(key: key);
 
@@ -55,10 +58,16 @@ class _WhereToGoState extends State<WhereToGo> {
   }
 
   List<Widget> listviewWidgets = <Widget>[];
+  TextStyle ts1 = styles.fromMainToList;
+  TextStyle ts2 = styles.fromMainToMap;
+  // TextStyle ts1On = styles.fromMainToListOn;
+  // TextStyle ts2On = styles.fromMainToMapOn;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldkey,
+      resizeToAvoidBottomPadding: false,
       body: NestedScrollView(
         physics: const ScrollPhysics(),
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -69,6 +78,10 @@ class _WhereToGoState extends State<WhereToGo> {
               elevation: 0,
               backgroundColor: colors.trans,
               stretch: true,
+              // snap: true,
+              // floating: true,
+              pinned: true,
+
               flexibleSpace: FlexibleSpaceBar(
                 background: InkWell(
                   onTap: () {},
@@ -130,55 +143,51 @@ class _WhereToGoState extends State<WhereToGo> {
         },
         body: Consumer<HOMEMAProvider>(builder:
             (BuildContext context, HOMEMAProvider value, Widget child) {
-          return Column(
+          return ListView(
+            padding: EdgeInsets.zero,
+            physics: const ScrollPhysics(),
+            shrinkWrap: true,
             children: <Widget>[
-              ListView(
-                padding: EdgeInsets.zero,
-                physics: const ScrollPhysics(),
-                shrinkWrap: true,
+              Column(
                 children: listviewWidgets,
               ),
-              RaisedButton(
-                color: !value.specSelected ? colors.ggrey : colors.white,
-                onPressed: () {
-                  value.specSelected
-                      ? Navigator.pushNamed(context, "/Home",
-                          arguments: <String, dynamic>{
-                              "salesDataFilter": false,
-                              "FilterData": null
-                            })
-                      : print("");
+              middleScreenButton(value.specSelected, () {
+                Navigator.pushNamed(context, "/Home",
+                    arguments: <String, dynamic>{
+                      "salesDataFilter": false,
+                      "FilterData": null
+                    });
+              }, trans(context, 'open_in_list'), Icons.list, ts1,
+                  "assets/images/discountlist.png"),
+              middleScreenButton(
+                value.specSelected,
+                () {
+                  Navigator.pushNamed(context, "/MapAsHome",
+                      arguments: <String, dynamic>{
+                        "home_map_lat": config.lat ?? 0.0,
+                        "home_map_long": config.long ?? 0.0
+                      });
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Text("${trans(context, 'open_in_list')}"),
-                    Icon(Icons.list, color: colors.blue)
-                  ],
-                ),
+                trans(context, 'show_on_map'),
+                Icons.map,
+                ts2,
+                "assets/images/discountmap.jpg",
               ),
-              RaisedButton(
-                color: !value.specSelected ? colors.ggrey : colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Text("${trans(context, 'show_on_map')}"),
-                    Icon(
-                      Icons.map,
-                      color: colors.blue,
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  value.specSelected
-                      ? Navigator.pushNamed(context, "/MapAsHome",
-                          arguments: <String, dynamic>{
-                              "home_map_lat": config.lat ?? 0.0,
-                              "home_map_long": config.long ?? 0.0
-                            })
-                      : print("");
-                },
-              )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.only(bottom: 14),
+                      child: Text(trans(context, 'you_have_shop'),
+                          style: styles.mystyle)),
+                  ButtonToUse(
+                    trans(context, 'click_here'),
+                    fontWait: FontWeight.bold,
+                    fontColors: colors.green,
+                  ),
+                ],
+              ),
             ],
           );
         }),
@@ -189,7 +198,7 @@ class _WhereToGoState extends State<WhereToGo> {
         radius: 24,
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: const Icon(Icons.add),
+          icon: const Icon(Icons.add, size: 38),
           color: colors.yellow,
           onPressed: () {},
         ),
@@ -200,12 +209,13 @@ class _WhereToGoState extends State<WhereToGo> {
   void distributeOnList(List<Specializations> specializations) {
     for (int i = 0; i < specializations.length; i += 2) {
       listviewWidgets.add(Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           specButton(specializations[i]),
+          verticalDiv(),
           specButton(specializations[i + 1])
         ],
       ));
+      listviewWidgets.add(const Divider(thickness: 1, height: 1));
       // listviewWidgets.add(const Divider(thickness: 1));
       if (i == specializations.length - 3) {
         listviewWidgets
@@ -213,8 +223,41 @@ class _WhereToGoState extends State<WhereToGo> {
 
         break;
       }
-      listviewWidgets.add(const SizedBox(height: 40));
+      listviewWidgets.add(const SizedBox(height: 20));
     }
+  }
+
+  Widget verticalDiv() {
+    return Container(
+      child: const VerticalDivider(color: Colors.grey, thickness: 1, width: 2),
+    );
+  }
+
+  Widget middleScreenButton(
+      bool v, Function f, String s, IconData i, TextStyle ts, String pic) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: RaisedButton(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        color: !v ? colors.white.withOpacity(.5) : colors.white,
+        onPressed: () {
+          v ? f() : print("");
+        },
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text("$s", style: ts),
+                Icon(i, color: colors.blue)
+              ],
+            ),
+            const SizedBox(height: 8),
+            Image.asset(pic)
+          ],
+        ),
+      ),
+    );
   }
 
   Widget specButton(Specializations item) {
@@ -223,30 +266,34 @@ class _WhereToGoState extends State<WhereToGo> {
         return Expanded(
           child: FlatButton(
             color: value.selectedSpecialize == item.id
-                ? colors.ggrey
+                ? colors.white.withOpacity(.3)
                 : colors.white,
-            shape:
-                RoundedRectangleBorder(side: BorderSide(color: colors.ggrey)),
+            // shape:
+            //     RoundedRectangleBorder(side: BorderSide(color: colors.ggrey)),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const SizedBox(height: 10),
-                Text(item.name, style: styles.maingridview),
-                const SizedBox(height: 40),
                 if (item.id % 2 == 1)
-                  const Icon(Icons.restaurant)
+                  const Icon(Icons.restaurant, size: 37)
                 else
-                  const Icon(Icons.local_cafe),
+                  const Icon(Icons.local_cafe, size: 37),
                 const SizedBox(height: 10),
+                Text(item.name, style: styles.maingridview),
+                const SizedBox(height: 20),
               ],
             ),
             onPressed: () {
               getIt<HOMEMAProvider>().setSlelectedSpec(item.id);
               setState(() {
                 if (value.selectedSpecialize != null) {
+                  ts1 = styles.fromMainToListOn;
+                  ts2 = styles.fromMainToMapOn;
                   value.specSelected = true;
                 } else {
+                  ts1 = styles.fromMainToList;
+                  ts2 = styles.fromMainToMap;
                   value.specSelected = false;
                 }
               });
@@ -257,7 +304,7 @@ class _WhereToGoState extends State<WhereToGo> {
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.grey[300],
+                  backgroundColor: Colors.grey[100],
                   textColor: colors.jokerBlue,
                   fontSize: 16.0);
             },

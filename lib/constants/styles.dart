@@ -10,9 +10,29 @@ class Styles {
 
   TextStyle saleTitle = TextStyle(
     fontSize: 18,
-    color: colors.black,
+    color: colors.grey,
   );
 
+  TextStyle fromMainToList = TextStyle(
+    fontSize: 18,
+    fontFamily: "Bangers",
+    color: colors.grey,
+  );
+    TextStyle fromMainToListOn = TextStyle(
+    fontSize: 18,
+    fontFamily: "Bangers",
+    color: colors.black,
+  );
+  TextStyle fromMainToMap = TextStyle(
+    fontSize: 18,
+    fontFamily: "Bangers",
+    color: colors.grey,
+  );
+    TextStyle fromMainToMapOn = TextStyle(
+    fontSize: 18,
+    fontFamily: "Bangers",
+    color: colors.black,
+  );
   TextStyle smallButton =
       TextStyle(fontSize: 12, color: colors.black, fontWeight: FontWeight.w100);
   TextStyle smallButtonactivated = TextStyle(
@@ -46,7 +66,7 @@ class Styles {
     fontWeight: FontWeight.w100,
     fontSize: 13,
   );
-    TextStyle maingridview = const TextStyle(
+  TextStyle maingridview = const TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 18,
   );
@@ -139,7 +159,8 @@ class Styles {
     fontSize: 15,
   );
   TextStyle showMore = const TextStyle(color: Colors.blue);
-    TextStyle moreInfo = const TextStyle(color: Colors.black,fontWeight:FontWeight.w600,fontSize: 15 );
+  TextStyle moreInfo = const TextStyle(
+      color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15);
 
   TextStyle memberSipMessageText = const TextStyle(fontSize: 12.0, height: 1.7);
 
