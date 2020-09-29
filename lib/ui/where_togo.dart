@@ -143,35 +143,39 @@ class _WhereToGoState extends State<WhereToGo> {
         },
         body: Consumer<HOMEMAProvider>(builder:
             (BuildContext context, HOMEMAProvider value, Widget child) {
-          return ListView(
-            padding: EdgeInsets.zero,
-            physics: const ScrollPhysics(),
-            shrinkWrap: true,
-            children: <Widget>[
-              Column(
-                children: listviewWidgets,
-              ),
-              middleScreenButton(value.specSelected, () {
-                Navigator.pushNamed(context, "/Home",
-                    arguments: <String, dynamic>{
-                      "salesDataFilter": false,
-                      "FilterData": null
-                    });
-              }, trans(context, 'open_in_list'), Icons.list, ts1,
-                  "assets/images/discountlist.png"),
-              middleScreenButton(
-                value.specSelected,
-                () {
-                  Navigator.pushNamed(context, "/MapAsHome",
-                      arguments: <String, dynamic>{
-                        "home_map_lat": config.lat ?? 0.0,
-                        "home_map_long": config.long ?? 0.0
-                      });
-                },
-                trans(context, 'show_on_map'),
-                Icons.map,
-                ts2,
-                "assets/images/discountmap.jpg",
+          return Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  physics: const ScrollPhysics(),
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    Column(children: listviewWidgets),
+                    middleScreenButton(
+                      value.specSelected,
+                      () {
+                        Navigator.pushNamed(context, "/MapAsHome",
+                            arguments: <String, dynamic>{
+                              "home_map_lat": config.lat ?? 0.0,
+                              "home_map_long": config.long ?? 0.0
+                            });
+                      },
+                      trans(context, 'show_on_map'),
+                      Icons.map,
+                      ts2,
+                      "assets/images/discountmap.jpg",
+                    ),
+                    middleScreenButton(value.specSelected, () {
+                      Navigator.pushNamed(context, "/Home",
+                          arguments: <String, dynamic>{
+                            "salesDataFilter": false,
+                            "FilterData": null
+                          });
+                    }, trans(context, 'open_in_list'), Icons.list, ts1,
+                        "assets/images/discountlist.png"),
+                  ],
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -224,7 +228,7 @@ class _WhereToGoState extends State<WhereToGo> {
         listviewWidgets.add(const Divider(thickness: 1, height: 1));
         break;
       }
-      listviewWidgets.add(const SizedBox(height: 20));
+      // listviewWidgets.add(const SizedBox(height: 10));
     }
   }
 
@@ -237,9 +241,9 @@ class _WhereToGoState extends State<WhereToGo> {
   Widget middleScreenButton(
       bool v, Function f, String s, IconData i, TextStyle ts, String pic) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: RaisedButton(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         color: !v ? colors.white.withOpacity(.5) : colors.white,
         onPressed: () {
           v ? f() : print("");
@@ -253,8 +257,10 @@ class _WhereToGoState extends State<WhereToGo> {
                 Icon(i, color: colors.blue)
               ],
             ),
-            const SizedBox(height: 8),
-            Image.asset(pic)
+            Container(
+                height: 70,
+                width: double.infinity,
+                child: Image.asset(pic, fit: BoxFit.cover))
           ],
         ),
       ),
@@ -267,10 +273,8 @@ class _WhereToGoState extends State<WhereToGo> {
         return Expanded(
           child: FlatButton(
             color: value.selectedSpecialize == item.id
-                ? colors.white.withOpacity(.3)
+                ? colors.blue.withOpacity(.1)
                 : colors.white,
-            // shape:
-            //     RoundedRectangleBorder(side: BorderSide(color: colors.ggrey)),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
