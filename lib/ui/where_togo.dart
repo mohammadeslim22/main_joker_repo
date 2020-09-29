@@ -218,9 +218,10 @@ class _WhereToGoState extends State<WhereToGo> {
       listviewWidgets.add(const Divider(thickness: 1, height: 1));
       // listviewWidgets.add(const Divider(thickness: 1));
       if (i == specializations.length - 3) {
-        listviewWidgets
-            .add(specButton(specializations[specializations.length - 1]));
-
+        listviewWidgets.add(Row(
+          children: [specButton(specializations[specializations.length - 1])],
+        ));
+        listviewWidgets.add(const Divider(thickness: 1, height: 1));
         break;
       }
       listviewWidgets.add(const SizedBox(height: 20));
