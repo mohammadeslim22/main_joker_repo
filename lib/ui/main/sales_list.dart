@@ -30,7 +30,7 @@ class _DiscountsListState extends State<DiscountsList> {
     super.initState();
     getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
-            pageSize: 3,
+            pageSize: 5,
             pageFuture: (int pageIndex) async {
               return (getIt<GlobalVars>().filterData != null)
                   ? getIt<SalesProvider>().getSalesDataFilterd(
@@ -70,6 +70,7 @@ class _DiscountsListState extends State<DiscountsList> {
       ),
       controller: _refreshController,
       onRefresh: () async {
+        getIt<SalesProvider>().salesLoaded = false;
         getIt<SalesProvider>().pagewiseSalesController.reset();
         _refreshController.refreshCompleted();
       },

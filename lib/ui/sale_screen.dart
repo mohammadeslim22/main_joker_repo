@@ -130,7 +130,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
             return <Widget>[
               SliverAppBar(
                 centerTitle: true,
-                expandedHeight: 358 + extededPlus,
+                expandedHeight: 320 + extededPlus,
                 elevation: 0,
                 backgroundColor: Colors.transparent,
                 stretch: true,
@@ -150,7 +150,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                             CurasolSlider(sale: sale, myindex: index),
                             Positioned(
                               left: 6,
-                              top: 250,
+                              top: 220,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,13 +277,11 @@ class ShopDetailsPage extends State<SaleDetailPage>
                             ),
                           ],
                         ),
-                        Flexible(
-                          child: BottomWidgetForSliver(
-                            key: key,
-                            bottomSheetController: bottomSheetController,
-                            mytext: mytext,
-                            scaffoldkey: scaffoldkey,
-                          ),
+                        BottomWidgetForSliver(
+                          key: key,
+                          bottomSheetController: bottomSheetController,
+                          mytext: mytext,
+                          scaffoldkey: scaffoldkey,
                         )
                       ],
                     ),
@@ -818,7 +816,7 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
           LayoutBuilder(builder: (BuildContext context, BoxConstraints size) {
         final TextSpan span = TextSpan(
           text: widget.mytext,
-          style: styles.mysmall,
+          style: styles.mysmall
         );
         final TextPainter tp = TextPainter(
           maxLines: 3,
@@ -908,7 +906,7 @@ class _CurasolSliderState extends State<CurasolSlider> {
       children: <Widget>[
         CarouselSlider(
           options: CarouselOptions(
-            height: 380,
+            height: 340,
             viewportFraction: 1,
             initialPage: 0,
             enableInfiniteScroll: true,

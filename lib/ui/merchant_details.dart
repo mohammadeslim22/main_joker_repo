@@ -136,7 +136,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  // const SizedBox(height: 10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

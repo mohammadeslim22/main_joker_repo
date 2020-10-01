@@ -195,10 +195,16 @@ class AddressListState extends State<AddressList> {
                   currentId = locationData.id;
                 });
                 if (getIt<MerchantProvider>().pagewiseBranchesController !=
-                    null)
-                  getIt<MerchantProvider>().pagewiseBranchesController.reset();
-                if (getIt<SalesProvider>().pagewiseSalesController != null)
-                  getIt<SalesProvider>().pagewiseSalesController.reset();
+                    null){
+                      getIt<MerchantProvider>().branchesLoaded = false;
+                      getIt<MerchantProvider>().pagewiseBranchesController.reset();
+                    }
+                  
+                if (getIt<SalesProvider>().pagewiseSalesController != null){
+                  getIt<SalesProvider>().salesLoaded = false;
+                   getIt<SalesProvider>().pagewiseSalesController.reset();
+                }
+                 
                 Navigator.pop(context);
                 Navigator.pop(context);
               },

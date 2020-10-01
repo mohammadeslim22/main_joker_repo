@@ -289,7 +289,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         title: Text("${trans(context, 'use_current_location')}"),
-        trailing:const  Icon(
+        trailing: const Icon(
           Icons.my_location,
           color: Colors.black,
         ),
@@ -309,10 +309,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 config.long = double.parse(loglat.elementAt(1));
               });
               Navigator.pop(context);
-              if (getIt<MerchantProvider>().pagewiseBranchesController != null)
+              if (getIt<MerchantProvider>().pagewiseBranchesController !=
+                  null) {
+                getIt<MerchantProvider>().branchesLoaded = false;
                 getIt<MerchantProvider>().pagewiseBranchesController.reset();
-              if (getIt<SalesProvider>().pagewiseSalesController != null)
+              }
+
+              if (getIt<SalesProvider>().pagewiseSalesController != null) {
+                getIt<SalesProvider>().salesLoaded = false;
                 getIt<SalesProvider>().pagewiseSalesController.reset();
+              }
             }
           }
         },

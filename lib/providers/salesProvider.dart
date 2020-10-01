@@ -9,10 +9,11 @@ import 'package:dio/dio.dart';
 import 'package:joker/constants/config.dart';
 
 class SalesProvider with ChangeNotifier {
+  bool salesLoaded = false;
   PagewiseLoadController<dynamic> pagewiseSalesController;
   Future<void> getSale(int saleId) async {
-    if(config.loggedin)
-    dio.get<dynamic>("sales/$saleId").then((Response<dynamic> value) {});
+    if (config.loggedin)
+      dio.get<dynamic>("sales/$saleId").then((Response<dynamic> value) {});
   }
 
   SimpleSales merchantSales;
@@ -30,11 +31,15 @@ class SalesProvider with ChangeNotifier {
   }
 
   Future<List<SaleData>> getSalesData(int pageIndex) async {
-    final Response<dynamic> response = await dio.get<dynamic>("psales",
-        queryParameters: <String, dynamic>{'page': pageIndex + 1});
-    sales = Sales.fromJson(response.data);
-    
-    return sales.data;
+    if (salesLoaded) {
+      return sales.data;
+    } else {
+      final Response<dynamic> response = await dio.get<dynamic>("psales",
+          queryParameters: <String, dynamic>{'page': pageIndex + 1});
+      sales = Sales.fromJson(response.data);
+      salesLoaded = true;
+      return sales.data;
+    }
   }
 
   Sales sales;

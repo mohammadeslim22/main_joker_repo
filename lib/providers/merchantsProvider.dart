@@ -8,21 +8,27 @@ import 'package:joker/models/branches_model.dart';
 class MerchantProvider with ChangeNotifier {
   Merchant merchant;
   Branches branches;
+  bool branchesLoaded = false;
   PagewiseLoadController<dynamic> pagewiseBranchesController;
 
-  Future<void> getMerchantData(int id, String source,int ignore) async {
+  Future<void> getMerchantData(int id, String source, int ignore) async {
     final dynamic response = await dio.get<dynamic>("merchants/$id",
-        queryParameters: <String, dynamic>{"source": source,"ignore":ignore});
+        queryParameters: <String, dynamic>{"source": source, "ignore": ignore});
     merchant = Merchant.fromJson(response.data);
     notifyListeners();
   }
 
   Future<List<BranchData>> getBranchesData(int pageIndex) async {
-    final Response<dynamic> response = await dio.get<dynamic>("branches",
-        queryParameters: <String, dynamic>{'page': pageIndex + 1});
-    print(response.data);
-    branches = Branches.fromJson(response.data);
-    return branches.data;
+    if (branchesLoaded) {
+      return branches.data;
+    } else {
+      final Response<dynamic> response = await dio.get<dynamic>("branches",
+          queryParameters: <String, dynamic>{'page': pageIndex + 1});
+      print(response.data);
+      branches = Branches.fromJson(response.data);
+      branchesLoaded = true;
+      return branches.data;
+    }
   }
 
   void setFav(int branchId) {
@@ -48,7 +54,8 @@ class MerchantProvider with ChangeNotifier {
         .merchant
         .name;
   }
-    double getMerchantRatesAverage(int merchantId) {
+
+  double getMerchantRatesAverage(int merchantId) {
     return branches.data
         .firstWhere((BranchData element) {
           return element.merchant.id == merchantId;
