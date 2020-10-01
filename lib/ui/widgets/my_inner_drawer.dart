@@ -47,14 +47,10 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
     } else {
       username = config.username;
     }
-    print("profile pic ${config.profileUrl}");
+    // print("profile pic ${config.profileUrl}");
     if (config.loggedin) {
       data.getData("profile_pic").then((String value) {
-        print("profile drawer pic:   $value");
-        setState(() {
-          config.profileUrl = value;
-        });
-        if (value.isEmpty) {
+        if (value.isEmpty || value == config.imageUrl) {
           print("error here ?");
           dio.get<dynamic>("user").then((Response<dynamic> value) {
             print(value.data['data']['name'].toString());
@@ -62,10 +58,20 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
               username = value.data['data']['name'].toString();
               config.username = value.data['data']['name'].toString();
               config.profileUrl = value.data['data']['image'].toString().trim();
+              if (config.profileUrl == config.imageUrl) {
+                config.profileUrl =
+                    "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg";
+              }
+              print("Image ${config.profileUrl}");
             });
 
-            data.setData("profile_pic", value.data['data']['image'].toString());
+            data.setData("profile_pic", config.profileUrl);
             data.setData("username", value.data['data']['name'].toString());
+          });
+        } else {
+          print("profile drawer pic:   $value");
+          setState(() {
+            config.profileUrl = value;
           });
         }
       });
@@ -129,7 +135,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                         child: CachedNetworkImage(
                           placeholderFadeInDuration:
                               const Duration(milliseconds: 300),
-                          imageUrl: config.profileUrl.trim() ?? "",
+                          imageUrl: config.profileUrl,
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
                               Container(

@@ -46,7 +46,7 @@ class _SalesCardState extends State<SalesCard> {
 
   @override
   Widget build(BuildContext context) {
-    print("saledata.cropedImage  ${saledata.cropedImage}");
+    // print("saledata.cropedImage ${saledata.name}  ${saledata.cropedImage}");
 
     return Card(
       shape: const RoundedRectangleBorder(
@@ -65,19 +65,18 @@ class _SalesCardState extends State<SalesCard> {
           children: <Widget>[
             Container(
               height: MediaQuery.of(context).size.height * .2,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12)),
-                // image: DecorationImage(
-                //     fit: BoxFit.cover,
-                //     onError: (dynamic exception, StackTrace stackTrace) {
-                //       print("saledata.cropedImage  ${saledata.cropedImage}");
-                //     },
-                //     // image: CachedNetworkImageProvider(
-                //     //   saledata.cropedImage,
-                //     // )
-                //     ),
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    onError: (dynamic exception, StackTrace stackTrace) {
+                      print("saledata.cropedImage  ${saledata.cropedImage}");
+                    },
+                    image: CachedNetworkImageProvider(
+                      saledata.cropedImage,
+                    )),
               ),
               child: saledata.isfavorite != 0
                   ? Stack(children: <Widget>[

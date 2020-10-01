@@ -9,6 +9,7 @@ class Config {
   Config._internal();
 
   static final Config _config = Config._internal();
+  String imageUrl = "https://www.space.co.ps/joker/image";
 
   String baseUrl = "https://www.space.co.ps/joker/api/ar/v1/customer/";
 
@@ -27,7 +28,8 @@ class Config {
   double lat = 0.0;
   double long = 0.0;
   String token = "";
-  String profileUrl = "";
+  String profileUrl =
+      "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg";
   String username;
   bool amIcomingFromHome = false;
   bool prifleNoVerfiyVisit = false;

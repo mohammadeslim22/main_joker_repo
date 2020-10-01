@@ -28,6 +28,7 @@ class Data {
     id = json['id'] as int;
     name = json['name'].toString();
     logo = json['logo'].toString();
+    print("merchant name: $name, Logo: $logo");
     if (json['branches'] != null) {
       branches = <MerchantBranches>[];
       json['branches'].forEach((dynamic v) {

@@ -104,7 +104,7 @@ class HOMEMAProvider with ChangeNotifier {
   Future<void> getSpecializationsData() async {
     final dynamic response = await dio.get<dynamic>("specializations");
     specializations.clear();
-    response.data.forEach((dynamic element) {
+    response.data['data'].forEach((dynamic element) {
       specializations.add(Specializations.fromJson(element));
     });
     specesLoaded = true;
