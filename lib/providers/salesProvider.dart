@@ -7,6 +7,9 @@ import 'package:joker/models/simplesales.dart';
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/constants/config.dart';
+import 'package:joker/util/service_locator.dart';
+
+import 'map_provider.dart';
 
 class SalesProvider with ChangeNotifier {
   bool salesLoaded = false;
@@ -34,8 +37,11 @@ class SalesProvider with ChangeNotifier {
     if (salesLoaded) {
       return sales.data;
     } else {
-      final Response<dynamic> response = await dio.get<dynamic>("psales",
-          queryParameters: <String, dynamic>{'page': pageIndex + 1});
+      final Response<dynamic> response =
+          await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
+        'page': pageIndex + 1,
+        'specifications': getIt<HOMEMAProvider>().selectedSpecialize
+      });
       sales = Sales.fromJson(response.data);
       salesLoaded = true;
       return sales.data;

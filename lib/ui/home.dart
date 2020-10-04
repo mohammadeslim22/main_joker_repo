@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:convert';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/providers/mainprovider.dart';
@@ -14,6 +15,7 @@ import '../constants/styles.dart';
 import '../localization/trans.dart';
 import '../ui/widgets/my_inner_drawer.dart';
 import 'main/merchant_list.dart';
+import 'main/merchant_list_statless.dart';
 import 'main/sales_list.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:joker/constants/config.dart';
@@ -22,6 +24,8 @@ import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/providers/globalVars.dart';
+
+import 'main/sales_list_statekess.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -63,6 +67,23 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 350),
     );
     _hide.forward();
+
+    getIt<SalesProvider>().pagewiseSalesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 5,
+            pageFuture: (int pageIndex) async {
+              return (getIt<GlobalVars>().filterData != null)
+                  ? getIt<SalesProvider>().getSalesDataFilterd(
+                      pageIndex, getIt<GlobalVars>().filterData)
+                  : getIt<SalesProvider>().getSalesData(pageIndex);
+            });
+
+    getIt<MerchantProvider>().pagewiseBranchesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 5,
+            pageFuture: (int pageIndex) async {
+              return getIt<MerchantProvider>().getBranchesData(pageIndex);
+            });
   }
 
   @override
@@ -243,8 +264,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               child: Container(
                   color: colors.grey,
                   child: (bolc.bottomNavIndex == 0)
-                      ? const DiscountsList()
-                      : ShopList()),
+                      ? DiscountsListStateless()
+                      : ShopListStaeless()),
             )),
         bottomNavigationBar: SizeTransition(
           sizeFactor: _hide,

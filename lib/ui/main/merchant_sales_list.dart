@@ -44,7 +44,7 @@ class _MerchantSalesListState extends State<MerchantSalesList> {
         padding: const EdgeInsets.all(15.0),
         itemBuilder: (BuildContext context, dynamic entry, int index) {
           return FadeIn(
-              child: SalesCard(context: context, sale: entry as SaleData));
+              child: SalesCard( sale: entry as SaleData));
         },
         pageFuture: (int pageIndex) {
           return getSalesData(pageIndex);

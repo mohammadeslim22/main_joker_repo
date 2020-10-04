@@ -12,14 +12,14 @@ import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/providers/globalVars.dart';
 
 class MapSalesList extends StatefulWidget {
-  const MapSalesList({Key key}) : super(key: key);
+  const MapSalesList({Key key, this.sc}) : super(key: key);
+  final ScrollController sc;
   // final FilterData filterData;
   @override
   _MapSalesListState createState() => _MapSalesListState();
 }
 
 class _MapSalesListState extends State<MapSalesList> {
-
   MainProvider bolc;
 
   @override
@@ -40,6 +40,7 @@ class _MapSalesListState extends State<MapSalesList> {
   Widget build(BuildContext context) {
     return PagewiseListView<dynamic>(
       physics: const ScrollPhysics(),
+      controller: widget.sc,
       shrinkWrap: true,
       loadingBuilder: (BuildContext context) {
         return const Center(
@@ -50,6 +51,13 @@ class _MapSalesListState extends State<MapSalesList> {
       pageLoadController: getIt<SalesProvider>().pagewiseSalesController,
       padding: const EdgeInsets.all(6.0),
       itemBuilder: (BuildContext context, dynamic entry, int index) {
+        if (index == 0) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 60),
+            child: FadeIn(
+                child: MapSalesCard(context: context, sale: entry as SaleData)),
+          );
+        }
         return FadeIn(
             child: MapSalesCard(context: context, sale: entry as SaleData));
       },

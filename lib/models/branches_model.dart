@@ -1,5 +1,5 @@
 class Branches {
-  Branches({this.data, this.links, this.meta});
+  Branches({this.data});
 
   Branches.fromJson(dynamic json) {
     if (json['data'] != null) {
@@ -8,12 +8,8 @@ class Branches {
         data.add(BranchData.fromJson(v));
       });
     }
-    links = json['links'] != null ? Links.fromJson(json['links']) : null;
-    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
   }
   List<BranchData> data;
-  Links links;
-  Meta meta;
 }
 
 class BranchData {
@@ -32,14 +28,13 @@ class BranchData {
   BranchData.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'] as String;
-    latitude =double.parse( json['latitude'].toString());
-    
-    longitude = double.parse( json['longitude'].toString());
+    latitude = double.parse(json['latitude'].toString());
+
+    longitude = double.parse(json['longitude'].toString());
     address = json['address'] as String;
     phone = json['phone'] as String;
-   // salesCount = json['sales'] as int;
-    merchant =
-        MerchantfromBranch.fromJson(json['merchant'] as Map<String, dynamic>);
+    // salesCount = json['sales'] as int;
+    merchant = MerchantfromBranch.fromJson(json['merchant']);
     isliked = json['isliked'] as int;
     isfavorite = json['isfavorite'] as int;
   }
@@ -62,53 +57,10 @@ class MerchantfromBranch {
     id = json['id'] as int;
     name = json['name'].toString();
     logo = json['logo'] as String;
-    rateAverage =double.parse(json['rates_average'].toString());
+    rateAverage = double.parse(json['rates_average'].toString());
   }
   int id;
   String name;
   String logo;
   double rateAverage;
-}
-
-class Links {
-  Links({this.first, this.last, this.prev, this.next});
-
-  Links.fromJson(dynamic json) {
-    first = json['first'] as String;
-    last = json['last'] as String;
-    prev = json['prev'] as String;
-    next = json['next'] as String;
-  }
-  String first;
-  String last;
-  String prev;
-  String next;
-}
-
-class Meta {
-  Meta(
-      {this.currentPage,
-      this.from,
-      this.lastPage,
-      this.path,
-      this.perPage,
-      this.to,
-      this.total});
-
-  Meta.fromJson(dynamic json) {
-    currentPage = json['current_page'] as int;
-    from = json['from'] as int;
-    lastPage = json['last_page'] as int;
-    path = json['path'] as String;
-    perPage = json['per_page'] as int;
-    to = json['to'] as int;
-    total = json['total'] as int;
-  }
-  int currentPage;
-  int from;
-  int lastPage;
-  String path;
-  int perPage;
-  int to;
-  int total;
 }

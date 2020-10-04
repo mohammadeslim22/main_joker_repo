@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:joker/localization/trans.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/providers/merchantsProvider.dart';
@@ -9,6 +10,7 @@ import '../../ui/cards/merchant_card.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 
 class ShopList extends StatefulWidget {
+  const ShopList({Key key}) : super(key: key);
   @override
   _ShopListState createState() => _ShopListState();
 }
@@ -71,17 +73,21 @@ class _ShopListState extends State<ShopList> {
       child: PagewiseListView<dynamic>(
         physics: const ScrollPhysics(),
         shrinkWrap: true,
+        pageLoadController:
+            getIt<MerchantProvider>().pagewiseBranchesController,
         loadingBuilder: (BuildContext context) {
           return const Center(
               child: CircularProgressIndicator(
             backgroundColor: Colors.transparent,
           ));
         },
+        padding: const EdgeInsets.all(15.0),
         itemBuilder: (BuildContext context, dynamic entry, int index) {
           return FadeIn(child: MerchantCard(branchData: entry as BranchData));
         },
-        pageLoadController:
-            getIt<MerchantProvider>().pagewiseBranchesController,
+        noItemsFoundBuilder: (BuildContext context) {
+          return Text(trans(context, "noting_to_show"));
+        },
       ),
     );
   }

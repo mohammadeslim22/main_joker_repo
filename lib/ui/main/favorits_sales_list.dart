@@ -97,7 +97,7 @@ class _DiscountsListState extends State<FavoritDiscountsList> {
           padding: const EdgeInsets.all(15.0),
           itemBuilder: (BuildContext context, dynamic entry, int index) {
             return FadeIn(
-                child: SalesCard(context: context, sale: entry as SaleData));
+                child: SalesCard( sale: entry as SaleData));
           },
           noItemsFoundBuilder: (BuildContext context) {
             return Text(trans(context, "noting_to_show"));

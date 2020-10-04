@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
-import 'package:joker/providers/mainprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -23,7 +22,6 @@ class DiscountsList extends StatefulWidget {
 class _DiscountsListState extends State<DiscountsList> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  MainProvider bolc;
 
   @override
   void initState() {
@@ -93,8 +91,7 @@ class _DiscountsListState extends State<DiscountsList> {
         pageLoadController: getIt<SalesProvider>().pagewiseSalesController,
         padding: const EdgeInsets.all(15.0),
         itemBuilder: (BuildContext context, dynamic entry, int index) {
-          return FadeIn(
-              child: SalesCard(context: context, sale: entry as SaleData));
+          return FadeIn(child: SalesCard(sale: entry as SaleData));
         },
         noItemsFoundBuilder: (BuildContext context) {
           return Text(trans(context, "noting_to_show"));

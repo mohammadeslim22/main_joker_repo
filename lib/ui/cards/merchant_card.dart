@@ -27,8 +27,10 @@ class _MerchantCardState extends State<MerchantCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+    return
+        // Container(margin:const EdgeInsets.fromLTRB(10, 0, 10, 10) ,height: 200,color: Colors.redAccent);
+
+        Card(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(12), topRight: Radius.circular(12)),
@@ -51,13 +53,11 @@ class _MerchantCardState extends State<MerchantCard> {
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12)),
                 image: DecorationImage(
-                  image: CachedNetworkImageProvider(
-                    branchData.merchant.logo,
-                      errorListener: () => print('error'),
-
-                  ),
-                  fit: BoxFit.cover,
-                ),
+                    fit: BoxFit.cover,
+                    onError: (dynamic exception, StackTrace stackTrace) {},
+                    image: CachedNetworkImageProvider(
+                      branchData.merchant.logo,
+                    )),
               ),
               child: branchData.isfavorite != 0
                   ? Stack(children: <Widget>[

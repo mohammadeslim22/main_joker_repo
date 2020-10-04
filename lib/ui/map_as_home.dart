@@ -173,13 +173,8 @@ class _MapAsHomeState extends State<MapAsHome> {
   }
 
   Widget _panel(ScrollController sc) {
-    return MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
-        child: ListView(
-          controller: sc,
-          children: const <Widget>[SizedBox(height: 60), MapSalesList()],
-        ));
+    //SizedBox(height: 60),
+    return  MapSalesList(sc: sc);
   }
 
   Future<void> _animateToUser() async {
@@ -269,10 +264,10 @@ class _MapAsHomeState extends State<MapAsHome> {
             });
           },
           onCameraIdle: () {
-            setState(() {
-              getIt<HOMEMAProvider>()
-                  .getBranchesData(_scaffoldkey, lat, long, specId);
-            });
+            // setState(() {
+            //   getIt<HOMEMAProvider>()
+            //       .getBranchesData(_scaffoldkey, lat, long, specId);
+            // });
           },
         ),
         Padding(
@@ -289,7 +284,7 @@ class _MapAsHomeState extends State<MapAsHome> {
                   borderRadius: BorderRadius.circular(6),
                   onTap: () {},
                   child: GestureDetector(
-                    child:const  Center(
+                    child: const Center(
                       child: Icon(
                         Icons.my_location,
                         color: Color.fromARGB(1023, 150, 150, 150),

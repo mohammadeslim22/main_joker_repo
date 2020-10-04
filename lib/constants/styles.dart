@@ -10,7 +10,7 @@ class Styles {
 
   TextStyle saleTitle = TextStyle(
     fontSize: 18,
-    color: colors.grey,
+    color: colors.black,
   );
 
   TextStyle fromMainToList = TextStyle(

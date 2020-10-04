@@ -8,8 +8,7 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
 
 class SalesCard extends StatefulWidget {
-  const SalesCard({Key key, this.context, this.sale}) : super(key: key);
-  final BuildContext context;
+  const SalesCard({Key key, this.sale}) : super(key: key);
   final SaleData sale;
 
   @override
@@ -72,7 +71,6 @@ class _SalesCardState extends State<SalesCard> {
                 image: DecorationImage(
                     fit: BoxFit.cover,
                     onError: (dynamic exception, StackTrace stackTrace) {
-                      print("saledata.cropedImage  ${saledata.cropedImage}");
                     },
                     image: CachedNetworkImageProvider(
                       saledata.cropedImage,
