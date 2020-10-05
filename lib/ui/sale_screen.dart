@@ -77,7 +77,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
 
   int index = 0;
   String mytext;
-  double extededPlus = 0.0;
+  double extededPlus = 50;
   bool isliked;
   bool isloved;
   bool isbottomSheetOpened;

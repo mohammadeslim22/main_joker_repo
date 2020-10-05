@@ -130,7 +130,7 @@ class Auth with ChangeNotifier {
               "authorization", "Bearer ${value.data['api_token']}");
           dio.options.headers['authorization'] =
               'Bearer ${value.data['api_token']}';
-
+          config.loggedin = true;
           Navigator.pushNamed(context, '/Home', arguments: <String, dynamic>{
             "salesDataFilter": false,
             "FilterData": null

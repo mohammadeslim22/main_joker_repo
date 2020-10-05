@@ -27,7 +27,7 @@ class _MapSalesListState extends State<MapSalesList> {
     super.initState();
     getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
-            pageSize: 3,
+            pageSize: 5,
             pageFuture: (int pageIndex) async {
               return (getIt<GlobalVars>().filterData != null)
                   ? getIt<SalesProvider>().getSalesDataFilterd(
@@ -44,9 +44,8 @@ class _MapSalesListState extends State<MapSalesList> {
       shrinkWrap: true,
       loadingBuilder: (BuildContext context) {
         return const Center(
-            child: CircularProgressIndicator(
-          backgroundColor: Colors.transparent,
-        ));
+            child:
+                CircularProgressIndicator(backgroundColor: Colors.transparent));
       },
       pageLoadController: getIt<SalesProvider>().pagewiseSalesController,
       padding: const EdgeInsets.all(6.0),

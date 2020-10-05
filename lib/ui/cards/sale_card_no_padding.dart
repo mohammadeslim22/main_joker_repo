@@ -3,10 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
+import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/functions.dart';
+import 'package:joker/util/service_locator.dart';
 
 class SalesCardNoPadding extends StatefulWidget {
   const SalesCardNoPadding({Key key, this.context, this.sale})
@@ -211,11 +214,15 @@ class _SalesCardState extends State<SalesCardNoPadding> {
             padding: const EdgeInsets.symmetric(horizontal: 130),
             child: Text(trans(context, 'more_info'), style: styles.moreInfo),
             onPressed: () {
-              Navigator.pushNamed(context, "/SaleLoader",
-                  arguments: <String, dynamic>{
-                    "merchant_id": saledata.merchant.id,
-                    "sale": saledata
-                  });
+              if (config.loggedin) {
+                Navigator.pushNamed(context, "/SaleLoader",
+                    arguments: <String, dynamic>{
+                      "merchant_id": saledata.merchant.id,
+                      "sale": saledata
+                    });
+              } else {
+                getIt<NavigationService>().navigateTo('/login', null);
+              }
             })
       ],
     );

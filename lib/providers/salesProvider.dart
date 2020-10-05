@@ -13,6 +13,7 @@ import 'map_provider.dart';
 
 class SalesProvider with ChangeNotifier {
   bool salesLoaded = false;
+  Sales sales;
   PagewiseLoadController<dynamic> pagewiseSalesController;
   Future<void> getSale(int saleId) async {
     if (config.loggedin)
@@ -33,6 +34,12 @@ class SalesProvider with ChangeNotifier {
     return merchantSales.data;
   }
 
+  void setFav(int saleId) {
+    sales.data.firstWhere((SaleData element) {
+      return element.id == saleId;
+    }).isfavorite = 1;
+  }
+
   Future<List<SaleData>> getSalesData(int pageIndex) async {
     if (salesLoaded) {
       return sales.data;
@@ -47,8 +54,6 @@ class SalesProvider with ChangeNotifier {
       return sales.data;
     }
   }
-
-  Sales sales;
 
   Future<List<SaleData>> getSalesDataFilterd(
       int pageIndex, FilterData filterData) async {

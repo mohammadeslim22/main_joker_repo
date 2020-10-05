@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/dio.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
@@ -124,7 +125,7 @@ Future<bool> favFunction(String model, int favoriteId) async {
     'favoritable_id': favoriteId
   }).then((dynamic value) {
     if (value.data == "true") {
-      getIt<MerchantProvider>().setFav(favoriteId);
+      getIt<SalesProvider>().setFav(favoriteId);
       res = true;
     } else {
       res = false;
