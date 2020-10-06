@@ -245,8 +245,14 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                   color: Colors.white,
                   textColor: colors.blue,
                   padding: const EdgeInsets.all(8.0),
-                  onPressed: () {
-                    print(mobileNoController.text);
+                  onPressed: () async {
+                     if (await auth.sendPinNewPhone(
+                                              mobileNoController.text,
+                                              context)) {
+                                            setState(() {
+                                              buttonChangeMoEnabeld = false;
+                                            });
+                                          }
                   },
                   child: Text(
                     trans(context, 'resend_code'),

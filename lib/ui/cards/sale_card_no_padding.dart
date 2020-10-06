@@ -38,7 +38,7 @@ class _SalesCardState extends State<SalesCardNoPadding> {
     } else {
       saleStatus = Colors.red;
     }
-    print(saledata.branches.length);
+    // print(saledata.branches.length);
 
     // if (saledata.branches.isNotEmpty) {
     //   saledata.branches.forEach((int element) {
@@ -60,7 +60,6 @@ class _SalesCardState extends State<SalesCardNoPadding> {
                   fit: BoxFit.cover,
                   image: CachedNetworkImageProvider(
                     saledata.cropedImage,
-                    errorListener: () => print('error'),
                   )),
             ),
             child: Stack(children: <Widget>[

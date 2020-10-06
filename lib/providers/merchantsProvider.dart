@@ -8,7 +8,6 @@ import 'package:joker/models/branches_model.dart';
 class MerchantProvider with ChangeNotifier {
   Merchant merchant;
   Branches branches;
-  bool branchesLoaded = false;
   PagewiseLoadController<dynamic> pagewiseBranchesController;
 
   Future<void> getMerchantData(int id, String source, int ignore) async {
@@ -19,16 +18,13 @@ class MerchantProvider with ChangeNotifier {
   }
 
   Future<List<BranchData>> getBranchesData(int pageIndex) async {
-    if (branchesLoaded) {
-      return branches.data;
-    } else {
+
       final Response<dynamic> response = await dio.get<dynamic>("branches",
           queryParameters: <String, dynamic>{'page': pageIndex + 1});
-      print(response.data);
+ 
       branches = Branches.fromJson(response.data);
-      branchesLoaded = true;
       return branches.data;
-    }
+    
   }
 
   void setFav(int branchId) {

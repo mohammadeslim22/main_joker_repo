@@ -12,7 +12,6 @@ import 'package:joker/util/service_locator.dart';
 import 'map_provider.dart';
 
 class SalesProvider with ChangeNotifier {
-  bool salesLoaded = false;
   Sales sales;
   PagewiseLoadController<dynamic> pagewiseSalesController;
   Future<void> getSale(int saleId) async {
@@ -29,7 +28,6 @@ class SalesProvider with ChangeNotifier {
         queryParameters: <String, dynamic>{'page': pageIndex});
 
     merchantSales = SimpleSales.fromJson(response.data);
-    print("$merchantId merchant second id");
 
     return merchantSales.data;
   }
@@ -41,18 +39,16 @@ class SalesProvider with ChangeNotifier {
   }
 
   Future<List<SaleData>> getSalesData(int pageIndex) async {
-    if (salesLoaded) {
-      return sales.data;
-    } else {
+ 
       final Response<dynamic> response =
           await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
         'page': pageIndex + 1,
         'specifications': getIt<HOMEMAProvider>().selectedSpecialize
       });
       sales = Sales.fromJson(response.data);
-      salesLoaded = true;
+ 
       return sales.data;
-    }
+    
   }
 
   Future<List<SaleData>> getSalesDataFilterd(

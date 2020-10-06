@@ -65,7 +65,6 @@ class MyMemberShipState extends State<MyMemberShip>
   }
 
   Widget _itemBuilder(BuildContext context, MembershipData memberShip) {
-    print(" hola hola ${config.qRCodeUrl}${memberShip.membership.merchantId}");
     return Card(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),

@@ -272,7 +272,6 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       obscureText: false,
                                       readOnly: true,
                                       onTab: () {
-                                        print(mobileNoController.text);
                                         Navigator.pushNamed(
                                           context,
                                           '/pinForProfile',
@@ -285,7 +284,6 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                         icon: Icon(Icons.edit,
                                             color: colors.blue),
                                         onPressed: () {
-                                          print(mobileNoController.text);
                                         },
                                       ),
                                       focusNode: focus1,

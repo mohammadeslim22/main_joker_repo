@@ -9,7 +9,6 @@ import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/service_locator.dart';
-import 'package:joker/providers/merchantsProvider.dart';
 
 final Location location = Location();
 

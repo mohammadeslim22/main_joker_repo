@@ -283,7 +283,6 @@ class _AutoLocateState extends State<AutoLocate> {
                                       _animateToUser();
                                     }
                                   } else {
-                                    print("iam fucked up");
                                     _animateToUser();
                                   }
                                 }
@@ -423,12 +422,10 @@ class _AutoLocateState extends State<AutoLocate> {
 
   void setFromSetFromMap() {
     if (getIt<MerchantProvider>().pagewiseBranchesController != null){
-      getIt<MerchantProvider>().branchesLoaded = false;
       getIt<MerchantProvider>().pagewiseBranchesController.reset();
     }
     
     if (getIt<SalesProvider>().pagewiseSalesController != null){
-      getIt<SalesProvider>().salesLoaded = false;
        getIt<SalesProvider>().pagewiseSalesController.reset();
     }
      

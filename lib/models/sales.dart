@@ -1,5 +1,5 @@
 class Sales {
-  Sales({this.data, this.links, this.meta});
+  Sales({this.data});
 
   Sales.fromJson(dynamic json) {
     if (json['data'] != null) {
@@ -8,12 +8,10 @@ class Sales {
         data.add(SaleData.fromJson(v));
       });
     }
-    links = json['links'] != null ? Links.fromJson(json['links']) : null;
-    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
+
   }
   List<SaleData> data;
-  Links links;
-  Meta meta;
+
 }
 
 class SaleData {
@@ -110,67 +108,8 @@ class MerchantForSale {
   int ratesAverage;
 }
 
-class Links {
-  Links({this.first, this.last, this.prev, this.next});
 
-  Links.fromJson(dynamic json) {
-    first = json['first'] as String;
-    last = json['last'] as String;
-    prev = json['prev'] as String;
-    next = json['next'] as String;
-  }
-  String first;
-  String last;
-  String prev;
-  String next;
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['first'] = first;
-    data['last'] = last;
-    data['prev'] = prev;
-    data['next'] = next;
-    return data;
-  }
-}
 
-class Meta {
-  Meta(
-      {this.currentPage,
-      this.from,
-      this.lastPage,
-      this.path,
-      this.perPage,
-      this.to,
-      this.total});
-
-  Meta.fromJson(dynamic json) {
-    currentPage = json['current_page'] as int;
-    from = json['from'] as int;
-    lastPage = json['last_page'] as int;
-    path = json['path'] as String;
-    perPage = json['per_page'] as int;
-    to = json['to'] as int;
-    total = json['total'] as int;
-  }
-  int currentPage;
-  int from;
-  int lastPage;
-  String path;
-  int perPage;
-  int to;
-  int total;
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['current_page'] = currentPage;
-    data['from'] = from;
-    data['last_page'] = lastPage;
-    data['path'] = path;
-    data['per_page'] = perPage;
-    data['to'] = to;
-    data['total'] = total;
-    return data;
-  }
-}
 
 class Images {
   Images(

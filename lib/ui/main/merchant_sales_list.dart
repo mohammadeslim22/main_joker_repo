@@ -40,7 +40,7 @@ class _MerchantSalesListState extends State<MerchantSalesList> {
             backgroundColor: Colors.transparent,
           ));
         },
-        pageSize: 10,
+        pageSize: 15,
         padding: const EdgeInsets.all(15.0),
         itemBuilder: (BuildContext context, dynamic entry, int index) {
           return FadeIn(

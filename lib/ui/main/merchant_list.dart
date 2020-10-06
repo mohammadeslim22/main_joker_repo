@@ -59,7 +59,6 @@ class _ShopListState extends State<ShopList> {
       ),
       controller: _refreshController,
       onRefresh: () async {
-        getIt<MerchantProvider>().branchesLoaded = false;
         getIt<MerchantProvider>().pagewiseBranchesController.reset();
         _refreshController.refreshCompleted();
       },

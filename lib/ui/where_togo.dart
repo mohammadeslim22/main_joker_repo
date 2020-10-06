@@ -11,8 +11,6 @@ import 'package:joker/providers/map_provider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
 import "package:flutter/cupertino.dart";
-
-import 'main/sales_list.dart';
 import 'widgets/buttonTouse.dart';
 
 class LoadWhereToGo extends StatelessWidget {
@@ -144,7 +142,7 @@ class _WhereToGoState extends State<WhereToGo> {
         body: Consumer<HOMEMAProvider>(builder:
             (BuildContext context, HOMEMAProvider value, Widget child) {
           return Column(
-            children: [
+            children: <Widget>[
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.zero,
@@ -223,7 +221,7 @@ class _WhereToGoState extends State<WhereToGo> {
       // listviewWidgets.add(const Divider(thickness: 1));
       if (i == specializations.length - 3) {
         listviewWidgets.add(Row(
-          children: [specButton(specializations[specializations.length - 1])],
+          children: <Widget>[specButton(specializations[specializations.length - 1])],
         ));
         listviewWidgets.add(const Divider(thickness: 1, height: 1));
         break;

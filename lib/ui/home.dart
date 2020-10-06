@@ -14,9 +14,7 @@ import '../constants/colors.dart';
 import '../constants/styles.dart';
 import '../localization/trans.dart';
 import '../ui/widgets/my_inner_drawer.dart';
-import 'main/merchant_list.dart';
 import 'main/merchant_list_statless.dart';
-import 'main/sales_list.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:joker/constants/config.dart';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -332,12 +330,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               Navigator.pop(context);
               if (getIt<MerchantProvider>().pagewiseBranchesController !=
                   null) {
-                getIt<MerchantProvider>().branchesLoaded = false;
                 getIt<MerchantProvider>().pagewiseBranchesController.reset();
               }
 
               if (getIt<SalesProvider>().pagewiseSalesController != null) {
-                getIt<SalesProvider>().salesLoaded = false;
                 getIt<SalesProvider>().pagewiseSalesController.reset();
               }
             }

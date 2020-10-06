@@ -79,7 +79,6 @@ class _SalesCardState extends State<MapSalesCard> {
                     fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
                       saledata.cropedImage,
-                      errorListener: () => print('error'),
                     )),
               ),
               child: saledata.isfavorite != 0
@@ -142,10 +141,8 @@ class _SalesCardState extends State<MapSalesCard> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              widget.sale.price ?? "",
-                              style: styles.redstyleForSaleScreen,
-                            ),
+                            Text(widget.sale.price ?? "",
+                                style: styles.redstyleForSaleScreen),
                             const SizedBox(width: 8),
                             Text(
                               widget.sale.oldPrice,
@@ -161,27 +158,6 @@ class _SalesCardState extends State<MapSalesCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        // Flexible(
-                        //   child: Row(
-                        //     children: <Widget>[
-                        //       Text(trans(context, 'branch'),
-                        //           style: styles.mylight),
-                        //       const SizedBox(width: 10),
-                        //       Container(
-                        //         padding: const EdgeInsets.symmetric(
-                        //             horizontal: 16, vertical: 4),
-                        //         decoration: BoxDecoration(
-                        //           borderRadius: const BorderRadius.all(
-                        //               Radius.circular(12)),
-                        //           color: Colors.grey[200],
-                        //         ),
-                        //         alignment: Alignment.center,
-                        //         child:
-                        //             Text(saledata.branches.length.toString()),
-                        //       )
-                        //     ],
-                        //   ),
-                        // ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[

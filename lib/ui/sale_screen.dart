@@ -454,11 +454,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                   children: <Widget>[
                     const SizedBox(width: 12),
                     const Expanded(
-                      child: Divider(
-                        color: Colors.grey,
-                        thickness: 1,
-                      ),
-                    ),
+                        child: Divider(color: Colors.grey, thickness: 1)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
@@ -467,11 +463,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                       ),
                     ),
                     const Expanded(
-                      child: Divider(
-                        color: Colors.grey,
-                        thickness: 1,
-                      ),
-                    ),
+                        child: Divider(color: Colors.grey, thickness: 1)),
                     const SizedBox(width: 12),
                   ],
                 ),
@@ -529,7 +521,9 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                   fit: BoxFit.cover,
                                 ),
                                 const SizedBox(width: 5),
-                                Text(tab.address)
+                                Text(tab.address != "null"
+                                    ? tab.address
+                                    : trans(context, "data_no_available"))
                               ]),
                             ],
                           );
@@ -627,7 +621,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
           alignment: Alignment.bottomCenter,
           child: Container(
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-            color: Colors.black,
+            color: colors.black,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -814,10 +808,8 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child:
           LayoutBuilder(builder: (BuildContext context, BoxConstraints size) {
-        final TextSpan span = TextSpan(
-          text: widget.mytext,
-          style: styles.mysmall
-        );
+        final TextSpan span =
+            TextSpan(text: widget.mytext, style: styles.mysmall);
         final TextPainter tp = TextPainter(
           maxLines: 3,
           textAlign: TextAlign.left,

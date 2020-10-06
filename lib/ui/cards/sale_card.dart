@@ -3,9 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
+import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/services/navigationService.dart';
+import 'package:joker/util/service_locator.dart';
 
 class SalesCard extends StatefulWidget {
   const SalesCard({Key key, this.sale}) : super(key: key);
@@ -32,7 +35,7 @@ class _SalesCardState extends State<SalesCard> {
     } else {
       saleStatus = Colors.red;
     }
-    print(saledata.branches.length);
+    // print(saledata.branches.length);
 
     // if (saledata.branches.isNotEmpty) {
     //   saledata.branches.forEach((int element) {
@@ -54,11 +57,16 @@ class _SalesCardState extends State<SalesCard> {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, "/SaleLoader",
+                if (config.loggedin) {
+               Navigator.pushNamed(context, "/SaleLoader",
               arguments: <String, dynamic>{
                 "merchant_id": saledata.merchant.id,
                 "sale": saledata
               });
+              } else {
+                getIt<NavigationService>().navigateTo('/login', null);
+              }
+     
         },
         child: Column(
           children: <Widget>[

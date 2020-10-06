@@ -43,7 +43,7 @@ class DiscountsListStateless extends StatelessWidget {
       ),
       controller: _refreshController,
       onRefresh: () async {
-        getIt<SalesProvider>().salesLoaded = false;
+        
         getIt<SalesProvider>().pagewiseSalesController.reset();
         _refreshController.refreshCompleted();
       },

@@ -36,6 +36,7 @@ Future<void> main() async {
     } else {
       config.loggedin = true;
     }
+    print("loggedIn: ${config.loggedin}");
     dio.options.headers['authorization'] = '$auth';
   });
 

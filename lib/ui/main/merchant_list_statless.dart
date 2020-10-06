@@ -38,7 +38,6 @@ class ShopListStaeless extends StatelessWidget {
       ),
       controller: _refreshController,
       onRefresh: () async {
-        getIt<MerchantProvider>().branchesLoaded = false;
         getIt<MerchantProvider>().pagewiseBranchesController.reset();
         _refreshController.refreshCompleted();
       },

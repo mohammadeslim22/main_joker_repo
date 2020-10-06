@@ -384,15 +384,11 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
-              trans(context, "accourding_to_rating"),
-              style: styles.mystyle,
-            ),
+            Text(trans(context, "accourding_to_rating"), style: styles.mystyle),
             RatingBar(
               onRatingChanged: (double rating) {
                 setState(() => _ratingStar = rating);
                 // TODO(mislem): use this var to send raiting to API
-                print(_ratingStar);
               },
               filledIcon: Icons.star,
               emptyIcon: Icons.star_border,
