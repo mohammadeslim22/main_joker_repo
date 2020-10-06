@@ -49,32 +49,32 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
     }
     // print("profile pic ${config.profileUrl}");
     if (config.loggedin) {
-      // data.getData("profile_pic").then((String value) {
-      //   if (value.isEmpty || value == config.imageUrl) {
-      //     print("error here ?");
-      //     dio.get<dynamic>("user").then((Response<dynamic> value) {
-      //       print(value.data['data']['name'].toString());
-      //       setState(() {
-      //         username = value.data['data']['name'].toString();
-      //         config.username = value.data['data']['name'].toString();
-      //         config.profileUrl = value.data['data']['image'].toString().trim();
-      //         if (config.profileUrl == config.imageUrl) {
-      //           config.profileUrl =
-      //               "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg";
-      //         }
-      //         print("Image ${config.profileUrl}");
-      //       });
+      data.getData("profile_pic").then((String value) {
+        if (value.isEmpty || value == config.imageUrl) {
+          print("error here ?");
+          dio.get<dynamic>("user").then((Response<dynamic> value) {
+            print(value.data['data']['name'].toString());
+            setState(() {
+              username = value.data['data']['name'].toString();
+              config.username = value.data['data']['name'].toString();
+              config.profileUrl = value.data['data']['image'].toString().trim();
+              if (config.profileUrl == config.imageUrl|| config.profileUrl==null) {
+                config.profileUrl =
+                    "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg";
+              }
+              print("Image ${config.profileUrl}");
+            });
 
-      //       data.setData("profile_pic", config.profileUrl);
-      //       data.setData("username", value.data['data']['name'].toString());
-      //     });
-      //   } else {
-      //     print("profile drawer pic:   $value");
-      //     setState(() {
-      //       config.profileUrl = value;
-      //     });
-      //   }
-      // });
+            data.setData("profile_pic", config.profileUrl);
+            data.setData("username", value.data['data']['name'].toString());
+          });
+        } else {
+          print("profile drawer pic:   $value");
+          setState(() {
+            config.profileUrl = value;
+          });
+        }
+      });
     }
   }
 

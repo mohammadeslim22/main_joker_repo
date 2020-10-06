@@ -636,7 +636,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
         ),
       ),
       floatingActionButton: CircleAvatar(
-        backgroundColor: Colors.white,
+        backgroundColor: colors.white,
         radius: 24,
         child: AnimatedBuilder(
           animation: rotationController,
@@ -650,7 +650,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
             padding: EdgeInsets.zero,
             icon: SvgPicture.asset("assets/images/arrowup.svg",
                 color: colors.yellow),
-            color: Colors.white,
+            color: colors.white,
             onPressed: () async {
               if (isbottomSheetOpened) {
                 rotationController.reverse(from: pi / 2);

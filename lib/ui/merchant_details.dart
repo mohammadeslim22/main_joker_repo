@@ -317,6 +317,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                               Column(
                                 children: <Widget>[
                                   RatingBar(
+                                    
                                     onRatingChanged: (double rating) async {
                                       await dio.post<dynamic>("rates",
                                           data: <String, dynamic>{
@@ -334,6 +335,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                     emptyColor: Colors.grey,
                                     halfFilledColor: Colors.blue[300],
                                     size: 30,
+                                    
                                   ),
                                   InkWell(
                                     child: Row(
