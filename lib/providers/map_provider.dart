@@ -26,7 +26,7 @@ class HOMEMAProvider with ChangeNotifier {
   int selectedSpecialize;
   Future<void> getBranchesData(GlobalKey<ScaffoldState> _scaffoldkey,
       double lat, double long, int specId) async {
-    // await getSpecializationsData();
+ 
     final Response<dynamic> response = await dio
         .get<dynamic>("map?long=$long&lat=$lat&specialization_id=$specId");
     branches = MapBranches.fromJson(response.data);

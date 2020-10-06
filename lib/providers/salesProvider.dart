@@ -43,7 +43,7 @@ class SalesProvider with ChangeNotifier {
       final Response<dynamic> response =
           await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
         'page': pageIndex + 1,
-        'specifications': getIt<HOMEMAProvider>().selectedSpecialize
+        'specification': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
       });
       sales = Sales.fromJson(response.data);
  
