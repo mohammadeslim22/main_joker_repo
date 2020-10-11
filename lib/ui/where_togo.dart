@@ -47,10 +47,12 @@ class WhereToGo extends StatefulWidget {
   _WhereToGoState createState() => _WhereToGoState();
 }
 
-class _WhereToGoState extends State<WhereToGo> {
+class _WhereToGoState extends State<WhereToGo>
+    with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> _scaffoldkey;
   PersistentBottomSheetController<dynamic> errorController;
-
+  AnimationController _controller;
+  Animation<Offset> _offsetAnimation;
   @override
   void initState() {
     super.initState();
@@ -65,8 +67,17 @@ class _WhereToGoState extends State<WhereToGo> {
       ts2 = styles.fromMainToMap;
       getIt<HOMEMAProvider>().specSelected = false;
     }
-
-       getIt<SalesProvider>().pagewiseSalesController =
+    _controller =
+        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+    _offsetAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(1.5, 0.0),
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.elasticIn,
+    ));
+    _controller.forward();
+    getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
             pageSize: 5,
             pageFuture: (int pageIndex) async {
@@ -80,7 +91,11 @@ class _WhereToGoState extends State<WhereToGo> {
   List<Widget> listviewWidgets = <Widget>[];
   TextStyle ts1 = styles.fromMainToList;
   TextStyle ts2 = styles.fromMainToMap;
-
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,22 +186,26 @@ class _WhereToGoState extends State<WhereToGo> {
                   shrinkWrap: true,
                   children: <Widget>[
                     Column(children: listviewWidgets),
-                    middleScreenButton(value.specSelected, () {
-                      Navigator.pushNamed(context, "/MapAsHome",
-                          arguments: <String, dynamic>{
-                            "home_map_lat": config.lat ?? 0.0,
-                            "home_map_long": config.long ?? 0.0
-                          });
-                    }, trans(context, 'show_on_map'), Icons.map, ts2,
-                        "assets/images/discountmap.jpg"),
-                    middleScreenButton(value.specSelected, () {
-                      Navigator.pushNamed(context, "/Home",
-                          arguments: <String, dynamic>{
-                            "salesDataFilter": false,
-                            "FilterData": null
-                          });
-                    }, trans(context, 'open_in_list'), Icons.list, ts1,
-                        "assets/images/discountlist.png"),
+                    SlideTransition(
+                        position: _offsetAnimation,
+                        child: middleScreenButton(value.specSelected, () {
+                          Navigator.pushNamed(context, "/MapAsHome",
+                              arguments: <String, dynamic>{
+                                "home_map_lat": config.lat ?? 0.0,
+                                "home_map_long": config.long ?? 0.0
+                              });
+                        }, trans(context, 'show_on_map'), Icons.map, ts2,
+                            "assets/images/discountmap.jpg")),
+                    SlideTransition(
+                        position: _offsetAnimation,
+                        child: middleScreenButton(value.specSelected, () {
+                          Navigator.pushNamed(context, "/Home",
+                              arguments: <String, dynamic>{
+                                "salesDataFilter": false,
+                                "FilterData": null
+                              });
+                        }, trans(context, 'open_in_list'), Icons.list, ts1,
+                            "assets/images/discountlist.png")),
                   ],
                 ),
               ),
@@ -305,13 +324,16 @@ class _WhereToGoState extends State<WhereToGo> {
               ],
             ),
             onPressed: () {
+              
               getIt<HOMEMAProvider>().setSlelectedSpec(item.id);
               setState(() {
                 if (value.selectedSpecialize != null) {
+                  _controller.reverse();
                   ts1 = styles.fromMainToListOn;
                   ts2 = styles.fromMainToMapOn;
                   value.specSelected = true;
                 } else {
+                  _controller.forward();
                   ts1 = styles.fromMainToList;
                   ts2 = styles.fromMainToMap;
                   value.specSelected = false;
