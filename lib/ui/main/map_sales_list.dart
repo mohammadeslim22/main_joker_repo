@@ -25,15 +25,15 @@ class _MapSalesListState extends State<MapSalesList> {
   @override
   void initState() {
     super.initState();
-    getIt<SalesProvider>().pagewiseSalesController =
-        PagewiseLoadController<dynamic>(
-            pageSize: 5,
-            pageFuture: (int pageIndex) async {
-              return (getIt<GlobalVars>().filterData != null)
-                  ? getIt<SalesProvider>().getSalesDataFilterd(
-                      pageIndex, getIt<GlobalVars>().filterData)
-                  : getIt<SalesProvider>().getSalesData(pageIndex);
-            });
+    // getIt<SalesProvider>().pagewiseSalesController =
+    //     PagewiseLoadController<dynamic>(
+    //         pageSize: 5,
+    //         pageFuture: (int pageIndex) async {
+    //           return (getIt<GlobalVars>().filterData != null)
+    //               ? getIt<SalesProvider>().getSalesDataFilterd(
+    //                   pageIndex, getIt<GlobalVars>().filterData)
+    //               : getIt<SalesProvider>().getSalesData(pageIndex);
+    //         });
   }
 
   @override

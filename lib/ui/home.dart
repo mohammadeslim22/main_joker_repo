@@ -66,15 +66,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
     _hide.forward();
 
-    getIt<SalesProvider>().pagewiseSalesController =
-        PagewiseLoadController<dynamic>(
-            pageSize: 5,
-            pageFuture: (int pageIndex) async {
-              return (getIt<GlobalVars>().filterData != null)
-                  ? getIt<SalesProvider>().getSalesDataFilterd(
-                      pageIndex, getIt<GlobalVars>().filterData)
-                  : getIt<SalesProvider>().getSalesData(pageIndex);
-            });
+    // getIt<SalesProvider>().pagewiseSalesController =
+    //     PagewiseLoadController<dynamic>(
+    //         pageSize: 5,
+    //         pageFuture: (int pageIndex) async {
+    //           return (getIt<GlobalVars>().filterData != null)
+    //               ? getIt<SalesProvider>().getSalesDataFilterd(
+    //                   pageIndex, getIt<GlobalVars>().filterData)
+    //               : getIt<SalesProvider>().getSalesData(pageIndex);
+    //         });
 
     getIt<MerchantProvider>().pagewiseBranchesController =
         PagewiseLoadController<dynamic>(

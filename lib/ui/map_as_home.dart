@@ -231,6 +231,9 @@ class _MapAsHomeState extends State<MapAsHome> {
     return Stack(
       children: <Widget>[
         GoogleMap(
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+          indoorViewEnabled: true,
           onMapCreated: (GoogleMapController controller) async {
             serviceEnabled = await location.serviceEnabled();
             permissionGranted = await location.hasPermission();
@@ -245,10 +248,10 @@ class _MapAsHomeState extends State<MapAsHome> {
             await Future<void>.delayed(const Duration(microseconds: 2000));
             mapController = controller;
 
-            // controller.showMarkerInfoWindow(value.markers.keys.last);
+           
           },
           onTap: (LatLng ll) {
-            value.showHorizentalListOrHideIt(false);
+          
           },
           padding: const EdgeInsets.only(bottom: 60),
           mapType: MapType.normal,
@@ -264,10 +267,7 @@ class _MapAsHomeState extends State<MapAsHome> {
             });
           },
           onCameraIdle: () {
-            // setState(() {
-            //   getIt<HOMEMAProvider>()
-            //       .getBranchesData(_scaffoldkey, lat, long, specId);
-            // });
+ 
           },
         ),
         Padding(

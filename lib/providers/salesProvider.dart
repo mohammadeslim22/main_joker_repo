@@ -13,6 +13,7 @@ import 'map_provider.dart';
 
 class SalesProvider with ChangeNotifier {
   Sales sales;
+  Sales tempSales;
   PagewiseLoadController<dynamic> pagewiseSalesController;
   Future<void> getSale(int saleId) async {
     if (config.loggedin)
@@ -39,16 +40,15 @@ class SalesProvider with ChangeNotifier {
   }
 
   Future<List<SaleData>> getSalesData(int pageIndex) async {
- 
-      final Response<dynamic> response =
-          await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
-        'page': pageIndex + 1,
-        'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
-      });
-      sales = Sales.fromJson(response.data);
- 
-      return sales.data;
-    
+    final Response<dynamic> response =
+        await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+    });
+    sales = Sales.fromJson(response.data);
+    tempSales = sales;
+
+    return sales.data;
   }
 
   Future<List<SaleData>> getSalesDataFilterd(

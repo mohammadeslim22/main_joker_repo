@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/models/map_branches.dart';
-import 'package:joker/services/navigationService.dart';
+
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/models/specializations.dart';
-import 'package:joker/constants/config.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HOMEMAProvider with ChangeNotifier {
   bool dataloaded = false;
   MapBranches branches;
+
   MapBranch inFocusBranch;
   bool horizentalListOn = false;
   double rotation;
@@ -26,9 +26,11 @@ class HOMEMAProvider with ChangeNotifier {
   int selectedSpecialize;
   Future<void> getBranchesData(GlobalKey<ScaffoldState> _scaffoldkey,
       double lat, double long, int specId) async {
- 
-    final Response<dynamic> response = await dio
-        .get<dynamic>("map?long=$long&lat=$lat&specialization_id=$specId");
+    final Response<dynamic> response =
+        await dio.get<dynamic>("map", queryParameters: <String, dynamic>{
+      'specialization': <int>[selectedSpecialize],
+      'limit':20
+    });
     branches = MapBranches.fromJson(response.data);
     markers.clear();
 
@@ -40,28 +42,21 @@ class HOMEMAProvider with ChangeNotifier {
       await _addMarker(_scaffoldkey, element);
     }); */
 
-    final Uint8List markerIcon =
-        await getBytesFromAsset('assets/images/locationMarkerblue.png', 100);
-    final Marker marker = Marker(
-        markerId: MarkerId('current_location'),
-        position: LatLng(config.lat ?? 0, config.long ?? 0),
-        icon: BitmapDescriptor.fromBytes(markerIcon),
-        infoWindow: InfoWindow(
-            title: getIt<NavigationService>()
-                .translateWithNoContext("your_location")),
-        rotation: rotation,
-        flat: true);
-    markers.add(marker);
+    // final Uint8List markerIcon =
+    //     await getBytesFromAsset('assets/images/locationMarkerblue.png', 100);
+    // final Marker marker = Marker(
+    //     markerId: MarkerId('current_location'),
+    //     position: LatLng(config.lat ?? 0, config.long ?? 0),
+    //     icon: BitmapDescriptor.fromBytes(markerIcon),
+    //     infoWindow: InfoWindow(
+    //         title: getIt<NavigationService>()
+    //             .translateWithNoContext("your_location")),
+    //     rotation: rotation,
+    //     flat: true);
+    // markers.add(marker);
     // markers[MarkerId('current_location')] = marker;
     dataloaded = true;
-    if (branches.mapBranches.isEmpty) {
-      getIt<HOMEMAProvider>().showHorizentalListOrHideIt(false);
-    }
-    notifyListeners();
-  }
 
-  void showHorizentalListOrHideIt(bool state) {
-    horizentalListOn = state;
     notifyListeners();
   }
 
@@ -72,15 +67,38 @@ class HOMEMAProvider with ChangeNotifier {
 
   Future<void> _addMarker(
       GlobalKey<ScaffoldState> _scaffoldkey, MapBranch element) async {
-    final Uint8List markerIcon =
-        await getBytesFromAsset('assets/images/locationMarkerblue.png', 100);
+    Uint8List markerIcon;
+    if (element.spec == "restaurant") {
+      markerIcon =
+          await getBytesFromAsset('assets/images/restaurant_icon.png', 90);
+    }else{
+       markerIcon =
+          await getBytesFromAsset('assets/images/coffee_icon.png', 90);
+    }
+
     final Marker marker = Marker(
         markerId: MarkerId(element.id.toString()),
         position: LatLng(element.latitude, element.longitude),
         icon: BitmapDescriptor.fromBytes(markerIcon),
         onTap: () {
           inFocusBranch = element;
-          getIt<HOMEMAProvider>().showHorizentalListOrHideIt(true);
+          getIt<HOMEMAProvider>().pc.open();
+
+          // getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
+          //     .scaffoldkey
+          //     .currentState
+          //     .showBottomSheet<dynamic>((BuildContext context) => Column(
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: <Widget>[
+          //             MediaQuery.removePadding(
+          //                 context: context,
+          //                 removeTop: true,
+          //                 removeBottom: true,
+          //                 removeLeft: true,
+          //                 removeRight: true,
+          //                 child: SalesCardNoPadding(sale: element.twoSales.first)),
+          //           ],
+          //         ));
         },
         infoWindow: InfoWindow(
           title: element.merchant.name.toString(),

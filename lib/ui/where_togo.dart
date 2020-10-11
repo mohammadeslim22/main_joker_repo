@@ -1,13 +1,16 @@
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/specializations.dart';
+import 'package:joker/providers/globalVars.dart';
 import 'package:joker/providers/map_provider.dart';
+import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
 import "package:flutter/cupertino.dart";
@@ -53,13 +56,31 @@ class _WhereToGoState extends State<WhereToGo> {
     super.initState();
     _scaffoldkey = GlobalKey<ScaffoldState>();
     distributeOnList(getIt<HOMEMAProvider>().specializations);
+    if (getIt<HOMEMAProvider>().selectedSpecialize != null) {
+      ts1 = styles.fromMainToListOn;
+      ts2 = styles.fromMainToMapOn;
+      getIt<HOMEMAProvider>().specSelected = true;
+    } else {
+      ts1 = styles.fromMainToList;
+      ts2 = styles.fromMainToMap;
+      getIt<HOMEMAProvider>().specSelected = false;
+    }
+
+       getIt<SalesProvider>().pagewiseSalesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 5,
+            pageFuture: (int pageIndex) async {
+              return (getIt<GlobalVars>().filterData != null)
+                  ? getIt<SalesProvider>().getSalesDataFilterd(
+                      pageIndex, getIt<GlobalVars>().filterData)
+                  : getIt<SalesProvider>().getSalesData(pageIndex);
+            });
   }
 
   List<Widget> listviewWidgets = <Widget>[];
   TextStyle ts1 = styles.fromMainToList;
   TextStyle ts2 = styles.fromMainToMap;
-  // TextStyle ts1On = styles.fromMainToListOn;
-  // TextStyle ts2On = styles.fromMainToMapOn;
+
 
   @override
   Widget build(BuildContext context) {
@@ -150,20 +171,14 @@ class _WhereToGoState extends State<WhereToGo> {
                   shrinkWrap: true,
                   children: <Widget>[
                     Column(children: listviewWidgets),
-                    middleScreenButton(
-                      value.specSelected,
-                      () {
-                        Navigator.pushNamed(context, "/MapAsHome",
-                            arguments: <String, dynamic>{
-                              "home_map_lat": config.lat ?? 0.0,
-                              "home_map_long": config.long ?? 0.0
-                            });
-                      },
-                      trans(context, 'show_on_map'),
-                      Icons.map,
-                      ts2,
-                      "assets/images/discountmap.jpg",
-                    ),
+                    middleScreenButton(value.specSelected, () {
+                      Navigator.pushNamed(context, "/MapAsHome",
+                          arguments: <String, dynamic>{
+                            "home_map_lat": config.lat ?? 0.0,
+                            "home_map_long": config.long ?? 0.0
+                          });
+                    }, trans(context, 'show_on_map'), Icons.map, ts2,
+                        "assets/images/discountmap.jpg"),
                     middleScreenButton(value.specSelected, () {
                       Navigator.pushNamed(context, "/Home",
                           arguments: <String, dynamic>{
@@ -221,7 +236,9 @@ class _WhereToGoState extends State<WhereToGo> {
       // listviewWidgets.add(const Divider(thickness: 1));
       if (i == specializations.length - 3) {
         listviewWidgets.add(Row(
-          children: <Widget>[specButton(specializations[specializations.length - 1])],
+          children: <Widget>[
+            specButton(specializations[specializations.length - 1])
+          ],
         ));
         listviewWidgets.add(const Divider(thickness: 1, height: 1));
         break;

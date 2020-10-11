@@ -4,6 +4,8 @@ import 'package:joker/models/merchant.dart';
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/models/branches_model.dart';
+import 'package:joker/util/service_locator.dart';
+import 'map_provider.dart';
 
 class MerchantProvider with ChangeNotifier {
   Merchant merchant;
@@ -18,13 +20,14 @@ class MerchantProvider with ChangeNotifier {
   }
 
   Future<List<BranchData>> getBranchesData(int pageIndex) async {
+    final Response<dynamic> response =
+        await dio.get<dynamic>("branches", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+    });
 
-      final Response<dynamic> response = await dio.get<dynamic>("branches",
-          queryParameters: <String, dynamic>{'page': pageIndex + 1});
- 
-      branches = Branches.fromJson(response.data);
-      return branches.data;
-    
+    branches = Branches.fromJson(response.data);
+    return branches.data;
   }
 
   void setFav(int branchId) {

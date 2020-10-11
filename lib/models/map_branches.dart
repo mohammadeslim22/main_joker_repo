@@ -1,3 +1,5 @@
+import 'package:joker/models/sales.dart';
+
 class MapBranches {
   MapBranches({this.mapBranches});
 
@@ -25,27 +27,31 @@ class MapBranch {
       this.isliked,
       this.isfavorite,
       this.twoSales,
-      this.merchant});
+      this.merchant,
+      this.spec});
 
   MapBranch.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'].toString();
     address = json['address'].toString();
     phone = json['phone'].toString();
-    latitude = json['latitude'] as double;
-    longitude = json['longitude'] as double;
+    // latitude = double.parse(json['latitude'].toString());
+    latitude = double.parse(json['latitude'].toString());
+    longitude = double.parse(json['longitude'].toString());
     ratesCount = json['rates_count'] as int;
     likesCount = json['likes_count'] as int;
     isliked = json['isliked'] as int;
     isfavorite = json['isfavorite'] as int;
     if (json['sales'] != null) {
-      twoSales = <TwoSales>[];
+      twoSales = <SaleData>[];
       json['sales'].forEach((dynamic v) {
-        twoSales.add(TwoSales.fromJson(v));
+        twoSales.add(SaleData.fromJson(v));
       });
     }
     merchant =
         json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
+    if (json['specialization'] != null)
+      spec = json['specialization'].toString();
   }
   int id;
   String name;
@@ -56,58 +62,60 @@ class MapBranch {
   int ratesCount;
   int likesCount;
   int isliked;
-  int isfavorite;  List<TwoSales> twoSales;
+  int isfavorite;
+  List<SaleData> twoSales;
   Merchant merchant;
+  String spec;
 }
 
-class TwoSales {
-  TwoSales(
-      {this.id,
-      this.userId,
-      this.name,
-      this.oldPrice,
-      this.newPrice,
-      this.startAt,
-      this.endAt,
-      this.details,
-      this.merchantId,
-      this.status,
-      this.mainImage,
-      this.createdAt,
-      this.updatedAt,
-      this.pivot});
+// class TwoSales {
+//   TwoSales(
+//       {this.id,
+//       this.userId,
+//       this.name,
+//       this.oldPrice,
+//       this.newPrice,
+//       this.startAt,
+//       this.endAt,
+//       this.details,
+//       this.merchantId,
+//       this.status,
+//       this.mainImage,
+//       this.createdAt,
+//       this.updatedAt,
+//       this.pivot});
 
-  TwoSales.fromJson(dynamic json) {
-    id = json['id'] as int;
-    userId = json['user_id'].toString();
-    name = json['name'].toString();
-    oldPrice = json['old_price'].toString();
-    newPrice = json['new_price'].toString();
-    startAt = json['start_at'].toString();
-    endAt = json['end_at'].toString();
-    details = json['details'].toString();
-    merchantId = json['merchant_id'].toString();
-    status = json['status'].toString();
-    mainImage = json['main_image'].toString();
-    createdAt = json['created_at'].toString();
-    updatedAt = json['updated_at'].toString();
-    pivot = json['pivot'] != null ? Pivot.fromJson(json['pivot']) : null;
-  }
-  int id;
-  String userId;
-  String name;
-  String oldPrice;
-  String newPrice;
-  String startAt;
-  String endAt;
-  String details;
-  String merchantId;
-  String status;
-  String mainImage;
-  String createdAt;
-  String updatedAt;
-  Pivot pivot;
-}
+//   TwoSales.fromJson(dynamic json) {
+//     id = json['id'] as int;
+//     userId = json['user_id'].toString();
+//     name = json['name'].toString();
+//     oldPrice = json['old_price'].toString();
+//     newPrice = json['new_price'].toString();
+//     startAt = json['start_at'].toString();
+//     endAt = json['end_at'].toString();
+//     details = json['details'].toString();
+//     merchantId = json['merchant_id'].toString();
+//     status = json['status'].toString();
+//     mainImage = json['main_image'].toString();
+//     createdAt = json['created_at'].toString();
+//     updatedAt = json['updated_at'].toString();
+//     pivot = json['pivot'] != null ? Pivot.fromJson(json['pivot']) : null;
+//   }
+//   int id;
+//   String userId;
+//   String name;
+//   String oldPrice;
+//   String newPrice;
+//   String startAt;
+//   String endAt;
+//   String details;
+//   String merchantId;
+//   String status;
+//   String mainImage;
+//   String createdAt;
+//   String updatedAt;
+//   Pivot pivot;
+// }
 
 class Pivot {
   Pivot({this.branchId, this.saleId});

@@ -49,6 +49,7 @@ class SaleData {
         images.add(Images.fromJson(v));
       });
     }
+    if(json['merchant']!=null)
     merchant = MerchantForSale.fromJson(json['merchant']);
     isliked = json['isliked'] as int;
     isfavorite = json['isfavorite'] as int;
