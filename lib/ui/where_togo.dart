@@ -15,6 +15,7 @@ import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
 import "package:flutter/cupertino.dart";
 import 'widgets/buttonTouse.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoadWhereToGo extends StatelessWidget {
   const LoadWhereToGo({Key key}) : super(key: key);
@@ -221,6 +222,13 @@ class _WhereToGoState extends State<WhereToGo>
                     trans(context, 'click_here'),
                     fontWait: FontWeight.bold,
                     fontColors: colors.green,
+                    onPressed: () async {
+                      if (await canLaunch(config.registerURL)) {
+                        await launch(config.registerURL);
+                      } else {
+                        throw 'Could not launch ${config.registerURL}';
+                      }
+                    },
                   ),
                 ],
               ),
@@ -324,7 +332,6 @@ class _WhereToGoState extends State<WhereToGo>
               ],
             ),
             onPressed: () {
-              
               getIt<HOMEMAProvider>().setSlelectedSpec(item.id);
               setState(() {
                 if (value.selectedSpecialize != null) {

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/colors.dart';
+import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/util/functions.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../widgets/text_form_input.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
@@ -168,8 +170,6 @@ class _MyLoginScreenState extends State<LoginScreen>
                             });
                             if (await auth.login(_usernameController.text,
                                 _passwordController.text, context)) {
-                                 
-
                             } else {
                               _formKey.currentState.validate();
                             }
@@ -212,6 +212,13 @@ class _MyLoginScreenState extends State<LoginScreen>
                   trans(context, 'click_here'),
                   fontWait: FontWeight.bold,
                   fontColors: colors.green,
+                  onPressed: () async {
+                    if (await canLaunch(config.registerURL)) {
+                      await launch(config.registerURL);
+                    } else {
+                      throw 'Could not launch ${config.registerURL}';
+                    }
+                  },
                 ),
               ),
             ],
