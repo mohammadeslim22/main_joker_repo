@@ -23,9 +23,9 @@ class MapAsHome extends StatefulWidget {
 
 class _MapAsHomeState extends State<MapAsHome> {
   StreamSubscription<dynamic> getPositionSubscription;
-  GoogleMapController mapController;
-  double lat;
-  double long;
+  // GoogleMapController mapController;
+  // double lat;
+  // double long;
   bool serviceEnabled;
   PermissionStatus permissionGranted;
   LocationData locationData;
@@ -42,12 +42,13 @@ class _MapAsHomeState extends State<MapAsHome> {
   @override
   void initState() {
     super.initState();
-    lat = widget.lat;
-    long = widget.long;
+    // lat = widget.lat;
+    // long = widget.long;
     // _scaffoldkey = GlobalKey<ScaffoldState>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey, lat, long, specId);
+      getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey,
+          getIt<HOMEMAProvider>().lat, getIt<HOMEMAProvider>().long, specId);
       // getIt<HOMEMAProvider>().pc.animatePanelToPosition(.3);
     });
   }
@@ -122,9 +123,8 @@ class _MapAsHomeState extends State<MapAsHome> {
                                 Text(
                                   "Explore ${getIt<HOMEMAProvider>().getSpecializationName()} Nearby",
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 24.0,
-                                  ),
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 24.0),
                                 ),
                               ],
                             ),
@@ -134,7 +134,7 @@ class _MapAsHomeState extends State<MapAsHome> {
                         ),
                       ),
                     ),
-                    body: _body(lat, long, value),
+                    body: _body(value),
                     panelBuilder: (ScrollController sc) => _panel(sc),
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(18.0),
@@ -174,23 +174,21 @@ class _MapAsHomeState extends State<MapAsHome> {
 
   Widget _panel(ScrollController sc) {
     //SizedBox(height: 60),
-    return  MapSalesList(sc: sc);
+    return MapSalesListState(sc: sc);
   }
 
   Future<void> _animateToUser() async {
     try {
       if (mounted) {
         await location.getLocation().then((LocationData value) {
-          mapController
+           getIt<HOMEMAProvider>().mapController
               .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
             target: LatLng(value.latitude, value.longitude),
             zoom: 13,
           )));
 
-          setState(() {
-            lat = value.latitude;
-            long = value.longitude;
-          });
+          getIt<HOMEMAProvider>().lat = value.latitude;
+          getIt<HOMEMAProvider>().long = value.longitude;
         });
       }
     } catch (e) {
@@ -227,7 +225,7 @@ class _MapAsHomeState extends State<MapAsHome> {
     }
   }
 
-  Widget _body(double lat, double long, HOMEMAProvider value) {
+  Widget _body(HOMEMAProvider value) {
     return Stack(
       children: <Widget>[
         GoogleMap(
@@ -246,29 +244,23 @@ class _MapAsHomeState extends State<MapAsHome> {
               }
             }
             await Future<void>.delayed(const Duration(microseconds: 2000));
-            mapController = controller;
-
-           
+            value.mapController = controller;
           },
-          onTap: (LatLng ll) {
-          
-          },
+          onTap: (LatLng ll) {},
           padding: const EdgeInsets.only(bottom: 60),
           mapType: MapType.normal,
           markers: Set<Marker>.of(value.markers),
           initialCameraPosition: CameraPosition(
-            target: LatLng(lat, long),
+            target: LatLng(value.lat, value.long),
             zoom: 13,
           ),
           onCameraMove: (CameraPosition pos) {
             setState(() {
-              lat = pos.target.latitude;
-              long = pos.target.longitude;
+              value.lat = pos.target.latitude;
+              value.long = pos.target.longitude;
             });
           },
-          onCameraIdle: () {
- 
-          },
+          onCameraIdle: () {},
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0, bottom: 100),

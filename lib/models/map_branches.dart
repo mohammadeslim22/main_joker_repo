@@ -28,7 +28,8 @@ class MapBranch {
       this.isfavorite,
       this.twoSales,
       this.merchant,
-      this.spec});
+      this.spec,
+      this.rateAverage});
 
   MapBranch.fromJson(dynamic json) {
     id = json['id'] as int;
@@ -52,6 +53,8 @@ class MapBranch {
         json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
     if (json['specialization'] != null)
       spec = json['specialization'].toString();
+
+    rateAverage = double.parse(json[''].toString());
   }
   int id;
   String name;
@@ -66,6 +69,7 @@ class MapBranch {
   List<SaleData> twoSales;
   Merchant merchant;
   String spec;
+  double rateAverage;
 }
 
 // class TwoSales {

@@ -11,36 +11,23 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/providers/globalVars.dart';
 
-class MapSalesList extends StatefulWidget {
-  const MapSalesList({Key key, this.sc}) : super(key: key);
+// class MapSalesList extends StatefulWidget {
+//   const MapSalesList({Key key, this.sc}) : super(key: key);
+//   final ScrollController sc;
+
+//   @override
+//   _MapSalesListState createState() => _MapSalesListState();
+// }
+
+class MapSalesListState extends StatelessWidget {
+  const MapSalesListState({Key key, this.sc}) : super(key: key);
   final ScrollController sc;
-  // final FilterData filterData;
-  @override
-  _MapSalesListState createState() => _MapSalesListState();
-}
-
-class _MapSalesListState extends State<MapSalesList> {
-  MainProvider bolc;
-
-  @override
-  void initState() {
-    super.initState();
-    // getIt<SalesProvider>().pagewiseSalesController =
-    //     PagewiseLoadController<dynamic>(
-    //         pageSize: 5,
-    //         pageFuture: (int pageIndex) async {
-    //           return (getIt<GlobalVars>().filterData != null)
-    //               ? getIt<SalesProvider>().getSalesDataFilterd(
-    //                   pageIndex, getIt<GlobalVars>().filterData)
-    //               : getIt<SalesProvider>().getSalesData(pageIndex);
-    //         });
-  }
 
   @override
   Widget build(BuildContext context) {
     return PagewiseListView<dynamic>(
       physics: const ScrollPhysics(),
-      controller: widget.sc,
+      controller: sc,
       shrinkWrap: true,
       loadingBuilder: (BuildContext context) {
         return const Center(

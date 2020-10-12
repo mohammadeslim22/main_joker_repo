@@ -27,10 +27,7 @@ class _MerchantCardState extends State<MerchantCard> {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // Container(margin:const EdgeInsets.fromLTRB(10, 0, 10, 10) ,height: 200,color: Colors.redAccent);
-
-        Card(
+    return Card(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(12), topRight: Radius.circular(12)),
@@ -83,11 +80,8 @@ class _MerchantCardState extends State<MerchantCard> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Expanded(
-                        child: Text(
-                          branchData.merchant.name,
-                          softWrap: true,
-                          style: styles.underHead,
-                        ),
+                        child: Text(branchData.merchant.name,
+                            softWrap: true, style: styles.underHead),
                       ),
                       RatingBar(
                         initialRating: double.parse(
@@ -116,9 +110,7 @@ class _MerchantCardState extends State<MerchantCard> {
                             children: <Widget>[
                               Text(trans(context, 'branches_number'),
                                   style: styles.mystyle),
-                              const SizedBox(
-                                width: 10,
-                              ),
+                              const SizedBox(width: 10),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 24, vertical: 4),
@@ -127,11 +119,8 @@ class _MerchantCardState extends State<MerchantCard> {
                                         Radius.circular(12)),
                                     color: Colors.grey[300]),
                                 alignment: Alignment.center,
-                                child: Text(
-                                  branchData.id.toString(),
-                                  softWrap: true,
-                                  style: styles.mystyle,
-                                ),
+                                child: Text(branchData.id.toString(),
+                                    softWrap: true, style: styles.mystyle),
                               )
                             ],
                           ),
@@ -140,16 +129,12 @@ class _MerchantCardState extends State<MerchantCard> {
                       Flexible(
                         child: Column(
                           children: <Widget>[
-                            Text(
-                              trans(context, 'current_sales'),
-                              style: styles.mylight,
-                              textAlign: TextAlign.center,
-                            ),
+                            Text(trans(context, 'current_sales'),
+                                style: styles.mylight,
+                                textAlign: TextAlign.center),
                             const SizedBox(height: 4),
-                            Text(
-                              branchData.salesCount.toString(),
-                              style: styles.mystyle,
-                            )
+                            Text(branchData.salesCount.toString(),
+                                style: styles.mystyle)
                           ],
                         ),
                       ),

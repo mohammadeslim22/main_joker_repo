@@ -25,7 +25,6 @@ Color saleStatus;
 class _SalesCardState extends State<MapSalesCard> {
   bool isliked = false;
   SaleData saledata;
-  String branches;
   @override
   void initState() {
     super.initState();
@@ -48,6 +47,7 @@ class _SalesCardState extends State<MapSalesCard> {
       ),
       child: InkWell(
         onTap: () {
+          getIt<HOMEMAProvider>().getSaleLotLang(saledata.branches.first.id);
           getIt<HOMEMAProvider>().pc.close();
           getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
               .scaffoldkey
