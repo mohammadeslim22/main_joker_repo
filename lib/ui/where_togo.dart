@@ -195,7 +195,7 @@ class _WhereToGoState extends State<WhereToGo>
                                 "home_map_long": config.long ?? 0.0
                               });
                         }, trans(context, 'show_on_map'), Icons.map, ts2,
-                            "assets/images/discountmap.jpg")),
+                            "assets/images/bg_unified_map_entrypoint.png")),
                     SlideTransition(
                         position: _offsetAnimation,
                         child: middleScreenButton(value.specSelected, () {

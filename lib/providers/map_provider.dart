@@ -70,10 +70,10 @@ class HOMEMAProvider with ChangeNotifier {
     Uint8List markerIcon;
     if (element.spec == "restaurant") {
       markerIcon =
-          await getBytesFromAsset('assets/images/restaurant_icon.png', 90);
+          await getBytesFromAsset('assets/images/ic_quick_link_map_restaurants.png', 110);
     }else{
        markerIcon =
-          await getBytesFromAsset('assets/images/coffee_icon.png', 90);
+          await getBytesFromAsset('assets/images/coffee_icon.png', 110);
     }
 
     final Marker marker = Marker(
