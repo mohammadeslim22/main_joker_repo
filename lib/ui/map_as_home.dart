@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/colors.dart';
+import 'package:joker/constants/config.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';
@@ -181,11 +182,12 @@ class _MapAsHomeState extends State<MapAsHome> {
     try {
       if (mounted) {
         await location.getLocation().then((LocationData value) {
-           getIt<HOMEMAProvider>().mapController
+          getIt<HOMEMAProvider>()
+              .mapController
               .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-            target: LatLng(value.latitude, value.longitude),
-            zoom: 13,
-          )));
+                target: LatLng(value.latitude, value.longitude),
+                zoom: 13,
+              )));
 
           getIt<HOMEMAProvider>().lat = value.latitude;
           getIt<HOMEMAProvider>().long = value.longitude;
@@ -226,6 +228,9 @@ class _MapAsHomeState extends State<MapAsHome> {
   }
 
   Widget _body(HOMEMAProvider value) {
+    print("vaslue lat ${value.lat}");
+        print("value long ${value.long}");
+
     return Stack(
       children: <Widget>[
         GoogleMap(
@@ -243,7 +248,7 @@ class _MapAsHomeState extends State<MapAsHome> {
                 _animateToUser();
               }
             }
-            await Future<void>.delayed(const Duration(microseconds: 2000));
+            //await Future<void>.delayed(const Duration(microseconds: 2000));
             value.mapController = controller;
           },
           onTap: (LatLng ll) {},
@@ -251,7 +256,7 @@ class _MapAsHomeState extends State<MapAsHome> {
           mapType: MapType.normal,
           markers: Set<Marker>.of(value.markers),
           initialCameraPosition: CameraPosition(
-            target: LatLng(value.lat, value.long),
+            target: LatLng(config.lat, config.long),
             zoom: 13,
           ),
           onCameraMove: (CameraPosition pos) {

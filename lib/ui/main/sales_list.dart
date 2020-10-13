@@ -10,7 +10,6 @@ import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/providers/salesProvider.dart';
-import 'package:joker/providers/globalVars.dart';
 
 class DiscountsList extends StatefulWidget {
   const DiscountsList({Key key}) : super(key: key);
@@ -26,15 +25,6 @@ class _DiscountsListState extends State<DiscountsList> {
   @override
   void initState() {
     super.initState();
-    // getIt<SalesProvider>().pagewiseSalesController =
-    //     PagewiseLoadController<dynamic>(
-    //         pageSize: 5,
-    //         pageFuture: (int pageIndex) async {
-    //           return (getIt<GlobalVars>().filterData != null)
-    //               ? getIt<SalesProvider>().getSalesDataFilterd(
-    //                   pageIndex, getIt<GlobalVars>().filterData)
-    //               : getIt<SalesProvider>().getSalesData(pageIndex);
-    //         });
   }
 
   @override

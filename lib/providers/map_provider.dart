@@ -8,6 +8,7 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/ui/cards/merchant_card.dart';
+import 'package:joker/ui/cards/merchant_card_no_padding.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/models/specializations.dart';
 import 'package:joker/util/service_locator.dart';
@@ -119,7 +120,7 @@ class HOMEMAProvider with ChangeNotifier {
                           removeBottom: true,
                           removeLeft: true,
                           removeRight: true,
-                          child: MerchantCard(branchData: element as BranchData)),
+                          child: MapMerchantCard(branchData: element)),
                     ],
                   ));
         },

@@ -55,7 +55,9 @@ Future<bool> get updateLocation async {
     res = false;
   } else {
     config.lat = double.parse(loglat.elementAt(0));
+    print("config lat : ${config.lat}");
     config.long = double.parse(loglat.elementAt(1));
+    print("config long : ${config.long}");
     res = true;
   }
 
