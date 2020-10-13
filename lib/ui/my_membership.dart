@@ -71,8 +71,8 @@ class MyMemberShipState extends State<MyMemberShip>
         ),
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, "/MembershipDetails",
-                arguments: <String, dynamic>{"membership": memberShip});
+            // Navigator.pushNamed(context, "/MembershipDetails",
+            //     arguments: <String, dynamic>{"membership": memberShip});
           },
           child: Container(
             padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),

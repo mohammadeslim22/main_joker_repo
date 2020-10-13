@@ -996,4 +996,5 @@ class _CurasolSliderState extends State<CurasolSlider> {
       ],
     );
   }
+  //abu talaat
 }
