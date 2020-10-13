@@ -30,6 +30,11 @@ class MerchantProvider with ChangeNotifier {
     return branches.data;
   }
 
+  Future<void> vistBranch(int branchId, {String source = 'click'}) async {
+    print(await dio.get<dynamic>("branches/$branchId",
+        queryParameters: <String, String>{'source': 'qr'}));
+  }
+
   void setFav(int branchId) {
     branches.data.firstWhere((BranchData element) {
       return element.id == branchId;

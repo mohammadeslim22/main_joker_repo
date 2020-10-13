@@ -94,8 +94,8 @@ class _WhereToGoState extends State<WhereToGo>
   TextStyle ts2 = styles.fromMainToMap;
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override

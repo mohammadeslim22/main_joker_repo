@@ -231,7 +231,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           final Map<String, dynamic> map =
                               json.decode(result.rawContent)
                                   as Map<String, dynamic>;
-
+                          getIt<MerchantProvider>().vistBranch(
+                              int.parse(map['id'].toString()),
+                              source: 'qr');
                           Navigator.pushNamed(context, "/MerchantDetails",
                               arguments: <String, dynamic>{
                                 "merchantId":

@@ -6,6 +6,8 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:rating_bar/rating_bar.dart';
 
 class MerchantCard extends StatefulWidget {
@@ -34,6 +36,7 @@ class _MerchantCardState extends State<MerchantCard> {
       ),
       child: InkWell(
         onTap: () async {
+          getIt<MerchantProvider>().vistBranch(branchData.id);
           Navigator.pushNamed(context, "/MerchantDetails",
               arguments: <String, dynamic>{
                 "merchantId": branchData.merchant.id,

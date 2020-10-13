@@ -64,6 +64,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    
     merchant = widget.merchant;
     salesNo = merchant.mydata.salesCount;
     index = merchant.mydata.branches[0].id;

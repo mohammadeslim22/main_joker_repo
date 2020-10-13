@@ -122,7 +122,7 @@ class MyMemberShipState extends State<MyMemberShip>
                     )
                   ],
                 ),
-                Flexible(
+                /* Flexible(
                   child: CachedNetworkImage(
                     placeholderFadeInDuration:
                         const Duration(milliseconds: 300),
@@ -151,7 +151,7 @@ class MyMemberShipState extends State<MyMemberShip>
                   //   "assets/images/qrcode.png",
                   //   scale: 2,
                   // )
-                )
+                ) */
               ],
             ),
           ),
