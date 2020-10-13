@@ -54,7 +54,7 @@ class MapBranch {
     if (json['specialization'] != null)
       spec = json['specialization'].toString();
 
-    rateAverage = double.parse(json[''].toString());
+    rateAverage = double.parse(json['rates_average'].toString());
   }
   int id;
   String name;
