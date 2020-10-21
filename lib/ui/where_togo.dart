@@ -237,17 +237,17 @@ class _WhereToGoState extends State<WhereToGo>
           );
         }),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: CircleAvatar(
-        backgroundColor: colors.white,
-        radius: 24,
-        child: IconButton(
-          padding: EdgeInsets.zero,
-          icon: const Icon(Icons.add, size: 38),
-          color: colors.yellow,
-          onPressed: () {},
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      // floatingActionButton: CircleAvatar(
+      //   backgroundColor: colors.white,
+      //   radius: 24,
+      //   child: IconButton(
+      //     padding: EdgeInsets.zero,
+      //     icon: const Icon(Icons.add, size: 38),
+      //     color: colors.yellow,
+      //     onPressed: () {},
+      //   ),
+      // ),
     );
   }
 
