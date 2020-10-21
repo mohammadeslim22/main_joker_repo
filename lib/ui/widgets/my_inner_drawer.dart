@@ -38,15 +38,15 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
   @override
   void initState() {
     super.initState();
-    if (config.username == null) {
+    //if (config.username == null) {
       data.getData("username").then((String value) {
         setState(() {
           username = value ?? "";
         });
       });
-    } else {
-      username = config.username;
-    }
+    // } else {
+    //   username = config.username;
+  //  }
     // print("profile pic ${config.profileUrl}");
     if (config.loggedin) {
       data.getData("profile_pic").then((String value) {

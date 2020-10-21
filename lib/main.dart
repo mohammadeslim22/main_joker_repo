@@ -80,7 +80,7 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
-
+////     "login": "girişyap",
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {

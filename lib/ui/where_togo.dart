@@ -77,6 +77,7 @@ class _WhereToGoState extends State<WhereToGo>
       parent: _controller,
       curve: Curves.elasticIn,
     ));
+    if(!getIt<HOMEMAProvider>().specSelected)
     _controller.forward();
     getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(

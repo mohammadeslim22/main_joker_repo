@@ -55,10 +55,13 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   final FocusNode focus4 = FocusNode();
   File myimage;
   Future<Profile> getProfileData() async {
-    final dynamic response = await dio.get<dynamic>("user");
-    print(response.data);
-    profile = Profile.fromJson(response.data);
-    return profile;
+    final Response<dynamic> response = await dio.get<dynamic>("user");
+    if (response.statusCode == 200) {
+      profile = Profile.fromJson(response.data);
+      return profile;
+    } else {
+      return null;
+    }
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -283,8 +286,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       suffixicon: IconButton(
                                         icon: Icon(Icons.edit,
                                             color: colors.blue),
-                                        onPressed: () {
-                                        },
+                                        onPressed: () {},
                                       ),
                                       focusNode: focus1,
                                       onFieldSubmitted: () {

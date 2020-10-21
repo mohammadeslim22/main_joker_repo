@@ -126,6 +126,7 @@ class Auth with ChangeNotifier {
 
       if (value.statusCode == 200) {
         if (value.data != "fail") {
+          data.setData("username", value.data['name'].toString());
           await data.setData(
               "authorization", "Bearer ${value.data['api_token']}");
           dio.options.headers['authorization'] =
@@ -180,6 +181,7 @@ class Auth with ChangeNotifier {
     String email,
     String mobile,
   ) async {
+    print("loging info:${myCountryDialCode + mobile.replaceAll("^0+", "")}");
     bool res;
     await dio.post<dynamic>("register", data: <String, dynamic>{
       "name": username,
@@ -320,8 +322,10 @@ class Auth with ChangeNotifier {
 
   Future<bool> getPinCode(String code) async {
     final String phone = await data.getData("phone");
+    print("phone  ${phone}");
     final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
         data: <String, dynamic>{"phone": phone, "verfiy_code": code});
+    print("correct data : ${correct.data}");
     if (correct.data == "false") {
       notifyListeners();
       return false;

@@ -162,6 +162,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                           borderRadius: BorderRadius.circular(18.0),
                           side: BorderSide(color: colors.jokerBlue)),
                       onPressed: () async {
+                        print("_usernameController.text : ${_usernameController.text}");
                         if (_isButtonEnabled) {
                           if (_formKey.currentState.validate()) {
                             mainProvider.togelf(true);

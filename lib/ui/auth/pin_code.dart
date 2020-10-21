@@ -56,17 +56,12 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              width: 140,
+              width: 160,
               child: PinCodeTextField(
                 length: 4,
                 obscureText: false,
                 animationType: AnimationType.fade,
                 animationDuration: const Duration(milliseconds: 300),
-                // borderRadius: BorderRadius.circular(5),
-                // shape: PinCodeFieldShape.box,
-                // inactiveColor: Colors.grey,
-                // fieldHeight: 40,
-                // fieldWidth: 30,
                 keyboardType: TextInputType.phone,
                 onCompleted: (String v) async {
                   bolc.togelf(true);
@@ -246,13 +241,12 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                   textColor: colors.blue,
                   padding: const EdgeInsets.all(8.0),
                   onPressed: () async {
-                     if (await auth.sendPinNewPhone(
-                                              mobileNoController.text,
-                                              context)) {
-                                            setState(() {
-                                              buttonChangeMoEnabeld = false;
-                                            });
-                                          }
+                    if (await auth.sendPinNewPhone(
+                        mobileNoController.text, context)) {
+                      setState(() {
+                        buttonChangeMoEnabeld = false;
+                      });
+                    }
                   },
                   child: Text(
                     trans(context, 'resend_code'),
