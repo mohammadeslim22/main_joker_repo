@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
+import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';
@@ -122,7 +123,9 @@ class _MapAsHomeState extends State<MapAsHome> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  "Explore ${getIt<HOMEMAProvider>().getSpecializationName()} Nearby",
+                                  trans(context, 'explore') +
+                                      " ${getIt<HOMEMAProvider>().getSpecializationName()} " +
+                                      trans(context, 'nearby'),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                       fontSize: 24.0),
@@ -229,7 +232,7 @@ class _MapAsHomeState extends State<MapAsHome> {
 
   Widget _body(HOMEMAProvider value) {
     print("vaslue lat ${value.lat}");
-        print("value long ${value.long}");
+    print("value long ${value.long}");
 
     return Stack(
       children: <Widget>[

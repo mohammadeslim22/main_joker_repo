@@ -212,7 +212,9 @@
     "open_in_list":"Recent Near Discounts",
     "show_on_map":"Explore nearby places",
     "more_info":"More Info",
-    "data_no_available":"Data not Available"
+    "data_no_available":"Data not Available",
+    "explore":"Explore",
+    "nearby":"Nearby"
 
 
 }
