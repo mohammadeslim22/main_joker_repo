@@ -179,6 +179,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                           cController: mobileNoController,
                           prefixIcon: Icons.phone,
                           kt: TextInputType.phone,
+                          onTab: () {},
                           obscureText: false,
                           readOnly: false,
                           suffixicon:

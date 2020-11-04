@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:joker/models/membership.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/models/specializations.dart';
 import 'package:joker/ui/about_us.dart';
 import 'package:joker/ui/address_list.dart';
 import 'package:joker/ui/advanced_search.dart';
@@ -92,7 +93,9 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       break;
     case "/AdvancedSearch":
       page = PageTransition<PageController>(
-        child: const AdvancedSearch(),
+        child:  AdvancedSearch(
+          specializations: args['specializations'] as List<Specialization> ,
+        ),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;

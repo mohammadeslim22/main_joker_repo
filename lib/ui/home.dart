@@ -6,6 +6,7 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/map_provider.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
@@ -208,7 +209,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     IconButton(
                       icon: Icon(Icons.search, color: colors.jokerBlue),
                       onPressed: () {
-                        Navigator.pushNamed(context, "/AdvancedSearch");
+                        Navigator.pushNamed(context, "/AdvancedSearch",
+                            arguments: <String, dynamic>{
+                              "specializations":
+                                  getIt<HOMEMAProvider>().specializations
+                            });
                       },
                     ),
                     // Badge(

@@ -11,6 +11,7 @@ import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';
 import 'providers/language.dart';
 import 'package:provider/provider.dart';
+import 'package:joker/util/size_config.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
@@ -45,11 +46,6 @@ class _SplashScreenState extends State<SplashScreen> {
       getIt<HOMEMAProvider>().setRotation(event.heading);
     });
     Navigator.pushNamedAndRemoveUntil(context, "/WhereToGo", (_) => false);
-    // Navigator.pushNamedAndRemoveUntil(context, "/HomeMap", (_) => false,
-    //     arguments: <String, dynamic>{
-    //       "home_map_lat": config.lat ?? 0.0,
-    //       "home_map_long": config.long ?? 0.0
-    //     });
   }
 
   Future<void> initPlatformState(Auth auth) async {
@@ -63,10 +59,6 @@ class _SplashScreenState extends State<SplashScreen> {
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) {
       return;
     }
@@ -83,6 +75,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       body: Container(
           color: Colors.white,

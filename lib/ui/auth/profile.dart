@@ -95,7 +95,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
         mobileNoController.text = value.phone;
         tempPhone = value.phone;
         birthDateController.text = value.birthDate;
-        config.locationController.text = "${value.address}";
+        config.locationController.text = value.address;
       });
     });
   }
@@ -119,7 +119,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
+    final MainProvider mainProvider = Provider.of<MainProvider>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -197,13 +197,13 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   child: Text(trans(context, 'open_gallery'),
                                       style: styles.mysmall),
                                   onPressed: () async {
-                                    getImage(ImageSource.gallery, bolc);
+                                    getImage(ImageSource.gallery, mainProvider);
                                   }),
                               FlatButton(
                                 child: Text(trans(context, "take_photo"),
                                     style: styles.mysmall),
                                 onPressed: () async {
-                                  getImage(ImageSource.camera, bolc);
+                                  getImage(ImageSource.camera, mainProvider);
                                 },
                               ),
                               if (myimage == null)
@@ -332,14 +332,17 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       readOnly: true,
                                       onTab: () async {
                                         try {
-                                          bolc.togelocationloading(true);
+                                          mainProvider
+                                              .togelocationloading(true);
 
                                           if (await updateLocation) {
                                             await getLocationName();
-                                            bolc.togelocationloading(false);
+                                            mainProvider
+                                                .togelocationloading(false);
                                           } else {
                                             Vibration.vibrate(duration: 400);
-                                            bolc.togelocationloading(false);
+                                            mainProvider
+                                                .togelocationloading(false);
 
                                             Scaffold.of(context)
                                                 .showSnackBar(snackBar);
@@ -350,7 +353,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                           }
                                         } catch (e) {
                                           Vibration.vibrate(duration: 400);
-                                          bolc.togelocationloading(false);
+                                          mainProvider
+                                              .togelocationloading(false);
                                           Scaffold.of(context)
                                               .showSnackBar(snackBar);
                                           setState(() {
@@ -365,7 +369,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                         onPressed: () {
                                           Navigator.pushNamed(
                                               context, '/AutoLocate',
-                                              arguments: <String, double>{
+                                              arguments: <String, dynamic>{
                                                 "lat": 51.0,
                                                 "long": 9.6,
                                                 "choice": 0
@@ -384,7 +388,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   Container(
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 16),
-                                    child: bolc.visibilityObs
+                                    child: mainProvider.visibilityObs
                                         ? Row(
                                             children: <Widget>[
                                               Expanded(
@@ -410,7 +414,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                             onPressed: () async {
                               if (_isButtonEnabled) {
                                 if (_formKey.currentState.validate()) {
-                                  bolc.togelf(true);
+                                  mainProvider.togelf(true);
                                   setState(() {
                                     _isButtonEnabled = false;
                                   });
@@ -424,84 +428,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       _isButtonEnabled = true;
                                     });
                                     if (value) {
-                                      showGeneralDialog<dynamic>(
-                                        barrierLabel: "Label",
-                                        barrierDismissible: true,
-                                        barrierColor:
-                                            Colors.black.withOpacity(0.73),
-                                        transitionDuration:
-                                            const Duration(milliseconds: 350),
-                                        context: context,
-                                        pageBuilder: (BuildContext context,
-                                            Animation<double> anim1,
-                                            Animation<double> anim2) {
-                                          return Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Container(
-                                              height: 360,
-                                              margin: const EdgeInsets.only(
-                                                  bottom: 160,
-                                                  left: 24,
-                                                  right: 24),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(40),
-                                              ),
-                                              child: Material(
-                                                type: MaterialType.transparency,
-                                                child: SizedBox.expand(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      SvgPicture.asset(
-                                                          'assets/images/checkdone.svg'),
-                                                      const SizedBox(
-                                                          height: 15),
-                                                      Flexible(
-                                                        child: Text(
-                                                            trans(context,
-                                                                "information_updated_successfully"),
-                                                            style: styles
-                                                                .underHeadblack),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 15),
-                                                      RaisedButton(
-                                                          color:
-                                                              colors.jokerBlue,
-                                                          child: Text(
-                                                              trans(context,
-                                                                  "ok"),
-                                                              style: styles
-                                                                  .underHeadwhite),
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          })
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        transitionBuilder:
-                                            (BuildContext context,
-                                                Animation<double> anim1,
-                                                Animation<double> anim2,
-                                                Widget child) {
-                                          return SlideTransition(
-                                            position: Tween<Offset>(
-                                                    begin: const Offset(0, 1),
-                                                    end: const Offset(0, 0))
-                                                .animate(anim1),
-                                            child: child,
-                                          );
-                                        },
-                                      );
+                                      ifUpdateTur();
                                     } else {
                                       _formKey.currentState.validate();
                                     }
@@ -510,21 +437,79 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                         .updateAll((String key, String value) {
                                       return null;
                                     });
-                                    bolc.togelf(false);
+                                    mainProvider.togelf(false);
                                   });
                                 }
                               }
                             },
                             color: colors.blue,
                             textColor: colors.white,
-                            child: Text(
+                            child: mainProvider.returnchildforProfile(
                               trans(context, 'save_changes'),
-                              style: styles.notificationNO,
+                              //  style: styles.notificationNO,
                             )),
                       ),
                     ]),
                   ],
                 ))));
+  }
+
+  void ifUpdateTur() {
+    showGeneralDialog<dynamic>(
+      barrierLabel: "Label",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.73),
+      transitionDuration: const Duration(milliseconds: 350),
+      context: context,
+      pageBuilder: (BuildContext context, Animation<double> anim1,
+          Animation<double> anim2) {
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: 360,
+            margin: const EdgeInsets.only(bottom: 160, left: 24, right: 24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(40),
+            ),
+            child: Material(
+              type: MaterialType.transparency,
+              child: SizedBox.expand(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SvgPicture.asset('assets/images/checkdone.svg'),
+                    const SizedBox(height: 15),
+                    Flexible(
+                      child: Text(
+                          trans(context, "information_updated_successfully"),
+                          style: styles.underHeadblack),
+                    ),
+                    const SizedBox(height: 15),
+                    RaisedButton(
+                        color: colors.jokerBlue,
+                        child: Text(trans(context, "ok"),
+                            style: styles.underHeadwhite),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        })
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (BuildContext context, Animation<double> anim1,
+          Animation<double> anim2, Widget child) {
+        return SlideTransition(
+          position:
+              Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
+                  .animate(anim1),
+          child: child,
+        );
+      },
+    );
   }
 
   Future<void> getImage(ImageSource imageSource, MainProvider bolc) async {

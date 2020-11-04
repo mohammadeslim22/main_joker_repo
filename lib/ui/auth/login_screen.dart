@@ -53,6 +53,7 @@ class _MyLoginScreenState extends State<LoginScreen>
               kt: TextInputType.phone,
               obscureText: false,
               readOnly: false,
+              onTab: () {},
               suffixicon: CountryPickerCode(context: context, isRTL: isRTL),
               onFieldSubmitted: () {
                 _focus1.requestFocus();

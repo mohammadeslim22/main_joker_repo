@@ -1,3 +1,5 @@
+import 'package:joker/constants/config.dart';
+
 class Profile {
   Profile(
       {this.id,
@@ -28,7 +30,8 @@ class Profile {
     emailVerifiedAt = json['data']['email_verified_at'].toString();
     countryId = json['data']['country_id'].toString();
     cityId = json['data']['city_id'].toString();
-    address = json['data']['address'].toString();
+    if (json['data']['address'] != null)
+      address = json['data']['address'].toString();
     longitude = json['data']['longitude'].toString();
     latitude = json['data']['latitude'].toString();
     phone = json['data']['phone'].toString();
@@ -48,7 +51,7 @@ class Profile {
   String emailVerifiedAt;
   String countryId;
   String cityId;
-  String address;
+  String address= config.locationController.text;
   String longitude;
   String latitude;
   String phone;

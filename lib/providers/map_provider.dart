@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/config.dart';
-import 'package:joker/models/branches_model.dart';
 import 'package:joker/models/map_branches.dart';
-import 'package:joker/ui/cards/merchant_card.dart';
 import 'package:joker/ui/cards/merchant_card_no_padding.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/models/specializations.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:joker/util/size_config.dart';
 
 class HOMEMAProvider with ChangeNotifier {
   bool dataloaded = false;
@@ -22,9 +21,8 @@ class HOMEMAProvider with ChangeNotifier {
   bool horizentalListOn = false;
   double rotation;
   bool specesLoaded = false;
-  // Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   List<Marker> markers = <Marker>[];
-  List<Specializations> specializations = <Specializations>[];
+  List<Specialization> specializations = <Specialization>[];
 
   int selectedSpecialize;
 
@@ -62,23 +60,7 @@ class HOMEMAProvider with ChangeNotifier {
     for (final MapBranch mapBranch in branches.mapBranches) {
       await _addMarker(_scaffoldkey, mapBranch);
     }
-    /* branches.mapBranches.forEach((MapBranch element) async {
-      await _addMarker(_scaffoldkey, element);
-    }); */
 
-    // final Uint8List markerIcon =
-    //     await getBytesFromAsset('assets/images/locationMarkerblue.png', 100);
-    // final Marker marker = Marker(
-    //     markerId: MarkerId('current_location'),
-    //     position: LatLng(config.lat ?? 0, config.long ?? 0),
-    //     icon: BitmapDescriptor.fromBytes(markerIcon),
-    //     infoWindow: InfoWindow(
-    //         title: getIt<NavigationService>()
-    //             .translateWithNoContext("your_location")),
-    //     rotation: rotation,
-    //     flat: true);
-    // markers.add(marker);
-    // markers[MarkerId('current_location')] = marker;
     dataloaded = true;
 
     notifyListeners();
@@ -94,7 +76,7 @@ class HOMEMAProvider with ChangeNotifier {
     Uint8List markerIcon;
     if (element.spec == "restaurant") {
       markerIcon = await getBytesFromAsset(
-          'assets/images/ic_quick_link_map_restaurants.png', 110);
+          'assets/images/ic_quick_link_map_restaurants.png', (SizeConfig.blockSizeHorizontal*50).toInt());
     } else {
       markerIcon =
           await getBytesFromAsset('assets/images/coffee_icon.png', 110);
@@ -106,7 +88,6 @@ class HOMEMAProvider with ChangeNotifier {
         icon: BitmapDescriptor.fromBytes(markerIcon),
         onTap: () {
           inFocusBranch = element;
-          //getIt<HOMEMAProvider>().pc.close();
 
           getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
               .scaffoldkey
@@ -126,8 +107,6 @@ class HOMEMAProvider with ChangeNotifier {
         },
         infoWindow: InfoWindow(title: element.merchant.name.toString()));
 
-    // final MarkerId markerId = MarkerId(element.id.toString());
-    // markers[markerId] = marker;
     markers.add(marker);
   }
 
@@ -144,9 +123,8 @@ class HOMEMAProvider with ChangeNotifier {
   Future<void> getSpecializationsData() async {
     final dynamic response = await dio.get<dynamic>("specializations");
     specializations.clear();
-    response.data['data'].forEach((dynamic element) {
-      specializations.add(Specializations.fromJson(element));
-    });
+    specializations = Specializations.fromJson(response.data).data;
+
     specesLoaded = true;
     notifyListeners();
   }
@@ -162,7 +140,7 @@ class HOMEMAProvider with ChangeNotifier {
   }
 
   String getSpecializationName() {
-    return specializations.firstWhere((Specializations element) {
+    return specializations.firstWhere((Specialization element) {
       return element.id == selectedSpecialize;
     }).name;
   }

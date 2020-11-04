@@ -68,6 +68,7 @@ class _AutoLocateState extends State<AutoLocate> {
     functions.add(setFromRegister);
     functions.add(setFromSetFromMap);
     functions.add(setFromAddLocation);
+    functions.add(setFromAdvancedSearch);
   }
 
   @override
@@ -124,6 +125,7 @@ class _AutoLocateState extends State<AutoLocate> {
               body: Stack(
                 children: <Widget>[
                   GoogleMap(
+                     myLocationEnabled: true,
                     circles: <Circle>{
                       Circle(
                           circleId: CircleId("id"),
@@ -242,11 +244,10 @@ class _AutoLocateState extends State<AutoLocate> {
                             borderRadius: BorderRadius.circular(6),
                             onTap: () {},
                             child: GestureDetector(
-                              child:const  Center(
+                              child: const Center(
                                 child: Icon(
                                   Icons.my_location,
-                                  color:
-                                       Color.fromARGB(1023, 150, 150, 150),
+                                  color: Color.fromARGB(1023, 150, 150, 150),
                                 ),
                               ),
                               onTap: () async {
@@ -322,8 +323,8 @@ class _AutoLocateState extends State<AutoLocate> {
   Future<void> _animateToUser() async {
     try {
       if (mounted) {}
-      final Uint8List markerIcon =
-          await getBytesFromAsset('assets/images/logo.jpg', 100);
+      // final Uint8List markerIcon =
+      //     await getBytesFromAsset('assets/images/logo.jpg', 100);
       await location.getLocation().then((LocationData value) {
         mapController
             .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -332,14 +333,14 @@ class _AutoLocateState extends State<AutoLocate> {
         )));
         getPositionSubscription =
             location.onLocationChanged.listen((LocationData value) {
-          final Marker marker = Marker(
-            markerId: MarkerId('current_location'),
-            position: LatLng(value.latitude, value.longitude),
-            icon: BitmapDescriptor.fromBytes(markerIcon),
-            flat: true,
-            anchor: const Offset(0.5, 0.5),
-          );
-          _addMarker(marker);
+          // final Marker marker = Marker(
+          //   markerId: MarkerId('current_location'),
+          //   position: LatLng(value.latitude, value.longitude),
+          //   icon: BitmapDescriptor.fromBytes(markerIcon),
+          //   flat: true,
+          //   anchor: const Offset(0.5, 0.5),
+          // );
+          // _addMarker(marker);
         });
         setState(() {
           lat = value.latitude;
@@ -385,16 +386,12 @@ class _AutoLocateState extends State<AutoLocate> {
                 color: colors.red,
                 textColor: colors.white,
                 child: Text(trans(context, 'cancel'))),
-            const SizedBox(
-              width: 30,
-            ),
+            const SizedBox(width: 30),
             RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                     side: BorderSide(color: colors.blue)),
                 onPressed: () {
-                  data.setData("lat", lat.toString());
-                  data.setData("long", long.toString());
                   setState(() {
                     config.lat = lat;
                     config.long = long;
@@ -421,19 +418,22 @@ class _AutoLocateState extends State<AutoLocate> {
   }
 
   void setFromSetFromMap() {
-    if (getIt<MerchantProvider>().pagewiseBranchesController != null){
+    if (getIt<MerchantProvider>().pagewiseBranchesController != null) {
       getIt<MerchantProvider>().pagewiseBranchesController.reset();
     }
-    
-    if (getIt<SalesProvider>().pagewiseSalesController != null){
-       getIt<SalesProvider>().pagewiseSalesController.reset();
+
+    if (getIt<SalesProvider>().pagewiseSalesController != null) {
+      getIt<SalesProvider>().pagewiseSalesController.reset();
     }
-     
 
     Navigator.pop(context);
   }
 
+  void setFromAdvancedSearch() {}
+
   void setFromRegister() {
+    data.setData("lat", lat.toString());
+    data.setData("long", long.toString());
     config.locationController.text =
         address == null ? "unkown" : address.addressLine ?? "unkown";
     Provider.of<MainProvider>(context, listen: false)

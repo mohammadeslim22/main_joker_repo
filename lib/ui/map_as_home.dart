@@ -25,9 +25,7 @@ class MapAsHome extends StatefulWidget {
 
 class _MapAsHomeState extends State<MapAsHome> {
   StreamSubscription<dynamic> getPositionSubscription;
-  // GoogleMapController mapController;
-  // double lat;
-  // double long;
+
   bool serviceEnabled;
   PermissionStatus permissionGranted;
   LocationData locationData;
@@ -38,20 +36,14 @@ class _MapAsHomeState extends State<MapAsHome> {
   GlobalKey<ScaffoldState> _scaffoldkey;
   int specId;
 
-  // double _panelHeightOpen;
-  // final double _panelHeightClosed = 100.0;
-
   @override
   void initState() {
     super.initState();
-    // lat = widget.lat;
-    // long = widget.long;
-    // _scaffoldkey = GlobalKey<ScaffoldState>();
+
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey,
           getIt<HOMEMAProvider>().lat, getIt<HOMEMAProvider>().long, specId);
-      // getIt<HOMEMAProvider>().pc.animatePanelToPosition(.3);
     });
   }
 
@@ -63,8 +55,6 @@ class _MapAsHomeState extends State<MapAsHome> {
 
   @override
   Widget build(BuildContext context) {
-    // _panelHeightOpen = MediaQuery.of(context).size.height * .80;
-
     return Scaffold(
       key: getIt<HOMEMAProvider>().scaffoldkey,
       body: Stack(
@@ -74,13 +64,10 @@ class _MapAsHomeState extends State<MapAsHome> {
             resizeToAvoidBottomInset: false,
             body: Consumer<HOMEMAProvider>(builder:
                 (BuildContext context, HOMEMAProvider value, Widget child) {
-              // if (value.dataloaded) {
               return Stack(
                 alignment: Alignment.topCenter,
                 children: <Widget>[
                   SlidingUpPanel(
-                    // maxHeight: _panelHeightOpen,
-                    // minHeight: _panelHeightClosed,
                     parallaxEnabled: true,
                     parallaxOffset: .5,
                     controller: value.pc,
@@ -164,11 +151,6 @@ class _MapAsHomeState extends State<MapAsHome> {
                   ),
                 ],
               );
-              // } else {
-              //   return const Center(
-              //     child: CircularProgressIndicator(),
-              //   );
-              // }
             }),
           ),
         ],
@@ -177,7 +159,6 @@ class _MapAsHomeState extends State<MapAsHome> {
   }
 
   Widget _panel(ScrollController sc) {
-    //SizedBox(height: 60),
     return MapSalesListState(sc: sc);
   }
 
@@ -251,7 +232,6 @@ class _MapAsHomeState extends State<MapAsHome> {
                 _animateToUser();
               }
             }
-            //await Future<void>.delayed(const Duration(microseconds: 2000));
             value.mapController = controller;
           },
           onTap: (LatLng ll) {},

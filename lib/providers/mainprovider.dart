@@ -133,6 +133,21 @@ class MainProvider extends ChangeNotifier {
       return spinkit;
     }
   }
+  Widget returnchildforProfile(String login) {
+    loginbase = login;
+    if (!loading) {
+      return Padding(
+          padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+          child: Text(loginbase,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 25,
+              )));
+    } else {
+      return spinkit;
+    }
+  }
 
   void togelf(bool state) {
     loading = state;

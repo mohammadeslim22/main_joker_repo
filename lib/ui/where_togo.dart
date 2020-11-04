@@ -251,7 +251,7 @@ class _WhereToGoState extends State<WhereToGo>
     );
   }
 
-  void distributeOnList(List<Specializations> specializations) {
+  void distributeOnList(List<Specialization> specializations) {
     for (int i = 0; i < specializations.length; i += 2) {
       listviewWidgets.add(Row(
         children: <Widget>[
@@ -310,7 +310,7 @@ class _WhereToGoState extends State<WhereToGo>
     );
   }
 
-  Widget specButton(Specializations item) {
+  Widget specButton(Specialization item) {
     return Consumer<HOMEMAProvider>(
       builder: (BuildContext context, HOMEMAProvider value, Widget child) {
         return Expanded(

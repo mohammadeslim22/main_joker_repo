@@ -1,21 +1,25 @@
-class Specializations {
-  Specializations({this.id, this.name, this.status});
+class Specialization {
+  Specialization({this.id, this.name});
 
-  Specializations.fromJson(dynamic json) {
-    id = json['id']as int;
+  Specialization.fromJson(dynamic json) {
+    id = json['id'] as int;
     name = json['name'].toString();
-    status = json['status'].toString();
-      }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['status'] = status;
-    return data;
   }
 
   int id;
   String name;
-  String status;
+}
+
+class Specializations {
+  Specializations({this.data});
+
+  Specializations.fromJson(dynamic json) {
+    if (json['data'] != null) {
+      data = <Specialization>[];
+      json['data'].forEach((dynamic v) {
+        data.add(Specialization.fromJson(v));
+      });
+    }
+  }
+  List<Specialization> data;
 }
