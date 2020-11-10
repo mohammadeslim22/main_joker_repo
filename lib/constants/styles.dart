@@ -100,6 +100,11 @@ class Styles {
       color: Color(0xFF303030),
       fontSize: 18,
       height: 1.7);
+        TextStyle agestaged = const TextStyle(
+      fontWeight: FontWeight.w100,
+      color: Color(0xFF303030),
+      fontSize: 12,
+      height: 1.7);
   TextStyle underHeadblack = const TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.black,

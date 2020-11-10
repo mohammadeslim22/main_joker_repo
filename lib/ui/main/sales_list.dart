@@ -13,7 +13,6 @@ import 'package:joker/providers/salesProvider.dart';
 
 class DiscountsList extends StatefulWidget {
   const DiscountsList({Key key}) : super(key: key);
-  // final FilterData filterData;
   @override
   _DiscountsListState createState() => _DiscountsListState();
 }

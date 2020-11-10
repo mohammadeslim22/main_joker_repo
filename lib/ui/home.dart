@@ -24,7 +24,7 @@ import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/providers/globalVars.dart';
 
-import 'main/sales_list_statekess.dart';
+import 'main/sales_list_stateless.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -66,16 +66,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 350),
     );
     _hide.forward();
-
-    // getIt<SalesProvider>().pagewiseSalesController =
-    //     PagewiseLoadController<dynamic>(
-    //         pageSize: 5,
-    //         pageFuture: (int pageIndex) async {
-    //           return (getIt<GlobalVars>().filterData != null)
-    //               ? getIt<SalesProvider>().getSalesDataFilterd(
-    //                   pageIndex, getIt<GlobalVars>().filterData)
-    //               : getIt<SalesProvider>().getSalesData(pageIndex);
-    //         });
 
     getIt<MerchantProvider>().pagewiseBranchesController =
         PagewiseLoadController<dynamic>(

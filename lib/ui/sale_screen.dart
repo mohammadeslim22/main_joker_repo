@@ -71,10 +71,8 @@ class ShopDetailsPage extends State<SaleDetailPage>
 
   final GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   PersistentBottomSheetController<dynamic> bottomSheetController;
-  // SimpleSales merchantSales;
   Color tabBackgroundColor = colors.trans;
   TextEditingController controller = TextEditingController();
-
   int index = 0;
   String mytext;
   double extededPlus = 50;
@@ -104,6 +102,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
     index = 0;
     isliked = sale.isliked != 0;
     isloved = sale.isfavorite != 0;
+    print("is fav ${sale.isfavorite}");
     isbottomSheetOpened = false;
     pageIndexx = 1;
     index += merchant.mydata.branches[0].id;
@@ -165,10 +164,22 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                         start: Colors.blue, end: Colors.purple),
                                     isLiked: isloved,
                                     onTap: (bool loved) async {
+                                      getIt<SalesProvider>()
+                                          .sales
+                                          .data
+                                          .forEach((element) {
+                                        print("sale sale id  ${element.id}");
+                                      });
+                                      print(loved);
                                       favFunction("App\\Sale", sale.id);
-                                      //   setState(() {
+                                      if (!loved) {
+                                        getIt<SalesProvider>()
+                                            .setFavSale(sale.id);
+                                      } else {
+                                        getIt<SalesProvider>()
+                                            .setunFavSale(sale.id);
+                                      }
                                       isloved = !isloved;
-                                      //  });
                                       return isloved;
                                     },
                                     likeCountPadding:

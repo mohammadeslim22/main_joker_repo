@@ -322,7 +322,7 @@ class Auth with ChangeNotifier {
 
   Future<bool> getPinCode(String code) async {
     final String phone = await data.getData("phone");
-    print("phone  ${phone}");
+    print("phone  $phone");
     final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
         data: <String, dynamic>{"phone": phone, "verfiy_code": code});
     print("correct data : ${correct.data}");

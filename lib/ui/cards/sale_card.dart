@@ -35,21 +35,10 @@ class _SalesCardState extends State<SalesCard> {
     } else {
       saleStatus = Colors.red;
     }
-    // print(saledata.branches.length);
-
-    // if (saledata.branches.isNotEmpty) {
-    //   saledata.branches.forEach((int element) {
-    //     branches += element.toString() + " ";
-    //   });
-    // } else {
-    //   branches = "0";
-    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    // print("saledata.cropedImage ${saledata.name}  ${saledata.cropedImage}");
-
     return Card(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -57,16 +46,15 @@ class _SalesCardState extends State<SalesCard> {
       ),
       child: InkWell(
         onTap: () {
-                if (config.loggedin) {
-               Navigator.pushNamed(context, "/SaleLoader",
-              arguments: <String, dynamic>{
-                "merchant_id": saledata.merchant.id,
-                "sale": saledata
-              });
-              } else {
-                getIt<NavigationService>().navigateTo('/login', null);
-              }
-     
+          if (config.loggedin) {
+            Navigator.pushNamed(context, "/SaleLoader",
+                arguments: <String, dynamic>{
+                  "merchant_id": saledata.merchant.id,
+                  "sale": saledata
+                });
+          } else {
+            getIt<NavigationService>().navigateTo('/login', null);
+          }
         },
         child: Column(
           children: <Widget>[
@@ -78,8 +66,7 @@ class _SalesCardState extends State<SalesCard> {
                     topRight: Radius.circular(12)),
                 image: DecorationImage(
                     fit: BoxFit.cover,
-                    onError: (dynamic exception, StackTrace stackTrace) {
-                    },
+                    onError: (dynamic exception, StackTrace stackTrace) {},
                     image: CachedNetworkImageProvider(
                       saledata.cropedImage,
                     )),
@@ -116,8 +103,11 @@ class _SalesCardState extends State<SalesCard> {
                               children: <Widget>[
                                 Text(saledata.status, style: styles.mylight),
                                 const SizedBox(width: 5),
-                                const CircleAvatar(
-                                    backgroundColor: Colors.green, radius: 6)
+                                CircleAvatar(
+                                    backgroundColor: saledata.status == "active"
+                                        ? Colors.green
+                                        : Colors.red,
+                                    radius: 6)
                               ],
                             ),
                             const SizedBox(height: 8),

@@ -428,7 +428,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       _isButtonEnabled = true;
                                     });
                                     if (value) {
-                                      ifUpdateTur();
+                                      ifUpdateTur(context,
+                                          "information_updated_successfully");
                                     } else {
                                       _formKey.currentState.validate();
                                     }
@@ -454,63 +455,63 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                 ))));
   }
 
-  void ifUpdateTur() {
-    showGeneralDialog<dynamic>(
-      barrierLabel: "Label",
-      barrierDismissible: true,
-      barrierColor: Colors.black.withOpacity(0.73),
-      transitionDuration: const Duration(milliseconds: 350),
-      context: context,
-      pageBuilder: (BuildContext context, Animation<double> anim1,
-          Animation<double> anim2) {
-        return Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            height: 360,
-            margin: const EdgeInsets.only(bottom: 160, left: 24, right: 24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(40),
-            ),
-            child: Material(
-              type: MaterialType.transparency,
-              child: SizedBox.expand(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SvgPicture.asset('assets/images/checkdone.svg'),
-                    const SizedBox(height: 15),
-                    Flexible(
-                      child: Text(
-                          trans(context, "information_updated_successfully"),
-                          style: styles.underHeadblack),
-                    ),
-                    const SizedBox(height: 15),
-                    RaisedButton(
-                        color: colors.jokerBlue,
-                        child: Text(trans(context, "ok"),
-                            style: styles.underHeadwhite),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        })
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (BuildContext context, Animation<double> anim1,
-          Animation<double> anim2, Widget child) {
-        return SlideTransition(
-          position:
-              Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
-                  .animate(anim1),
-          child: child,
-        );
-      },
-    );
-  }
+  // void ifUpdateTur() {
+  //   showGeneralDialog<dynamic>(
+  //     barrierLabel: "Label",
+  //     barrierDismissible: true,
+  //     barrierColor: Colors.black.withOpacity(0.73),
+  //     transitionDuration: const Duration(milliseconds: 350),
+  //     context: context,
+  //     pageBuilder: (BuildContext context, Animation<double> anim1,
+  //         Animation<double> anim2) {
+  //       return Align(
+  //         alignment: Alignment.bottomCenter,
+  //         child: Container(
+  //           height: 360,
+  //           margin: const EdgeInsets.only(bottom: 160, left: 24, right: 24),
+  //           decoration: BoxDecoration(
+  //             color: Colors.white,
+  //             borderRadius: BorderRadius.circular(40),
+  //           ),
+  //           child: Material(
+  //             type: MaterialType.transparency,
+  //             child: SizedBox.expand(
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.center,
+  //                 children: <Widget>[
+  //                   SvgPicture.asset('assets/images/checkdone.svg'),
+  //                   const SizedBox(height: 15),
+  //                   Flexible(
+  //                     child: Text(
+  //                         trans(context, "information_updated_successfully"),
+  //                         style: styles.underHeadblack),
+  //                   ),
+  //                   const SizedBox(height: 15),
+  //                   RaisedButton(
+  //                       color: colors.jokerBlue,
+  //                       child: Text(trans(context, "ok"),
+  //                           style: styles.underHeadwhite),
+  //                       onPressed: () {
+  //                         Navigator.pop(context);
+  //                       })
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //     transitionBuilder: (BuildContext context, Animation<double> anim1,
+  //         Animation<double> anim2, Widget child) {
+  //       return SlideTransition(
+  //         position:
+  //             Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
+  //                 .animate(anim1),
+  //         child: child,
+  //       );
+  //     },
+  //   );
+  // }
 
   Future<void> getImage(ImageSource imageSource, MainProvider bolc) async {
     // TODO(mIsleem): try this

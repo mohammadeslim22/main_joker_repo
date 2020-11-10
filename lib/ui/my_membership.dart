@@ -10,7 +10,6 @@ import 'package:dio/dio.dart';
 import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 
-
 class MyMemberShip extends StatefulWidget {
   @override
   MyMemberShipState createState() => MyMemberShipState();
@@ -69,58 +68,75 @@ class MyMemberShipState extends State<MyMemberShip>
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: InkWell(
-          onTap: () {
-            // Navigator.pushNamed(context, "/MembershipDetails",
-            //     arguments: <String, dynamic>{"membership": memberShip});
-          },
+          onTap: () {},
           child: Container(
             padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Flexible(
-                  child: Column(
-                    children: <Widget>[
-                      FloatingActionButton(
-                        mini: true,
-                        heroTag: memberShip.membership.merchant,
-                        elevation: 0,
-                        backgroundColor: colors.trans,
-                        onPressed: () {},
-                        child: SvgPicture.asset("assets/images/vip.svg"),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Column(
+                      children: <Widget>[
+                        FloatingActionButton(
+                          mini: true,
+                          heroTag: memberShip.membership.merchant,
+                          elevation: 0,
+                          backgroundColor: colors.trans,
+                          onPressed: () {},
+                          child: SvgPicture.asset("assets/images/vip.svg"),
+                        ),
+                        Text(
+                          memberShip.membership.type,
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(trans(context, "age_staged"),
+                            style: styles.agestaged),
+                        const SizedBox(height: 12),
+                        Text(memberShip.membership.ageStage,
+                            style: styles.underHead),
+                      ],
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Container(
+                          child: const VerticalDivider(
+                              color: Colors.grey, thickness: 1),
+                          height: 45),
+                      Expanded(
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              memberShip.membership.title,
+                              style: styles.underHead,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(memberShip.membership.meesage),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: <Widget>[
+                            //     Text("${memberShip.startAt}".split(' ')[0],
+                            //         style: styles.mysmall),
+                            //     Icon(Icons.arrow_forward, color: colors.blue, size: 12),
+                            //     Text("${memberShip.endAt}".split(' ')[0],
+                            //         style: styles.mysmall)
+                            //   ],
+                            // )
+                          ],
+                        ),
                       ),
-                      Text(
-                        memberShip.membership.type,
-                        textAlign: TextAlign.center,
-                      )
                     ],
                   ),
                 ),
-                Container(
-                    child:
-                        const VerticalDivider(color: Colors.grey, thickness: 1),
-                    height: 45),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      memberShip.membership.merchant,
-                      style: styles.underHead,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("${memberShip.startAt}".split(' ')[0],
-                            style: styles.mysmall),
-                        Icon(Icons.arrow_forward, color: colors.blue, size: 12),
-                        Text("${memberShip.endAt}".split(' ')[0],
-                            style: styles.mysmall)
-                      ],
-                    )
-                  ],
-                ),
+
                 /* Flexible(
                   child: CachedNetworkImage(
                     placeholderFadeInDuration:

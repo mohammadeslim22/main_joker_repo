@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
+import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/dio.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:joker/util/data.dart';
-import 'package:joker/util/service_locator.dart';
 
 final Location location = Location();
 
@@ -91,17 +93,10 @@ Future<void> getLocationName() async {
 }
 
 SnackBar snackBar = SnackBar(
-  content: const Text("Location Service was not alowed  !"),
-  action: SnackBarAction(
-    label: 'Ok !',
-    onPressed: () {},
-  ),
-);
-SpinKitRing spinkit = SpinKitRing(
-  color: colors.jokerBlue,
-  size: 30.0,
-  lineWidth: 3,
-);
+    content: const Text("Location Service was not alowed  !"),
+    action: SnackBarAction(label: 'Ok !', onPressed: () {}));
+SpinKitRing spinkit =
+    SpinKitRing(color: colors.jokerBlue, size: 30.0, lineWidth: 3);
 
 Future<bool> likeFunction(String model, int likeId) async {
   bool res;
@@ -120,13 +115,15 @@ Future<bool> likeFunction(String model, int likeId) async {
 }
 
 Future<bool> favFunction(String model, int favoriteId) async {
+  getIt<SalesProvider>().sales.data.forEach((element) {
+    print("sale id  ${element.id}");
+  });
   bool res;
   await dio.post<dynamic>("favorites", data: <String, dynamic>{
     'favoritable_type': model,
     'favoritable_id': favoriteId
   }).then((dynamic value) {
     if (value.data == "true") {
-      getIt<SalesProvider>().setFav(favoriteId);
       res = true;
     } else {
       res = false;
@@ -160,5 +157,61 @@ Future<bool> onWillPop(BuildContext context) async {
 
 void goToMap(BuildContext context) {
   Navigator.pushNamedAndRemoveUntil(context, "/WhereToGo", (_) => false);
+}
 
+void ifUpdateTur(BuildContext context, String text) {
+  showGeneralDialog<dynamic>(
+    barrierLabel: "Label",
+    barrierDismissible: true,
+    barrierColor: Colors.black.withOpacity(0.73),
+    transitionDuration: const Duration(milliseconds: 350),
+    context: context,
+    pageBuilder: (BuildContext context, Animation<double> anim1,
+        Animation<double> anim2) {
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          height: 360,
+          margin: const EdgeInsets.only(bottom: 160, left: 24, right: 24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(40),
+          ),
+          child: Material(
+            type: MaterialType.transparency,
+            child: SizedBox.expand(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SvgPicture.asset('assets/images/checkdone.svg'),
+                  const SizedBox(height: 15),
+                  Flexible(
+                    child: Text(trans(context, text),
+                        style: styles.underHeadblack),
+                  ),
+                  const SizedBox(height: 15),
+                  RaisedButton(
+                      color: colors.jokerBlue,
+                      child: Text(trans(context, "ok"),
+                          style: styles.underHeadwhite),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+    transitionBuilder: (BuildContext context, Animation<double> anim1,
+        Animation<double> anim2, Widget child) {
+      return SlideTransition(
+        position:
+            Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
+                .animate(anim1),
+        child: child,
+      );
+    },
+  );
 }

@@ -15,6 +15,7 @@ class SalesProvider with ChangeNotifier {
   Sales sales;
   Sales tempSales;
   PagewiseLoadController<dynamic> pagewiseSalesController;
+  Sales favSales;
   Future<void> getSale(int saleId) async {
     if (config.loggedin)
       dio.get<dynamic>("sales/$saleId").then((Response<dynamic> value) {});
@@ -32,14 +33,43 @@ class SalesProvider with ChangeNotifier {
 
     return merchantSales.data;
   }
+  Future<List<SaleData>> getFavoritData(int pageIndex) async {
+    final Response<dynamic> response =
+        await dio.get<dynamic>("favorites", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'model': 'App\\Sale',
+    });
+    favSales = Sales.fromJson(response.data);
+    return favSales.data;
+  }
+  void setFavSale(int saleId) {
+    try {
+      sales.data.forEach((sale) {
+        print("sale ${sale.id}");
+      });
+      sales.data.firstWhere((SaleData element) {
+        return element.id == saleId;
+      }).isfavorite = 1;
+      notifyListeners();
+    } catch (err) {
+      print("could not find element");
+    }
+  }
 
-  void setFav(int saleId) {
-    sales.data.firstWhere((SaleData element) {
-      return element.id == saleId;
-    }).isfavorite = 1;
+  void setunFavSale(int saleId) {
+    print(saleId);
+    try {
+      sales.data.firstWhere((SaleData element) {
+        return element.id == saleId;
+      }).isfavorite = 0;
+      notifyListeners();
+    } catch (err) {
+      print("orrrrr");
+    }
   }
 
   Future<List<SaleData>> getSalesData(int pageIndex) async {
+    print("page index $pageIndex");
     final Response<dynamic> response =
         await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
@@ -50,8 +80,37 @@ class SalesProvider with ChangeNotifier {
 
     return sales.data;
   }
+  Future<List<SaleData>> getSalesDataAuthenticated(int pageIndex) async {
+    print("page index $pageIndex");
+    final Response<dynamic> response =
+        await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+    });
+    sales = Sales.fromJson(response.data);
+    tempSales = sales;
 
+    return sales.data;
+  }
   Future<List<SaleData>> getSalesDataFilterd(
+      int pageIndex, FilterData filterData) async {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String startDate = formatter.format(filterData.startingdate);
+    final String endDate = formatter.format(filterData.endingdate);
+    final Response<dynamic> response =
+        await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'merchant_name': filterData.merchantNameOrPartOfit,
+      'name': filterData.saleNameOrPartOfit,
+      'from_date': startDate,
+      'to_date': endDate,
+      'rate': filterData.rating,
+      'specifications': filterData.specifications
+    });
+    sales = Sales.fromJson(response.data);
+    return sales.data;
+  }
+  Future<List<SaleData>> getSalesDataFilterdAuthenticated(
       int pageIndex, FilterData filterData) async {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String startDate = formatter.format(filterData.startingdate);

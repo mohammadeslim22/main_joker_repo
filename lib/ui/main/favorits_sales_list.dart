@@ -4,6 +4,8 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/providers/salesProvider.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../ui/cards/sale_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';
@@ -20,20 +22,20 @@ class FavoritDiscountsList extends StatefulWidget {
 }
 
 class _DiscountsListState extends State<FavoritDiscountsList> {
-  Sales sale;
+  // Sales favSales;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   MainProvider bolc;
 
-  Future<List<SaleData>> getFavoritData(int pageIndex) async {
-    final Response<dynamic> response =
-        await dio.get<dynamic>("favorites", queryParameters: <String, dynamic>{
-      'page': pageIndex + 1,
-      'model': 'App\\Sale',
-    });
-    sale = Sales.fromJson(response.data);
-    return sale.data;
-  }
+  // Future<List<SaleData>> getFavoritData(int pageIndex) async {
+  //   final Response<dynamic> response =
+  //       await dio.get<dynamic>("favorites", queryParameters: <String, dynamic>{
+  //     'page': pageIndex + 1,
+  //     '  ': 'App\\Sale',
+  //   });
+  //   favSales = Sales.fromJson(response.data);
+  //   return favSales.data;
+  // }
 
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(milliseconds: 1000));
@@ -103,7 +105,7 @@ class _DiscountsListState extends State<FavoritDiscountsList> {
             return Text(trans(context, "noting_to_show"));
           },
           pageFuture: (int pageIndex) {
-            return getFavoritData(pageIndex);
+            return getIt<SalesProvider>().getFavoritData(pageIndex);
           }),
     );
   }

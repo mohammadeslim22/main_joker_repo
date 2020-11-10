@@ -4,6 +4,7 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/merchant.dart';
+import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/functions.dart';
 import 'package:like_button/like_button.dart';
@@ -64,7 +65,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    
+
     merchant = widget.merchant;
     salesNo = merchant.mydata.salesCount;
     index = merchant.mydata.branches[0].id;
@@ -80,7 +81,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
     });
 
     likecount = merchant.mydata.likesCount;
-    isliked = merchant.mydata.isliked != 0;
+    isliked = merchant.mydata.isfavorite != 0;
     ratingStar =
         merchant.mydata.branches.firstWhere((MerchantBranches element) {
       return element.id == widget.branchId;
@@ -137,7 +138,6 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  // const SizedBox(height: 10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -200,12 +200,19 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                     style: const TextStyle(color: Colors.black),
                                   );
                                 },
-                                isLiked: merchant.mydata.isfavorite != 0,
+                                isLiked: isloved,
                                 countPostion: CountPostion.bottom,
                                 circleColor: CircleColor(
                                     start: colors.blue, end: Colors.purple),
                                 onTap: (bool loved) async {
                                   favFunction("App\\Branch", widget.branchId);
+                                  if (!loved) {
+                                    getIt<MerchantProvider>()
+                                        .setFavMerchant(widget.branchId);
+                                  } else {
+                                    getIt<MerchantProvider>()
+                                        .setunFavMerchant(widget.branchId);
+                                  }
                                   isloved = !isloved;
                                   return isloved;
                                 },
@@ -318,7 +325,6 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                               Column(
                                 children: <Widget>[
                                   RatingBar(
-                                    
                                     onRatingChanged: (double rating) async {
                                       await dio.post<dynamic>("rates",
                                           data: <String, dynamic>{
@@ -336,7 +342,6 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                     emptyColor: Colors.grey,
                                     halfFilledColor: Colors.blue[300],
                                     size: 30,
-                                    
                                   ),
                                   InkWell(
                                     child: Row(

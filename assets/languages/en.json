@@ -214,7 +214,12 @@
     "more_info":"More Info",
     "data_no_available":"Data not Available",
     "explore":"Explore",
-    "nearby":"Nearby"
+    "nearby":"Nearby",
+    "message":"Message",
+    "address":"Address",
+    "direct_contact":"Direct Contact",
+    "message_sent_successfully":"Message Sent Successfully",
+    "message_sending_failed":"Message Sending failed :("
 
 
 }

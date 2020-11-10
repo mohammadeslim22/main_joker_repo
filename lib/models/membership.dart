@@ -64,7 +64,7 @@ class Membership {
     title = json['title'].toString();
     gender = json['gender'].toString();
     ageStage = json['age_stage'].toString();
-    meesage = json['meesage'].toString();
+    meesage = json['message'].toString();
     type = json['type'].toString();
     status = json['status'].toString();
     createdAt = json['created_at'].toString();

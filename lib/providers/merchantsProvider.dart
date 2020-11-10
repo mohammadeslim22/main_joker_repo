@@ -35,10 +35,18 @@ class MerchantProvider with ChangeNotifier {
         queryParameters: <String, String>{'source': 'qr'}));
   }
 
-  void setFav(int branchId) {
+  void setFavMerchant(int branchId) {
     branches.data.firstWhere((BranchData element) {
       return element.id == branchId;
     }).isfavorite = 1;
+    notifyListeners();
+  }
+
+  void setunFavMerchant(int branchId) {
+    branches.data.firstWhere((BranchData element) {
+      return element.id == branchId;
+    }).isfavorite = 1;
+    notifyListeners();
   }
 
   String getMerchantMainPhoto(int merchantId) {

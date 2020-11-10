@@ -217,5 +217,10 @@
     "more_info": "مزيد من المعلومات",
     "data_no_available": "البيانات غير متوفرة",
     "explore": "استكشف",
-    "nearby": "في الجوار"
+    "nearby": "في الجوار",
+    "message":"رسالة",
+    "address":"العنوان",
+    "direct_contact":"للتواصل المباشر",
+    "message_sent_successfully":"تم الإرسال بنجاح",
+    "message_sending_failed":"فشل ارسال الرسالة :("
 }

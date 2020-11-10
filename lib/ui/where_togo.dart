@@ -77,16 +77,21 @@ class _WhereToGoState extends State<WhereToGo>
       parent: _controller,
       curve: Curves.elasticIn,
     ));
-    if(!getIt<HOMEMAProvider>().specSelected)
-    _controller.forward();
+    if (!getIt<HOMEMAProvider>().specSelected) _controller.forward();
     getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
-            pageSize: 5,
+            pageSize: config.loggedin?15:5,
             pageFuture: (int pageIndex) async {
-              return (getIt<GlobalVars>().filterData != null)
-                  ? getIt<SalesProvider>().getSalesDataFilterd(
-                      pageIndex, getIt<GlobalVars>().filterData)
-                  : getIt<SalesProvider>().getSalesData(pageIndex);
+              return config.loggedin
+                  ? (getIt<GlobalVars>().filterData != null)
+                      ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
+                          pageIndex, getIt<GlobalVars>().filterData)
+                      : getIt<SalesProvider>()
+                          .getSalesDataAuthenticated(pageIndex)
+                  : (getIt<GlobalVars>().filterData != null)
+                      ? getIt<SalesProvider>().getSalesDataFilterd(
+                          pageIndex, getIt<GlobalVars>().filterData)
+                      : getIt<SalesProvider>().getSalesData(pageIndex);
             });
   }
 

@@ -8,10 +8,8 @@ class Sales {
         data.add(SaleData.fromJson(v));
       });
     }
-
   }
   List<SaleData> data;
-
 }
 
 class SaleData {
@@ -49,10 +47,11 @@ class SaleData {
         images.add(Images.fromJson(v));
       });
     }
-    if(json['merchant']!=null)
-    merchant = MerchantForSale.fromJson(json['merchant']);
+    if (json['merchant'] != null)
+      merchant = MerchantForSale.fromJson(json['merchant']);
     isliked = json['isliked'] as int;
     isfavorite = json['isfavorite'] as int;
+    print("is favorite $id $isfavorite");
     if (json['branches'] != null) {
       branches = <BranchesMini>[];
       json['branches'].forEach((dynamic v) {
@@ -108,9 +107,6 @@ class MerchantForSale {
   int salesCount;
   int ratesAverage;
 }
-
-
-
 
 class Images {
   Images(
