@@ -5,9 +5,7 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/dio.dart';
-import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:joker/util/data.dart';
@@ -115,9 +113,6 @@ Future<bool> likeFunction(String model, int likeId) async {
 }
 
 Future<bool> favFunction(String model, int favoriteId) async {
-  getIt<SalesProvider>().sales.data.forEach((element) {
-    print("sale id  ${element.id}");
-  });
   bool res;
   await dio.post<dynamic>("favorites", data: <String, dynamic>{
     'favoritable_type': model,

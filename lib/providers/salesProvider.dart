@@ -14,6 +14,7 @@ import 'map_provider.dart';
 class SalesProvider with ChangeNotifier {
   Sales sales;
   Sales tempSales;
+  Sales merchantSales;
   PagewiseLoadController<dynamic> pagewiseSalesController;
   Sales favSales;
   Future<void> getSale(int saleId) async {
@@ -21,7 +22,7 @@ class SalesProvider with ChangeNotifier {
       dio.get<dynamic>("sales/$saleId").then((Response<dynamic> value) {});
   }
 
-  SimpleSales merchantSales;
+  SimpleSales simplemMerchantSales;
 
   Future<List<SimpleSalesData>> getSimpleSalesData(
       int pageIndex, int merchantId) async {
@@ -29,10 +30,11 @@ class SalesProvider with ChangeNotifier {
         "simplesales?merchant_id=$merchantId",
         queryParameters: <String, dynamic>{'page': pageIndex});
 
-    merchantSales = SimpleSales.fromJson(response.data);
+    simplemMerchantSales = SimpleSales.fromJson(response.data);
 
-    return merchantSales.data;
+    return simplemMerchantSales.data;
   }
+
   Future<List<SaleData>> getFavoritData(int pageIndex) async {
     final Response<dynamic> response =
         await dio.get<dynamic>("favorites", queryParameters: <String, dynamic>{
@@ -42,11 +44,20 @@ class SalesProvider with ChangeNotifier {
     favSales = Sales.fromJson(response.data);
     return favSales.data;
   }
+
+  Future<List<SaleData>> getMerchantSalesData(
+      int pageIndex, int merchantId) async {
+    final Response<dynamic> response = await dio.get<dynamic>(
+        "sales?merchant_id=$merchantId",
+        queryParameters: <String, dynamic>{'page': pageIndex + 1});
+
+    merchantSales = Sales.fromJson(response.data);
+
+    return merchantSales.data;
+  }
+
   void setFavSale(int saleId) {
     try {
-      sales.data.forEach((sale) {
-        print("sale ${sale.id}");
-      });
       sales.data.firstWhere((SaleData element) {
         return element.id == saleId;
       }).isfavorite = 1;
@@ -80,6 +91,7 @@ class SalesProvider with ChangeNotifier {
 
     return sales.data;
   }
+
   Future<List<SaleData>> getSalesDataAuthenticated(int pageIndex) async {
     print("page index $pageIndex");
     final Response<dynamic> response =
@@ -92,6 +104,7 @@ class SalesProvider with ChangeNotifier {
 
     return sales.data;
   }
+
   Future<List<SaleData>> getSalesDataFilterd(
       int pageIndex, FilterData filterData) async {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -110,6 +123,7 @@ class SalesProvider with ChangeNotifier {
     sales = Sales.fromJson(response.data);
     return sales.data;
   }
+
   Future<List<SaleData>> getSalesDataFilterdAuthenticated(
       int pageIndex, FilterData filterData) async {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');

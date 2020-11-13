@@ -312,13 +312,13 @@ class _AutoLocateState extends State<AutoLocate> {
         ));
   }
 
-  void _addMarker(Marker marker) {
-    final MarkerId markerId = MarkerId('current_location');
+  // void _addMarker(Marker marker) {
+  //   final MarkerId markerId = MarkerId('current_location');
 
-    setState(() {
-      markers[markerId] = marker;
-    });
-  }
+  //   setState(() {
+  //     markers[markerId] = marker;
+  //   });
+  // }
 
   Future<void> _animateToUser() async {
     try {

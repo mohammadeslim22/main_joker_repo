@@ -164,12 +164,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                         start: Colors.blue, end: Colors.purple),
                                     isLiked: isloved,
                                     onTap: (bool loved) async {
-                                      getIt<SalesProvider>()
-                                          .sales
-                                          .data
-                                          .forEach((element) {
-                                        print("sale sale id  ${element.id}");
-                                      });
+                            
                                       print(loved);
                                       favFunction("App\\Sale", sale.id);
                                       if (!loved) {

@@ -76,7 +76,7 @@ class MyMemberShipState extends State<MyMemberShip>
               children: <Widget>[
                 Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                  children: <Widget>[
                     Column(
                       children: <Widget>[
                         FloatingActionButton(
@@ -94,7 +94,7 @@ class MyMemberShipState extends State<MyMemberShip>
                       ],
                     ),
                     Column(
-                      children: [
+                      children: <Widget>[
                         Text(trans(context, "age_staged"),
                             style: styles.agestaged),
                         const SizedBox(height: 12),
@@ -106,7 +106,7 @@ class MyMemberShipState extends State<MyMemberShip>
                 ),
                 Expanded(
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       Container(
                           child: const VerticalDivider(
                               color: Colors.grey, thickness: 1),

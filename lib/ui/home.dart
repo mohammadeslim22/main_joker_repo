@@ -66,13 +66,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 350),
     );
     _hide.forward();
-
-    getIt<MerchantProvider>().pagewiseBranchesController =
-        PagewiseLoadController<dynamic>(
-            pageSize: 5,
-            pageFuture: (int pageIndex) async {
-              return getIt<MerchantProvider>().getBranchesData(pageIndex);
-            });
   }
 
   @override

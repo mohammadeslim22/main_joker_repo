@@ -11,6 +11,7 @@ import 'package:joker/models/specializations.dart';
 import 'package:joker/providers/globalVars.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/salesProvider.dart';
+import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
 import "package:flutter/cupertino.dart";
@@ -77,10 +78,12 @@ class _WhereToGoState extends State<WhereToGo>
       parent: _controller,
       curve: Curves.elasticIn,
     ));
-    if (!getIt<HOMEMAProvider>().specSelected) _controller.forward();
+    if (!getIt<HOMEMAProvider>().specSelected) {
+      _controller.forward();
+    }
     getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
-            pageSize: config.loggedin?15:5,
+            pageSize: config.loggedin ? 15 : 5,
             pageFuture: (int pageIndex) async {
               return config.loggedin
                   ? (getIt<GlobalVars>().filterData != null)
@@ -93,6 +96,16 @@ class _WhereToGoState extends State<WhereToGo>
                           pageIndex, getIt<GlobalVars>().filterData)
                       : getIt<SalesProvider>().getSalesData(pageIndex);
             });
+    getIt<MerchantProvider>().pagewiseBranchesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 5,
+            pageFuture: (int pageIndex) async {
+              return config.loggedin
+                  ? getIt<MerchantProvider>().getBranchesDataAuthintecated(pageIndex)
+                  : getIt<MerchantProvider>()
+                      .getBranchesData(pageIndex);
+            });
+            
   }
 
   List<Widget> listviewWidgets = <Widget>[];

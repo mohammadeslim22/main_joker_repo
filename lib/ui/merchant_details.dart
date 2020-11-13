@@ -4,11 +4,11 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/merchant.dart';
-import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/functions.dart';
 import 'package:like_button/like_button.dart';
 import 'package:rating_bar/rating_bar.dart';
+import 'package:shimmer/shimmer.dart';
 import 'main/merchant_sales_list.dart';
 import '../util/service_locator.dart';
 import 'package:joker/providers/merchantsProvider.dart';
@@ -23,18 +23,22 @@ class ShopDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: colors.white,
-      child: FutureBuilder<void>(
+      child: FutureBuilder<Merchant>(
         future:
             getIt<MerchantProvider>().getMerchantData(merchantId, source, 0),
-        builder: (BuildContext ctx, AsyncSnapshot<void> snapshot) {
+        builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Page(
-                merchant: getIt<MerchantProvider>().merchant,
-                branchId: branchId);
+            return Page(merchant: snapshot.data, branchId: branchId);
           } else {
-            return const Center(
-                child: CircularProgressIndicator(
-                    backgroundColor: Colors.transparent));
+            return Shimmer.fromColors(
+                baseColor: Colors.grey[300],
+                highlightColor: Colors.grey[100],
+                enabled: true,
+                child: const ShimmerLoader());
+
+            // const Center(
+            //     child: CircularProgressIndicator(
+            //         backgroundColor: Colors.transparent));
           }
         },
       ),
@@ -385,6 +389,158 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
               child: MerchantSalesList(merchantId: widget.merchant.mydata.id))
         ],
       ),
+    );
+  }
+}
+
+class ShimmerLoader extends StatelessWidget {
+  const ShimmerLoader({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+      shrinkWrap: true,
+      children: <Widget>[
+        Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height * .25,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12)),
+                  ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(height: 6),
+                        Text(trans(context, 'city'), style: styles.mylight),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        LikeButton(
+                          size: 26,
+                          likeBuilder: (bool isLiked) {
+                            return Container(
+                              padding: const EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                color: !isLiked ? Colors.grey : Colors.blue,
+                                borderRadius: BorderRadius.circular(70),
+                              ),
+                              child: Image.asset("assets/images/like.png",
+                                  width: 10, height: 10),
+                            );
+                          },
+                          likeCountPadding:
+                              const EdgeInsets.symmetric(vertical: 3),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          countBuilder: (int c, bool b, String count) {
+                            return Text(
+                              count,
+                              style: const TextStyle(color: Colors.black),
+                            );
+                          },
+                          countPostion: CountPostion.bottom,
+                          circleColor: const CircleColor(
+                              start: Colors.white, end: Colors.purple),
+                          onTap: (bool loved) async {
+                            return loved;
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            LikeButton(
+                              size: 31,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              countBuilder: (int c, bool b, String count) {
+                                return Text(
+                                  count,
+                                  style: const TextStyle(color: Colors.black),
+                                );
+                              },
+                              countPostion: CountPostion.bottom,
+                              circleColor: CircleColor(
+                                  start: colors.blue, end: Colors.purple),
+                              onTap: (bool loved) async {
+                                return loved;
+                              },
+                              likeCountPadding:
+                                  const EdgeInsets.symmetric(vertical: 0),
+                            ),
+                            const SizedBox(height: 20)
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            )),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Divider(
+                color: Colors.grey,
+                thickness: 1,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  trans(context, "shop_branches"),
+                  style: styles.mystyle,
+                ),
+              ),
+              const Divider(color: Colors.grey, thickness: 1),
+            ],
+          ),
+        ),
+        Column(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              color: Colors.blue,
+              height: 120,
+              width: 600,
+            ),
+            Container(
+              color: Colors.red,
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+              width: MediaQuery.of(context).size.width,
+              height: 96,
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 1,
+          ),
+        ),
+        Container(
+          height: 400,
+          width: 400,
+          color: colors.red,
+        )
+      ],
     );
   }
 }

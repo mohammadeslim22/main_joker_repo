@@ -9,9 +9,7 @@ import 'package:joker/util/service_locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../ui/cards/sale_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';
-import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
-import 'package:dio/dio.dart';
 import 'package:joker/constants/colors.dart';
 
 class FavoritDiscountsList extends StatefulWidget {
@@ -22,21 +20,9 @@ class FavoritDiscountsList extends StatefulWidget {
 }
 
 class _DiscountsListState extends State<FavoritDiscountsList> {
-  // Sales favSales;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   MainProvider bolc;
-
-  // Future<List<SaleData>> getFavoritData(int pageIndex) async {
-  //   final Response<dynamic> response =
-  //       await dio.get<dynamic>("favorites", queryParameters: <String, dynamic>{
-  //     'page': pageIndex + 1,
-  //     '  ': 'App\\Sale',
-  //   });
-  //   favSales = Sales.fromJson(response.data);
-  //   return favSales.data;
-  // }
-
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(milliseconds: 1000));
     _refreshController.refreshCompleted();

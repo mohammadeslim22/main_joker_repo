@@ -12,14 +12,29 @@ class MerchantProvider with ChangeNotifier {
   Branches branches;
   PagewiseLoadController<dynamic> pagewiseBranchesController;
 
-  Future<void> getMerchantData(int id, String source, int ignore) async {
+  Future<Merchant> getMerchantData(int id, String source, int ignore) async {
     final dynamic response = await dio.get<dynamic>("merchants/$id",
         queryParameters: <String, dynamic>{"source": source, "ignore": ignore});
     merchant = Merchant.fromJson(response.data);
     notifyListeners();
+    return merchant;
   }
 
   Future<List<BranchData>> getBranchesData(int pageIndex) async {
+    final Response<dynamic> response =
+        await dio.get<dynamic>("pbranches", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+    });
+
+    branches = Branches.fromJson(response.data);
+    branches.data.forEach((element) {
+      print("branch no auth ${element.id}");
+    });
+    return branches.data;
+  }
+
+  Future<List<BranchData>> getBranchesDataAuthintecated(int pageIndex) async {
     final Response<dynamic> response =
         await dio.get<dynamic>("branches", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
@@ -27,6 +42,9 @@ class MerchantProvider with ChangeNotifier {
     });
 
     branches = Branches.fromJson(response.data);
+    branches.data.forEach((element) {
+      print("branch auth ${element.id}");
+    });
     return branches.data;
   }
 
@@ -36,17 +54,26 @@ class MerchantProvider with ChangeNotifier {
   }
 
   void setFavMerchant(int branchId) {
-    branches.data.firstWhere((BranchData element) {
-      return element.id == branchId;
-    }).isfavorite = 1;
-    notifyListeners();
+    print("branchId $branchId");
+    try {
+      branches.data.firstWhere((BranchData element) {
+        return element.id == branchId;
+      }).isfavorite = 1;
+      notifyListeners();
+    } catch (err) {
+      print("error in branch fitch ");
+    }
   }
 
   void setunFavMerchant(int branchId) {
-    branches.data.firstWhere((BranchData element) {
-      return element.id == branchId;
-    }).isfavorite = 1;
-    notifyListeners();
+    try {
+      branches.data.firstWhere((BranchData element) {
+        return element.id == branchId;
+      }).isfavorite = 1;
+      notifyListeners();
+    } catch (err) {
+      print("error in branch fitch ");
+    }
   }
 
   String getMerchantMainPhoto(int merchantId) {
