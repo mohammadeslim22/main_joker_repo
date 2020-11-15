@@ -8,6 +8,7 @@ import 'package:joker/models/branches_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:joker/util/size_config.dart';
 import 'package:rating_bar/rating_bar.dart';
 
 class MerchantCard extends StatefulWidget {
@@ -96,7 +97,7 @@ class _MerchantCardState extends State<MerchantCard> {
                         filledColor: Colors.amberAccent,
                         emptyColor: Colors.grey,
                         halfFilledColor: Colors.blue[300],
-                        size: 10,
+                        size: SizeConfig.blockSizeHorizontal*5,
                         onRatingChanged: (double rating) {},
                       ),
                     ],

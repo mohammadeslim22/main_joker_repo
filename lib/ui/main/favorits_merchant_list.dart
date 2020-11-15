@@ -1,67 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/mainprovider.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../ui/cards/merchant_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';
-import 'package:joker/util/dio.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
-import 'package:dio/dio.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:joker/constants/colors.dart';
 
-class FavoritMerchantsList extends StatefulWidget {
-  const FavoritMerchantsList({Key key}) : super(key: key);
-
-  @override
-  _MerchantsListState createState() => _MerchantsListState();
-}
-
-class _MerchantsListState extends State<FavoritMerchantsList> {
-  List<BranchData> branchesData;
-  Branches branches;
+class FavoritMerchantsList extends StatelessWidget {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  MainProvider bolc;
-
-  Future<List<BranchData>> getFavoritData(int pageIndex) async {
-    final Response<dynamic> response = await dio.get<dynamic>("favorites",
-        queryParameters: <String, dynamic>{
-          'page': pageIndex + 1,
-          'model': "App\\Branch"
-        });
-    branches = Branches.fromJson(response.data);
-    return branches.data;
-  }
-
-  Future<void> _onRefresh() async {
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
-    _refreshController.refreshCompleted();
-  }
-
-  Future<void> _onLoading() async {
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
-    if (mounted) {
-      setState(() {});
-      _refreshController.loadComplete();
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
-      enablePullDown: false,
+      enablePullDown: true,
       enablePullUp: true,
-      header:  WaterDropHeader(
-        waterDropColor: colors.blue,
-      ),
+      header: WaterDropHeader(waterDropColor: colors.blue),
       footer: CustomFooter(
         builder: (BuildContext context, LoadStatus mode) {
           Widget body;
@@ -76,15 +35,19 @@ class _MerchantsListState extends State<FavoritMerchantsList> {
           } else {
             body = const Text("No more Data");
           }
-          return Container(
-            height: 55.0,
-            child: Center(child: body),
-          );
+          return Container(height: 55.0, child: Center(child: body));
         },
       ),
       controller: _refreshController,
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
+      onRefresh: () async {
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+        _refreshController.refreshCompleted();
+      },
+      onLoading: () async {
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+        _refreshController.loadComplete();
+      },
       child: PagewiseListView<dynamic>(
           physics: const ScrollPhysics(),
           shrinkWrap: true,
@@ -103,7 +66,7 @@ class _MerchantsListState extends State<FavoritMerchantsList> {
             return Text(trans(context, "noting_to_show"));
           },
           pageFuture: (int pageIndex) {
-            return getFavoritData(pageIndex);
+            return getIt<MerchantProvider>().getFavoritData(pageIndex);
           }),
     );
   }

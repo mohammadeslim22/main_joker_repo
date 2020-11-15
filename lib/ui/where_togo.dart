@@ -13,6 +13,7 @@ import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:joker/util/size_config.dart';
 import 'package:provider/provider.dart';
 import "package:flutter/cupertino.dart";
 import 'widgets/buttonTouse.dart';
@@ -101,11 +102,10 @@ class _WhereToGoState extends State<WhereToGo>
             pageSize: 5,
             pageFuture: (int pageIndex) async {
               return config.loggedin
-                  ? getIt<MerchantProvider>().getBranchesDataAuthintecated(pageIndex)
-                  : getIt<MerchantProvider>()
-                      .getBranchesData(pageIndex);
+                  ? getIt<MerchantProvider>()
+                      .getBranchesDataAuthintecated(pageIndex)
+                  : getIt<MerchantProvider>().getBranchesData(pageIndex);
             });
-            
   }
 
   List<Widget> listviewWidgets = <Widget>[];
@@ -128,14 +128,11 @@ class _WhereToGoState extends State<WhereToGo>
           return <Widget>[
             SliverAppBar(
               centerTitle: true,
-              expandedHeight: 215,
+              expandedHeight: SizeConfig.screenHeight * .35,
               elevation: 0,
               backgroundColor: colors.trans,
               stretch: true,
-              // snap: true,
-              // floating: true,
               pinned: true,
-
               flexibleSpace: FlexibleSpaceBar(
                 background: InkWell(
                   onTap: () {},
@@ -143,7 +140,7 @@ class _WhereToGoState extends State<WhereToGo>
                     children: <Widget>[
                       CarouselSlider(
                         options: CarouselOptions(
-                          height: 240,
+                          height: SizeConfig.screenHeight * .45,
                           viewportFraction: 1,
                           initialPage: 0,
                           enableInfiniteScroll: true,
@@ -168,7 +165,7 @@ class _WhereToGoState extends State<WhereToGo>
                                   image: DecorationImage(
                                     image: NetworkImage(
                                         "https://thumbs.dreamstime.com/z/photo-beatch-photo-beatch-196011893.jpg"),
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               );

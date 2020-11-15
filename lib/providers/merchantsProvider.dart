@@ -10,6 +10,8 @@ import 'map_provider.dart';
 class MerchantProvider with ChangeNotifier {
   Merchant merchant;
   Branches branches;
+    Branches favbranches;
+
   PagewiseLoadController<dynamic> pagewiseBranchesController;
 
   Future<Merchant> getMerchantData(int id, String source, int ignore) async {
@@ -48,6 +50,15 @@ class MerchantProvider with ChangeNotifier {
     return branches.data;
   }
 
+  Future<List<BranchData>> getFavoritData(int pageIndex) async {
+    final Response<dynamic> response = await dio.get<dynamic>("favorites",
+        queryParameters: <String, dynamic>{
+          'page': pageIndex + 1,
+          'model': "App\\Branch"
+        });
+    favbranches = Branches.fromJson(response.data);
+    return favbranches.data;
+  }
   Future<void> vistBranch(int branchId, {String source = 'click'}) async {
     print(await dio.get<dynamic>("branches/$branchId",
         queryParameters: <String, String>{'source': 'qr'}));

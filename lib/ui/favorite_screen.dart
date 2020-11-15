@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/util/size_config.dart';
 import 'package:provider/provider.dart';
 import 'main/favorits_merchant_list.dart';
 import 'main/favorits_sales_list.dart';
@@ -22,7 +23,8 @@ class _MyFavState extends State<Favorite> with SingleTickerProviderStateMixin {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-              trans(context, "fav"),style: styles.appBars,
+              trans(context, "fav"),
+              style: styles.appBars,
             ),
             centerTitle: true,
             bottom: PreferredSize(
@@ -32,8 +34,8 @@ class _MyFavState extends State<Favorite> with SingleTickerProviderStateMixin {
         body: Container(
           color: colors.grey,
           child: (bolc.favocurrentIndex == 0)
-              ? const FavoritMerchantsList()
-              : const FavoritDiscountsList(),
+              ? FavoritMerchantsList()
+              : FavoritDiscountsList(),
         ));
   }
 }

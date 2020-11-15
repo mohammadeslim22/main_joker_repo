@@ -33,7 +33,7 @@ class BranchData {
     longitude = double.parse(json['longitude'].toString());
     address = json['address'] as String;
     phone = json['phone'] as String;
-    // salesCount = json['sales'] as int;
+     salesCount = json['sales'] as int;
     merchant = MerchantfromBranch.fromJson(json['merchant']);
     isliked = json['isliked'] as int;
     isfavorite = json['isfavorite'] as int;

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:joker/util/size_config.dart';
 import '../constants/styles.dart';
 import '../models/merchant.dart';
 import '../util/dio.dart';
@@ -129,7 +130,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
             return <Widget>[
               SliverAppBar(
                 centerTitle: true,
-                expandedHeight: 320 + extededPlus,
+                expandedHeight: SizeConfig.screenHeight * .473 + extededPlus,
                 elevation: 0,
                 backgroundColor: Colors.transparent,
                 stretch: true,
@@ -904,7 +905,7 @@ class _CurasolSliderState extends State<CurasolSlider> {
       children: <Widget>[
         CarouselSlider(
           options: CarouselOptions(
-            height: 340,
+            height: SizeConfig.screenHeight * .5,
             viewportFraction: 1,
             initialPage: 0,
             enableInfiniteScroll: true,
