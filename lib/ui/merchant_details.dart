@@ -209,14 +209,17 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                 circleColor: CircleColor(
                                     start: colors.blue, end: Colors.purple),
                                 onTap: (bool loved) async {
+                                  print(
+                                      getIt<MerchantProvider>().branches.data);
                                   favFunction("App\\Branch", widget.branchId);
                                   if (!loved) {
                                     getIt<MerchantProvider>()
-                                        .setFavMerchant(widget.branchId);
+                                        .setFavBraanch(widget.branchId);
                                   } else {
                                     getIt<MerchantProvider>()
-                                        .setunFavMerchant(widget.branchId);
+                                        .setunFavBranch(widget.branchId);
                                   }
+                                  
                                   isloved = !isloved;
                                   return isloved;
                                 },

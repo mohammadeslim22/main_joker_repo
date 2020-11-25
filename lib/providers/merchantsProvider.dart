@@ -10,7 +10,7 @@ import 'map_provider.dart';
 class MerchantProvider with ChangeNotifier {
   Merchant merchant;
   Branches branches;
-    Branches favbranches;
+  Branches favbranches;
 
   PagewiseLoadController<dynamic> pagewiseBranchesController;
 
@@ -33,6 +33,7 @@ class MerchantProvider with ChangeNotifier {
     branches.data.forEach((element) {
       print("branch no auth ${element.id}");
     });
+    notifyListeners();
     return branches.data;
   }
 
@@ -42,11 +43,12 @@ class MerchantProvider with ChangeNotifier {
       'page': pageIndex + 1,
       'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
     });
-
     branches = Branches.fromJson(response.data);
     branches.data.forEach((element) {
-      print("branch auth ${element.id}");
+      print("branch auth -- ${element.id}");
     });
+    notifyListeners();
+
     return branches.data;
   }
 
@@ -57,26 +59,29 @@ class MerchantProvider with ChangeNotifier {
           'model': "App\\Branch"
         });
     favbranches = Branches.fromJson(response.data);
+    notifyListeners();
     return favbranches.data;
   }
+
   Future<void> vistBranch(int branchId, {String source = 'click'}) async {
     print(await dio.get<dynamic>("branches/$branchId",
         queryParameters: <String, String>{'source': 'qr'}));
   }
 
-  void setFavMerchant(int branchId) {
-    print("branchId $branchId");
+  void setFavBraanch(int branchId) {
+    print(branches.data);
     try {
       branches.data.firstWhere((BranchData element) {
         return element.id == branchId;
       }).isfavorite = 1;
       notifyListeners();
     } catch (err) {
-      print("error in branch fitch ");
+      print("error in branch fitch $err");
     }
+    notifyListeners();
   }
 
-  void setunFavMerchant(int branchId) {
+  void setunFavBranch(int branchId) {
     try {
       branches.data.firstWhere((BranchData element) {
         return element.id == branchId;
@@ -85,6 +90,7 @@ class MerchantProvider with ChangeNotifier {
     } catch (err) {
       print("error in branch fitch ");
     }
+    notifyListeners();
   }
 
   String getMerchantMainPhoto(int merchantId) {
