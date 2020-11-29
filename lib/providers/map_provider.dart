@@ -56,7 +56,7 @@ class HOMEMAProvider with ChangeNotifier {
     branches = MapBranches.fromJson(response.data);
     markers.clear();
 
-    // TODO(mIsleem): use for instead of forEach
+    //TODO(mIsleem): use for instead of forEach
     for (final MapBranch mapBranch in branches.mapBranches) {
       await _addMarker(_scaffoldkey, mapBranch);
     }

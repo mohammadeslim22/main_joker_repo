@@ -143,7 +143,7 @@ class _MerchantCardState extends State<MapMerchantCard> {
                               style: styles.mylight,
                               textAlign: TextAlign.center),
                           const SizedBox(height: 4),
-                          Text(branchData.twoSales.length.toString(),
+                          Text(branchData.salesCount.toString(),
                               style: styles.mystyle)
                         ],
                       ),

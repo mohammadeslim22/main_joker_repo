@@ -26,7 +26,7 @@ class MapBranch {
       this.likesCount,
       this.isliked,
       this.isfavorite,
-      this.twoSales,
+      this.salesCount,
       this.merchant,
       this.spec,
       this.rateAverage});
@@ -44,13 +44,9 @@ class MapBranch {
     isliked = json['isliked'] as int;
     isfavorite = json['isfavorite'] as int;
     if (json['sales'] != null) {
-      twoSales = <SaleData>[];
-      json['sales'].forEach((dynamic v) {
-        twoSales.add(SaleData.fromJson(v));
-      });
+      salesCount = json['sales'] as int;
     }
-    merchant =
-        json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
+    merchant = json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
     if (json['specialization'] != null)
       spec = json['specialization'].toString();
 
@@ -66,7 +62,7 @@ class MapBranch {
   int likesCount;
   int isliked;
   int isfavorite;
-  List<SaleData> twoSales;
+  int salesCount;
   Merchant merchant;
   String spec;
   double rateAverage;

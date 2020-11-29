@@ -39,8 +39,6 @@ class _MapAsHomeState extends State<MapAsHome> {
   @override
   void initState() {
     super.initState();
-
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey,
           getIt<HOMEMAProvider>().lat, getIt<HOMEMAProvider>().long, specId);
