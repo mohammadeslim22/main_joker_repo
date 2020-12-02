@@ -138,7 +138,6 @@ class HOMEMAProvider with ChangeNotifier {
 
     notifyListeners();
   }
-
   String getSpecializationName() {
     return specializations.firstWhere((Specialization element) {
       return element.id == selectedSpecialize;

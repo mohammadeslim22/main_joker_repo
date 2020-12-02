@@ -219,7 +219,9 @@
     "address":"Address",
     "direct_contact":"Direct Contact",
     "message_sent_successfully":"Message Sent Successfully",
-    "message_sending_failed":"Message Sending failed :("
+    "message_sending_failed":"Message Sending failed :(",
+    "pull_up_load":"pull up load",
+    "no_data":"No more Data"
 
 
 }
