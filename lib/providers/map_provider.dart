@@ -9,6 +9,7 @@ import 'package:joker/models/map_branches.dart';
 import 'package:joker/ui/cards/merchant_card_no_padding.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/models/specializations.dart';
+import 'package:joker/models/location_images.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:joker/util/size_config.dart';
@@ -23,6 +24,8 @@ class HOMEMAProvider with ChangeNotifier {
   bool specesLoaded = false;
   List<Marker> markers = <Marker>[];
   List<Specialization> specializations = <Specialization>[];
+  List<LocationImages> locationPics = <LocationImages>[];
+  
 
   int selectedSpecialize;
 
@@ -77,9 +80,12 @@ class HOMEMAProvider with ChangeNotifier {
     if (element.spec == "restaurant") {
       markerIcon = await getBytesFromAsset(
           'assets/images/ic_quick_link_map_restaurants.png', (SizeConfig.blockSizeHorizontal*50).toInt());
-    } else {
+    } else if(element.spec == "coffeeshop"){
       markerIcon =
           await getBytesFromAsset('assets/images/coffee_icon.png', 110);
+    }else{
+       markerIcon =
+          await getBytesFromAsset('assets/images/locationMarkerblue.png', 110);
     }
 
     final Marker marker = Marker(
@@ -126,6 +132,14 @@ class HOMEMAProvider with ChangeNotifier {
     specializations = Specializations.fromJson(response.data).data;
 
     specesLoaded = true;
+    notifyListeners();
+  }
+    Future<void> getLocationPics() async {
+    final dynamic response = await dio.get<dynamic>("images");
+     response.data.forEach((dynamic v) {
+        locationPics.add(LocationImages.fromJson(v));
+      });
+       locationPics.clear();
     notifyListeners();
   }
 

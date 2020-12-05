@@ -78,7 +78,28 @@ class SalesProvider with ChangeNotifier {
       print("orrrrr");
     }
   }
+  void setLikeSale(int saleId) {
+    try {
+      sales.data.firstWhere((SaleData element) {
+        return element.id == saleId;
+      }).isliked = 1;
+      notifyListeners();
+    } catch (err) {
+      print("could not find element");
+    }
+  }
 
+  void setunLikeSale(int saleId) {
+    print(saleId);
+    try {
+      sales.data.firstWhere((SaleData element) {
+        return element.id == saleId;
+      }).isliked = 0;
+      notifyListeners();
+    } catch (err) {
+      print("orrrrr");
+    }
+  }
   Future<List<SaleData>> getSalesData(int pageIndex) async {
     print("page index $pageIndex");
     final Response<dynamic> response =

@@ -7,6 +7,7 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/models/location_images.dart';
 import 'package:joker/models/specializations.dart';
 import 'package:joker/providers/globalVars.dart';
 import 'package:joker/providers/map_provider.dart';
@@ -34,7 +35,7 @@ class LoadWhereToGo extends StatelessWidget {
                 } else {
                   return Container(
                       color: colors.white,
-                      child: const CupertinoActivityIndicator());
+                      child: const CupertinoActivityIndicator(radius: 24));
                 }
               },
             )
@@ -59,6 +60,10 @@ class _WhereToGoState extends State<WhereToGo>
   @override
   void initState() {
     super.initState();
+    getIt<HOMEMAProvider>().locationPics.add(LocationImages(
+        image:
+            "https://thumbs.dreamstime.com/z/photo-beatch-photo-beatch-196011893.jpg"));
+    getIt<HOMEMAProvider>().getLocationPics();
     _scaffoldkey = GlobalKey<ScaffoldState>();
     distributeOnList(getIt<HOMEMAProvider>().specializations);
     if (getIt<HOMEMAProvider>().selectedSpecialize != null) {
@@ -156,15 +161,16 @@ class _WhereToGoState extends State<WhereToGo>
                           pageViewKey:
                               const PageStorageKey<dynamic>('carousel_slider'),
                         ),
-                        items: <int>[1, 2, 3].map((int image) {
+                        items: getIt<HOMEMAProvider>()
+                            .locationPics
+                            .map((LocationImages image) {
                           return Builder(
                             builder: (BuildContext context) {
                               return Container(
                                 padding: EdgeInsets.zero,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: NetworkImage(
-                                        "https://thumbs.dreamstime.com/z/photo-beatch-photo-beatch-196011893.jpg"),
+                                    image: NetworkImage(image.image),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -226,27 +232,32 @@ class _WhereToGoState extends State<WhereToGo>
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Padding(
-                      padding: const EdgeInsets.only(bottom: 14),
+              Padding(
+                padding: const EdgeInsets.only(left: 8, right: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.only(bottom: 14, left: 8),
                       child: Text(trans(context, 'you_have_shop'),
-                          style: styles.mystyle)),
-                  ButtonToUse(
-                    trans(context, 'click_here'),
-                    fontWait: FontWeight.bold,
-                    fontColors: colors.green,
-                    onPressed: () async {
-                      if (await canLaunch(config.registerURL)) {
-                        await launch(config.registerURL);
-                      } else {
-                        throw 'Could not launch ${config.registerURL}';
-                      }
-                    },
-                  ),
-                ],
+                          style: styles.mystyle),
+                    )),
+                    ButtonToUse(
+                      trans(context, 'click_here'),
+                      fontWait: FontWeight.bold,
+                      fontColors: colors.green,
+                      onPressed: () async {
+                        if (await canLaunch(config.registerURL)) {
+                          await launch(config.registerURL);
+                        } else {
+                          throw 'Could not launch ${config.registerURL}';
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           );

@@ -221,7 +221,9 @@
     "message_sent_successfully":"Message Sent Successfully",
     "message_sending_failed":"Message Sending failed :(",
     "pull_up_load":"pull up load",
-    "no_data":"No more Data"
+    "no_data":"No more Data",
+    "Merchant_MemberShips":"Merchant MemberShips",
+    "u_subscribed_already":"You have pervious Subscription" 
 
 
 }

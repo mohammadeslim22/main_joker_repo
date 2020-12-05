@@ -220,10 +220,14 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                         end: Colors.purple),
                                     onTap: (bool loved) async {
                                       likeFunction("App\\Sale", sale.id);
-                                      //  setState(() {
+                                         if (!loved) {
+                                        getIt<SalesProvider>()
+                                            .setLikeSale(sale.id);
+                                      } else {
+                                        getIt<SalesProvider>()
+                                            .setunLikeSale(sale.id);
+                                      }
                                       isliked = !isliked;
-                                      //  });
-
                                       return isliked;
                                     },
                                   ),

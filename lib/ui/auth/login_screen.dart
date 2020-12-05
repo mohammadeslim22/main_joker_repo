@@ -163,7 +163,8 @@ class _MyLoginScreenState extends State<LoginScreen>
                           borderRadius: BorderRadius.circular(18.0),
                           side: BorderSide(color: colors.jokerBlue)),
                       onPressed: () async {
-                        print("_usernameController.text : ${_usernameController.text}");
+                        print(
+                            "_usernameController.text : ${_usernameController.text}");
                         if (_isButtonEnabled) {
                           if (_formKey.currentState.validate()) {
                             mainProvider.togelf(true);
@@ -204,24 +205,28 @@ class _MyLoginScreenState extends State<LoginScreen>
           },
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(trans(context, 'you_have_shop'), style: styles.mystyle),
               Expanded(
-                child: ButtonToUse(
-                  trans(context, 'click_here'),
-                  fontWait: FontWeight.bold,
-                  fontColors: colors.green,
-                  onPressed: () async {
-                    if (await canLaunch(config.registerURL)) {
-                      await launch(config.registerURL);
-                    } else {
-                      throw 'Could not launch ${config.registerURL}';
-                    }
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(trans(context, 'you_have_shop'),
+                      style: styles.mystyle),
                 ),
+              ),
+              ButtonToUse(
+                trans(context, 'click_here'),
+                fontWait: FontWeight.bold,
+                fontColors: colors.green,
+                onPressed: () async {
+                  if (await canLaunch(config.registerURL)) {
+                    await launch(config.registerURL);
+                  } else {
+                    throw 'Could not launch ${config.registerURL}';
+                  }
+                },
               ),
             ],
           ),

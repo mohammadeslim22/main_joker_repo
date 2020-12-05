@@ -31,7 +31,7 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(trans(context, 'Merchant MemberShips'),
+          title: Text(trans(context, 'Merchant_MemberShips'),
               style: styles.appBars)),
       body: FutureBuilder<List<MemFromMerchant>>(
           future: getMemebershipsData(widget.merchantId),
@@ -118,11 +118,26 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                               "membership_id": memFromMerchant.id
                             }).then((Response<dynamic> value) {
                           if (value.statusCode == 200) {
+                            print(value.data);
                             if (value.data.toString() == "true") {
                               showToastWidget(
                                   IconToastWidget.success(
                                       msg: trans(context,
                                           'request_sent_successfully')),
+                                  context: context,
+                                  position: StyledToastPosition.center,
+                                  animation: StyledToastAnimation.slideFromTop,
+                                  reverseAnimation: StyledToastAnimation.fade,
+                                  duration: const Duration(seconds: 4),
+                                  animDuration: const Duration(seconds: 1),
+                                  curve: Curves.elasticOut,
+                                  reverseCurve: Curves.linear);
+                            } else if (value.data.toString().trim() ==
+                                "already exist") {
+                              showToastWidget(
+                                  IconToastWidget.success(
+                                      msg: trans(
+                                          context, 'u_subscribed_already')),
                                   context: context,
                                   position: StyledToastPosition.center,
                                   animation: StyledToastAnimation.slideFromTop,
