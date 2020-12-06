@@ -30,7 +30,7 @@ class MerchantProvider with ChangeNotifier {
     });
 
     branches = Branches.fromJson(response.data);
-    branches.data.forEach((element) {
+    branches.data.forEach((BranchData element) {
       print("branch no auth ${element.id}");
     });
     notifyListeners();
@@ -44,7 +44,7 @@ class MerchantProvider with ChangeNotifier {
       'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
     });
     branches = Branches.fromJson(response.data);
-    branches.data.forEach((element) {
+    branches.data.forEach((BranchData element) {
       print("branch auth -- ${element.id}");
     });
     notifyListeners();

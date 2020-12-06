@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:convert';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
-import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/providers/mainprovider.dart';

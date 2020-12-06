@@ -25,7 +25,6 @@ class HOMEMAProvider with ChangeNotifier {
   List<Marker> markers = <Marker>[];
   List<Specialization> specializations = <Specialization>[];
   List<LocationImages> locationPics = <LocationImages>[];
-  
 
   int selectedSpecialize;
 
@@ -59,7 +58,7 @@ class HOMEMAProvider with ChangeNotifier {
     branches = MapBranches.fromJson(response.data);
     markers.clear();
 
-    //TODO(mIsleem): use for instead of forEach
+    // TODO(mIsleem): use for instead of forEach
     for (final MapBranch mapBranch in branches.mapBranches) {
       await _addMarker(_scaffoldkey, mapBranch);
     }
@@ -79,12 +78,13 @@ class HOMEMAProvider with ChangeNotifier {
     Uint8List markerIcon;
     if (element.spec == "restaurant") {
       markerIcon = await getBytesFromAsset(
-          'assets/images/ic_quick_link_map_restaurants.png', (SizeConfig.blockSizeHorizontal*50).toInt());
-    } else if(element.spec == "coffeeshop"){
+          'assets/images/ic_quick_link_map_restaurants.png',
+          (SizeConfig.blockSizeHorizontal * 50).toInt());
+    } else if (element.spec == "coffeeshop") {
       markerIcon =
           await getBytesFromAsset('assets/images/coffee_icon.png', 110);
-    }else{
-       markerIcon =
+    } else {
+      markerIcon =
           await getBytesFromAsset('assets/images/locationMarkerblue.png', 110);
     }
 
@@ -130,16 +130,18 @@ class HOMEMAProvider with ChangeNotifier {
     final dynamic response = await dio.get<dynamic>("specializations");
     specializations.clear();
     specializations = Specializations.fromJson(response.data).data;
-
+    await getLocationPics();
     specesLoaded = true;
     notifyListeners();
   }
-    Future<void> getLocationPics() async {
+
+  Future<void> getLocationPics() async {
     final dynamic response = await dio.get<dynamic>("images");
-     response.data.forEach((dynamic v) {
-        locationPics.add(LocationImages.fromJson(v));
-      });
-       locationPics.clear();
+    locationPics.clear();
+    response.data.forEach((dynamic v) {
+      locationPics.add(LocationImages.fromJson(v));
+    });
+
     notifyListeners();
   }
 
@@ -152,6 +154,7 @@ class HOMEMAProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
   String getSpecializationName() {
     return specializations.firstWhere((Specialization element) {
       return element.id == selectedSpecialize;

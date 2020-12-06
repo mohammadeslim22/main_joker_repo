@@ -60,10 +60,10 @@ class _WhereToGoState extends State<WhereToGo>
   @override
   void initState() {
     super.initState();
-    getIt<HOMEMAProvider>().locationPics.add(LocationImages(
-        image:
-            "https://thumbs.dreamstime.com/z/photo-beatch-photo-beatch-196011893.jpg"));
-    getIt<HOMEMAProvider>().getLocationPics();
+    // getIt<HOMEMAProvider>().locationPics.add(LocationImages(
+    //     imagefull:
+    //         "https://thumbs.dreamstime.com/z/photo-beatch-photo-beatch-196011893.jpg"));
+    // getIt<HOMEMAProvider>().getLocationPics();
     _scaffoldkey = GlobalKey<ScaffoldState>();
     distributeOnList(getIt<HOMEMAProvider>().specializations);
     if (getIt<HOMEMAProvider>().selectedSpecialize != null) {
@@ -166,11 +166,12 @@ class _WhereToGoState extends State<WhereToGo>
                             .map((LocationImages image) {
                           return Builder(
                             builder: (BuildContext context) {
+                              print(image.image);
                               return Container(
                                 padding: EdgeInsets.zero,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: NetworkImage(image.image),
+                                    image: NetworkImage(image.imagefull),
                                     fit: BoxFit.cover,
                                   ),
                                 ),

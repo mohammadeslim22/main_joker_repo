@@ -1,4 +1,3 @@
-import 'package:joker/models/sales.dart';
 
 class MapBranches {
   MapBranches({this.mapBranches});
