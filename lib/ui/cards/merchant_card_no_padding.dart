@@ -166,7 +166,7 @@ class _MerchantCardState extends State<MapMerchantCard> {
                         "source": "click"
                       });
                 } else {
-                  getIt<NavigationService>().navigateTo('/login', null);
+                  getIt<NavigationService>().navigateToNamed('/login', null);
                 }
               })
         ],

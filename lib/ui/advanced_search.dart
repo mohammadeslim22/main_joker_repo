@@ -174,7 +174,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: <Widget>[
                 Text(trans(context, "search_through"), style: styles.mystyle),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Column(children: <Widget>[
                   TextFormInput(
                     text: trans(context, 'shop_name_or_part_of_it'),
@@ -195,7 +195,6 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                     },
                   )
                 ]),
-                // const SizedBox(height: 10),
                 Text(trans(context, "specializations"), style: styles.mystyle),
                 const SizedBox(height: 10),
                 GridView.count(
@@ -204,7 +203,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                     primary: true,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 8,
-                    crossAxisCount: 4,
+                    crossAxisCount: 3,
                     childAspectRatio: 2,
                     addRepaintBoundaries: true,
                     children: widget.specializations.map((Specialization item) {

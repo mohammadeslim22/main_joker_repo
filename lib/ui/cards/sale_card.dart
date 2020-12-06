@@ -53,7 +53,7 @@ class _SalesCardState extends State<SalesCard> {
                   "sale": saledata
                 });
           } else {
-            getIt<NavigationService>().navigateTo('/login', null);
+            getIt<NavigationService>().navigateToNamed('/login', null);
           }
         },
         child: Column(

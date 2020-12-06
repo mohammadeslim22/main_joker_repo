@@ -45,6 +45,7 @@ void dioDefaults() {
     if (response.statusCode == 200) {
     } else if (response.statusCode == 401) {
       Fluttertoast.showToast(msg: "Login please");
+
       getIt<NavigationService>().navigateTo('/login', null);
     }
     return response; // continue

@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
+import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/util/size_config.dart';
 import 'package:rating_bar/rating_bar.dart';
@@ -37,13 +39,17 @@ class _MerchantCardState extends State<MerchantCard> {
       ),
       child: InkWell(
         onTap: () async {
-          getIt<MerchantProvider>().vistBranch(branchData.id);
-          Navigator.pushNamed(context, "/MerchantDetails",
-              arguments: <String, dynamic>{
-                "merchantId": branchData.merchant.id,
-                "branchId": branchData.id,
-                "source": "click"
-              });
+          if (config.loggedin) {
+            getIt<MerchantProvider>().vistBranch(branchData.id);
+            Navigator.pushNamed(context, "/MerchantDetails",
+                arguments: <String, dynamic>{
+                  "merchantId": branchData.merchant.id,
+                  "branchId": branchData.id,
+                  "source": "click"
+                });
+          } else {
+            getIt<NavigationService>().navigateToNamed('/login', null);
+          }
         },
         child: Column(
           children: <Widget>[
@@ -97,7 +103,7 @@ class _MerchantCardState extends State<MerchantCard> {
                         filledColor: Colors.amberAccent,
                         emptyColor: Colors.grey,
                         halfFilledColor: Colors.blue[300],
-                        size: SizeConfig.blockSizeHorizontal*5,
+                        size: SizeConfig.blockSizeHorizontal * 5,
                         onRatingChanged: (double rating) {},
                       ),
                     ],
