@@ -60,10 +60,6 @@ class _WhereToGoState extends State<WhereToGo>
   @override
   void initState() {
     super.initState();
-    // getIt<HOMEMAProvider>().locationPics.add(LocationImages(
-    //     imagefull:
-    //         "https://thumbs.dreamstime.com/z/photo-beatch-photo-beatch-196011893.jpg"));
-    // getIt<HOMEMAProvider>().getLocationPics();
     _scaffoldkey = GlobalKey<ScaffoldState>();
     distributeOnList(getIt<HOMEMAProvider>().specializations);
     if (getIt<HOMEMAProvider>().selectedSpecialize != null) {
@@ -89,7 +85,7 @@ class _WhereToGoState extends State<WhereToGo>
     }
     getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
-            pageSize: config.loggedin ? 15 : 5,
+            pageSize: config.loggedin ? 15 : 6,
             pageFuture: (int pageIndex) async {
               return config.loggedin
                   ? (getIt<GlobalVars>().filterData != null)

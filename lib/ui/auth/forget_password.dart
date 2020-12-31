@@ -110,7 +110,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                         Container(),
                       SafeArea(
                         child: Container(
-                          width: 160,
+                          width: 190,
                           margin: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 20),
                           decoration: BoxDecoration(
@@ -122,7 +122,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Container(
-                                width: 140,
+                                width: 160,
                                 child: PinCodeTextField(
                                   length: 4,
                                   obscureText: false,
