@@ -37,10 +37,10 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
           future: getMemebershipsData(widget.merchantId),
           builder: (BuildContext ctx,
               AsyncSnapshot<List<MemFromMerchant>> snapshot) {
-            if (snapshot.data == null) {
-              return Center(child: Text(trans(context, 'nothing_to_show')));
-            }
             if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data == null) {
+                return Center(child: Text(trans(context, 'nothing_to_show')));
+              }
               return ListView.builder(
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 6),

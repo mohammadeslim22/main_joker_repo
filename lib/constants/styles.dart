@@ -135,6 +135,11 @@ class Styles {
     color: Colors.red,
     fontSize: 24,
   );
+    TextStyle timeLeftTextStyle = const TextStyle(
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+    fontSize: 16,
+  );
   TextStyle redstyleForminiSaleScreen = const TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.red,

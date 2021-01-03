@@ -128,13 +128,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                                   obscureText: false,
                                   animationType: AnimationType.fade,
                                   animationDuration:
-                                      const Duration(milliseconds: 300),
-                                  // borderRadius: BorderRadius.circular(5),
-                                  // shape: PinCodeFieldShape.box,
-                                  // inactiveColor: Colors.grey,
-                                  // fieldHeight: 40,
-                                  // fieldWidth: 30,
-                                    
+                                  const Duration(milliseconds: 300),                               
                                   keyboardType: TextInputType.phone,
                                   onCompleted: (String v) async {
                                     getIt<Auth>().verifyCode(

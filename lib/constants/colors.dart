@@ -10,6 +10,7 @@ class MyColors {
   static final MyColors _colors = MyColors._internal();
 
   Color white = const Color(0xffffffff);
+  Color whiteArrow = const Color(0xFFF5F5F5);
   Color grey = const Color(0xffF5F5F7);
   Color black = const Color(0xff101010);
   Color yellow = const Color(0xffFFC000);

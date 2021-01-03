@@ -9,12 +9,7 @@ import 'widgets/favoritetab_bar.dart';
 import '../constants/colors.dart';
 import '../constants/styles.dart';
 
-class Favorite extends StatefulWidget {
-  @override
-  _MyFavState createState() => _MyFavState();
-}
-
-class _MyFavState extends State<Favorite> with SingleTickerProviderStateMixin {
+class Favorite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MainProvider bolc = Provider.of<MainProvider>(context);
