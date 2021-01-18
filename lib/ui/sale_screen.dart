@@ -165,7 +165,6 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                         start: Colors.blue, end: Colors.purple),
                                     isLiked: isloved,
                                     onTap: (bool loved) async {
-                            
                                       print(loved);
                                       favFunction("App\\Sale", sale.id);
                                       if (!loved) {
@@ -220,7 +219,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                         end: Colors.purple),
                                     onTap: (bool loved) async {
                                       likeFunction("App\\Sale", sale.id);
-                                         if (!loved) {
+                                      if (!loved) {
                                         getIt<SalesProvider>()
                                             .setLikeSale(sale.id);
                                       } else {

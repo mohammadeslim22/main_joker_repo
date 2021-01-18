@@ -15,11 +15,11 @@ class MyColors {
   Color yellow = const Color(0xffFFC000);
   Color green = const Color(0xff007C40);
   Color red = const Color(0xffFC531C);
-    Color blue=  Colors.blue[400];
+  Color blue = Colors.blue[400];
   Color redOpacity = const Color(0xffFC531C);
-  Color jokerBlue =  Colors.blue;
-  Color trans =  Colors.transparent ;
-  Color ggrey =  Colors.grey ;
+  Color jokerBlue = Colors.blue;
+  Color trans = Colors.transparent;
+  Color ggrey = Colors.grey;
 }
 
 final MyColors colors = MyColors();

@@ -54,7 +54,8 @@ void dioDefaults() {
 
     // Fluttertoast.showToast(msg: "Retry later");
     print(e.message);
-    // Do something with response error
+    // Do s w
+// ith response error
     return e; //continue
   }));
 }
