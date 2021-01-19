@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
+import 'package:joker/ui/map_as_home.dart';
 import 'package:like_button/like_button.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/util/functions.dart';
@@ -12,9 +13,11 @@ import 'package:joker/providers/map_provider.dart';
 import '../../ui/cards/sale_card_no_padding.dart';
 
 class MapSalesCard extends StatefulWidget {
-  const MapSalesCard({Key key, this.context, this.sale}) : super(key: key);
+  const MapSalesCard({Key key, this.context, this.sale, this.close})
+      : super(key: key);
   final BuildContext context;
   final SaleData sale;
+  final Function close;
 
   @override
   _SalesCardState createState() => _SalesCardState();
@@ -48,22 +51,7 @@ class _SalesCardState extends State<MapSalesCard> {
       child: InkWell(
         onTap: () {
           getIt<HOMEMAProvider>().getSaleLotLang(saledata.branches.first.id);
-          getIt<HOMEMAProvider>().pc.close();
-          getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
-              .scaffoldkey
-              .currentState
-              .showBottomSheet<dynamic>((BuildContext context) => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      MediaQuery.removePadding(
-                          context: context,
-                          removeTop: true,
-                          removeBottom: true,
-                          removeLeft: true,
-                          removeRight: true,
-                          child: SalesCardNoPadding(sale: saledata)),
-                    ],
-                  ));
+          widget.close();
         },
         child: Row(
           children: <Widget>[

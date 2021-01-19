@@ -230,70 +230,7 @@ class _AutoLocateState extends State<AutoLocate> {
                   //     ),
                   //   ),
                   // ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, bottom: 69),
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        child: Material(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(6),
-                            onTap: () {},
-                            child: GestureDetector(
-                              child: const Center(
-                                child: Icon(
-                                  Icons.my_location,
-                                  color: Color.fromARGB(1023, 150, 150, 150),
-                                ),
-                              ),
-                              onTap: () async {
-                                serviceEnabled =
-                                    await location.serviceEnabled();
-                                if (!serviceEnabled) {
-                                  serviceEnabled =
-                                      await location.requestService();
-                                  if (!serviceEnabled) {
-                                  } else {
-                                    permissionGranted =
-                                        await location.hasPermission();
-                                    if (permissionGranted ==
-                                        PermissionStatus.denied) {
-                                      permissionGranted =
-                                          await location.requestPermission();
-                                      if (permissionGranted ==
-                                          PermissionStatus.granted) {
-                                        _animateToUser();
-                                      }
-                                    } else {
-                                      _animateToUser();
-                                    }
-                                  }
-                                } else {
-                                  permissionGranted =
-                                      await location.hasPermission();
-                                  if (permissionGranted ==
-                                      PermissionStatus.denied) {
-                                    permissionGranted =
-                                        await location.requestPermission();
-                                    if (permissionGranted ==
-                                        PermissionStatus.granted) {
-                                      _animateToUser();
-                                    }
-                                  } else {
-                                    _animateToUser();
-                                  }
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  
                   accesptDeclineButtons(),
                 ],
               ),

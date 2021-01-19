@@ -121,7 +121,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    // final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
     return Scaffold(
       key: scaffoldkey,

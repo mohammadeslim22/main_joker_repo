@@ -223,5 +223,6 @@
     "pull_up_load": "yüklemeyi çek",
     "no_data": "Başka Veri Yok",
     "Merchant_MemberShips":"Tüccar Üye Gemileri",
-    "u_subscribed_already":"Önceki bir aboneliğiniz var"
+    "u_subscribed_already":"Önceki bir aboneliğiniz var",
+    "offers":"Satışlar"
 }

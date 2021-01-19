@@ -101,11 +101,11 @@ class SalesProvider with ChangeNotifier {
     }
   }
   Future<List<SaleData>> getSalesData(int pageIndex) async {
-    print("page index $pageIndex");
+    print("here is p-sales page index $pageIndex");
     final Response<dynamic> response =
         await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize??1]
     });
     sales = Sales.fromJson(response.data);
     tempSales = sales;

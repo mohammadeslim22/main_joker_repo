@@ -50,24 +50,15 @@ Future<void> main() async {
         ChangeNotifierProvider<Auth>.value(
           value: getIt<Auth>(),
         ),
-        ChangeNotifierProvider<Language>(
-          create: (_) => Language(),
-        ),
-        ChangeNotifierProvider<MainProvider>(
-          create: (_) => MainProvider(),
-        ),
+        ChangeNotifierProvider<Language>(create: (_) => Language()),
+        ChangeNotifierProvider<MainProvider>(create: (_) => MainProvider()),
         ChangeNotifierProvider<HOMEMAProvider>.value(
-          value: getIt<HOMEMAProvider>(),
-        ),
+            value: getIt<HOMEMAProvider>()),
         ChangeNotifierProvider<MerchantProvider>.value(
-          value: getIt<MerchantProvider>(),
-        ),
+            value: getIt<MerchantProvider>()),
         ChangeNotifierProvider<SalesProvider>.value(
-          value: getIt<SalesProvider>(),
-        ),
-        ChangeNotifierProvider<GlobalVars>.value(
-          value: getIt<GlobalVars>(),
-        ),
+            value: getIt<SalesProvider>()),
+        ChangeNotifierProvider<GlobalVars>.value(value: getIt<GlobalVars>()),
       ],
       child: MyApp(),
     ),
@@ -80,6 +71,7 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
+
 class _MyAppState extends State<MyApp> {
   bool doOnce = true;
   @override

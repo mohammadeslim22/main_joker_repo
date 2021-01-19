@@ -80,10 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
           color: Colors.white,
           alignment: Alignment.center,
-          child: SvgPicture.asset(
-            "assets/images/Layer.svg",
-            width: 200,
-          )),
+          child: SvgPicture.asset("assets/images/Layer.svg", width: 200)),
     );
   }
 }

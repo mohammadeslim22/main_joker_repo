@@ -1,19 +1,62 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/providers/globalVars.dart';
 import 'package:joker/providers/map_provider.dart';
+import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:joker/util/size_config.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/ui/main/map_sales_list.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+class LoadWhereToGo extends StatelessWidget {
+  const LoadWhereToGo({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    {
+      return FutureBuilder<dynamic>(
+        future: getIt<HOMEMAProvider>().getSpecializationsData(),
+        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return MapAsHome(lat: config.lat ?? 0.0, long: config.long ?? 0.0);
+          } else {
+            return Container(
+              color: colors.white,
+              child: Align(
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SvgPicture.asset("assets/images/joker_indirim.svg",
+                        fit: BoxFit.cover),
+                    const SizedBox(height: 12),
+                    const CupertinoActivityIndicator(radius: 24)
+                  ],
+                ),
+              ),
+            );
+          }
+        },
+      );
+    }
+  }
+}
 
 class MapAsHome extends StatefulWidget {
   const MapAsHome({Key key, this.long, this.lat}) : super(key: key);
@@ -23,7 +66,7 @@ class MapAsHome extends StatefulWidget {
   _MapAsHomeState createState() => _MapAsHomeState();
 }
 
-class _MapAsHomeState extends State<MapAsHome> {
+class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
   StreamSubscription<dynamic> getPositionSubscription;
 
   bool serviceEnabled;
@@ -35,14 +78,48 @@ class _MapAsHomeState extends State<MapAsHome> {
   Address address;
   GlobalKey<ScaffoldState> _scaffoldkey;
   int specId;
-
+  bool shoOffersButton;
+  static PanelController pc = PanelController();
+  AnimationController rotationController;
+  AnimationController _animationController;
+  bool isPlaying = false;
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey,
-          getIt<HOMEMAProvider>().lat, getIt<HOMEMAProvider>().long, specId);
+    shoOffersButton = false;
+    rotationController = AnimationController(
+        duration: const Duration(milliseconds: 700), vsync: this);
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 450));
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await pc.hide();
     });
+    getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey,
+        getIt<HOMEMAProvider>().lat, getIt<HOMEMAProvider>().long, 1);
+    getIt<SalesProvider>().pagewiseSalesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: config.loggedin ? 15 : 6,
+            pageFuture: (int pageIndex) async {
+              return config.loggedin
+                  ? (getIt<GlobalVars>().filterData != null)
+                      ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
+                          pageIndex, getIt<GlobalVars>().filterData)
+                      : getIt<SalesProvider>()
+                          .getSalesDataAuthenticated(pageIndex)
+                  : (getIt<GlobalVars>().filterData != null)
+                      ? getIt<SalesProvider>().getSalesDataFilterd(
+                          pageIndex, getIt<GlobalVars>().filterData)
+                      : getIt<SalesProvider>().getSalesData(pageIndex);
+            });
+    getIt<MerchantProvider>().pagewiseBranchesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 5,
+            pageFuture: (int pageIndex) async {
+              return config.loggedin
+                  ? getIt<MerchantProvider>()
+                      .getBranchesDataAuthintecated(pageIndex)
+                  : getIt<MerchantProvider>().getBranchesData(pageIndex);
+            });
   }
 
   @override
@@ -51,113 +128,252 @@ class _MapAsHomeState extends State<MapAsHome> {
     getPositionSubscription?.cancel();
   }
 
+  void _handleOnPressed() {
+    setState(() {
+      print("shoOffersButton $shoOffersButton");
+      // shoOffersButton = !shoOffersButton;
+      if (shoOffersButton) {
+        //hide offers
+        pc.hide();
+        shoOffersButton = !shoOffersButton;
+        _animationController.reverse();
+      } else {
+         Fluttertoast.showToast(msg: "TODO: open menu");
+        //open menu
+        // _animationController.reverse();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: getIt<HOMEMAProvider>().scaffoldkey,
-      body: Stack(
-        children: <Widget>[
-          Scaffold(
-            key: _scaffoldkey,
-            resizeToAvoidBottomInset: false,
-            body: Consumer<HOMEMAProvider>(builder:
-                (BuildContext context, HOMEMAProvider value, Widget child) {
-              return Stack(
-                alignment: Alignment.topCenter,
-                children: <Widget>[
-                  SlidingUpPanel(
-                    parallaxEnabled: true,
-                    parallaxOffset: .5,
-                    controller: value.pc,
-                    backdropColor: colors.trans,
-                    backdropOpacity: .7,
-                    backdropEnabled: true,
-                    header: Container(
-                      decoration: BoxDecoration(
-                          color: colors.white,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(18.0))),
-                      width: MediaQuery.of(context).size.width,
-                      child: FlatButton(
-                        onPressed: () {
-                          print(value.pc.isPanelOpen);
-                          if (value.pc.isPanelOpen) {
-                            value.pc.close();
-                          } else {
-                            value.pc.open();
-                          }
+      resizeToAvoidBottomInset: false,
+      body: Consumer<HOMEMAProvider>(
+          builder: (BuildContext context, HOMEMAProvider value, Widget child) {
+        return Stack(
+          alignment: Alignment.topCenter,
+          children: <Widget>[
+            SlidingUpPanel(
+              controller: pc,
+              backdropColor: colors.trans,
+              backdropOpacity: .7,
+              backdropEnabled: true,
+              renderPanelSheet: false,
+              header: Container(
+                decoration: BoxDecoration(
+                    color: colors.white,
+                    borderRadius:
+                        const BorderRadius.all(Radius.circular(18.0))),
+                width: MediaQuery.of(context).size.width,
+                child: FlatButton(
+                  onPressed: () async {
+                    print("fuck u ");
+                    if (pc.isPanelOpen) {
+                      await pc.close();
+                    } else {
+                      await pc.open();
+                    }
+                  },
+                  child: Column(
+                    children: <Widget>[
+                      const SizedBox(height: 12.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            width: 48,
+                            height: 5,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(12.0))),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            trans(context, 'explore') +
+                                " ${getIt<HOMEMAProvider>().getSpecializationName()} " +
+                                trans(context, 'nearby'),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.normal, fontSize: 24.0),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12.0),
+                      const Divider(thickness: 1)
+                    ],
+                  ),
+                ),
+              ),
+              body: _body(value),
+              panelBuilder: (ScrollController sc) => _panel(sc),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(18.0),
+                  topRight: Radius.circular(18.0)),
+              onPanelSlide: (double pos) {},
+            ),
+            Positioned(
+              left: SizeConfig.blockSizeHorizontal * 2,
+              top: SizeConfig.blockSizeVertical * 4,
+              child: FloatingActionButton(
+                isExtended: false,
+                mini: true,
+                child: AnimatedIcon(
+                    icon: AnimatedIcons.menu_close,
+                    progress: _animationController,
+                    color: Colors.orange),
+                onPressed: () => _handleOnPressed(),
+                backgroundColor: colors.white,
+              ),
+            ),
+            Visibility(
+              visible: !shoOffersButton,
+              child: Positioned(
+                left: 8.0,
+                right: 8.0,
+                bottom: 12,
+                child: Container(
+                  height: SizeConfig.blockSizeVertical * 10,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16.0),
+                      color: colors.white),
+                  padding: const EdgeInsets.all(8),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: getIt<HOMEMAProvider>().specializations.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final Color color = index + 1 ==
+                              getIt<HOMEMAProvider>().selectedSpecialize
+                          ? Colors.orange
+                          : Colors.black;
+                      return InkWell(
+                        child: Container(
+                          // height: SizeConfig.blockSizeVertical * 10,
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Column(
+                            children: <Widget>[
+                              Icon(Icons.ac_unit, color: color),
+                              const SizedBox(height: 8),
+                              Text(
+                                  getIt<HOMEMAProvider>()
+                                      .specializations[index]
+                                      .name,
+                                  style: TextStyle(color: color)),
+                            ],
+                          ),
+                        ),
+                        onTap: () {
+                          getIt<HOMEMAProvider>().setSlelectedSpec(index + 1);
                         },
-                        child: Column(
-                          children: <Widget>[
-                            const SizedBox(height: 12.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  width: 48,
-                                  height: 5,
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(12.0))),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  trans(context, 'explore') +
-                                      " ${getIt<HOMEMAProvider>().getSpecializationName()} " +
-                                      trans(context, 'nearby'),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 24.0),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12.0),
-                            const Divider(thickness: 1)
-                          ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Visibility(
+              // visible: !shoOffersButton,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, bottom: 120),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Material(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(6),
+                        onTap: () {},
+                        child: GestureDetector(
+                          child: const Center(
+                            child: Icon(Icons.near_me, color: Colors.orange),
+                          ),
+                          onTap: () async {
+                            animateFunction();
+                          },
                         ),
                       ),
                     ),
-                    body: _body(value),
-                    panelBuilder: (ScrollController sc) => _panel(sc),
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(18.0),
-                        topRight: Radius.circular(18.0)),
-                    onPanelSlide: (double pos) {},
                   ),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: !shoOffersButton,
+              child: Stack(
+                children: <Widget>[
                   Positioned(
-                    left: 20.0,
-                    top: 40,
-                    child: FloatingActionButton(
-                      isExtended: false,
-                      mini: true,
-                      child: Icon(
-                        Icons.close,
-                        size: 30,
-                        color: Theme.of(context).primaryColor,
+                      left: 0,
+                      top: SizeConfig.blockSizeVertical * 20,
+                      child: InkWell(
+                          child: Container(
+                            height: SizeConfig.blockSizeVertical * 8,
+                            width: SizeConfig.blockSizeHorizontal * 8,
+                            alignment: Alignment.centerLeft,
+                            decoration: const BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(12),
+                                    topRight: Radius.circular(12))),
+                            padding: const EdgeInsets.only(
+                                left: 4, top: 4, bottom: 4),
+                            child: RotatedBox(
+                                quarterTurns: 1,
+                                child: Text(
+                                  trans(context, 'offers'),
+                                  style: TextStyle(
+                                      fontSize: 14, color: colors.white),
+                                )),
+                          ),
+                          onTap: () async {
+                            setState(() {
+                              shoOffersButton = true;
+                            });
+                            await pc.show();
+                            pc.open();
+                            _animationController.forward();
+                          })),
+                  Positioned(
+                    left: SizeConfig.blockSizeHorizontal * 5,
+                    top: SizeConfig.blockSizeVertical * 22.25,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.orange,
+                      radius: 10,
+                      child: AnimatedBuilder(
+                        animation: rotationController,
+                        builder: (_, Widget child) {
+                          return Transform.rotate(
+                              angle: rotationController.value * 2 * pi / 2,
+                              child: child);
+                        },
+                        child: RotatedBox(
+                            quarterTurns: 1,
+                            child: SvgPicture.asset("assets/images/arrowup.svg",
+                                color: colors.white)),
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      backgroundColor: colors.white,
                     ),
                   ),
                 ],
-              );
-            }),
-          ),
-        ],
-      ),
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
 
   Widget _panel(ScrollController sc) {
-    return MapSalesListState(sc: sc);
+    return MapSalesListState(sc: sc, close: () async => await pc.close());
   }
 
   Future<void> _animateToUser() async {
@@ -178,6 +394,40 @@ class _MapAsHomeState extends State<MapAsHome> {
     } catch (e) {
       return;
     }
+  }
+
+  Widget _body(HOMEMAProvider value) {
+    return GoogleMap(
+      // myLocationEnabled: true,
+      myLocationButtonEnabled: true,
+      indoorViewEnabled: false,
+      zoomControlsEnabled: false,
+      onMapCreated: (GoogleMapController controller) async {
+        serviceEnabled = await location.serviceEnabled();
+        permissionGranted = await location.hasPermission();
+        value.mapController = controller;
+        if (permissionGranted == PermissionStatus.denied) {
+        } else {
+          if (!serviceEnabled) {
+          } else {
+            _animateToUser();
+          }
+        }
+      },
+      onTap: (LatLng ll) {},
+      padding: const EdgeInsets.only(bottom: 60),
+      mapType: MapType.normal,
+      markers: Set<Marker>.of(value.markers),
+      initialCameraPosition:
+          CameraPosition(target: LatLng(config.lat, config.long), zoom: 13),
+      onCameraMove: (CameraPosition pos) {
+        setState(() {
+          value.lat = pos.target.latitude;
+          value.long = pos.target.longitude;
+        });
+      },
+      onCameraIdle: () {},
+    );
   }
 
   Future<void> animateFunction() async {
@@ -207,77 +457,5 @@ class _MapAsHomeState extends State<MapAsHome> {
         _animateToUser();
       }
     }
-  }
-
-  Widget _body(HOMEMAProvider value) {
-    print("vaslue lat ${value.lat}");
-    print("value long ${value.long}");
-
-    return Stack(
-      children: <Widget>[
-        GoogleMap(
-          myLocationEnabled: true,
-          myLocationButtonEnabled: false,
-          indoorViewEnabled: true,
-          onMapCreated: (GoogleMapController controller) async {
-            serviceEnabled = await location.serviceEnabled();
-            permissionGranted = await location.hasPermission();
-
-            if (permissionGranted == PermissionStatus.denied) {
-            } else {
-              if (!serviceEnabled) {
-              } else {
-                _animateToUser();
-              }
-            }
-            value.mapController = controller;
-          },
-          onTap: (LatLng ll) {},
-          padding: const EdgeInsets.only(bottom: 60),
-          mapType: MapType.normal,
-          markers: Set<Marker>.of(value.markers),
-          initialCameraPosition: CameraPosition(
-            target: LatLng(config.lat, config.long),
-            zoom: 13,
-          ),
-          onCameraMove: (CameraPosition pos) {
-            setState(() {
-              value.lat = pos.target.latitude;
-              value.long = pos.target.longitude;
-            });
-          },
-          onCameraIdle: () {},
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0, bottom: 100),
-          child: Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              width: 40,
-              height: 40,
-              child: Material(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(6),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(6),
-                  onTap: () {},
-                  child: GestureDetector(
-                    child: const Center(
-                      child: Icon(
-                        Icons.my_location,
-                        color: Color.fromARGB(1023, 150, 150, 150),
-                      ),
-                    ),
-                    onTap: () async {
-                      animateFunction();
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

@@ -26,7 +26,7 @@ class HOMEMAProvider with ChangeNotifier {
   List<Specialization> specializations = <Specialization>[];
   List<LocationImages> locationPics = <LocationImages>[];
 
-  int selectedSpecialize;
+  int selectedSpecialize = 1;
 
   double lat = config.lat ?? 0.0;
   double long = config.long ?? 0.0;
@@ -43,7 +43,7 @@ class HOMEMAProvider with ChangeNotifier {
     long = selectedBranch.longitude;
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
       target: LatLng(lat, long),
-      zoom: 13,
+      zoom: 17,
     )));
     notifyListeners();
   }
@@ -52,15 +52,14 @@ class HOMEMAProvider with ChangeNotifier {
       double lat, double long, int specId) async {
     final Response<dynamic> response =
         await dio.get<dynamic>("map", queryParameters: <String, dynamic>{
-      'specialization': <int>[selectedSpecialize],
+      'specialization': <int>[specId ?? selectedSpecialize],
       'limit': 20
     });
     branches = MapBranches.fromJson(response.data);
     markers.clear();
-
-    // TODO(mIsleem): use for instead of forEach
+    addUserIcon();
     for (final MapBranch mapBranch in branches.mapBranches) {
-      await _addMarker(_scaffoldkey, mapBranch);
+      await _addMarker(_scaffoldkey, mapBranch, false);
     }
 
     dataloaded = true;
@@ -73,47 +72,82 @@ class HOMEMAProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _addMarker(
-      GlobalKey<ScaffoldState> _scaffoldkey, MapBranch element) async {
+  Future<void> addUserIcon() async {
+    final Uint8List markerIcon = await getBytesFromAsset(
+        'assets/images/location_icon.png',
+        (SizeConfig.blockSizeHorizontal * 42).toInt());
+    markers.add(Marker(
+      markerId: MarkerId("user"),
+      position: LatLng(config.lat, config.long),
+      icon: BitmapDescriptor.fromBytes(markerIcon),
+    ));
+  }
+
+  Future<void> _addMarker(GlobalKey<ScaffoldState> _scaffoldkey,
+      MapBranch element, bool focus) async {
     Uint8List markerIcon;
-    if (element.spec == "restaurant") {
+    if (focus) {
       markerIcon = await getBytesFromAsset(
           'assets/images/ic_quick_link_map_restaurants.png',
-          (SizeConfig.blockSizeHorizontal * 50).toInt());
-    } else if (element.spec == "coffeeshop") {
-      markerIcon =
-          await getBytesFromAsset('assets/images/coffee_icon.png', 110);
+          (SizeConfig.blockSizeHorizontal * 46).round());
     } else {
-      markerIcon =
-          await getBytesFromAsset('assets/images/locationMarkerblue.png', 110);
+      if (element.spec == "restaurant") {
+        markerIcon = await getBytesFromAsset('assets/images/rest_icon.png',
+            (SizeConfig.blockSizeHorizontal * 38).toInt());
+      } else if (element.spec == "coffeeshop") {
+        markerIcon = await getBytesFromAsset('assets/images/coffee_icon.png',
+            (SizeConfig.blockSizeHorizontal * 38).round());
+      } else {
+        markerIcon = await getBytesFromAsset(
+            'assets/images/locationMarkerblue.png',
+            (SizeConfig.blockSizeHorizontal * 40).round());
+      }
     }
 
     final Marker marker = Marker(
         markerId: MarkerId(element.id.toString()),
         position: LatLng(element.latitude, element.longitude),
         icon: BitmapDescriptor.fromBytes(markerIcon),
-        onTap: () {
+        onTap: () async {
           inFocusBranch = element;
-
-          getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
-              .scaffoldkey
-              .currentState
-              .showBottomSheet<dynamic>((BuildContext context) => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      MediaQuery.removePadding(
-                          context: context,
-                          removeTop: true,
-                          removeBottom: true,
-                          removeLeft: true,
-                          removeRight: true,
-                          child: MapMerchantCard(branchData: element)),
-                    ],
-                  ));
+          editMarkersIcons(_scaffoldkey, element);
+          await mapController
+              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+            target: LatLng(element.latitude, element.longitude),
+            zoom: 17,
+          )));
+          // getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
+          //     .scaffoldkey
+          //     .currentState
+          //     .showBottomSheet<dynamic>((BuildContext context) => Column(
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: <Widget>[
+          //             MediaQuery.removePadding(
+          //                 context: context,
+          //                 removeTop: true,
+          //                 removeBottom: true,
+          //                 removeLeft: true,
+          //                 removeRight: true,
+          //                 child: MapMerchantCard(branchData: element)),
+          //           ],
+          //         ));
         },
         infoWindow: InfoWindow(title: element.merchant.name.toString()));
 
     markers.add(marker);
+  }
+
+  Future<void> editMarkersIcons(
+      GlobalKey<ScaffoldState> _scaffoldkey, MapBranch element) async {
+    markers.removeWhere(
+        (Marker m) => m.markerId == MarkerId(element.id.toString()));
+    await _addMarker(_scaffoldkey, element, true);
+    markers.removeWhere(
+        (Marker m) => m.markerId != MarkerId(element.id.toString()));
+    for (final MapBranch mapBranch in branches.mapBranches) {
+      await _addMarker(_scaffoldkey, mapBranch, mapBranch.id == element.id);
+    }
+    addUserIcon();
   }
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
@@ -156,8 +190,11 @@ class HOMEMAProvider with ChangeNotifier {
   }
 
   String getSpecializationName() {
+    if (specializations.isEmpty) {
+      return "";
+    }
     return specializations.firstWhere((Specialization element) {
-      return element.id == selectedSpecialize;
+      return element.id == (selectedSpecialize ?? 1);
     }).name;
   }
 

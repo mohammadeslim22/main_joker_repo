@@ -10,8 +10,9 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/providers/salesProvider.dart';
 
 class MapSalesListState extends StatelessWidget {
-  const MapSalesListState({Key key, this.sc}) : super(key: key);
+  const MapSalesListState({Key key, this.sc, this.close}) : super(key: key);
   final ScrollController sc;
+  final Function close;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class MapSalesListState extends StatelessWidget {
           );
         }
         return FadeIn(
-            child: MapSalesCard(context: context, sale: entry as SaleData));
+            child: MapSalesCard(context: context, sale: entry as SaleData,close:close));
       },
       noItemsFoundBuilder: (BuildContext context) {
         return Text(trans(context, "noting_to_show"));

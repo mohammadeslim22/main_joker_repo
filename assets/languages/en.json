@@ -223,7 +223,8 @@
     "pull_up_load":"pull up load",
     "no_data":"No more Data",
     "Merchant_MemberShips":"Merchant MemberShips",
-    "u_subscribed_already":"You have pervious Subscription" 
+    "u_subscribed_already":"You have pervious Subscription",
+    "offers":"Offers"
 
 
 }
