@@ -14,9 +14,9 @@ class FaveCard extends StatelessWidget {
         CachedNetworkImage(imageUrl: ""),
         Expanded(
             child: Column(
-          children: [Text(""), Text("")],
+          children:const <Widget>[Text(""), Text("")],
         )),
-        Column(children: [])
+  
       ],
     );
   }

@@ -52,7 +52,7 @@ void dioDefaults() {
     return response; // continue
   }, onError: (DioError e) async {
     //Navigator.pushNamed(navigatorState.currentContext, "/login");
-
+// print("status code: ${response.statusCode}  endpoint : ${response.request.path}");
     // Fluttertoast.showToast(msg: "Retry later");
     print(e.message);
     // Do something with response error

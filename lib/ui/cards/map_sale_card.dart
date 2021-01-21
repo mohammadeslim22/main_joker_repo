@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
-import 'package:joker/ui/map_as_home.dart';
 import 'package:like_button/like_button.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/providers/map_provider.dart';
-import '../../ui/cards/sale_card_no_padding.dart';
 
 class MapSalesCard extends StatefulWidget {
   const MapSalesCard({Key key, this.context, this.sale, this.close})

@@ -19,7 +19,6 @@ import 'package:joker/ui/auth/forget_password.dart';
 import 'package:joker/ui/auth//profile.dart';
 import 'package:joker/ui/notifications_screen.dart';
 import 'package:joker/ui/setLocation.dart';
-import 'package:joker/ui/where_togo.dart';
 import 'package:joker/ui/map_as_home.dart';
 import 'package:joker/ui/settings.dart';
 import 'package:joker/ui/merchant_details.dart';

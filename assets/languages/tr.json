@@ -224,5 +224,7 @@
     "no_data": "Başka Veri Yok",
     "Merchant_MemberShips":"Tüccar Üye Gemileri",
     "u_subscribed_already":"Önceki bir aboneliğiniz var",
-    "offers":"Satışlar"
+    "offers":"Satışlar",
+    "discount":"İndirim",
+    "ends_in":"Ends in"
 }

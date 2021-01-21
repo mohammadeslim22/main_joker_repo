@@ -3,15 +3,14 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/models/map_branches.dart';
-import 'package:joker/ui/cards/merchant_card_no_padding.dart';
+import 'package:joker/models/sales.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/models/specializations.dart';
 import 'package:joker/models/location_images.dart';
-import 'package:joker/util/service_locator.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:joker/util/size_config.dart';
 
 class HOMEMAProvider with ChangeNotifier {
@@ -32,6 +31,50 @@ class HOMEMAProvider with ChangeNotifier {
   double long = config.long ?? 0.0;
 
   GoogleMapController mapController;
+  List<SaleData> lastSales = <SaleData>[];
+  bool offersHorizontalCardsList = false;
+  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
+  bool specSelected = false;
+  int selectedBranchId;
+  bool showSlidingPanel = false;
+  bool showSepcializationsPad = true;
+  SwiperController swipController = SwiperController();
+  void toggleShowSlidingPanel() {
+    showSlidingPanel = !showSlidingPanel;
+    print("showSlidingPanel $showSlidingPanel");
+    notifyListeners();
+  }
+
+  void toggleSHowSepcializationsPad() {
+    showSepcializationsPad = !showSepcializationsPad;
+    print("showSepcializationsPad $showSepcializationsPad");
+    notifyListeners();
+  }
+
+  void makeshowSlidingPanelTrue() {
+    showSlidingPanel = true;
+    print("showSlidingPanel $showSlidingPanel");
+    notifyListeners();
+  }
+
+  void makeshowSlidingPanelFalse() {
+    showSlidingPanel = false;
+
+    print("showSlidingPanel $showSlidingPanel");
+    notifyListeners();
+  }
+
+  void makeShowSepcializationsPadFalse() {
+    showSepcializationsPad = false;
+    print("showSepcializationsPad $showSepcializationsPad");
+    notifyListeners();
+  }
+
+  void makeShowSepcializationsPadTrue() {
+    showSepcializationsPad = true;
+    print("showSepcializationsPad $showSepcializationsPad");
+    notifyListeners();
+  }
 
   void getSaleLotLang(int branchId) {
     selectedBranch = branches.mapBranches.firstWhere((MapBranch element) {
@@ -49,7 +92,7 @@ class HOMEMAProvider with ChangeNotifier {
   }
 
   Future<void> getBranchesData(GlobalKey<ScaffoldState> _scaffoldkey,
-      double lat, double long, int specId) async {
+      int specId) async {
     final Response<dynamic> response =
         await dio.get<dynamic>("map", queryParameters: <String, dynamic>{
       'specialization': <int>[specId ?? selectedSpecialize],
@@ -116,37 +159,83 @@ class HOMEMAProvider with ChangeNotifier {
             target: LatLng(element.latitude, element.longitude),
             zoom: 17,
           )));
+          lastSales = element.lastsales;
+          showOffersHorizontalCards(element.id);
+          selectedBranchId = element.id;
+          swipController.move(0);
           // getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
           //     .scaffoldkey
           //     .currentState
-          //     .showBottomSheet<dynamic>((BuildContext context) => Column(
-          //           mainAxisSize: MainAxisSize.min,
-          //           children: <Widget>[
-          //             MediaQuery.removePadding(
-          //                 context: context,
-          //                 removeTop: true,
-          //                 removeBottom: true,
-          //                 removeLeft: true,
-          //                 removeRight: true,
-          //                 child: MapMerchantCard(branchData: element)),
-          //           ],
-          //         ));
+          //     .showBottomSheet<dynamic>(
+          //       (BuildContext context) => Container(
+          //           height: SizeConfig.screenHeight / 2,
+          //           // width: SizeConfig.screenWidth,
+          //           margin: const EdgeInsets.symmetric(
+          //               horizontal: 12, vertical: 16),
+          //           child: _buildCarousel(context)),
+          //     );
         },
         infoWindow: InfoWindow(title: element.merchant.name.toString()));
 
     markers.add(marker);
   }
 
+  void showOffersHorizontalCards(int selId) {
+    if (selectedBranchId == null) {
+      offersHorizontalCardsList = true;
+      makeShowSepcializationsPadFalse();
+      // makeshowSlidingPanelTrue();
+    } else {
+      if (selId == selectedBranchId) {
+        offersHorizontalCardsList = !offersHorizontalCardsList;
+        if(!showSlidingPanel){
+          toggleSHowSepcializationsPad();
+        }else{
+
+        }
+        
+        // makeShowSepcializationsPadTrue();
+        // makeshowSlidingPanelFalse();
+        // if (shoOffersButton) {
+        //   //
+        // } else {
+        //   makeshoOffersButtonfalse();
+        // }
+        // toggleshoOffersButton();
+      } else {
+        offersHorizontalCardsList = true;
+        makeShowSepcializationsPadFalse();
+        // makeshowSlidingPanelTrue();
+        // makeshowSlidingPanelTrue();
+      }
+      // if (offersHorizontalCardsList) {
+      //   makeshoOffersButtonTrue();
+      // }
+    }
+
+    notifyListeners();
+  }
+
+  void hideOffersHorizontalCards() {
+    offersHorizontalCardsList = false;
+    notifyListeners();
+  }
+
   Future<void> editMarkersIcons(
       GlobalKey<ScaffoldState> _scaffoldkey, MapBranch element) async {
-    markers.removeWhere(
-        (Marker m) => m.markerId == MarkerId(element.id.toString()));
-    await _addMarker(_scaffoldkey, element, true);
-    markers.removeWhere(
-        (Marker m) => m.markerId != MarkerId(element.id.toString()));
+    markers.clear();
+    // await _addMarker(_scaffoldkey, element, true);
     for (final MapBranch mapBranch in branches.mapBranches) {
       await _addMarker(_scaffoldkey, mapBranch, mapBranch.id == element.id);
     }
+    // markers.removeWhere(
+    //     (Marker m) => m.markerId == MarkerId(element.id.toString()));
+    // await _addMarker(_scaffoldkey, element, true);
+    // markers.removeWhere(
+    //     (Marker m) => m.markerId != MarkerId(element.id.toString()));
+    // for (final MapBranch mapBranch in branches.mapBranches) {
+    //   await _addMarker(_scaffoldkey, mapBranch, mapBranch.id == element.id);
+    // }
     addUserIcon();
   }
 
@@ -197,9 +286,4 @@ class HOMEMAProvider with ChangeNotifier {
       return element.id == (selectedSpecialize ?? 1);
     }).name;
   }
-
-  final PanelController pc = PanelController();
-  PersistentBottomSheetController<dynamic> errorController;
-  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
-  bool specSelected = false;
 }

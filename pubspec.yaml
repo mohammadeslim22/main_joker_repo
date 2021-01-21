@@ -76,6 +76,7 @@ dependencies:
   barcode_scan: ^3.0.1
   country_provider: ^1.0.1
   url_launcher: ^5.7.2
+  flutter_swiper: ^1.1.6
 
 dev_dependencies:
   flutter_test:
@@ -121,11 +122,16 @@ flutter:
       fonts:
         - asset: assets/fonts/Bangers-Regular.ttf
           style: normal
+    - family: "RedHatText"
+      fonts:
+        - asset: assets/fonts/RedHatText-Bold.ttf
+        - asset: assets/fonts/RedHatText-Medium.ttf
+          style: normal
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  #         weight: 700 
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

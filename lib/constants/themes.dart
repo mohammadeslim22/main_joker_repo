@@ -16,15 +16,13 @@ ThemeData mainThemeData() {
     canvasColor: Colors.white,
     cursorColor: colors.jokerBlue,
     hintColor: colors.black,
-   // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
+    // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
     textTheme: TextTheme(
-      bodyText2: TextStyle(
-        color: colors.black,
-        fontSize: 14.0,
-      ),
+      bodyText2: TextStyle(color: colors.black, fontSize: 14.0),
     ),
   );
 }
+
 ThemeData mainThemeDatadark() {
   return ThemeData(
     primaryColor: colors.jokerBlue,
@@ -37,10 +35,10 @@ ThemeData mainThemeDatadark() {
       textTheme: const TextTheme(),
     ),
     fontFamily: "Almarai",
-    canvasColor:const Color(0xFF666666),
+    canvasColor: const Color(0xFF666666),
     cursorColor: colors.jokerBlue,
     hintColor: colors.black,
-   // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
+    // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
     textTheme: TextTheme(
       bodyText2: TextStyle(
         color: colors.black,

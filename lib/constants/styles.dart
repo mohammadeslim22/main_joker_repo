@@ -18,7 +18,7 @@ class Styles {
     fontFamily: "Bangers",
     color: colors.grey,
   );
-    TextStyle fromMainToListOn = TextStyle(
+  TextStyle fromMainToListOn = TextStyle(
     fontSize: 18,
     fontFamily: "Bangers",
     color: colors.black,
@@ -28,7 +28,7 @@ class Styles {
     fontFamily: "Bangers",
     color: colors.grey,
   );
-    TextStyle fromMainToMapOn = TextStyle(
+  TextStyle fromMainToMapOn = TextStyle(
     fontSize: 18,
     fontFamily: "Bangers",
     color: colors.black,
@@ -100,7 +100,7 @@ class Styles {
       color: Color(0xFF303030),
       fontSize: 18,
       height: 1.7);
-        TextStyle agestaged = const TextStyle(
+  TextStyle agestaged = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Color(0xFF303030),
       fontSize: 12,
@@ -135,7 +135,7 @@ class Styles {
     color: Colors.red,
     fontSize: 24,
   );
-    TextStyle timeLeftTextStyle = const TextStyle(
+  TextStyle timeLeftTextStyle = const TextStyle(
     fontWeight: FontWeight.w600,
     color: Colors.black,
     fontSize: 16,
@@ -168,12 +168,18 @@ class Styles {
     color: colors.grey,
     fontSize: 15,
   );
+  TextStyle saleNameInMapCard = const TextStyle(
+      fontWeight: FontWeight.w700, color: Colors.black, fontSize: 15);
+  TextStyle saledescInMapCard = const TextStyle(
+      fontWeight: FontWeight.w200, color: Colors.black, fontSize: 10);
   TextStyle showMore = const TextStyle(color: Colors.blue);
   TextStyle moreInfo = const TextStyle(
       color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15);
 
   TextStyle memberSipMessageText = const TextStyle(fontSize: 12.0, height: 1.7);
-
+  TextStyle googlemapsG = const TextStyle(fontWeight: FontWeight.w700, color: Colors.white, fontSize: 40,fontFamily:"RedHatText" );
+    TextStyle maps = const TextStyle(
+      color: Colors.white, fontWeight: FontWeight.w600, fontSize: 26,fontFamily:"RedHatText");
   TextStyle memberShipMessage = TextStyle(fontSize: 15.0, color: colors.green);
 }
 

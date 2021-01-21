@@ -28,14 +28,18 @@ class SaleData {
       this.merchant,
       this.isfavorite,
       this.isliked,
-      this.branches});
+      this.branches,
+      this.discount,
+      this.period});
 
   SaleData.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'] as String;
     oldPrice = json['old_price'] as String;
     price = json['new_price'] as String;
+    discount = json['discount'] as String;
     startAt = json['start_at'] as String;
+    period = json['period'] as String;
     endAt = json['end_at'] as String;
     details = json['details'] as String;
     status = json['status'] as String;
@@ -64,7 +68,9 @@ class SaleData {
   String name;
   String oldPrice;
   String price;
+  String discount;
   String startAt;
+  String period;
   String endAt;
   String details;
   String status;

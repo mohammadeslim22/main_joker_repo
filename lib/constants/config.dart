@@ -9,7 +9,7 @@ class Config {
   Config._internal();
 
   static final Config _config = Config._internal();
-  String imageUrl = "https://www.space.co.ps/joker/image";
+  String imageUrl = "https://www.space.co.ps/joker/image/";
 
   String baseUrl = "https://www.space.co.ps/joker/api/ar/v1/customer/";
 
