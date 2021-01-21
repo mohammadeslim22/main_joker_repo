@@ -84,15 +84,12 @@ class HOMEMAProvider with ChangeNotifier {
     print(selectedBranch.longitude);
     lat = selectedBranch.latitude;
     long = selectedBranch.longitude;
-    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: LatLng(lat, long),
-      zoom: 17,
-    )));
+    mapController.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: LatLng(lat, long), zoom: 17)));
     notifyListeners();
   }
 
-  Future<void> getBranchesData(GlobalKey<ScaffoldState> _scaffoldkey,
-      int specId) async {
+  Future<void> getBranchesData(int specId) async {
     final Response<dynamic> response =
         await dio.get<dynamic>("map", queryParameters: <String, dynamic>{
       'specialization': <int>[specId ?? selectedSpecialize],
@@ -102,7 +99,8 @@ class HOMEMAProvider with ChangeNotifier {
     markers.clear();
     addUserIcon();
     for (final MapBranch mapBranch in branches.mapBranches) {
-      await _addMarker(_scaffoldkey, mapBranch, false);
+      await _addMarker(mapBranch,
+          mapBranch.id == (inFocusBranch != null ? inFocusBranch.id : 99999));
     }
 
     dataloaded = true;
@@ -126,13 +124,21 @@ class HOMEMAProvider with ChangeNotifier {
     ));
   }
 
-  Future<void> _addMarker(GlobalKey<ScaffoldState> _scaffoldkey,
-      MapBranch element, bool focus) async {
+  Future<void> _addMarker(MapBranch element, bool focus) async {
     Uint8List markerIcon;
     if (focus) {
-      markerIcon = await getBytesFromAsset(
-          'assets/images/ic_quick_link_map_restaurants.png',
-          (SizeConfig.blockSizeHorizontal * 46).round());
+      if (element.spec == "restaurant") {
+        markerIcon = await getBytesFromAsset(
+            'assets/images/ic_quick_link_map_restaurants.png',
+            (SizeConfig.blockSizeHorizontal * 46).round());
+      } else if (element.spec == "coffeeshop") {
+        markerIcon = await getBytesFromAsset('assets/images/coffee_icon.png',
+            (SizeConfig.blockSizeHorizontal * 46).round());
+      } else {
+        markerIcon = await getBytesFromAsset(
+            'assets/images/locationMarkerblue.png',
+            (SizeConfig.blockSizeHorizontal * 46).round());
+      }
     } else {
       if (element.spec == "restaurant") {
         markerIcon = await getBytesFromAsset('assets/images/rest_icon.png',
@@ -153,7 +159,7 @@ class HOMEMAProvider with ChangeNotifier {
         icon: BitmapDescriptor.fromBytes(markerIcon),
         onTap: () async {
           inFocusBranch = element;
-          editMarkersIcons(_scaffoldkey, element);
+          editMarkersIcons(element);
           await mapController
               .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
             target: LatLng(element.latitude, element.longitude),
@@ -188,12 +194,10 @@ class HOMEMAProvider with ChangeNotifier {
     } else {
       if (selId == selectedBranchId) {
         offersHorizontalCardsList = !offersHorizontalCardsList;
-        if(!showSlidingPanel){
+        if (!showSlidingPanel) {
           toggleSHowSepcializationsPad();
-        }else{
+        } else {}
 
-        }
-        
         // makeShowSepcializationsPadTrue();
         // makeshowSlidingPanelFalse();
         // if (shoOffersButton) {
@@ -221,12 +225,13 @@ class HOMEMAProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> editMarkersIcons(
-      GlobalKey<ScaffoldState> _scaffoldkey, MapBranch element) async {
+  Future<void> editMarkersIcons(MapBranch element) async {
     markers.clear();
     // await _addMarker(_scaffoldkey, element, true);
     for (final MapBranch mapBranch in branches.mapBranches) {
-      await _addMarker(_scaffoldkey, mapBranch, mapBranch.id == element.id);
+      print("${mapBranch.id} ${element.id} ${mapBranch.id == element.id}");
+      await _addMarker(mapBranch, mapBranch.id == element.id);
+      print(markers);
     }
     // markers.removeWhere(
     //     (Marker m) => m.markerId == MarkerId(element.id.toString()));

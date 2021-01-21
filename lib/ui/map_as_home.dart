@@ -25,6 +25,7 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/ui/main/map_sales_list.dart';
+import 'package:rating_bar/rating_bar.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class LoadWhereToGo extends StatelessWidget {
@@ -74,7 +75,6 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
 
   bool serviceEnabled;
   PermissionStatus permissionGranted;
-  GlobalKey<ScaffoldState> _scaffoldkey;
   int specId;
   static PanelController pc = PanelController();
   AnimationController rotationController;
@@ -90,7 +90,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await pc.hide();
     });
-    getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey, 1);
+    getIt<HOMEMAProvider>().getBranchesData(1);
     getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
             pageSize: config.loggedin ? 15 : 6,
@@ -391,14 +391,14 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
 
   Widget mapCard(SaleData rs) {
     return Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(32), color: colors.white),
+            borderRadius: BorderRadius.circular(24), color: colors.white),
         child: Column(
           children: <Widget>[
             Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
@@ -412,6 +412,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                         height: SizeConfig.blockSizeVertical * 8,
                         width: SizeConfig.blockSizeHorizontal * 16,
                       )),
+                  const SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -420,11 +421,24 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                       const SizedBox(height: 12),
                       Text(rs.details, style: styles.saledescInMapCard)
                     ],
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      children:  <Widget>[
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(Icons.star, color: colors.orange),
+                          onPressed: () {},
+                        ),
+                        Text(rs.merchant.ratesAverage.toString())
+                      ],
+                    ),
                   )
                 ]),
             const SizedBox(height: 16),
             Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-              SvgPicture.asset("assets/images/discount_incard.svg",
+              SvgPicture.asset("assets/images/discount.svg",
                   fit: BoxFit.cover,
                   height: SizeConfig.blockSizeVertical * 5,
                   width: SizeConfig.blockSizeHorizontal * 12),
@@ -453,15 +467,27 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   " (${rs.status})")
             ]),
             const SizedBox(height: 4),
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-              SvgPicture.asset(
-                "assets/images/ends_in.svg",
-                fit: BoxFit.cover,
-                height: SizeConfig.blockSizeVertical * 5,
-                width: SizeConfig.blockSizeHorizontal * 12,
-              ),
-              Text("  " + trans(context, 'ends_in') + "  " + rs.period)
-            ]),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      SvgPicture.asset("assets/images/ends_in.svg",
+                          fit: BoxFit.cover,
+                          height: SizeConfig.blockSizeVertical * 5,
+                          width: SizeConfig.blockSizeHorizontal * 12),
+                      Text("  " + trans(context, 'ends_in') + "  " + rs.period)
+                    ],
+                  ),
+                  InkWell(
+                                      child: SvgPicture.asset(
+                      "assets/images/love_btn.svg",
+                      fit: BoxFit.cover,
+                      height: SizeConfig.blockSizeVertical * 2,
+                      width: SizeConfig.blockSizeHorizontal * 4,
+                    ),onTap: (){},
+                  ),
+                ]),
             const SizedBox(height: 4),
             RaisedButton(
               disabledColor: colors.orange,
@@ -563,7 +589,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
         value.long = pos.target.longitude;
       },
       onCameraIdle: () {
-        getIt<HOMEMAProvider>().getBranchesData(_scaffoldkey, value.selectedSpecialize);
+        getIt<HOMEMAProvider>().getBranchesData(value.selectedSpecialize);
       },
     );
   }

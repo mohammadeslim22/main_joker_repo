@@ -3,7 +3,7 @@ import 'colors.dart';
 
 ThemeData mainThemeData() {
   return ThemeData(
-    primaryColor: colors.jokerBlue,
+    primaryColor: colors.orange,
     primaryTextTheme: const TextTheme(),
     scaffoldBackgroundColor: colors.grey,
     appBarTheme: AppBarTheme(
@@ -25,7 +25,7 @@ ThemeData mainThemeData() {
 
 ThemeData mainThemeDatadark() {
   return ThemeData(
-    primaryColor: colors.jokerBlue,
+    primaryColor: colors.orange,
     primaryTextTheme: const TextTheme(),
     scaffoldBackgroundColor: const Color(0xFF2B2B2B),
     appBarTheme: AppBarTheme(
