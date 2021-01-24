@@ -21,11 +21,12 @@ import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/util/size_config.dart';
+import 'package:like_button/like_button.dart';
 import 'package:location/location.dart';
+import 'package:map_launcher/map_launcher.dart' as map_luncher;
 import 'package:provider/provider.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/ui/main/map_sales_list.dart';
-import 'package:rating_bar/rating_bar.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class LoadWhereToGo extends StatelessWidget {
@@ -80,9 +81,11 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
   AnimationController rotationController;
   AnimationController _animationController;
   bool isPlaying = false;
+
   @override
   void initState() {
     super.initState();
+
     rotationController = AnimationController(
         duration: const Duration(milliseconds: 700), vsync: this);
     _animationController = AnimationController(
@@ -373,7 +376,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                     child: Swiper(
                       itemBuilder: (BuildContext context, int index) {
                         final SaleData rs = value.lastSales[index];
-                        return mapCard(rs);
+                        return mapCard(rs, value);
                       },
                       itemCount: value.lastSales.length,
                       viewportFraction: .8,
@@ -389,9 +392,48 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
     );
   }
 
-  Widget mapCard(SaleData rs) {
+  dynamic openMapsSheet(BuildContext context, map_luncher.Coords coords) async {
+    try {
+      const String title = "Ocean Beach";
+      final List<map_luncher.AvailableMap> availableMaps =
+          await map_luncher.MapLauncher.installedMaps;
+
+      showModalBottomSheet<dynamic>(
+        context: context,
+        builder: (BuildContext context) {
+          return SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                child: Wrap(
+                  children: <Widget>[
+                    for (map_luncher.AvailableMap map in availableMaps)
+                      ListTile(
+                        onTap: () => map.showMarker(
+                          coords: coords,
+                          title: title,
+                        ),
+                        title: Text(map.mapName),
+                        leading: SvgPicture.asset(
+                          map.icon,
+                          height: 30.0,
+                          width: 30.0,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Widget mapCard(SaleData rs, HOMEMAProvider value) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24), color: colors.white),
         child: Column(
@@ -412,82 +454,119 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                         height: SizeConfig.blockSizeVertical * 8,
                         width: SizeConfig.blockSizeHorizontal * 16,
                       )),
-                  const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(rs.name, style: styles.saleNameInMapCard),
-                      const SizedBox(height: 12),
-                      Text(rs.details, style: styles.saledescInMapCard)
-                    ],
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width / 2.20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text(rs.name, style: styles.saleNameInMapCard),
+                        const SizedBox(height: 12),
+                        Text(rs.details, style: styles.saledescInMapCard)
+                      ],
+                    ),
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
+                  Expanded(
                     child: Row(
-                      children:  <Widget>[
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          icon: Icon(Icons.star, color: colors.orange),
-                          onPressed: () {},
-                        ),
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Icon(Icons.star, color: colors.orange),
                         Text(rs.merchant.ratesAverage.toString())
                       ],
                     ),
                   )
                 ]),
-            const SizedBox(height: 16),
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-              SvgPicture.asset("assets/images/discount.svg",
-                  fit: BoxFit.cover,
-                  height: SizeConfig.blockSizeVertical * 5,
-                  width: SizeConfig.blockSizeHorizontal * 12),
-              Text("  " + trans(context, 'discount') + " 50%")
-            ]),
-            const SizedBox(height: 8),
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-              SvgPicture.asset("assets/images/price.svg",
-                  fit: BoxFit.cover,
-                  height: SizeConfig.blockSizeVertical * 5,
-                  width: SizeConfig.blockSizeHorizontal * 12),
-              Text("  " + rs.price + " currency")
-            ]),
-            const SizedBox(height: 8),
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-              SvgPicture.asset("assets/images/time_left.svg",
-                  fit: BoxFit.cover,
-                  height: SizeConfig.blockSizeVertical * 5,
-                  width: SizeConfig.blockSizeHorizontal * 12),
-              Text("  " +
-                  rs.startAt +
-                  " " +
-                  trans(context, 'to') +
-                  " " +
-                  rs.endAt +
-                  " (${rs.status})")
-            ]),
-            const SizedBox(height: 4),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
                   Row(
-                    children: <Widget>[
-                      SvgPicture.asset("assets/images/ends_in.svg",
-                          fit: BoxFit.cover,
-                          height: SizeConfig.blockSizeVertical * 5,
-                          width: SizeConfig.blockSizeHorizontal * 12),
-                      Text("  " + trans(context, 'ends_in') + "  " + rs.period)
-                    ],
-                  ),
-                  InkWell(
-                                      child: SvgPicture.asset(
-                      "assets/images/love_btn.svg",
-                      fit: BoxFit.cover,
-                      height: SizeConfig.blockSizeVertical * 2,
-                      width: SizeConfig.blockSizeHorizontal * 4,
-                    ),onTap: (){},
-                  ),
-                ]),
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SvgPicture.asset("assets/images/discount.svg",
+                            fit: BoxFit.cover,
+                            height: SizeConfig.blockSizeVertical * 5,
+                            width: SizeConfig.blockSizeHorizontal * 12),
+                        Text("  " + trans(context, 'discount') + " 50%")
+                      ]),
+                  const SizedBox(height: 8),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SvgPicture.asset("assets/images/price.svg",
+                            fit: BoxFit.cover,
+                            height: SizeConfig.blockSizeVertical * 5,
+                            width: SizeConfig.blockSizeHorizontal * 12),
+                        Text("  " + rs.price + " currency")
+                      ]),
+                  const SizedBox(height: 8),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SvgPicture.asset("assets/images/time_left.svg",
+                            fit: BoxFit.cover,
+                            height: SizeConfig.blockSizeVertical * 5,
+                            width: SizeConfig.blockSizeHorizontal * 12),
+                        Text("  " +
+                            rs.startAt +
+                            " " +
+                            trans(context, 'to') +
+                            " " +
+                            rs.endAt +
+                            " (${rs.status})")
+                      ]),
+                  const SizedBox(height: 4),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            SvgPicture.asset("assets/images/ends_in.svg",
+                                fit: BoxFit.cover,
+                                height: SizeConfig.blockSizeVertical * 5,
+                                width: SizeConfig.blockSizeHorizontal * 12),
+                            Container(
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width /
+                                            2.2),
+                                child: Text("  " +
+                                    trans(context, 'ends_in') +
+                                    "  " +
+                                    rs.period))
+                          ],
+                        ),
+                        LikeButton(
+                          circleSize: SizeConfig.blockSizeHorizontal * 12,
+                          size: SizeConfig.blockSizeHorizontal * 7,
+                          padding: const EdgeInsets.symmetric(horizontal: 3),
+                          countPostion: CountPostion.bottom,
+                          circleColor: const CircleColor(
+                              start: Colors.blue, end: Colors.purple),
+                          isLiked: rs.isfavorite == 1,
+                          onTap: (bool loved) async {
+                            print(loved);
+                            favFunction("App\\Sale", rs.id);
+                            if (!loved) {
+                              getIt<SalesProvider>().setFavSale(rs.id,
+                                  bId: value.inFocusBranch.id);
+                            } else {
+                              getIt<SalesProvider>().setunFavSale(rs.id);
+                            }
+                            return !loved;
+                          },
+                          likeCountPadding:
+                              const EdgeInsets.symmetric(vertical: 0),
+                        ),
+                      ]),
+                ],
+              ),
+            ),
             const SizedBox(height: 4),
             RaisedButton(
               disabledColor: colors.orange,
@@ -496,7 +575,12 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   side: BorderSide(color: colors.orange)),
               color: colors.orange,
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              onPressed: () {},
+              onPressed: () async {
+                final map_luncher.Coords crods = map_luncher.Coords(
+                    value.inFocusBranch.latitude,
+                    value.inFocusBranch.longitude);
+                openMapsSheet(context, crods);
+              },
               child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 Text("G", style: styles.googlemapsG),
                 const Text("  "),
