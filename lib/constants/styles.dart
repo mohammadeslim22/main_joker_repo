@@ -100,6 +100,11 @@ class Styles {
       color: Color(0xFF303030),
       fontSize: 18,
       height: 1.7);
+  TextStyle username = const TextStyle(
+      fontWeight: FontWeight.w400,
+      color: Color(0xFFFF7B00),
+      fontSize: 24,
+      height: 1.7);
   TextStyle agestaged = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Color(0xFF303030),
@@ -110,6 +115,11 @@ class Styles {
     color: Colors.black,
     fontSize: 20,
   );
+  TextStyle textInShowMore = const TextStyle(
+      fontWeight: FontWeight.w100,
+      color: Colors.black,
+      fontSize: 20,
+      height: 1.7);
   TextStyle notificationNO = const TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.white,
@@ -117,7 +127,7 @@ class Styles {
   );
   TextStyle saleScreenBottomBar = const TextStyle(
     fontWeight: FontWeight.w600,
-    color: Colors.blueAccent,
+    color: Colors.orange,
     fontSize: 20,
   );
   TextStyle resend = const TextStyle(
@@ -172,14 +182,21 @@ class Styles {
       fontWeight: FontWeight.w700, color: Colors.black, fontSize: 15);
   TextStyle saledescInMapCard = const TextStyle(
       fontWeight: FontWeight.w200, color: Colors.black, fontSize: 10);
-  TextStyle showMore = const TextStyle(color: Colors.blue);
+  TextStyle showMore = const TextStyle(color: Color(0xFF707070), fontSize: 12);
   TextStyle moreInfo = const TextStyle(
-      color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15);
+      color: Color(0xFF707070), fontWeight: FontWeight.w100, fontSize: 15);
 
   TextStyle memberSipMessageText = const TextStyle(fontSize: 12.0, height: 1.7);
-  TextStyle googlemapsG = const TextStyle(fontWeight: FontWeight.w700, color: Colors.white, fontSize: 40,fontFamily:"RedHatText" );
-    TextStyle maps = const TextStyle(
-      color: Colors.white, fontWeight: FontWeight.w600, fontSize: 26,fontFamily:"RedHatText");
+  TextStyle googlemapsG = const TextStyle(
+      fontWeight: FontWeight.w700,
+      color: Colors.white,
+      fontSize: 40,
+      fontFamily: "RedHatText");
+  TextStyle maps = const TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+      fontSize: 26,
+      fontFamily: "RedHatText");
   TextStyle memberShipMessage = TextStyle(fontSize: 15.0, color: colors.green);
 }
 

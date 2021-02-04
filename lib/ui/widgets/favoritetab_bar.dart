@@ -6,7 +6,6 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:provider/provider.dart';
 
-
 class FavoritBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -24,29 +23,25 @@ class FavoritBar extends StatelessWidget {
                   splashColor: colors.trans,
                   highlightColor: colors.trans,
                   onPressed: () {
-                    if(bolc.favocurrentIndex==1){
+                    if (bolc.favocurrentIndex == 1) {
                       bolc.changeTabBarIndex(0);
                     }
-                    
                   },
                   child: Column(
                     children: <Widget>[
-                      Text(
-                        trans(context, 'stores'),
-                        style: styles.underHeadblack,
-                      ),
+                      Text(trans(context, 'stores'),
+                          style: styles.underHeadblack),
                       AnimatedOpacity(
-                          opacity: bolc.visible1 ? 1.0 :0.0,
-                          duration:const Duration(milliseconds: 700),
+                          opacity: bolc.visible1 ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 700),
                           child: Container(
                             decoration: BoxDecoration(
-                              borderRadius:const  BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  topRight: Radius.circular(12)),
-                                   color:colors.blue
-                            ),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    topRight: Radius.circular(12)),
+                                color: colors.orange),
                             alignment: Alignment.bottomCenter,
-                            height: 5,
+                            height: 4,
                             width: MediaQuery.of(context).size.width * .4,
                           ))
                     ],
@@ -62,11 +57,11 @@ class FavoritBar extends StatelessWidget {
               child: FlatButton(
                   textColor: Colors.black,
                   disabledColor: Colors.grey,
-                  padding:const EdgeInsets.all(18.0),
+                  padding: const EdgeInsets.all(18.0),
                   splashColor: colors.trans,
                   highlightColor: colors.trans,
                   onPressed: () {
-                        if(bolc.favocurrentIndex==0){
+                    if (bolc.favocurrentIndex == 0) {
                       bolc.changeTabBarIndex(1);
                     }
                   },
@@ -78,14 +73,13 @@ class FavoritBar extends StatelessWidget {
                       ),
                       AnimatedOpacity(
                           opacity: bolc.visible2 ? 1.0 : 0.0,
-                          duration:const Duration(milliseconds: 800),
+                          duration: const Duration(milliseconds: 800),
                           child: Container(
                             decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  topRight: Radius.circular(12)),
-                                  color:colors.jokerBlue
-                            ),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    topRight: Radius.circular(12)),
+                                color: colors.jokerBlue),
                             alignment: Alignment.bottomCenter,
                             height: 5,
                             width: MediaQuery.of(context).size.width * .4,

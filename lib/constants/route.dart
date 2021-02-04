@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/membership.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/models/specializations.dart';
@@ -6,8 +7,8 @@ import 'package:joker/ui/about_us.dart';
 import 'package:joker/ui/address_list.dart';
 import 'package:joker/ui/advanced_search.dart';
 import 'package:joker/ui/contact_us.dart';
+import 'package:joker/ui/main_drawer.dart';
 import 'package:joker/ui/merchant_memberships.dart';
-import 'package:joker/ui/sale_screen.dart';
 import 'package:joker/ui/auth/registration_screen.dart';
 import 'package:joker/ui/membership_details.dart';
 import 'package:joker/ui/my_membership.dart';
@@ -18,6 +19,7 @@ import 'package:joker/ui/auth/change_password.dart';
 import 'package:joker/ui/auth/forget_password.dart';
 import 'package:joker/ui/auth//profile.dart';
 import 'package:joker/ui/notifications_screen.dart';
+import 'package:joker/ui/sale_screen_new.dart';
 import 'package:joker/ui/setLocation.dart';
 import 'package:joker/ui/map_as_home.dart';
 import 'package:joker/ui/settings.dart';
@@ -62,19 +64,19 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-    case "/SaleDetails":
-      page = PageTransition<PageController>(
-        child: SaleDetailPage(
-          //  merchantId: args['merchant_id'] as int,
-          saleData: args['sale'] as SaleData,
-        ),
-        type: PageTransitionType.rightToLeftWithFade,
-      );
-      break;
+    // case "/SaleDetails":
+    //   page = PageTransition<PageController>(
+    //     child: SaleDetailPage(
+    //       //  merchantId: args['merchant_id'] as int,
+    //       saleData: args['sale'] as SaleData,
+    //     ),
+    //     type: PageTransitionType.rightToLeftWithFade,
+    //   );
+    //   break;
     case "/SaleLoader":
       page = PageTransition<PageController>(
-        child: Loader(
-          merchentid: args['merchant_id'] as int,
+        child: SaleLoader(
+          merchant: args['mapBranch'] as MapBranch ,
           saleData: args['sale'] as SaleData,
         ),
         type: PageTransitionType.rightToLeftWithFade,
@@ -92,8 +94,8 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       break;
     case "/AdvancedSearch":
       page = PageTransition<PageController>(
-        child:  AdvancedSearch(
-          specializations: args['specializations'] as List<Specialization> ,
+        child: AdvancedSearch(
+          specializations: args['specializations'] as List<Specialization>,
         ),
         type: PageTransitionType.rightToLeftWithFade,
       );
@@ -210,6 +212,12 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
           lat: args['home_map_lat'] as double,
           long: args['home_map_long'] as double,
         ),
+        type: PageTransitionType.rightToLeftWithFade,
+      );
+      break;
+    case "/MainMenu":
+      page = PageTransition<PageController>(
+        child: const MainMenu(),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;

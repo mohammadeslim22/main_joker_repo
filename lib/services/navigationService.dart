@@ -13,6 +13,6 @@ class NavigationService {
   }
 
   String translateWithNoContext(String key) {
-    return trans(navigatorKey.currentState.context, "your_location");
+    return trans(navigatorKey.currentState.context, key);
   }
 }

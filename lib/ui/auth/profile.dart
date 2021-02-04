@@ -391,9 +391,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                     child: mainProvider.visibilityObs
                                         ? Row(
                                             children: <Widget>[
-                                              Expanded(
-                                                child: spinkit,
-                                              ),
+                                              Expanded(child: spinkit),
                                             ],
                                           )
                                         : Container(),

@@ -40,10 +40,6 @@ Future<void> main() async {
     dio.options.headers['authorization'] = '$auth';
   });
 
-  //  data.getData("lang").then((String value) {
-  //   config.userLnag = Locale(value);
-  // });
-
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[

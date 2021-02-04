@@ -18,7 +18,6 @@ class HOMEMAProvider with ChangeNotifier {
   MapBranches branches;
   MapBranch selectedBranch;
   MapBranch inFocusBranch;
-  bool horizentalListOn = false;
   double rotation;
   bool specesLoaded = false;
   List<Marker> markers = <Marker>[];
@@ -39,6 +38,54 @@ class HOMEMAProvider with ChangeNotifier {
   bool showSlidingPanel = false;
   bool showSepcializationsPad = true;
   SwiperController swipController = SwiperController();
+  AnimationController controller;
+
+  void setLikeSale(int saleId) {
+    try {
+      inFocusBranch.lastsales.firstWhere((SaleData element) {
+        return element.id == saleId;
+      }).isliked = 1;
+      notifyListeners();
+    } catch (err) {
+      print("could not find element");
+    }
+  }
+
+  void setunLikeSale(int saleId) {
+    print(saleId);
+    try {
+      inFocusBranch.lastsales.firstWhere((SaleData element) {
+        return element.id == saleId;
+      }).isliked = 0;
+      notifyListeners();
+    } catch (err) {
+      print("orrrrr");
+    }
+  }
+
+  void setFavSale(int saleId) {
+    try {
+      inFocusBranch.lastsales.firstWhere((SaleData element) {
+        return element.id == saleId;
+      }).isfavorite = 1;
+      // notifyListeners();
+    } catch (err) {
+      print("could not find element $err");
+    }
+  }
+
+  void setunFavSale(int saleId) {
+    print(saleId);
+    try {
+      inFocusBranch.lastsales.firstWhere((SaleData element) {
+        return element.id == saleId;
+      }).isfavorite = 0;
+      // notifyListeners();
+    } catch (err) {
+      print("orrrrr");
+    }
+  }
+
   void toggleShowSlidingPanel() {
     showSlidingPanel = !showSlidingPanel;
     print("showSlidingPanel $showSlidingPanel");
@@ -90,11 +137,21 @@ class HOMEMAProvider with ChangeNotifier {
   }
 
   Future<void> getBranchesData(int specId) async {
-    final Response<dynamic> response =
-        await dio.get<dynamic>("map", queryParameters: <String, dynamic>{
-      'specialization': <int>[specId ?? selectedSpecialize],
-      'limit': 20
-    });
+    Response<dynamic> response;
+    if (config.loggedin) {
+      response =
+          await dio.get<dynamic>("map2", queryParameters: <String, dynamic>{
+        'specialization': <int>[specId ?? selectedSpecialize],
+        'limit': 20
+      });
+    } else {
+      response =
+          await dio.get<dynamic>("map", queryParameters: <String, dynamic>{
+        'specialization': <int>[specId ?? selectedSpecialize],
+        'limit': 20
+      });
+    }
+
     branches = MapBranches.fromJson(response.data);
     markers.clear();
     addUserIcon();
@@ -169,6 +226,10 @@ class HOMEMAProvider with ChangeNotifier {
           showOffersHorizontalCards(element.id);
           selectedBranchId = element.id;
           swipController.move(0);
+          element.lastsales.forEach((SaleData element) {
+            print("is favorite ${element.id} ${element.isfavorite}");
+          });
+
           // getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
           //     .scaffoldkey
           //     .currentState
@@ -189,11 +250,18 @@ class HOMEMAProvider with ChangeNotifier {
   void showOffersHorizontalCards(int selId) {
     if (selectedBranchId == null) {
       offersHorizontalCardsList = true;
+      controller.forward();
+
       makeShowSepcializationsPadFalse();
       // makeshowSlidingPanelTrue();
     } else {
       if (selId == selectedBranchId) {
         offersHorizontalCardsList = !offersHorizontalCardsList;
+        if (offersHorizontalCardsList) {
+          controller.forward();
+        } else {
+          controller.reverse();
+        }
         if (!showSlidingPanel) {
           toggleSHowSepcializationsPad();
         } else {}
@@ -208,6 +276,7 @@ class HOMEMAProvider with ChangeNotifier {
         // toggleshoOffersButton();
       } else {
         offersHorizontalCardsList = true;
+        controller.forward();
         makeShowSepcializationsPadFalse();
         // makeshowSlidingPanelTrue();
         // makeshowSlidingPanelTrue();
@@ -222,6 +291,7 @@ class HOMEMAProvider with ChangeNotifier {
 
   void hideOffersHorizontalCards() {
     offersHorizontalCardsList = false;
+    controller.reverse();
     notifyListeners();
   }
 
@@ -258,20 +328,20 @@ class HOMEMAProvider with ChangeNotifier {
     final dynamic response = await dio.get<dynamic>("specializations");
     specializations.clear();
     specializations = Specializations.fromJson(response.data).data;
-    await getLocationPics();
+    // await getLocationPics();
     specesLoaded = true;
     notifyListeners();
   }
 
-  Future<void> getLocationPics() async {
-    final dynamic response = await dio.get<dynamic>("images");
-    locationPics.clear();
-    response.data.forEach((dynamic v) {
-      locationPics.add(LocationImages.fromJson(v));
-    });
+  // Future<void> getLocationPics() async {
+  //   final dynamic response = await dio.get<dynamic>("images");
+  //   locationPics.clear();
+  //   response.data.forEach((dynamic v) {
+  //     locationPics.add(LocationImages.fromJson(v));
+  //   });
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
   void setSlelectedSpec(int id) {
     if (id == selectedSpecialize) {
@@ -279,7 +349,7 @@ class HOMEMAProvider with ChangeNotifier {
     } else {
       selectedSpecialize = id;
     }
-
+    getBranchesData(selectedSpecialize);
     notifyListeners();
   }
 

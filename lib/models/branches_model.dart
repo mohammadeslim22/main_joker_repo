@@ -37,7 +37,6 @@ class BranchData {
     merchant = MerchantfromBranch.fromJson(json['merchant']);
     isliked = json['isliked'] as int;
     isfavorite = json['isfavorite'] as int;
-    print("is favorite $id $isfavorite");
   }
   int id;
   String name;

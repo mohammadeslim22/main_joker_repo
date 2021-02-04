@@ -6,6 +6,7 @@ ThemeData mainThemeData() {
     primaryColor: colors.orange,
     primaryTextTheme: const TextTheme(),
     scaffoldBackgroundColor: colors.grey,
+    accentColor: colors.orange,
     appBarTheme: AppBarTheme(
       color: colors.grey,
       elevation: 0.0,
@@ -13,8 +14,8 @@ ThemeData mainThemeData() {
       textTheme: const TextTheme(),
     ),
     fontFamily: "Almarai",
-    canvasColor: Colors.white,
-    cursorColor: colors.jokerBlue,
+    canvasColor: colors.white,
+    cursorColor: colors.orange,
     hintColor: colors.black,
     // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
     textTheme: TextTheme(
@@ -36,14 +37,11 @@ ThemeData mainThemeDatadark() {
     ),
     fontFamily: "Almarai",
     canvasColor: const Color(0xFF666666),
-    cursorColor: colors.jokerBlue,
+    cursorColor: colors.orange,
     hintColor: colors.black,
     // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
     textTheme: TextTheme(
-      bodyText2: TextStyle(
-        color: colors.black,
-        fontSize: 14.0,
-      ),
+      bodyText2: TextStyle(color: colors.black, fontSize: 14.0),
     ),
   );
 }

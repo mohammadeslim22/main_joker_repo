@@ -9,9 +9,9 @@ class Config {
   Config._internal();
 
   static final Config _config = Config._internal();
-  String imageUrl = "https://www.space.co.ps/joker/image/";
+  String imageUrl = "http://joker.localhost.ps/web/image/";
 
-  String baseUrl = "https://www.space.co.ps/joker/api/ar/v1/customer/";
+  String baseUrl = "http://joker.localhost.ps/web/api/en/v1/customer/";
 
   // TODO(fahjan): api key for onesignal push notifications
   String onesignal = "bc4208c6-1-48c0-b4d5-390029a340dc"; // ca9a

@@ -54,33 +54,31 @@ class _SalesCardState extends State<MapSalesCard> {
         child: Row(
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 6),
-              height: MediaQuery.of(context).size.width * .25,
-              width: MediaQuery.of(context).size.width * .25,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12)),
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: CachedNetworkImageProvider(
-                      saledata.cropedImage,
-                    )),
-              ),
-              child: saledata.isfavorite != 0
-                  ? Stack(children: <Widget>[
-                      Positioned(
-                        left: 8.0,
-                        top: 8.0,
-                        child: CircleAvatar(
-                          backgroundColor: colors.white,
-                          radius: 12,
-                          child: SvgPicture.asset('assets/images/loveicon.svg'),
+                padding: const EdgeInsets.fromLTRB(200, 0, 80, 6),
+                height: MediaQuery.of(context).size.width * .25,
+                width: MediaQuery.of(context).size.width * .25,
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12)),
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image:
+                            CachedNetworkImageProvider(saledata.cropedImage))),
+                child: saledata.isfavorite != 0
+                    ? Stack(children: <Widget>[
+                        Positioned(
+                          left: 8.0,
+                          top: 8.0,
+                          child: CircleAvatar(
+                            backgroundColor: colors.white,
+                            radius: 12,
+                            child:
+                                SvgPicture.asset('assets/images/loveicon.svg'),
+                          ),
                         ),
-                      ),
-                    ])
-                  : Container(),
-            ),
+                      ])
+                    : Container()),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
@@ -100,8 +98,8 @@ class _SalesCardState extends State<MapSalesCard> {
                                 children: <Widget>[
                                   Text(saledata.status, style: styles.mylight),
                                   const SizedBox(width: 5),
-                                  const CircleAvatar(
-                                      backgroundColor: Colors.green, radius: 6)
+                                  CircleAvatar(
+                                      backgroundColor: saleStatus, radius: 6)
                                 ],
                               ),
                               const SizedBox(height: 8),
@@ -130,12 +128,10 @@ class _SalesCardState extends State<MapSalesCard> {
                             Text(widget.sale.price ?? "",
                                 style: styles.redstyleForSaleScreen),
                             const SizedBox(width: 8),
-                            Text(
-                              widget.sale.oldPrice,
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  decoration: TextDecoration.lineThrough),
-                            ),
+                            Text(widget.sale.oldPrice,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    decoration: TextDecoration.lineThrough)),
                           ],
                         ),
                       ],

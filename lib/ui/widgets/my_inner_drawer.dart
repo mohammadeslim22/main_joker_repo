@@ -6,6 +6,7 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
+import 'package:joker/services/navigationService.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
 import 'package:joker/util/data.dart';
@@ -39,42 +40,38 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
   void initState() {
     super.initState();
     //if (config.username == null) {
-      data.getData("username").then((String value) {
-        setState(() {
-          username = value ?? "";
-        });
+   if (config.loggedin) {
+      data.getData("username").then((String name) {
+        if (name.isEmpty || name == null) {
+          config.username = name;
+        } else {
+          config.username = trans(context, 'username');
+        }
       });
-    // } else {
-    //   username = config.username;
-  //  }
-    // print("profile pic ${config.profileUrl}");
-    if (config.loggedin) {
+
       data.getData("profile_pic").then((String value) {
-        if (value.isEmpty || value == config.imageUrl) {
-          print("error here ?");
+        if (value.isEmpty || value == null) {
           dio.get<dynamic>("user").then((Response<dynamic> value) {
             print(value.data['data']['name'].toString());
-            setState(() {
-              username = value.data['data']['name'].toString();
-              config.username = value.data['data']['name'].toString();
-              config.profileUrl = value.data['data']['image'].toString().trim();
-              if (config.profileUrl == config.imageUrl|| config.profileUrl==null) {
-                config.profileUrl =
-                    "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg";
-              }
-              print("Image ${config.profileUrl}");
-            });
+            config.username = value.data['data']['name'].toString();
 
-            data.setData("profile_pic", config.profileUrl);
+            if (value.data['data']['image'].toString().trim() !=
+                "http://joker.localhost.ps/web/image") {
+              config.profileUrl = value.data['data']['image'].toString().trim();
+              data.setData("profile_pic", config.profileUrl);
+            }
+
             data.setData("username", value.data['data']['name'].toString());
           });
         } else {
-          print("profile drawer pic:   $value");
-          setState(() {
+          if (value != "http://joker.localhost.ps/web/image") {
             config.profileUrl = value;
-          });
+          }
         }
       });
+    } else {
+      config.username =
+          getIt<NavigationService>().translateWithNoContext("Login or Sign up");
     }
   }
 

@@ -5,7 +5,9 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/providers/map_provider.dart';
 import 'package:joker/util/dio.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:joker/util/data.dart';
@@ -151,6 +153,9 @@ Future<bool> onWillPop(BuildContext context) async {
 }
 
 void goToMap(BuildContext context) {
+  getIt<HOMEMAProvider>().makeshowSlidingPanelFalse();
+  getIt<HOMEMAProvider>().makeShowSepcializationsPadTrue();
+  getIt<HOMEMAProvider>().hideOffersHorizontalCards(); 
   Navigator.pushNamedAndRemoveUntil(context, "/WhereToGo", (_) => false);
 }
 

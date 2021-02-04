@@ -1,10 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/config.dart';
+import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/map_provider.dart';
+import 'package:joker/services/navigationService.dart';
+import 'package:joker/util/dio.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/service_locator.dart';
@@ -71,6 +75,40 @@ class _SplashScreenState extends State<SplashScreen> {
     final Auth auth = Provider.of<Auth>(context, listen: false);
     askUser(lang, auth);
     initPlatformState(auth);
+
+    if (config.loggedin) {
+      data.getData("username").then((String name) {
+        if (name.isEmpty || name == null) {
+          config.username = name;
+        } else {
+          config.username = trans(context, 'username');
+        }
+      });
+
+      data.getData("profile_pic").then((String value) {
+        if (value.isEmpty || value == null) {
+          dio.get<dynamic>("user").then((Response<dynamic> value) {
+            print(value.data['data']['name'].toString());
+            config.username = value.data['data']['name'].toString();
+
+            if (value.data['data']['image'].toString().trim() !=
+                "http://joker.localhost.ps/web/image") {
+              config.profileUrl = value.data['data']['image'].toString().trim();
+              data.setData("profile_pic", config.profileUrl);
+            }
+
+            data.setData("username", value.data['data']['name'].toString());
+          });
+        } else {
+          if (value != "http://joker.localhost.ps/web/image") {
+            config.profileUrl = value;
+          }
+        }
+      });
+    } else {
+      config.username =
+          getIt<NavigationService>().translateWithNoContext("Login or Sign up");
+    }
   }
 
   @override

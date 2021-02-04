@@ -7,8 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:flutter_svg/svg.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
@@ -19,6 +20,7 @@ import 'package:joker/providers/globalVars.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/providers/salesProvider.dart';
+import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/util/size_config.dart';
 import 'package:like_button/like_button.dart';
@@ -78,10 +80,12 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
   PermissionStatus permissionGranted;
   int specId;
   static PanelController pc = PanelController();
+
   AnimationController rotationController;
   AnimationController _animationController;
   bool isPlaying = false;
 
+  Animation<Offset> _offsetAnimation;
   @override
   void initState() {
     super.initState();
@@ -90,6 +94,15 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
         duration: const Duration(milliseconds: 700), vsync: this);
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
+    getIt<HOMEMAProvider>().controller =
+        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+    _offsetAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(0.0, -5.5),
+    ).animate(CurvedAnimation(
+      parent: getIt<HOMEMAProvider>().controller,
+      curve: Curves.ease,
+    ));
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await pc.hide();
     });
@@ -134,12 +147,14 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
       value.hideOffersHorizontalCards();
       _animationController.reverse();
     } else {
-      Fluttertoast.showToast(msg: "TODO: open menu");
+      // Fluttertoast.showToast(msg: "TODO: open menu");
+      Navigator.pushNamed(context, "/MainMenu");
       //open menu
       // _animationController.reverse();
     }
   }
 
+  bool locationWidgetShow = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +170,17 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
               backdropColor: colors.trans,
               backdropOpacity: .7,
               backdropEnabled: true,
-              renderPanelSheet: false,
+              onPanelClosed: () {
+                setState(() {
+                  locationWidgetShow = true;
+                });
+              },
+              onPanelOpened: () {
+                setState(() {
+                  locationWidgetShow = false;
+                });
+              },
+              // renderPanelSheet: false,
               header: Container(
                 decoration: BoxDecoration(
                     color: colors.white,
@@ -252,7 +277,9 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Column(
                             children: <Widget>[
-                              Icon(Icons.ac_unit, color: color),
+                              SvgPicture.asset("assets/images/restaurant.svg",
+                                  color: color, height: 24, width: 24),
+                              // Icon(Icons.ac_unit, color: color),
                               const SizedBox(height: 8),
                               Text(
                                   getIt<HOMEMAProvider>()
@@ -271,30 +298,35 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            Positioned(
-              right: 8,
-              bottom: !value.offersHorizontalCardsList ? 120 : 360,
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(6),
-                  onTap: () {
-                    _animateToUser();
-                  },
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: colors.white,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8))),
-                    child: Center(
-                      child: Icon(Icons.near_me, color: colors.orange),
+            Visibility(
+                child: Positioned(
+                  right: 8,
+                  bottom: 120,
+                  child: SlideTransition(
+                    position: _offsetAnimation,
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(6),
+                        onTap: () {
+                          _animateToUser();
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: colors.white,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(8))),
+                          child: Center(
+                            child: Icon(Icons.near_me, color: colors.orange),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
+                visible: locationWidgetShow),
             Visibility(
               visible: !value.showSlidingPanel,
               child: Stack(
@@ -432,6 +464,36 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
   }
 
   Widget mapCard(SaleData rs, HOMEMAProvider value) {
+    String endsIn = "";
+    String ln = "";
+    String lnn = "";
+    if (rs.period is! String) {
+      if (rs.period[0] != 0) {
+        ln = "\n";
+      } else {
+        lnn = "\n";
+      }
+
+      final String yearsToEnd = rs.period[0] != 0
+          ? rs.period[0].toString() + " " + trans(context, 'years') + ","
+          : "";
+      final String monthsToEnd = rs.period[1] != 0
+          ? rs.period[1].toString() + " " + trans(context, 'months') + ","
+          : "";
+      final String daysToEnd = rs.period[2] != 0
+          ? rs.period[2].toString() + " " + trans(context, 'days') + ","
+          : "";
+      final String hoursToEnd = rs.period[3] != 0
+          ? rs.period[3].toString() + " " + trans(context, 'hours') + ","
+          : "";
+      final String minutesToEnd = rs.period[4] != 0
+          ? rs.period[4].toString() + " " + trans(context, 'minutes') + "."
+          : "";
+      endsIn =
+          "$yearsToEnd $monthsToEnd  $ln$daysToEnd $lnn$hoursToEnd $ln$minutesToEnd";
+    } else {
+      endsIn = rs.period.toString();
+    }
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         decoration: BoxDecoration(
@@ -474,7 +536,8 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Icon(Icons.star, color: colors.orange),
-                        Text(rs.merchant.ratesAverage.toString())
+                        Text(value.inFocusBranch.merchant.ratesAverage
+                            .toString())
                       ],
                     ),
                   )
@@ -482,8 +545,27 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Column(
-                children: [
-                  const SizedBox(height: 16),
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      radius: 12,
+                      splashColor: colors.orange,
+                      child: Text(trans(context, 'more_info'),
+                          style: styles.moreInfo),
+                      onTap: () {
+                        if (config.loggedin) {
+                          Navigator.pushNamed(context, "/SaleLoader",
+                              arguments: <String, dynamic>{
+                                "mapBranch": value.inFocusBranch,
+                                "sale": rs
+                              });
+                        } else {
+                          getIt<NavigationService>().navigateTo('/login', null);
+                        }
+                      },
+                    ),
+                  ),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -491,7 +573,9 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
                             width: SizeConfig.blockSizeHorizontal * 12),
-                        Text("  " + trans(context, 'discount') + " 50%")
+                        Text("  " + trans(context, 'discount') + "  ",
+                            style: styles.moreInfo),
+                        Text(rs.discount)
                       ]),
                   const SizedBox(height: 8),
                   Row(
@@ -501,7 +585,8 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
                             width: SizeConfig.blockSizeHorizontal * 12),
-                        Text("  " + rs.price + " currency")
+                        Text("  " + rs.price + " currency",
+                            style: styles.moreInfo)
                       ]),
                   const SizedBox(height: 8),
                   Row(
@@ -511,13 +596,16 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
                             width: SizeConfig.blockSizeHorizontal * 12),
-                        Text("  " +
-                            rs.startAt +
-                            " " +
-                            trans(context, 'to') +
-                            " " +
-                            rs.endAt +
-                            " (${rs.status})")
+                        Text(
+                            "  " +
+                                rs.startAt +
+                                " " +
+                                trans(context, 'to') +
+                                " " +
+                                rs.endAt +
+                                "  ",
+                            style: styles.moreInfo),
+                        Text(rs.status)
                       ]),
                   const SizedBox(height: 4),
                   Row(
@@ -529,16 +617,18 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                                 fit: BoxFit.cover,
                                 height: SizeConfig.blockSizeVertical * 5,
                                 width: SizeConfig.blockSizeHorizontal * 12),
+                            Text("  " + trans(context, 'ends_in') + "  ",
+                                style: styles.moreInfo),
                             Container(
                                 padding: EdgeInsets.zero,
                                 constraints: BoxConstraints(
                                     maxWidth:
                                         MediaQuery.of(context).size.width /
-                                            2.2),
-                                child: Text("  " +
-                                    trans(context, 'ends_in') +
-                                    "  " +
-                                    rs.period))
+                                            2.8),
+                                child: Text(
+                                  endsIn,
+                                  textAlign: TextAlign.start,
+                                )),
                           ],
                         ),
                         LikeButton(
@@ -550,13 +640,11 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                               start: Colors.blue, end: Colors.purple),
                           isLiked: rs.isfavorite == 1,
                           onTap: (bool loved) async {
-                            print(loved);
                             favFunction("App\\Sale", rs.id);
                             if (!loved) {
-                              getIt<SalesProvider>().setFavSale(rs.id,
-                                  bId: value.inFocusBranch.id);
+                              value.setFavSale(rs.id);
                             } else {
-                              getIt<SalesProvider>().setunFavSale(rs.id);
+                              value.setunFavSale(rs.id);
                             }
                             return !loved;
                           },
@@ -567,7 +655,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            const SizedBox(height: 4),
+            const Spacer(),
             RaisedButton(
               disabledColor: colors.orange,
               shape: RoundedRectangleBorder(
@@ -587,36 +675,10 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                 Text(trans(context, 'maps'), style: styles.maps)
               ]),
             ),
+            const SizedBox(height: 8),
           ],
         ));
   }
-  // Widget _buildCarousel(BuildContext context) {
-  //   return SizedBox(
-  //     // you may want to use an aspect ratio here for tablet support
-  //     height: 200.0,
-  //     child: PageView.builder(
-  //       // store this controller in a State to save the carousel scroll position
-  //       controller: PageController(viewportFraction: 0.8),
-  //       itemBuilder: (BuildContext context, int itemIndex) {
-  //         return Transform.scale(
-  //               scale: i == itemIndex ? 1 : 0.9,
-  //               child:_buildCarouselItem(context, itemIndex));
-  //       },
-  //     ),
-  //   );
-  // }
-
-  // Widget _buildCarouselItem(BuildContext context, int itemIndex) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 4.0),
-  //     child: Container(
-  //       decoration: const BoxDecoration(
-  //         color: Colors.grey,
-  //         borderRadius: BorderRadius.all(Radius.circular(4.0)),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget _panel(ScrollController sc) {
     return MapSalesListState(sc: sc, close: () async => await pc.close());
