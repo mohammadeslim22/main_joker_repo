@@ -155,8 +155,62 @@ Future<bool> onWillPop(BuildContext context) async {
 void goToMap(BuildContext context) {
   getIt<HOMEMAProvider>().makeshowSlidingPanelFalse();
   getIt<HOMEMAProvider>().makeShowSepcializationsPadTrue();
-  getIt<HOMEMAProvider>().hideOffersHorizontalCards(); 
-  Navigator.pushNamedAndRemoveUntil(context, "/WhereToGo", (_) => false);
+  getIt<HOMEMAProvider>().hideOffersHorizontalCards();
+  Navigator.pushNamedAndRemoveUntil(context, "/MapAsHome", (_) => false,
+      arguments: <String, dynamic>{
+        "home_map_lat": config.lat,
+        "home_map_long": config.long
+      });
+}
+
+void showFullText(BuildContext context, String text) {
+  showGeneralDialog<dynamic>(
+    barrierLabel: "Label",
+    barrierDismissible: true,
+    barrierColor: Colors.black.withOpacity(0.73),
+    transitionDuration: const Duration(milliseconds: 350),
+    context: context,
+    pageBuilder: (BuildContext context, Animation<double> anim1,
+        Animation<double> anim2) {
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          margin:
+              const EdgeInsets.only(bottom: 160, left: 24, right: 24, top: 160),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(40)),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          child: Material(
+            type: MaterialType.transparency,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(child: Text(text, style: styles.textInShowMore)),
+                const SizedBox(height: 15),
+                RaisedButton(
+                    color: colors.jokerBlue,
+                    child: Text(trans(context, "ok"),
+                        style: styles.underHeadwhite),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    })
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+    transitionBuilder: (BuildContext context, Animation<double> anim1,
+        Animation<double> anim2, Widget child) {
+      return SlideTransition(
+        position:
+            Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
+                .animate(anim1),
+        child: child,
+      );
+    },
+  );
 }
 
 void ifUpdateTur(BuildContext context, String text) {

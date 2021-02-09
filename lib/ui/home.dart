@@ -155,10 +155,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   automaticallyImplyLeading: true,
                   actions: <Widget>[
                     IconButton(
-                      icon: Icon(
-                        Icons.map,
-                        color: colors.jokerBlue,
-                      ),
+                      icon: Icon(Icons.map, color: colors.orange),
                       onPressed: () {
                         if (_errorController != null) {
                           Navigator.pop(context);
@@ -169,10 +166,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       },
                     ),
                     IconButton(
-                      icon: Icon(
-                        Icons.clear,
-                        color: colors.jokerBlue,
-                      ),
+                      icon: Icon(Icons.clear, color: colors.orange),
                       onPressed: () {
                         AwesomeDialog(
                           context: context,
@@ -189,7 +183,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.search, color: colors.jokerBlue),
+                      icon: Icon(Icons.search, color: colors.orange),
                       onPressed: () {
                         Navigator.pushNamed(context, "/AdvancedSearch",
                             arguments: <String, dynamic>{
@@ -210,7 +204,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     //   ),
                     // ),
                     IconButton(
-                      icon: Icon(Icons.camera, color: colors.jokerBlue),
+                      icon: Icon(Icons.camera, color: colors.orange),
                       onPressed: () async {
                         final ScanResult result = await BarcodeScanner.scan();
 
@@ -332,10 +326,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         title: Text("${trans(context, 'set_from_map')}"),
-        trailing: Icon(
-          Icons.add,
-          color: colors.black,
-        ),
+        trailing: Icon(Icons.add, color: colors.black),
         onTap: () async {
           config.amIcomingFromHome = true;
           String lat;

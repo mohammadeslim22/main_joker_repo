@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
-import 'package:joker/models/merchant.dart';
+import 'package:joker/models/map_branches.dart';
+import 'package:joker/models/merchant.dart' as merchantMainModel;
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/models/branches_model.dart';
@@ -8,16 +9,17 @@ import 'package:joker/util/service_locator.dart';
 import 'map_provider.dart';
 
 class MerchantProvider with ChangeNotifier {
-  Merchant merchant;
+  merchantMainModel.Merchant merchant;
   Branches branches;
-  Branches favbranches;
+  List<MapBranch> favbranches;
 
   PagewiseLoadController<dynamic> pagewiseBranchesController;
 
-  Future<Merchant> getMerchantData(int id, String source, int ignore) async {
+  Future<merchantMainModel.Merchant> getMerchantData(
+      int id, String source, int ignore) async {
     final dynamic response = await dio.get<dynamic>("merchants/$id",
         queryParameters: <String, dynamic>{"source": source, "ignore": ignore});
-    merchant = Merchant.fromJson(response.data);
+    merchant = merchantMainModel.Merchant.fromJson(response.data);
     notifyListeners();
     return merchant;
   }
@@ -52,15 +54,19 @@ class MerchantProvider with ChangeNotifier {
     return branches.data;
   }
 
-  Future<List<BranchData>> getFavoritData(int pageIndex) async {
+  Future<List<MapBranch>> getFavoritData(int pageIndex) async {
     final Response<dynamic> response = await dio.get<dynamic>("favorites",
         queryParameters: <String, dynamic>{
           'page': pageIndex + 1,
           'model': "App\\Branch"
         });
-    favbranches = Branches.fromJson(response.data);
+    response.data['data'].forEach((dynamic v) {
+      favbranches.add(MapBranch.fromJson(v));
+    });
+
+    MapBranch.fromJson(response.data);
     notifyListeners();
-    return favbranches.data;
+    return favbranches;
   }
 
   Future<void> vistBranch(int branchId, {String source = 'click'}) async {

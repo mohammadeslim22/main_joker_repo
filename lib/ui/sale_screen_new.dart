@@ -2,11 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:joker/constants/config.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/salesProvider.dart';
-import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/util/size_config.dart';
 import 'package:provider/provider.dart';
@@ -82,7 +80,7 @@ class ShopDetailsPage extends State<SaleLoader>
     print("current state ${key.currentState}");
     final RenderBox box = state.context.findRenderObject() as RenderBox;
     setState(() {
-      extededPlus = box.size.height;
+      extededPlus = box.size.height + 3;
     });
   }
 
@@ -184,11 +182,7 @@ class ShopDetailsPage extends State<SaleLoader>
                             ],
                           )),
                       const SizedBox(height: 12),
-                      BottomWidgetForSliver(
-                          key: key,
-                          bottomSheetController: bottomSheetController,
-                          mytext: mytext,
-                          scaffoldkey: scaffoldkey),
+                      BottomWidgetForSliver(key: key, mytext: mytext),
                     ],
                   ),
                 ),
@@ -362,9 +356,8 @@ class ShopDetailsPage extends State<SaleLoader>
     if (rs.period is! String) {
       if (rs.period[0] != 0) {
         ln = "\n";
-      }else{
-      }
-   
+      } else {}
+
       final String yearsToEnd = rs.period[0] != 0
           ? rs.period[0].toString() + " " + trans(context, 'years') + ","
           : "";
@@ -380,7 +373,8 @@ class ShopDetailsPage extends State<SaleLoader>
       final String minutesToEnd = rs.period[4] != 0
           ? rs.period[4].toString() + " " + trans(context, 'minutes') + "."
           : "";
-      endsIn = "$yearsToEnd $monthsToEnd  $daysToEnd $ln$hoursToEnd $minutesToEnd";
+      endsIn =
+          "$yearsToEnd $monthsToEnd  $daysToEnd $ln$hoursToEnd $minutesToEnd";
     } else {
       endsIn = rs.period.toString();
     }
@@ -438,26 +432,7 @@ class ShopDetailsPage extends State<SaleLoader>
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Column(
                 children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      radius: 12,
-                      splashColor: colors.orange,
-                      child: Text(trans(context, 'more_info'),
-                          style: styles.moreInfo),
-                      onTap: () {
-                        if (config.loggedin) {
-                          Navigator.pushNamed(context, "/SaleLoader",
-                              arguments: <String, dynamic>{
-                                "mapBranch": value.inFocusBranch,
-                                "sale": rs
-                              });
-                        } else {
-                          getIt<NavigationService>().navigateTo('/login', null);
-                        }
-                      },
-                    ),
-                  ),
+                  const SizedBox(height: 8),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -515,36 +490,90 @@ class ShopDetailsPage extends State<SaleLoader>
                                 padding: EdgeInsets.zero,
                                 constraints: BoxConstraints(
                                     maxWidth:
-                                        MediaQuery.of(context).size.width /
-                                            2),
+                                        MediaQuery.of(context).size.width / 2),
                                 child: Text(
                                   endsIn,
                                   textAlign: TextAlign.start,
                                 )),
                           ],
                         ),
-                        LikeButton(
-                          circleSize: SizeConfig.blockSizeHorizontal * 12,
-                          size: SizeConfig.blockSizeHorizontal * 7,
-                          padding: const EdgeInsets.symmetric(horizontal: 3),
-                          countPostion: CountPostion.bottom,
-                          circleColor: const CircleColor(
-                              start: Colors.blue, end: Colors.purple),
-                          isLiked: rs.isfavorite == 1,
-                          onTap: (bool loved) async {
-                            print(loved);
-                            favFunction("App\\Sale", rs.id);
-                            if (!loved) {
-                              getIt<SalesProvider>().setFavSale(rs.id,
-                                  bId: value.inFocusBranch.id);
-                            } else {
-                              getIt<SalesProvider>().setunFavSale(rs.id);
-                            }
-                            return !loved;
-                          },
-                          likeCountPadding:
-                              const EdgeInsets.symmetric(vertical: 0),
-                        ),
+                        Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              LikeButton(
+                                circleSize: SizeConfig.blockSizeHorizontal * 12,
+                                size: SizeConfig.blockSizeHorizontal * 7,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 3),
+                                countPostion: CountPostion.bottom,
+                                circleColor: const CircleColor(
+                                    start: Colors.blue, end: Colors.purple),
+                                isLiked: rs.isfavorite == 1,
+                                onTap: (bool loved) async {
+                                  favFunction("App\\Sale", rs.id);
+                                  if (!loved) {
+                                    value.setFavSale(rs.id);
+                                  } else {
+                                    value.setunFavSale(rs.id);
+                                  }
+                                  return !loved;
+                                },
+                                likeCountPadding:
+                                    const EdgeInsets.symmetric(vertical: 0),
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  const SizedBox(height: 2),
+                                  LikeButton(
+                                    circleSize:
+                                        SizeConfig.blockSizeHorizontal * 12,
+                                    size: SizeConfig.blockSizeHorizontal * 6,
+                                    likeBuilder: (bool isLiked) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(3),
+                                        decoration: BoxDecoration(
+                                            color: !isLiked
+                                                ? colors.black.withOpacity(.5)
+                                                : colors.orange,
+                                            borderRadius:
+                                                BorderRadius.circular(70)),
+                                        child: Image.asset(
+                                            "assets/images/like.png",
+                                            width:
+                                                SizeConfig.blockSizeHorizontal,
+                                            height:
+                                                SizeConfig.blockSizeHorizontal),
+                                      );
+                                    },
+                                    isLiked: isliked,
+                                    likeCountPadding:
+                                        const EdgeInsets.symmetric(vertical: 3),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    countBuilder:
+                                        (int c, bool b, String count) {
+                                      return Text(
+                                        count,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                      );
+                                    },
+                                    countPostion: CountPostion.bottom,
+                                    circleColor: const CircleColor(
+                                        start: Colors.white,
+                                        end: Colors.purple),
+                                    onTap: (bool loved) async {
+                                      likeFunction("App\\Sale", rs.id);
+                                      //  setState(() {
+                                      isliked = !isliked;
+                                      //  });
+
+                                      return isliked;
+                                    },
+                                  ),
+                                ],
+                              )
+                            ])
                       ]),
                 ],
               ),
@@ -761,15 +790,9 @@ class ShopDetailsPage extends State<SaleLoader>
   }
 }
 
-// ignore: must_be_immutable
 class BottomWidgetForSliver extends StatefulWidget {
-  BottomWidgetForSliver(
-      {Key key, this.mytext, this.bottomSheetController, this.scaffoldkey})
-      : super(key: key);
+  const BottomWidgetForSliver({Key key, this.mytext}) : super(key: key);
   final String mytext;
-
-  final GlobalKey<ScaffoldState> scaffoldkey;
-  PersistentBottomSheetController<dynamic> bottomSheetController;
   @override
   State<StatefulWidget> createState() => BottomWidgetForSliverState();
 }
@@ -793,7 +816,7 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
           Text.rich(span, overflow: TextOverflow.ellipsis, maxLines: 3),
           InkWell(
             onTap: () {
-              ifUpdateTur(context, widget.mytext);
+              showFullText(context, widget.mytext);
             },
             child: Visibility(
                 child: Container(
@@ -811,54 +834,5 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
   }
 }
 
-void ifUpdateTur(BuildContext context, String text) {
-  showGeneralDialog<dynamic>(
-    barrierLabel: "Label",
-    barrierDismissible: true,
-    barrierColor: Colors.black.withOpacity(0.73),
-    transitionDuration: const Duration(milliseconds: 350),
-    context: context,
-    pageBuilder: (BuildContext context, Animation<double> anim1,
-        Animation<double> anim2) {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          margin:
-              const EdgeInsets.only(bottom: 160, left: 24, right: 24, top: 160),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(40)),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          child: Material(
-            type: MaterialType.transparency,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              // mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(child: Text(text, style: styles.textInShowMore)),
-                const SizedBox(height: 15),
-                RaisedButton(
-                    color: colors.jokerBlue,
-                    child: Text(trans(context, "ok"),
-                        style: styles.underHeadwhite),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    })
-              ],
-            ),
-          ),
-        ),
-      );
-    },
-    transitionBuilder: (BuildContext context, Animation<double> anim1,
-        Animation<double> anim2, Widget child) {
-      return SlideTransition(
-        position:
-            Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
-                .animate(anim1),
-        child: child,
-      );
-    },
-  );
-}
-  //abu talaat
 
+//abu talaat

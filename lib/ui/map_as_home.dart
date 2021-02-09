@@ -98,7 +98,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
     _offsetAnimation = Tween<Offset>(
       begin: Offset.zero,
-      end: const Offset(0.0, -5.5),
+      end: const Offset(0.0, -7.5),
     ).animate(CurvedAnimation(
       parent: getIt<HOMEMAProvider>().controller,
       curve: Curves.ease,

@@ -79,8 +79,15 @@ class MainMenu extends StatelessWidget {
                 ),
                 leading: SvgPicture.asset("assets/images/home_group.svg"),
                 onTap: () {
-                  Navigator.pushNamed(context, "/WhereToGo");
+                  Navigator.pop(context);
+                  // Navigator.pushNamed(context, "/MapAsHome");
                 },
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                      child: SvgPicture.asset("assets/images/fav_icon.svg"))
+                ],
               ),
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
@@ -90,10 +97,9 @@ class MainMenu extends StatelessWidget {
                     Badge(
                       position: BadgePosition.topRight(top: 16, right: 10),
                       badgeContent: Container(
-                        margin: const EdgeInsets.only(left: 24, right: 24),
-                        padding: const EdgeInsets.all(4),
-                        child: const Text("10"),
-                      ),
+                          margin: const EdgeInsets.only(left: 24, right: 24),
+                          padding: const EdgeInsets.all(4),
+                          child: const Text("10")),
                       badgeColor: colors.yellow,
                     ),
                   ],
@@ -117,10 +123,7 @@ class MainMenu extends StatelessWidget {
                 title: Text("${trans(context, 'membership')}"),
                 leading: SvgPicture.asset("assets/images/vip.svg"),
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    "/Membership",
-                  );
+                  Navigator.pushNamed(context, "/Membership");
                 },
               ),
               ListTile(

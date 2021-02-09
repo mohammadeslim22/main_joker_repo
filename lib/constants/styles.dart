@@ -28,30 +28,20 @@ class Styles {
     fontFamily: "Bangers",
     color: colors.grey,
   );
-  TextStyle fromMainToMapOn = TextStyle(
-    fontSize: 18,
-    fontFamily: "Bangers",
-    color: colors.black,
-  );
+  TextStyle fromMainToMapOn =
+      TextStyle(fontSize: 18, fontFamily: "Bangers", color: colors.black);
   TextStyle smallButton =
       TextStyle(fontSize: 12, color: colors.black, fontWeight: FontWeight.w100);
   TextStyle smallButtonactivated = TextStyle(
       fontSize: 12, color: colors.jokerBlue, fontWeight: FontWeight.w100);
   TextStyle mylight = const TextStyle(
-    fontWeight: FontWeight.w100,
-    color: Colors.grey,
-    fontSize: 15,
-  );
+      fontWeight: FontWeight.w100, color: Colors.grey, fontSize: 15);
   TextStyle mysmalllight = const TextStyle(
-    fontWeight: FontWeight.w100,
-    color: Colors.grey,
-    fontSize: 12,
-  );
+      fontWeight: FontWeight.w100, color: Colors.grey, fontSize: 12);
   TextStyle pleazeCheck = TextStyle(
-    fontWeight: FontWeight.values.first,
-    color: const Color(0xFF303030),
-    fontSize: 20,
-  );
+      fontWeight: FontWeight.values.first,
+      color: const Color(0xFF303030),
+      fontSize: 20);
   TextStyle mysmall = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.black,
@@ -62,19 +52,12 @@ class Styles {
       color: Colors.black,
       fontSize: 18,
       height: 1.7);
-  TextStyle mysmallforgridview = const TextStyle(
-    fontWeight: FontWeight.w100,
-    fontSize: 13,
-  );
-  TextStyle maingridview = const TextStyle(
-    fontWeight: FontWeight.w400,
-    fontSize: 18,
-  );
+  TextStyle mysmallforgridview =
+      const TextStyle(fontWeight: FontWeight.w100, fontSize: 13);
+  TextStyle maingridview =
+      const TextStyle(fontWeight: FontWeight.w400, fontSize: 18);
   TextStyle pinCodePhone = const TextStyle(
-    fontWeight: FontWeight.bold,
-    color: Colors.green,
-    fontSize: 18,
-  );
+      fontWeight: FontWeight.bold, color: Colors.green, fontSize: 18);
   TextStyle mystyle = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.black,
@@ -91,10 +74,7 @@ class Styles {
       fontSize: 15,
       height: 1.7);
   TextStyle mystyle2 = const TextStyle(
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-    fontSize: 36,
-  );
+      fontWeight: FontWeight.bold, color: Colors.black, fontSize: 36);
   TextStyle underHead = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Color(0xFF303030),
@@ -111,10 +91,11 @@ class Styles {
       fontSize: 12,
       height: 1.7);
   TextStyle underHeadblack = const TextStyle(
-    fontWeight: FontWeight.w100,
-    color: Colors.black,
-    fontSize: 20,
-  );
+      fontWeight: FontWeight.w100, color: Colors.black, fontSize: 20);
+  TextStyle underHeadorange = const TextStyle(
+      fontWeight: FontWeight.w100, color: Colors.orange, fontSize: 20);
+  TextStyle underHeadwhite = const TextStyle(
+      fontWeight: FontWeight.w100, color: Colors.white, fontSize: 20);
   TextStyle textInShowMore = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.black,
@@ -161,13 +142,12 @@ class Styles {
     fontSize: 15,
     decoration: TextDecoration.none,
   );
-  TextStyle underHeadwhite = const TextStyle(
-    fontWeight: FontWeight.w300,
-    color: Colors.white,
-    fontSize: 20,
-    height: 1.5,
-    decoration: TextDecoration.none,
-  );
+  TextStyle underHeadwhite2 = const TextStyle(
+      fontWeight: FontWeight.w300,
+      color: Colors.white,
+      fontSize: 20,
+      height: 1.5,
+      decoration: TextDecoration.none);
   TextStyle memberShipBottomSheet = const TextStyle(
     fontWeight: FontWeight.w600,
     color: Colors.white,

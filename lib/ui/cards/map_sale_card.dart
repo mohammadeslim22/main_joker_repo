@@ -54,13 +54,11 @@ class _SalesCardState extends State<MapSalesCard> {
         child: Row(
           children: <Widget>[
             Container(
-                padding: const EdgeInsets.fromLTRB(200, 0, 80, 6),
+              
                 height: MediaQuery.of(context).size.width * .25,
                 width: MediaQuery.of(context).size.width * .25,
                 decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12)),
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
                     image: DecorationImage(
                         fit: BoxFit.cover,
                         image:
@@ -72,7 +70,7 @@ class _SalesCardState extends State<MapSalesCard> {
                           top: 8.0,
                           child: CircleAvatar(
                             backgroundColor: colors.white,
-                            radius: 12,
+                            radius: 8,
                             child:
                                 SvgPicture.asset('assets/images/loveicon.svg'),
                           ),

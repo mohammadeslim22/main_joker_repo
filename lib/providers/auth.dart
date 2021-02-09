@@ -106,7 +106,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<bool> login(String username, String pass, BuildContext context) async {
-    print("loging info:${myCountryDialCode + username.toString()}");
+    print("loging info:${myCountryDialCode + username.replaceAll("^0+", "").toString().trim()}");
     bool res;
     await dio.post<dynamic>("login", data: <String, dynamic>{
       "phone":

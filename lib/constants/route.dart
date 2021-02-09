@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:joker/constants/config.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/membership.dart';
 import 'package:joker/models/sales.dart';
@@ -39,9 +40,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case "/Home":
       page = PageTransition<PageController>(
-        child: const Home(),
-        type: PageTransitionType.rightToLeftWithFade,
-      );
+          child: const Home(), type: PageTransitionType.rightToLeftWithFade);
       break;
     // case "/HomeMap":
     //   page = PageTransition<PageController>(
@@ -54,15 +53,12 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     //   break;
     case "/login":
       page = PageTransition<PageController>(
-        child: LoginScreen(),
-        type: PageTransitionType.rightToLeftWithFade,
-      );
+          child: LoginScreen(), type: PageTransitionType.rightToLeftWithFade);
       break;
     case "/settings":
       page = PageTransition<PageController>(
-        child: const Settings(),
-        type: PageTransitionType.rightToLeftWithFade,
-      );
+          child: const Settings(),
+          type: PageTransitionType.rightToLeftWithFade);
       break;
     // case "/SaleDetails":
     //   page = PageTransition<PageController>(
@@ -75,22 +71,19 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     //   break;
     case "/SaleLoader":
       page = PageTransition<PageController>(
-        child: SaleLoader(
-          merchant: args['mapBranch'] as MapBranch ,
-          saleData: args['sale'] as SaleData,
-        ),
-        type: PageTransitionType.rightToLeftWithFade,
-      );
+          child: SaleLoader(
+            merchant: args['mapBranch'] as MapBranch,
+            saleData: args['sale'] as SaleData,
+          ),
+          type: PageTransitionType.rightToLeftWithFade);
       break;
     case "/AutoLocate":
       page = PageTransition<PageController>(
-        child: AutoLocate(
-          lat: args['lat'] as double,
-          long: args['long'] as double,
-          choice: args['choice'] as int,
-        ),
-        type: PageTransitionType.rightToLeftWithFade,
-      );
+          child: AutoLocate(
+              lat: args['lat'] as double,
+              long: args['long'] as double,
+              choice: args['choice'] as int),
+          type: PageTransitionType.rightToLeftWithFade);
       break;
     case "/AdvancedSearch":
       page = PageTransition<PageController>(
@@ -209,8 +202,8 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
     case "/MapAsHome":
       page = PageTransition<PageController>(
         child: MapAsHome(
-          lat: args['home_map_lat'] as double,
-          long: args['home_map_long'] as double,
+          lat: args['home_map_lat'] as double ?? config.lat,
+          long: args['home_map_long'] as double ?? config.long,
         ),
         type: PageTransitionType.rightToLeftWithFade,
       );

@@ -104,9 +104,7 @@ class _SalesCardState extends State<SalesCard> {
                                 Text(saledata.status, style: styles.mylight),
                                 const SizedBox(width: 5),
                                 CircleAvatar(
-                                    backgroundColor: saledata.status == "active"
-                                        ? Colors.green
-                                        : Colors.red,
+                                    backgroundColor: saleStatus,
                                     radius: 6)
                               ],
                             ),
