@@ -9,8 +9,7 @@ import 'package:joker/util/size_config.dart';
 import 'package:like_button/like_button.dart';
 
 class FaveCard extends StatelessWidget {
-  const FaveCard({Key key, this.sale, this.value})
-      : super(key: key);
+  const FaveCard({Key key, this.sale, this.value}) : super(key: key);
   final SaleData sale;
   final HOMEMAProvider value;
 
@@ -19,13 +18,11 @@ class FaveCard extends StatelessWidget {
     return Card(
         child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start,
+           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
@@ -43,18 +40,18 @@ class FaveCard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 1.7),
+                        maxWidth: MediaQuery.of(context).size.width / 2),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(sale.name, style: styles.saleNameInMapCard),
                         const SizedBox(height: 12),
-                        BottomWidgetForSliver(mytext: sale.details),
-                        // Text(sale.details, style: styles.saledescInMapCard)
+                        TextOverflowRapper(mytext: sale.details+"sale.detailssale.details sale.details sale.detailssale.details sale.details"),
                       ],
                     ),
                   ),
+                
                 ]),
             LikeButton(
               circleSize: SizeConfig.blockSizeHorizontal * 12,
@@ -118,7 +115,52 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
                         alignment: isRTL
                             ? Alignment.centerLeft
                             : Alignment.centerRight,
-                        height: SizeConfig.blockSizeVertical *2,
+                        height: SizeConfig.blockSizeVertical * 2,
+                        child: Text(trans(context, "show_more"),
+                            style: styles.showMore)),
+                    visible: exceeded,
+                    replacement: Container()),
+              )
+            ]);
+      }),
+    );
+  }
+}
+
+class TextOverflowRapper extends StatelessWidget {
+  const TextOverflowRapper({Key key, this.mytext}) : super(key: key);
+  final String mytext;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+
+    return Container(
+      child:
+          LayoutBuilder(builder: (BuildContext context, BoxConstraints size) {
+        final TextSpan span =
+            TextSpan(text: mytext, style: styles.saledescInMapCard);
+        final TextPainter tp = TextPainter(
+            maxLines: 2, textDirection: TextDirection.ltr, text: span);
+        tp.layout(maxWidth: size.maxWidth);
+        final bool exceeded = tp.didExceedMaxLines;
+        return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text.rich(span,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  textAlign: TextAlign.start),
+              InkWell(
+                onTap: () {
+                  showFullText(context, mytext);
+                },
+                child: Visibility(
+                    child: Container(
+                        alignment: isRTL
+                            ? Alignment.centerLeft
+                            : Alignment.centerRight,
+                        height: SizeConfig.blockSizeVertical * 2,
                         child: Text(trans(context, "show_more"),
                             style: styles.showMore)),
                     visible: exceeded,

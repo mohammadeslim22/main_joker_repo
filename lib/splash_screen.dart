@@ -88,6 +88,7 @@ class _SplashScreenState extends State<SplashScreen> {
       data.getData("profile_pic").then((String value) {
         if (value.isEmpty || value == null) {
           dio.get<dynamic>("user").then((Response<dynamic> value) {
+          if(value.statusCode==200){
             print(value.data['data']['name'].toString());
             config.username = value.data['data']['name'].toString();
 
@@ -98,6 +99,8 @@ class _SplashScreenState extends State<SplashScreen> {
             }
 
             data.setData("username", value.data['data']['name'].toString());
+          }
+            
           });
         } else {
           if (value != "http://joker.localhost.ps/web/image") {

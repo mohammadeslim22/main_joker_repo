@@ -351,12 +351,15 @@ class ShopDetailsPage extends State<SaleLoader>
   }
 
   Widget mapCard(SaleData rs, BuildContext context, HOMEMAProvider value) {
-    String endsIn = "";
+     String endsIn = "";
     String ln = "";
+    String lnn = "";
     if (rs.period is! String) {
       if (rs.period[0] != 0) {
         ln = "\n";
-      } else {}
+      } else {
+        lnn = "\n";
+      }
 
       final String yearsToEnd = rs.period[0] != 0
           ? rs.period[0].toString() + " " + trans(context, 'years') + ","
@@ -375,6 +378,8 @@ class ShopDetailsPage extends State<SaleLoader>
           : "";
       endsIn =
           "$yearsToEnd $monthsToEnd  $daysToEnd $ln$hoursToEnd $minutesToEnd";
+           endsIn =
+          "$yearsToEnd $monthsToEnd  $ln$daysToEnd $lnn$hoursToEnd $ln$minutesToEnd";
     } else {
       endsIn = rs.period.toString();
     }

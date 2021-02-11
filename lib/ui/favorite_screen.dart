@@ -28,6 +28,7 @@ class Favorite extends StatelessWidget {
           child: (bolc.favocurrentIndex == 0)
               ? FavoritMerchantsList()
               : FavoritDiscountsList(),
-        ));
+        )
+        );
   }
 }
