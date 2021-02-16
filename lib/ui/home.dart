@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'dart:convert';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
@@ -18,7 +19,7 @@ import '../ui/widgets/my_inner_drawer.dart';
 import 'main/merchant_list_statless.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:joker/constants/config.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+// import 'package:barcode_scan/barcode_scan.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
@@ -231,11 +232,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     IconButton(
                       icon: Icon(Icons.camera, color: colors.orange),
                       onPressed: () async {
-                        final ScanResult result = await BarcodeScanner.scan();
-
+                        // final ScanResult result = await BarcodeScanner.scan();
+                        final String barcodeScanRes =
+                            await FlutterBarcodeScanner.scanBarcode(
+                                "#ff6666", "Cancel", true, ScanMode.QR);
                         try {
                           final Map<String, dynamic> map =
-                              json.decode(result.rawContent)
+                              json.decode(barcodeScanRes)
                                   as Map<String, dynamic>;
                           getIt<MerchantProvider>().vistBranch(
                               int.parse(map['id'].toString()),
@@ -247,8 +250,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 "branchId": int.parse(map['id'].toString()),
                                 "source": "qr"
                               });
-                          print(result.rawContent);
-                          Fluttertoast.showToast(msg: result.rawContent);
+                          print(barcodeScanRes);
+                          Fluttertoast.showToast(msg: barcodeScanRes);
                         } catch (e) {
                           Fluttertoast.showToast(
                               msg: trans(context, 'use_right_qr_code'));

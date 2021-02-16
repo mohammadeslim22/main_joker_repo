@@ -107,30 +107,21 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
       await pc.hide();
     });
     getIt<HOMEMAProvider>().getBranchesData(1);
-    // getIt<SalesProvider>().pagewiseSalesController =
-    //     PagewiseLoadController<dynamic>(
-    //         pageSize: config.loggedin ? 15 : 6,
-    //         pageFuture: (int pageIndex) async {
-    //           return config.loggedin
-    //               ? (getIt<GlobalVars>().filterData != null)
-    //                   ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
-    //                       pageIndex, getIt<GlobalVars>().filterData)
-    //                   : getIt<SalesProvider>()
-    //                       .getSalesDataAuthenticated(pageIndex)
-    //               : (getIt<GlobalVars>().filterData != null)
-    //                   ? getIt<SalesProvider>().getSalesDataFilterd(
-    //                       pageIndex, getIt<GlobalVars>().filterData)
-    //                   : getIt<SalesProvider>().getSalesData(pageIndex);
-    //         });
-    // getIt<MerchantProvider>().pagewiseBranchesController =
-    //     PagewiseLoadController<dynamic>(
-    //         pageSize: 5,
-    //         pageFuture: (int pageIndex) async {
-    //           return config.loggedin
-    //               ? getIt<MerchantProvider>()
-    //                   .getBranchesDataAuthintecated(pageIndex)
-    //               : getIt<MerchantProvider>().getBranchesData(pageIndex);
-    //         });
+    getIt<SalesProvider>().pagewiseSalesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: config.loggedin ? 15 : 6,
+            pageFuture: (int pageIndex) async {
+              return config.loggedin
+                  ? (getIt<GlobalVars>().filterData != null)
+                      ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
+                          pageIndex, getIt<GlobalVars>().filterData)
+                      : getIt<SalesProvider>()
+                          .getSalesDataAuthenticated(pageIndex)
+                  : (getIt<GlobalVars>().filterData != null)
+                      ? getIt<SalesProvider>().getSalesDataFilterd(
+                          pageIndex, getIt<GlobalVars>().filterData)
+                      : getIt<SalesProvider>().getSalesData(pageIndex);
+            });
   }
 
   @override
@@ -548,7 +539,8 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
               child: Column(
                 children: <Widget>[
                   Align(
-                    alignment:isRTL? Alignment.centerLeft:Alignment.centerRight,
+                    alignment:
+                        isRTL ? Alignment.centerLeft : Alignment.centerRight,
                     child: InkWell(
                       radius: 12,
                       splashColor: colors.orange,

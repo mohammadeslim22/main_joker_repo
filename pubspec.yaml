@@ -73,7 +73,8 @@ dependencies:
   expandable: ^4.1.4
   get_it: ^5.0.0
   flutter_sim_country_code: ^0.0.3
-  barcode_scan: ^3.0.1
+  # barcode_scan: ^3.0.1
+  flutter_barcode_scanner: ^1.0.2
   country_provider: ^1.0.1
   url_launcher: ^5.7.2
   flutter_swiper: ^1.1.6
