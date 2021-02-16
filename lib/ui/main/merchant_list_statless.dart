@@ -12,7 +12,7 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 class ShopListStaeless extends StatelessWidget {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-
+      
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(

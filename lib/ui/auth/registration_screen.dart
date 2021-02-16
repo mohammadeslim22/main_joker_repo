@@ -148,7 +148,7 @@ class _MyRegistrationState extends State<Registration>
                       (_obscureText == false)
                           ? Icons.visibility
                           : Icons.visibility_off,
-                      color: colors.blue,
+                      color: colors.orange,
                     ),
                     onPressed: () {
                       setState(() {
@@ -176,7 +176,7 @@ class _MyRegistrationState extends State<Registration>
                   },
                   suffixicon: Icon(
                     Icons.calendar_today,
-                    color: colors.blue,
+                    color: colors.orange,
                   ),
                   focusNode: focus3,
                   validator: (String value) {
@@ -218,7 +218,7 @@ class _MyRegistrationState extends State<Registration>
                     }
                   },
                   suffixicon: IconButton(
-                    icon: const Icon(Icons.add_location, color: Colors.blue),
+                    icon: const Icon(Icons.add_location, color: Colors.orange),
                     onPressed: () {
                       Navigator.pushNamed(context, '/AutoLocate',
                           arguments: <String, double>{
@@ -278,7 +278,7 @@ class _MyRegistrationState extends State<Registration>
                     child: RaisedButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: colors.blue)),
+                            side: BorderSide(color: colors.orange)),
                         onPressed: () async {
                           if (_isButtonEnabled) {
                             if (_formKey.currentState.validate()) {
@@ -309,7 +309,7 @@ class _MyRegistrationState extends State<Registration>
                             });
                           }
                         },
-                        color: colors.blue,
+                        color: colors.orange,
                         textColor: colors.white,
                         child: mainProvider
                             .returnchild(trans(context, 'regisration'))),

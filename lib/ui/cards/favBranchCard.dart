@@ -61,7 +61,7 @@ class FaveBranchCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 3),
               countPostion: CountPostion.bottom,
               circleColor:
-                  const CircleColor(start: Colors.blue, end: Colors.purple),
+                  const CircleColor(start: Colors.orange, end: Colors.purple),
               isLiked: branch.isfavorite == 1,
               onTap: (bool loved) async {
                 favFunction("App\\Sale", branch.id);

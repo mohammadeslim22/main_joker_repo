@@ -141,7 +141,7 @@ class TextOverflowRapper extends StatelessWidget {
         final TextSpan span =
             TextSpan(text: mytext, style: styles.saledescInMapCard);
         final TextPainter tp = TextPainter(
-            maxLines: 2, textDirection: TextDirection.ltr, text: span);
+            maxLines: 3, textDirection: TextDirection.ltr, text: span);
         tp.layout(maxWidth: size.maxWidth);
         final bool exceeded = tp.didExceedMaxLines;
         return Column(
@@ -149,7 +149,7 @@ class TextOverflowRapper extends StatelessWidget {
             children: <Widget>[
               Text.rich(span,
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
+                  maxLines: 3,
                   textAlign: TextAlign.start),
               InkWell(
                 onTap: () {

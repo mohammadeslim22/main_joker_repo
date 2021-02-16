@@ -378,7 +378,7 @@
 //                   gravity: ToastGravity.CENTER,
 //                   timeInSecForIosWeb: 1,
 //                   backgroundColor: Colors.grey[100],
-//                   textColor: colors.jokerBlue,
+//                   textColor: colors.orange,
 //                   fontSize: 16.0);
 //             },
 //           ),

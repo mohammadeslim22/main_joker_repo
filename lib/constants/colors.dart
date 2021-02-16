@@ -18,7 +18,7 @@ class MyColors {
   Color red = const Color(0xffFC531C);
   Color blue = Colors.blue[400];
   Color redOpacity = const Color(0xffFC531C);
-  Color jokerBlue = Colors.blue;
+  // Color orange = Colors.blue;
   Color trans = Colors.transparent;
   Color ggrey = Colors.grey;
   Color orange = Colors.orange;

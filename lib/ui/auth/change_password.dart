@@ -163,7 +163,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: colors.jokerBlue)),
+                          side: BorderSide(color: colors.orange)),
                       onPressed: () async {
                         if (_isButtonEnabled) {
                           if (_formKey.currentState.validate()) {
@@ -189,7 +189,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                           }
                         }
                       },
-                      color: colors.jokerBlue,
+                      color: colors.orange,
                       textColor: colors.white,
                       child: bolc
                           .returnchild(trans(context, 'change_my_password'))),

@@ -6,7 +6,9 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/providers/map_provider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
 
@@ -47,11 +49,17 @@ class _SalesCardState extends State<SalesCard> {
       child: InkWell(
         onTap: () {
           if (config.loggedin) {
+            final MapBranch m = MapBranch(
+                merchant: Merchant(
+                    id: saledata.merchant.id,
+                    logo: saledata.merchant.logo,
+                    name: saledata.merchant.name,
+                    ratesAverage: saledata.merchant.ratesAverage,
+                    salesCount: saledata.merchant.salesCount));
+            getIt<HOMEMAProvider>().setinFocusBranch(m);
+            print("mmmmmmmmmmmmmmmm $m");
             Navigator.pushNamed(context, "/SaleLoader",
-                arguments: <String, dynamic>{
-                  "merchant_id": saledata.merchant.id,
-                  "sale": saledata
-                });
+                arguments: <String, dynamic>{"mapBranch": m, "sale": saledata});
           } else {
             getIt<NavigationService>().navigateToNamed('/login', null);
           }
@@ -104,8 +112,7 @@ class _SalesCardState extends State<SalesCard> {
                                 Text(saledata.status, style: styles.mylight),
                                 const SizedBox(width: 5),
                                 CircleAvatar(
-                                    backgroundColor: saleStatus,
-                                    radius: 6)
+                                    backgroundColor: saleStatus, radius: 6)
                               ],
                             ),
                             const SizedBox(height: 8),

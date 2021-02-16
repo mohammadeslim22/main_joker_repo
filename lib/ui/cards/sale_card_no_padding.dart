@@ -6,7 +6,9 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/providers/map_provider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/service_locator.dart';
@@ -214,9 +216,18 @@ class _SalesCardState extends State<SalesCardNoPadding> {
             child: Text(trans(context, 'more_info'), style: styles.moreInfo),
             onPressed: () {
               if (config.loggedin) {
+                final MapBranch m = MapBranch(
+                    merchant: Merchant(
+                        id: saledata.merchant.id,
+                        logo: saledata.merchant.logo,
+                        name: saledata.merchant.name,
+                        ratesAverage: saledata.merchant.ratesAverage,
+                        salesCount: saledata.merchant.salesCount));
+                getIt<HOMEMAProvider>().setinFocusBranch(m);
+                print("mmmmmmmmmmmmmmmm $m");
                 Navigator.pushNamed(context, "/SaleLoader",
                     arguments: <String, dynamic>{
-                      "merchant_id": saledata.merchant.id,
+                      "mapBranch": m,
                       "sale": saledata
                     });
               } else {

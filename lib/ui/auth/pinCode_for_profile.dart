@@ -214,7 +214,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
               if (enabeld)
                 CircularPercentIndicator(
                     radius: 130.0,
-                    progressColor: Colors.blue[300],
+                    progressColor: Colors.orange[300],
                     circularStrokeCap: CircularStrokeCap.round,
                     animation: true,
                     animationDuration: 31500,
@@ -239,7 +239,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                       borderRadius: BorderRadius.circular(20.0),
                       side: const BorderSide(color: Colors.black)),
                   color: colors.white,
-                  textColor: Colors.blue,
+                  textColor: Colors.orange,
                   padding: const EdgeInsets.all(8.0),
                   onPressed: () {},
                   child: Text(

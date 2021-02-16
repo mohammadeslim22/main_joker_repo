@@ -311,7 +311,7 @@ class _AutoLocateState extends State<AutoLocate> {
             RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
-                    side: const BorderSide(color: Colors.blue)),
+                    side: const BorderSide(color: Colors.orange)),
                 onPressed: () {
                   config.locationController.text =
                       "Tap to get your Location...";
@@ -320,14 +320,14 @@ class _AutoLocateState extends State<AutoLocate> {
                       .togelocationloading(false);
                   Scaffold.of(context).hideCurrentSnackBar();
                 },
-                color: colors.red,
-                textColor: colors.white,
+                color: colors.white,
+                textColor: colors.orange,
                 child: Text(trans(context, 'cancel'))),
             const SizedBox(width: 30),
             RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: colors.blue)),
+                    side: BorderSide(color: colors.orange)),
                 onPressed: () {
                   setState(() {
                     config.lat = lat;
@@ -337,7 +337,7 @@ class _AutoLocateState extends State<AutoLocate> {
                   functions[widget.choice].call();
                   Navigator.pop(context);
                 },
-                color: colors.blue,
+                color: colors.orange,
                 textColor: colors.white,
                 child: Text(trans(context, 'pick'))),
           ],

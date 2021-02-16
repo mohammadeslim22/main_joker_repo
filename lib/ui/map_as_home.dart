@@ -107,30 +107,30 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
       await pc.hide();
     });
     getIt<HOMEMAProvider>().getBranchesData(1);
-    getIt<SalesProvider>().pagewiseSalesController =
-        PagewiseLoadController<dynamic>(
-            pageSize: config.loggedin ? 15 : 6,
-            pageFuture: (int pageIndex) async {
-              return config.loggedin
-                  ? (getIt<GlobalVars>().filterData != null)
-                      ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
-                          pageIndex, getIt<GlobalVars>().filterData)
-                      : getIt<SalesProvider>()
-                          .getSalesDataAuthenticated(pageIndex)
-                  : (getIt<GlobalVars>().filterData != null)
-                      ? getIt<SalesProvider>().getSalesDataFilterd(
-                          pageIndex, getIt<GlobalVars>().filterData)
-                      : getIt<SalesProvider>().getSalesData(pageIndex);
-            });
-    getIt<MerchantProvider>().pagewiseBranchesController =
-        PagewiseLoadController<dynamic>(
-            pageSize: 5,
-            pageFuture: (int pageIndex) async {
-              return config.loggedin
-                  ? getIt<MerchantProvider>()
-                      .getBranchesDataAuthintecated(pageIndex)
-                  : getIt<MerchantProvider>().getBranchesData(pageIndex);
-            });
+    // getIt<SalesProvider>().pagewiseSalesController =
+    //     PagewiseLoadController<dynamic>(
+    //         pageSize: config.loggedin ? 15 : 6,
+    //         pageFuture: (int pageIndex) async {
+    //           return config.loggedin
+    //               ? (getIt<GlobalVars>().filterData != null)
+    //                   ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
+    //                       pageIndex, getIt<GlobalVars>().filterData)
+    //                   : getIt<SalesProvider>()
+    //                       .getSalesDataAuthenticated(pageIndex)
+    //               : (getIt<GlobalVars>().filterData != null)
+    //                   ? getIt<SalesProvider>().getSalesDataFilterd(
+    //                       pageIndex, getIt<GlobalVars>().filterData)
+    //                   : getIt<SalesProvider>().getSalesData(pageIndex);
+    //         });
+    // getIt<MerchantProvider>().pagewiseBranchesController =
+    //     PagewiseLoadController<dynamic>(
+    //         pageSize: 5,
+    //         pageFuture: (int pageIndex) async {
+    //           return config.loggedin
+    //               ? getIt<MerchantProvider>()
+    //                   .getBranchesDataAuthintecated(pageIndex)
+    //               : getIt<MerchantProvider>().getBranchesData(pageIndex);
+    //         });
   }
 
   @override
@@ -464,6 +464,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
   }
 
   Widget mapCard(SaleData rs, HOMEMAProvider value) {
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     String endsIn = "";
     String ln = "";
     String lnn = "";
@@ -475,19 +476,19 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
       }
 
       final String yearsToEnd = rs.period[0] != 0
-          ? rs.period[0].toString() + " " + trans(context, 'years') + ","
+          ? rs.period[0].toString() + " " + trans(context, 'year') + ","
           : "";
       final String monthsToEnd = rs.period[1] != 0
-          ? rs.period[1].toString() + " " + trans(context, 'months') + ","
+          ? rs.period[1].toString() + " " + trans(context, 'month') + ","
           : "";
       final String daysToEnd = rs.period[2] != 0
-          ? rs.period[2].toString() + " " + trans(context, 'days') + ","
+          ? rs.period[2].toString() + " " + trans(context, 'day') + ","
           : "";
       final String hoursToEnd = rs.period[3] != 0
-          ? rs.period[3].toString() + " " + trans(context, 'hours') + ","
+          ? rs.period[3].toString() + " " + trans(context, 'hour') + ","
           : "";
       final String minutesToEnd = rs.period[4] != 0
-          ? rs.period[4].toString() + " " + trans(context, 'minutes') + "."
+          ? rs.period[4].toString() + " " + trans(context, 'minute') + "."
           : "";
       endsIn =
           "$yearsToEnd $monthsToEnd  $ln$daysToEnd $lnn$hoursToEnd $ln$minutesToEnd";
@@ -547,7 +548,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
               child: Column(
                 children: <Widget>[
                   Align(
-                    alignment: Alignment.centerRight,
+                    alignment:isRTL? Alignment.centerLeft:Alignment.centerRight,
                     child: InkWell(
                       radius: 12,
                       splashColor: colors.orange,

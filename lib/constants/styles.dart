@@ -33,7 +33,7 @@ class Styles {
   TextStyle smallButton =
       TextStyle(fontSize: 12, color: colors.black, fontWeight: FontWeight.w100);
   TextStyle smallButtonactivated = TextStyle(
-      fontSize: 12, color: colors.jokerBlue, fontWeight: FontWeight.w100);
+      fontSize: 12, color: colors.orange, fontWeight: FontWeight.w100);
   TextStyle mylight = const TextStyle(
       fontWeight: FontWeight.w100, color: Colors.grey, fontSize: 15);
   TextStyle mysmalllight = const TextStyle(

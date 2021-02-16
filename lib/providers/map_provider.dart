@@ -39,6 +39,10 @@ class HOMEMAProvider with ChangeNotifier {
   bool showSepcializationsPad = true;
   SwiperController swipController = SwiperController();
   AnimationController controller;
+  void setinFocusBranch(MapBranch toBeInFocus) {
+    inFocusBranch = toBeInFocus;
+    notifyListeners();
+  }
 
   void setLikeSale(int saleId) {
     try {
@@ -155,6 +159,7 @@ class HOMEMAProvider with ChangeNotifier {
     branches = MapBranches.fromJson(response.data);
     markers.clear();
     addUserIcon();
+    print("${branches.mapBranches.length} branches.mapBranches.length");
     for (final MapBranch mapBranch in branches.mapBranches) {
       await _addMarker(mapBranch,
           mapBranch.id == (inFocusBranch != null ? inFocusBranch.id : 99999));

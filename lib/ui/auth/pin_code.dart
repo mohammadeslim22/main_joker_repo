@@ -164,7 +164,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                             borderRadius:
                                                 BorderRadius.circular(18.0),
                                             side:
-                                                BorderSide(color: colors.blue)),
+                                                BorderSide(color: colors.orange)),
                                         onPressed: () async {
                                           if (await auth.sendPinNewPhone(
                                               mobileNoController.text,
@@ -206,7 +206,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
               pinCode(bolc, auth),
               CircularPercentIndicator(
                   radius: 130.0,
-                  progressColor: Colors.blue[300],
+                  progressColor: Colors.orange[300],
                   circularStrokeCap: CircularStrokeCap.round,
                   animation: true,
                   animationDuration: 31500,
@@ -223,7 +223,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: const BorderSide(color: Colors.blue)),
+                          side: const BorderSide(color: Colors.orange)),
                       onPressed: () {},
                       color: Colors.deepPurpleAccent,
                       textColor: Colors.white,
@@ -238,7 +238,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(20.0),
                       side: const BorderSide(color: Colors.black)),
                   color: Colors.white,
-                  textColor: colors.blue,
+                  textColor: colors.orange,
                   padding: const EdgeInsets.all(8.0),
                   onPressed: () async {
                     if (await auth.sendPinNewPhone(

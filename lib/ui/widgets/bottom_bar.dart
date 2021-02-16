@@ -32,8 +32,8 @@ class BottomContent extends StatelessWidget {
                   child: SvgPicture.asset(
                     'assets/images/sales.svg',
                     color: bolc.bottomNavIndex == 0
-                        ? colors.blue
-                        : colors.blue.withOpacity(0.6),
+                        ? colors.orange
+                        : colors.orange.withOpacity(0.6),
                     height: bolc.bottomNavIndex == 1 ? 20 : 25,
                     width: bolc.bottomNavIndex == 1 ? 25 : 35,
                   ),
@@ -48,7 +48,8 @@ class BottomContent extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   height: 2,
                   width: MediaQuery.of(context).size.width * .4,
-                  color: bolc.bottomNavIndex == 0 ? colors.blue : colors.trans,
+                  color:
+                      bolc.bottomNavIndex == 0 ? colors.orange : colors.trans,
                 )
               ],
             ),
@@ -61,10 +62,7 @@ class BottomContent extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
-            child: VerticalDivider(
-              color: colors.blue,
-              width: 1,
-            ),
+            child: VerticalDivider(color: colors.orange, width: 1),
           ),
           RaisedButton(
             color: colors.trans,
@@ -77,23 +75,21 @@ class BottomContent extends StatelessWidget {
                   child: SvgPicture.asset(
                     'assets/images/merchants.svg',
                     color: bolc.bottomNavIndex == 1
-                        ? colors.blue
-                        : colors.blue.withOpacity(0.6),
+                        ? colors.orange
+                        : colors.orange.withOpacity(0.6),
                     height: bolc.bottomNavIndex == 0 ? 20 : 25,
                     width: bolc.bottomNavIndex == 0 ? 25 : 35,
                   ),
                 ),
                 const SizedBox(height: 5),
-                Text(
-                  '${trans(context, 'merchants')}',
-                  style: styles.mylight,
-                ),
+                Text('${trans(context, 'merchants')}', style: styles.mylight),
                 const SizedBox(height: 5),
                 Container(
                   alignment: Alignment.bottomCenter,
                   height: 2,
                   width: MediaQuery.of(context).size.width * .4,
-                  color: bolc.bottomNavIndex == 1 ? colors.blue : colors.trans,
+                  color:
+                      bolc.bottomNavIndex == 1 ? colors.orange : colors.trans,
                 )
               ],
             ),

@@ -74,7 +74,7 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
         child: ExpandableNotifier(
             controller: exp,
             child: ExpandablePanel(
-              theme: ExpandableThemeData(iconColor: colors.blue),
+              theme: ExpandableThemeData(iconColor: colors.orange),
               controller: exp,
               header: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -110,7 +110,7 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                   children: <Widget>[
                     Text(memFromMerchant.message),
                     FlatButton(
-                      color: colors.blue,
+                      color: colors.orange,
                       onPressed: () {
                         exp.toggle();
                         dio.post<dynamic>("usermemberships",

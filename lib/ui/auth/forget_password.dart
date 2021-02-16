@@ -128,7 +128,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                                   obscureText: false,
                                   animationType: AnimationType.fade,
                                   animationDuration:
-                                  const Duration(milliseconds: 300),                               
+                                      const Duration(milliseconds: 300),
                                   keyboardType: TextInputType.phone,
                                   onCompleted: (String v) async {
                                     getIt<Auth>().verifyCode(
@@ -138,7 +138,8 @@ class _MyForgetPassState extends State<ForgetPassword>
                                     setState(() {
                                       currentText = value;
                                     });
-                                  }, appContext: context,
+                                  },
+                                  appContext: context,
                                 ),
                               ),
                             ],
@@ -150,7 +151,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                         child: RaisedButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: colors.jokerBlue)),
+                                side: BorderSide(color: colors.orange)),
                             onPressed: () async {
                               if (_isButtonEnabled) {
                                 if (_formKey.currentState.validate()) {
@@ -185,7 +186,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                                 }
                               }
                             },
-                            color: colors.jokerBlue,
+                            color: colors.orange,
                             textColor: colors.white,
                             child: bolc
                                 .returnchild(trans(context, mainButtonkey))),

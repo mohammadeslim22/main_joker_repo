@@ -219,7 +219,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                     getIt<MerchantProvider>()
                                         .setunFavBranch(widget.branchId);
                                   }
-                                  
+
                                   isloved = !isloved;
                                   return isloved;
                                 },
@@ -282,7 +282,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                 const BorderRadius.all(Radius.circular(8)),
                             color: index != tab.id
                                 ? tabBackgroundColor
-                                : colors.jokerBlue,
+                                : colors.orange,
                           ),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 5, vertical: 8),
@@ -318,48 +318,43 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               RaisedButton(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 25),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(28.0),
-                                ),
-                                onPressed: () {},
-                                color: Colors.grey[300],
-                                textColor: Colors.black,
-                                child: Text(trans(context, "send_complaint"),
-                                    style: styles.mystyle),
-                              ),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6, horizontal: 16),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(16.0)),
+                                  onPressed: () {},
+                                  color: Colors.grey[300],
+                                  textColor: Colors.black,
+                                  child: Text(trans(context, "send_complaint"),
+                                      style: styles.mystyle)),
                               Column(
                                 children: <Widget>[
                                   RatingBar(
-                                    onRatingChanged: (double rating) async {
-                                      await dio.post<dynamic>("rates",
-                                          data: <String, dynamic>{
-                                            'rateable_type': "App\\Branch",
-                                            'rateable_id': index,
-                                            'rate_value': rating
-                                          });
-                                    },
-                                    initialRating: ratingStar,
-                                    filledIcon: Icons.star,
-                                    emptyIcon: Icons.star_border,
-                                    halfFilledIcon: Icons.star_half,
-                                    isHalfAllowed: true,
-                                    filledColor: Colors.amberAccent,
-                                    emptyColor: Colors.grey,
-                                    halfFilledColor: Colors.blue[300],
-                                    size: 30,
-                                  ),
+                                      onRatingChanged: (double rating) async {
+                                        await dio.post<dynamic>("rates",
+                                            data: <String, dynamic>{
+                                              'rateable_type': "App\\Branch",
+                                              'rateable_id': index,
+                                              'rate_value': rating
+                                            });
+                                      },
+                                      initialRating: ratingStar,
+                                      filledIcon: Icons.star,
+                                      emptyIcon: Icons.star_border,
+                                      halfFilledIcon: Icons.star_half,
+                                      isHalfAllowed: true,
+                                      filledColor: Colors.amberAccent,
+                                      emptyColor: Colors.grey,
+                                      halfFilledColor: Colors.orange[300],
+                                      size: 30),
                                   InkWell(
                                     child: Row(
                                       children: <Widget>[
                                         Text(trans(context, "rate_shop"),
                                             style: styles.mystyle),
-                                        Icon(
-                                          Icons.arrow_forward,
-                                          color: colors.blue,
-                                          size: 20,
-                                        ),
+                                        Icon(Icons.arrow_forward,
+                                            color: colors.orange, size: 20),
                                       ],
                                     ),
                                     onTap: () {},
@@ -519,9 +514,9 @@ class ShimmerLoader extends StatelessWidget {
           children: <Widget>[
             Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              color: Colors.blue,
+              color: Colors.orange,
               height: 120,
-              width: 600,
+              width: 600
             ),
             Container(
               color: Colors.red,

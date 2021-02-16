@@ -54,7 +54,7 @@ class MyMemberShipState extends State<MyMemberShip>
             );
           },
           noItemsFoundBuilder: (BuildContext context) {
-            return Text(trans(context, "noting_to_show"));
+            return Center(child: Text(trans(context, 'nothing_to_show')));
           },
           pageFuture: (int pageIndex) {
             return getMembershipsData(pageIndex);

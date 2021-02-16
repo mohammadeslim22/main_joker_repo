@@ -94,11 +94,11 @@ class MySettingState extends State<SettingsScreen> {
             'assets/images/settingsvg.svg',
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * .35,
-          ), 
+          ),
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            color: Colors.white,
+            color: colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -109,8 +109,8 @@ class MySettingState extends State<SettingsScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: ToggleButtons(
                     color: Colors.grey,
-                    fillColor: Colors.blue[100],
-                    selectedColor: colors.blue,
+                    fillColor: Colors.orange[100],
+                    selectedColor: colors.orange,
                     children: const <Widget>[
                       Icon(Icons.notifications_active),
                       Icon(Icons.notifications_paused),
@@ -145,7 +145,7 @@ class MySettingState extends State<SettingsScreen> {
                   style: styles.mystyle,
                 ),
                 Switch(
-                  activeColor: colors.blue,
+                  activeColor: colors.orange,
                   onChanged: (bool value) {
                     dio.post<dynamic>("settings", data: <String, dynamic>{
                       'recieve_notify': value ? "on" : "off"
@@ -221,11 +221,11 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
                   opacity: list[index] ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 800),
                   child: Container(
-                    decoration:  BoxDecoration(
-                        borderRadius:const BorderRadius.only(
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             topRight: Radius.circular(12)),
-                        color: colors.blue),
+                        color: colors.orange),
                     alignment: Alignment.bottomCenter,
                     height: 3,
                     width: MediaQuery.of(context).size.width * .15,
@@ -243,17 +243,31 @@ Widget languagBar(BuildContext context) {
       children: <Widget>[
         fontBarChoice(context, "arabic", 0, bolc.language, "language", () {
           lang.setLanguage(const Locale('ar'));
+          dio.options.baseUrl = config.baseUrl
+              .replaceFirst('/en/', '/${config.userLnag.countryCode ?? 'en'}/');
+          dio.options.baseUrl = config.baseUrl
+              .replaceFirst('/tr/', '/${config.userLnag.countryCode ?? 'en'}/');
+          print("config.baseUrl  ${config.baseUrl}");
           config.userLnag = const Locale('ar');
         }),
         verticalDiv(),
         fontBarChoice(context, "english", 1, bolc.language, "language", () {
           lang.setLanguage(const Locale('en'));
-          // setState(() {});
+          dio.options.baseUrl = config.baseUrl
+              .replaceFirst('/ar/', '/${config.userLnag.countryCode ?? 'en'}/');
+          dio.options.baseUrl = config.baseUrl
+              .replaceFirst('/tr/', '/${config.userLnag.countryCode ?? 'en'}/');
+        print("config.baseUrl  ${config.baseUrl}");
           config.userLnag = const Locale('en');
         }),
         verticalDiv(),
         fontBarChoice(context, "turkish", 2, bolc.language, "language", () {
           lang.setLanguage(const Locale('tr'));
+          dio.options.baseUrl = config.baseUrl
+              .replaceFirst('/ar/', '/${config.userLnag.countryCode ?? 'en'}/');
+          dio.options.baseUrl = config.baseUrl
+              .replaceFirst('/en/', '/${config.userLnag.countryCode ?? 'en'}/');
+         print("config.baseUrl  ${config.baseUrl}");
           config.userLnag = const Locale('tr');
         }),
       ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/models/map_branches.dart';
-import 'package:joker/models/merchant.dart' as merchantMainModel;
+import 'package:joker/models/merchant.dart' as merchant_main_model;
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/models/branches_model.dart';
@@ -9,17 +9,17 @@ import 'package:joker/util/service_locator.dart';
 import 'map_provider.dart';
 
 class MerchantProvider with ChangeNotifier {
-  merchantMainModel.Merchant merchant;
+  merchant_main_model.Merchant merchant;
   Branches branches;
   List<MapBranch> favbranches;
 
   PagewiseLoadController<dynamic> pagewiseBranchesController;
 
-  Future<merchantMainModel.Merchant> getMerchantData(
+  Future<merchant_main_model.Merchant> getMerchantData(
       int id, String source, int ignore) async {
     final dynamic response = await dio.get<dynamic>("merchants/$id",
         queryParameters: <String, dynamic>{"source": source, "ignore": ignore});
-    merchant = merchantMainModel.Merchant.fromJson(response.data);
+    merchant = merchant_main_model.Merchant.fromJson(response.data);
     notifyListeners();
     return merchant;
   }

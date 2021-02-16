@@ -17,9 +17,9 @@ class MainMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colors.white,
-      appBar: AppBar(backgroundColor: colors.white),
+      // appBar: AppBar(backgroundColor: colors.white),
       body: ListView(
-        padding: const EdgeInsets.only(top: 0, left: 16, bottom: 16, right: 16),
+        padding: const EdgeInsets.only(top: 32, left: 16, bottom: 16, right: 16),
         shrinkWrap: true,
         children: <Widget>[
           Column(
@@ -80,15 +80,14 @@ class MainMenu extends StatelessWidget {
                 leading: SvgPicture.asset("assets/images/home_group.svg"),
                 onTap: () {
                   Navigator.pop(context);
-                  // Navigator.pushNamed(context, "/MapAsHome");
                 },
               ),
-              Row(
-                children: <Widget>[
-                  Container(
-                      child: SvgPicture.asset("assets/images/fav_icon.svg"))
-                ],
-              ),
+              // Row(
+              //   children: <Widget>[
+              //     Container(
+              //         child: SvgPicture.asset("assets/images/fav_icon.svg"))
+              //   ],
+              // ),
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Row(
@@ -108,6 +107,15 @@ class MainMenu extends StatelessWidget {
                     SvgPicture.asset("assets/images/notifications_group.svg"),
                 onTap: () {
                   Navigator.pushNamed(context, "/Notifications");
+                },
+              ),
+
+              ListTile(
+                contentPadding: const EdgeInsets.only(left: 0),
+                title: Text("${trans(context, 'sale_list')}"),
+                leading: SvgPicture.asset("assets/images/fave_group.svg"),
+                onTap: () {
+                  Navigator.pushNamed(context, "/Home");
                 },
               ),
               ListTile(

@@ -57,8 +57,7 @@ class FavoritDiscountsList extends StatelessWidget {
           loadingBuilder: (BuildContext context) {
             return const Center(
                 child: CircularProgressIndicator(
-              backgroundColor: Colors.transparent,
-            ));
+                    backgroundColor: Colors.transparent));
           },
           pageSize: 10,
           padding: const EdgeInsets.all(15.0),

@@ -36,9 +36,30 @@ class _SplashScreenState extends State<SplashScreen> {
     data.getData("lang").then((String value) async {
       if (value.isEmpty) {
       } else {
+        const String arabicBaseUrl =
+            "http://joker.localhost.ps/web/api/ar/v1/customer/";
+        const String englishBaseUrl =
+            "http://joker.localhost.ps/web/api/en/v1/customer/";
+        const String turkishBaseUrl =
+            "http://joker.localhost.ps/web/api/tr/v1/customer/";
+        String baseUrl = await data.getData("baseUrl");
+        if (baseUrl == "" || baseUrl.isEmpty || baseUrl == null) {
+          baseUrl = config.baseUrl;
+        }
         print("1: $value");
         config.userLnag = Locale(value);
         await lang.setLanguage(Locale(value));
+        print("config.userLnag.countryCode  $value  $baseUrl");
+        if (value == "en") {
+          dio.options.baseUrl = englishBaseUrl;
+        } else if (value == "ar") {
+          print("sub bitch ");
+          dio.options.baseUrl = arabicBaseUrl;
+        } else {
+          dio.options.baseUrl = turkishBaseUrl;
+        }
+        print("dio.options.baseUrl ${dio.options.baseUrl}");
+        await data.setData("baseUrl", dio.options.baseUrl);
         print("2: ${lang.currentLanguage}");
       }
     });
@@ -75,7 +96,6 @@ class _SplashScreenState extends State<SplashScreen> {
     final Auth auth = Provider.of<Auth>(context, listen: false);
     askUser(lang, auth);
     initPlatformState(auth);
-
     if (config.loggedin) {
       data.getData("username").then((String name) {
         if (name.isEmpty || name == null) {
@@ -88,19 +108,19 @@ class _SplashScreenState extends State<SplashScreen> {
       data.getData("profile_pic").then((String value) {
         if (value.isEmpty || value == null) {
           dio.get<dynamic>("user").then((Response<dynamic> value) {
-          if(value.statusCode==200){
-            print(value.data['data']['name'].toString());
-            config.username = value.data['data']['name'].toString();
+            if (value.statusCode == 200) {
+              print(value.data['data']['name'].toString());
+              config.username = value.data['data']['name'].toString();
 
-            if (value.data['data']['image'].toString().trim() !=
-                "http://joker.localhost.ps/web/image") {
-              config.profileUrl = value.data['data']['image'].toString().trim();
-              data.setData("profile_pic", config.profileUrl);
+              if (value.data['data']['image'].toString().trim() !=
+                  "http://joker.localhost.ps/web/image") {
+                config.profileUrl =
+                    value.data['data']['image'].toString().trim();
+                data.setData("profile_pic", config.profileUrl);
+              }
+
+              data.setData("username", value.data['data']['name'].toString());
             }
-
-            data.setData("username", value.data['data']['name'].toString());
-          }
-            
           });
         } else {
           if (value != "http://joker.localhost.ps/web/image") {

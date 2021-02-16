@@ -124,7 +124,7 @@ class _MyLoginScreenState extends State<LoginScreen>
               children: <Widget>[
                 Text(trans(context, 'back_to_map')),
                 const SizedBox(width: 16),
-                Icon(Icons.keyboard_return, color: colors.jokerBlue)
+                Icon(Icons.keyboard_return, color: colors.orange)
               ],
             ),
           ),
@@ -161,7 +161,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: colors.jokerBlue)),
+                          side: BorderSide(color: colors.orange)),
                       onPressed: () async {
                         print(
                             "_usernameController.text : ${_usernameController.text}");
@@ -187,7 +187,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                           }
                         }
                       },
-                      color: colors.blue,
+                      color: colors.orange,
                       textColor: colors.white,
                       child: mainProvider.returnchild(trans(context, 'login'))),
                 ),

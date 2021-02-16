@@ -61,10 +61,8 @@ class ShopDetailsPage extends State<SaleLoader>
     getIt<SalesProvider>().getSale(widget.saleData.id);
     sale = widget.saleData;
     merchant = widget.merchant;
-
     rotationController = AnimationController(
         duration: const Duration(milliseconds: 700), vsync: this);
-
     mytext = sale.details;
     myIndex = 0;
     isliked = sale.isliked != 0;
@@ -351,7 +349,7 @@ class ShopDetailsPage extends State<SaleLoader>
   }
 
   Widget mapCard(SaleData rs, BuildContext context, HOMEMAProvider value) {
-     String endsIn = "";
+    String endsIn = "";
     String ln = "";
     String lnn = "";
     if (rs.period is! String) {
@@ -378,7 +376,7 @@ class ShopDetailsPage extends State<SaleLoader>
           : "";
       endsIn =
           "$yearsToEnd $monthsToEnd  $daysToEnd $ln$hoursToEnd $minutesToEnd";
-           endsIn =
+      endsIn =
           "$yearsToEnd $monthsToEnd  $ln$daysToEnd $lnn$hoursToEnd $ln$minutesToEnd";
     } else {
       endsIn = rs.period.toString();
@@ -838,6 +836,5 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
     );
   }
 }
-
 
 //abu talaat

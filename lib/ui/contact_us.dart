@@ -90,7 +90,7 @@ class ContactUs extends StatelessWidget {
             child: RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: colors.jokerBlue)),
+                    side: BorderSide(color: colors.orange)),
                 onPressed: () async {
                   final Response<dynamic> response = await dio
                       .post<dynamic>("contact", data: <String, dynamic>{
@@ -126,7 +126,7 @@ class ContactUs extends StatelessWidget {
                         reverseCurve: Curves.linear);
                   }
                 },
-                color: colors.blue,
+                color: colors.orange,
                 textColor: colors.white,
                 child: Text(trans(context, 'send'))),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:convert';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/providers/mainprovider.dart';
@@ -65,6 +66,30 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 350),
     );
     _hide.forward();
+    getIt<SalesProvider>().pagewiseSalesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: config.loggedin ? 15 : 6,
+            pageFuture: (int pageIndex) async {
+              return config.loggedin
+                  ? (getIt<GlobalVars>().filterData != null)
+                      ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
+                          pageIndex, getIt<GlobalVars>().filterData)
+                      : getIt<SalesProvider>()
+                          .getSalesDataAuthenticated(pageIndex)
+                  : (getIt<GlobalVars>().filterData != null)
+                      ? getIt<SalesProvider>().getSalesDataFilterd(
+                          pageIndex, getIt<GlobalVars>().filterData)
+                      : getIt<SalesProvider>().getSalesData(pageIndex);
+            });
+    getIt<MerchantProvider>().pagewiseBranchesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 5,
+            pageFuture: (int pageIndex) async {
+              return config.loggedin
+                  ? getIt<MerchantProvider>()
+                      .getBranchesDataAuthintecated(pageIndex)
+                  : getIt<MerchantProvider>().getBranchesData(pageIndex);
+            });
   }
 
   @override
@@ -270,7 +295,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             decoration: BoxDecoration(
                 color: Colors.black.withOpacity(.1),
                 border:
-                    Border(top: BorderSide(color: colors.blue, width: 7.0))),
+                    Border(top: BorderSide(color: colors.orange, width: 7.0))),
             child: Text(
               "${trans(context, 'location_setting')}",
               textAlign: TextAlign.center,

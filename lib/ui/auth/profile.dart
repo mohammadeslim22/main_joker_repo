@@ -408,7 +408,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: colors.jokerBlue)),
+                                side: BorderSide(color: colors.orange)),
                             onPressed: () async {
                               if (_isButtonEnabled) {
                                 if (_formKey.currentState.validate()) {
@@ -486,7 +486,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   //                   ),
   //                   const SizedBox(height: 15),
   //                   RaisedButton(
-  //                       color: colors.jokerBlue,
+  //                       color: colors.orange,
   //                       child: Text(trans(context, "ok"),
   //                           style: styles.underHeadwhite),
   //                       onPressed: () {

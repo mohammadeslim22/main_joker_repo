@@ -40,8 +40,10 @@ void dioDefaults() {
     // If you want to reject the request with a error message,
     // you can return a `DioError` object or return `dio.reject(errMsg)`
   }, onResponse: (Response<dynamic> response) async {
-    
-    print("status code: ${response.statusCode}  endpoint : ${response.request.path}");
+    print("config.userLnag.countryCode ${config.userLnag.countryCode}");
+
+    print(
+        "status code: ${response.statusCode}  endpoint : ${response.request.path}");
     // print("error : ${response.realUri.toString()}");
     if (response.statusCode == 200) {
     } else if (response.statusCode == 401) {

@@ -96,7 +96,7 @@ SnackBar snackBar = SnackBar(
     content: const Text("Location Service was not alowed  !"),
     action: SnackBarAction(label: 'Ok !', onPressed: () {}));
 SpinKitRing spinkit =
-    SpinKitRing(color: colors.jokerBlue, size: 30.0, lineWidth: 3);
+    SpinKitRing(color: colors.orange, size: 30.0, lineWidth: 3);
 
 Future<bool> likeFunction(String model, int likeId) async {
   bool res;
@@ -189,7 +189,7 @@ void showFullText(BuildContext context, String text) {
                 Expanded(child: Text(text, style: styles.textInShowMore)),
                 const SizedBox(height: 15),
                 RaisedButton(
-                    color: colors.jokerBlue,
+                    color: colors.orange,
                     child: Text(trans(context, "ok"),
                         style: styles.underHeadwhite),
                     onPressed: () {
@@ -245,7 +245,7 @@ void ifUpdateTur(BuildContext context, String text) {
                   ),
                   const SizedBox(height: 15),
                   RaisedButton(
-                      color: colors.jokerBlue,
+                      color: colors.orange,
                       child: Text(trans(context, "ok"),
                           style: styles.underHeadwhite),
                       onPressed: () {

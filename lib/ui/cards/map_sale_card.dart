@@ -158,7 +158,7 @@ class _SalesCardState extends State<MapSalesCard> {
                               decoration: BoxDecoration(
                                 color: !isLiked
                                     ? Colors.black.withOpacity(.5)
-                                    : Colors.blue,
+                                    : Colors.orange,
                                 borderRadius: BorderRadius.circular(70),
                               ),
                               child: Image.asset("assets/images/like.png",

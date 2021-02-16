@@ -286,7 +286,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                         side: BorderSide(
                                           color: selectedOptions.contains(
                                                   options.indexOf(item))
-                                              ? colors.jokerBlue
+                                              ? colors.orange
                                               : colors.grey,
                                         ),
                                       ),
@@ -296,7 +296,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                           : colors.white.withOpacity(.45),
                                       textColor: selectedOptions
                                               .contains(options.indexOf(item))
-                                          ? colors.jokerBlue
+                                          ? colors.orange
                                           : colors.white,
                                       onPressed: () {
                                         _errorController.setState(() {
@@ -325,13 +325,13 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                       trans(context, 'activated'),
                                       trans(context, 'deactivated')
                                     ],
-                                    icons:const  <IconData>[
+                                    icons: const <IconData>[
                                       Icons.power_settings_new,
                                       Icons.blur_off
                                     ],
                                     activeBgColors: <Color>[
-                                      colors.blue,
-                                      colors.blue,
+                                      colors.orange,
+                                      colors.orange,
                                     ],
                                     onToggle: (int index) {}),
                               ],
@@ -345,11 +345,9 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                       vertical: 12, horizontal: 25),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(
-                                        color: colors.blue,
-                                      )),
+                                      side: BorderSide(color: colors.orange)),
                                   onPressed: () {},
-                                  color: colors.blue,
+                                  color: colors.orange,
                                   textColor: colors.white,
                                   child: Text(trans(context, "search"),
                                       style: styles.notificationNO),

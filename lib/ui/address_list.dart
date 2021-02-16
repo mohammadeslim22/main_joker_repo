@@ -108,7 +108,7 @@ class AddressListState extends State<AddressList> {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 36),
               child: RaisedButton(
-                  color: colors.jokerBlue,
+                  color: colors.orange,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -195,14 +195,14 @@ class AddressListState extends State<AddressList> {
                   currentId = locationData.id;
                 });
                 if (getIt<MerchantProvider>().pagewiseBranchesController !=
-                    null){
-                      getIt<MerchantProvider>().pagewiseBranchesController.reset();
-                    }
-                  
-                if (getIt<SalesProvider>().pagewiseSalesController != null){
-                   getIt<SalesProvider>().pagewiseSalesController.reset();
+                    null) {
+                  getIt<MerchantProvider>().pagewiseBranchesController.reset();
                 }
-                 
+
+                if (getIt<SalesProvider>().pagewiseSalesController != null) {
+                  getIt<SalesProvider>().pagewiseSalesController.reset();
+                }
+
                 Navigator.pop(context);
                 Navigator.pop(context);
               },

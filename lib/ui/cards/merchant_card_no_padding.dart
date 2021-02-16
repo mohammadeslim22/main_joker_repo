@@ -102,7 +102,7 @@ class _MerchantCardState extends State<MapMerchantCard> {
                       isHalfAllowed: true,
                       filledColor: Colors.amberAccent,
                       emptyColor: Colors.grey,
-                      halfFilledColor: Colors.blue[300],
+                      halfFilledColor: Colors.orange[300],
                       size: 10,
                       onRatingChanged: (double rating) {},
                     ),

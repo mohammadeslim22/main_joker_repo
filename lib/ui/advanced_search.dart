@@ -19,58 +19,6 @@ import 'package:joker/util/functions.dart';
 import 'package:flutter/services.dart';
 import 'package:joker/providers/globalVars.dart';
 
-// class AdvancedSearch extends StatefulWidget {
-//   const AdvancedSearch({Key key}) : super(key: key);
-//   @override
-//   AdvanceSearchscreen createState() => AdvanceSearchscreen();
-// }
-
-// class AdvanceSearchscreen extends State<AdvancedSearch>
-//     with TickerProviderStateMixin {
-//   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
-//   // List<Specialization> specializations = <Specialization>[];
-//   // Future<List<Specializations>> getSpecializationsData() async {
-//   //   final dynamic response = await dio.get<dynamic>("specializations");
-//   //   specializations.clear();
-//   //   response.data.forEach((dynamic element) {
-//   //     specializations.add(Specializations.fromJson(element));
-//   //   });
-//   //   return specializations;
-//   // }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//         onTap: () {
-//           SystemChannels.textInput.invokeMethod<String>('TextInput.hide');
-//         },
-//         child: Scaffold(
-//           key: _scaffoldkey,
-//           appBar: AppBar(
-//               centerTitle: true,
-//               title: Text(
-//                 trans(context, "advanced_search"),
-//                 style: styles.mystyle,
-//               )),
-//           body: FutureBuilder<List<Specializations>>(
-//             future: getSpecializationsData(),
-//             builder: (BuildContext ctx,
-//                 AsyncSnapshot<List<Specializations>> snapshot) {
-//               if (snapshot.connectionState == ConnectionState.done) {
-//                 return Page(
-//                   scaffoldkey: _scaffoldkey,
-//                   specializations: specializations,
-//                 );
-//               } else {
-//                 return const Center(
-//                     child: CircularProgressIndicator(
-//                         backgroundColor: Colors.transparent));
-//               }
-//             },
-//           ),
-//         ));
-//   }
-// }
 
 class AdvancedSearch extends StatefulWidget {
   const AdvancedSearch({Key key, this.scaffoldkey, this.specializations})
@@ -113,16 +61,15 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
       calendarController: _calendarController,
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
-        selectedColor: Colors.deepPurple[400],
-        todayColor: Colors.deepPurple[200],
-        markersColor: Colors.brown[700],
-        outsideDaysVisible: false,
-      ),
+          selectedColor: Colors.orange[400],
+          todayColor: Colors.orange[200],
+          markersColor: Colors.brown[700],
+          outsideDaysVisible: false),
       headerStyle: HeaderStyle(
         formatButtonTextStyle:
             const TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
         formatButtonDecoration: BoxDecoration(
-          color: Colors.deepPurple[400],
+          color: Colors.orange[400],
           borderRadius: BorderRadius.circular(16.0),
         ),
       ),
@@ -212,13 +159,13 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(38.0),
                             side: BorderSide(
                               color: selectedOptions.contains(item.id)
-                                  ? colors.jokerBlue
+                                  ? colors.orange
                                   : colors.ggrey,
                             ),
                           ),
                           color: colors.white,
                           textColor: selectedOptions.contains(item.id)
-                              ? colors.jokerBlue
+                              ? colors.orange
                               : colors.black,
                           onPressed: () {
                             setState(() {
@@ -234,7 +181,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 1,
                                 backgroundColor: Colors.grey[300],
-                                textColor: colors.jokerBlue,
+                                textColor: colors.orange,
                                 fontSize: 16.0);
                           },
                           child: Text(item.name,
@@ -285,8 +232,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                         rangeSlider: true,
                         max: 500,
                         trackBar: FlutterSliderTrackBar(
-                          activeTrackBar:
-                              BoxDecoration(color: colors.jokerBlue),
+                          activeTrackBar: BoxDecoration(color: colors.orange),
                           activeTrackBarDraggable: true,
                           inactiveTrackBarHeight: 2,
                           activeTrackBarHeight: 3,
@@ -330,7 +276,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                       Text(startDate),
                       Icon(
                         Icons.arrow_forward,
-                        color: colors.jokerBlue,
+                        color: colors.orange,
                       ),
                       Text(endDate),
                     ],
@@ -416,7 +362,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                       isHalfAllowed: true,
                       filledColor: Colors.amberAccent,
                       emptyColor: colors.grey,
-                      halfFilledColor: Colors.blue[300],
+                      halfFilledColor: Colors.orange[300],
                       size: 30,
                     ),
                   ],
@@ -444,7 +390,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                           vertical: 12, horizontal: 25),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.blue[900])),
+                          side: BorderSide(color: Colors.orange[900])),
                       onPressed: () {
                         getIt<GlobalVars>().filterData = FilterData(
                           merchantName.text,
@@ -461,7 +407,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                               "salesDataFilter": true,
                             });
                       },
-                      color: Colors.blue[600],
+                      color: Colors.orange[600],
                       textColor: colors.white,
                       child: Text(trans(context, "search"),
                           style: styles.notificationNO),

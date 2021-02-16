@@ -20,7 +20,7 @@ class FavoritMerchantsList extends StatelessWidget {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: WaterDropHeader(waterDropColor: colors.blue),
+      header: WaterDropHeader(waterDropColor: colors.orange),
       footer: CustomFooter(
         builder: (BuildContext context, LoadStatus mode) {
           Widget body;

@@ -79,7 +79,7 @@
 //                                 borderRadius: const BorderRadius.only(
 //                                     topLeft: Radius.circular(12),
 //                                     topRight: Radius.circular(12)),
-//                                 color: colors.jokerBlue),
+//                                 color: colors.orange),
 //                             alignment: Alignment.bottomCenter,
 //                             height: 5,
 //                             width: MediaQuery.of(context).size.width * .4,

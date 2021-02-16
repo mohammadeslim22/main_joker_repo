@@ -31,6 +31,7 @@ Future<void> main() async {
   dioDefaults();
   await data.getData('authorization').then<dynamic>((String auth) {
     print("auth what :$auth");
+
     if (auth.isEmpty) {
       config.loggedin = false;
     } else {
@@ -38,6 +39,7 @@ Future<void> main() async {
     }
     print("loggedIn: ${config.loggedin}");
     dio.options.headers['authorization'] = '$auth';
+    
   });
 
   runApp(
@@ -134,12 +136,7 @@ Widget errorScreen(dynamic detailsException) {
                 ),
                 FlatButton(
                   color: colors.blue,
-                  child: Text(
-                    'Go Back',
-                    style: TextStyle(
-                      color: colors.white,
-                    ),
-                  ),
+                  child: Text('Go Back', style: TextStyle(color: colors.white)),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
