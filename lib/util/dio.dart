@@ -5,8 +5,8 @@ import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
 
 String token;
-String baseUrl = config.baseUrl
-    .replaceFirst('/ar/', '/${config.userLnag.countryCode ?? 'ar'}/');
+// String baseUrl = config.baseUrl
+//     .replaceFirst('/ar/', '/${config.userLnag.countryCode ?? 'ar'}/');
 
 BaseOptions options = BaseOptions(
   baseUrl: config.baseUrl,
@@ -40,7 +40,6 @@ void dioDefaults() {
     // If you want to reject the request with a error message,
     // you can return a `DioError` object or return `dio.reject(errMsg)`
   }, onResponse: (Response<dynamic> response) async {
-    print("config.userLnag.countryCode ${config.userLnag.countryCode}");
 
     print(
         "status code: ${response.statusCode}  endpoint : ${response.request.path}");

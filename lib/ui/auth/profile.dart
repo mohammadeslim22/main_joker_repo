@@ -142,7 +142,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                     ClipPath(
                       clipper: HeaderColor(),
                       child: Container(
-                        color: Colors.blue[300].withOpacity(0.3),
+                        color: Colors.orange[300].withOpacity(0.3),
                       ),
                     ),
                     ListView(children: <Widget>[
@@ -161,7 +161,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   placeHolder:
                                       (BuildContext context, String url) =>
                                           const CircularProgressIndicator(),
-                                  borderColor: colors.blue,
+                                  borderColor: colors.orange,
                                   cacheImage: true,
                                 ),
                                 tag: "generate_a_unique_tag",
@@ -253,7 +253,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       focusNode: focus,
                                       suffixicon: IconButton(
                                         icon: Icon(Icons.edit,
-                                            color: colors.blue),
+                                            color: colors.orange),
                                         onPressed: () {},
                                       ),
                                       onTab: () {},
@@ -285,7 +285,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       },
                                       suffixicon: IconButton(
                                         icon: Icon(Icons.edit,
-                                            color: colors.blue),
+                                            color: colors.orange),
                                         onPressed: () {},
                                       ),
                                       focusNode: focus1,
@@ -310,7 +310,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                         _selectDate(context);
                                       },
                                       suffixicon: IconButton(
-                                        color: colors.blue,
+                                        color: colors.orange,
                                         icon: const Icon(Icons.calendar_today),
                                         onPressed: () {
                                           //   _selectDate(context);
@@ -365,7 +365,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       },
                                       suffixicon: IconButton(
                                         icon: Icon(Icons.add_location,
-                                            color: colors.blue),
+                                            color: colors.orange),
                                         onPressed: () {
                                           Navigator.pushNamed(
                                               context, '/AutoLocate',
@@ -441,7 +441,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                 }
                               }
                             },
-                            color: colors.blue,
+                            color: colors.orange,
                             textColor: colors.white,
                             child: mainProvider.returnchildforProfile(
                               trans(context, 'save_changes'),
