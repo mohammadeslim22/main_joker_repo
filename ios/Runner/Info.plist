@@ -20,6 +20,20 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>comgooglemaps</string>
+		<string>baidumap</string>
+		<string>iosamap</string>
+		<string>waze</string>
+		<string>yandexmaps</string>
+		<string>yandexnavi</string>
+		<string>citymapper</string>
+		<string>mapswithme</string>
+		<string>osmandmaps</string>
+		<string>dgis</string>
+		<string>qqmap</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
@@ -48,21 +62,5 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-    <string>comgooglemaps</string>
-    <string>baidumap</string>
-    <string>iosamap</string>
-    <string>waze</string>
-    <string>yandexmaps</string>
-    <string>yandexnavi</string>
-    <string>citymapper</string>
-    <string>mapswithme</string>
-    <string>osmandmaps</string>
-    <string>dgis</string>
-    <string>qqmap</string>
-	</array>
-
-	
 </dict>
 </plist>
