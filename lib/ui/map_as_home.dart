@@ -7,8 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:flutter_svg/svg.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/colors.dart';
@@ -18,7 +16,6 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/providers/globalVars.dart';
 import 'package:joker/providers/map_provider.dart';
-import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
@@ -253,6 +250,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(16.0),
                       color: colors.white),
                   padding: const EdgeInsets.all(8),
+                  alignment: Alignment.center,
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
@@ -268,9 +266,18 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Column(
                             children: <Widget>[
-                              SvgPicture.asset("assets/images/restaurant.svg",
-                                  color: color, height: 24, width: 24),
-                              // Icon(Icons.ac_unit, color: color),
+                              if (index == 0)
+                                SvgPicture.asset(
+                                    "assets/images/restaurant_w.svg",
+                                    color: color,
+                                    height: 24,
+                                    width: 24),
+                              if (index == 1)
+                                SvgPicture.asset(
+                                    "assets/images/coffee_w.svg",
+                                    color: color,
+                                    height: 24,
+                                    width: 24),
                               const SizedBox(height: 8),
                               Text(
                                   getIt<HOMEMAProvider>()
@@ -562,10 +569,14 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SvgPicture.asset("assets/images/discount.svg",
+                        Image.asset("assets/images/28_discount.png",
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
-                            width: SizeConfig.blockSizeHorizontal * 12),
+                            width: SizeConfig.blockSizeHorizontal * 10),
+                        // SvgPicture.asset("assets/images/222.svg",
+                        //     fit: BoxFit.cover,
+                        //     height: SizeConfig.blockSizeVertical * 5,
+                        //     width: SizeConfig.blockSizeHorizontal * 12),
                         Text("  " + trans(context, 'discount') + "  ",
                             style: styles.moreInfo),
                         Text(rs.discount)
@@ -574,10 +585,15 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SvgPicture.asset("assets/images/price.svg",
+                        
+                         Image.asset("assets/images/cash_png.png",
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
-                            width: SizeConfig.blockSizeHorizontal * 12),
+                            width: SizeConfig.blockSizeHorizontal * 10),
+                        // SvgPicture.asset("assets/images/price.svg",
+                        //     fit: BoxFit.cover,
+                        //     height: SizeConfig.blockSizeVertical * 5,
+                        //     width: SizeConfig.blockSizeHorizontal * 12),
                         Text("  " + rs.price + " currency",
                             style: styles.moreInfo)
                       ]),
@@ -585,10 +601,14 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SvgPicture.asset("assets/images/time_left.svg",
+                        Image.asset("assets/images/sale_time.png",
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
-                            width: SizeConfig.blockSizeHorizontal * 12),
+                            width: SizeConfig.blockSizeHorizontal * 10),
+                        // SvgPicture.asset("assets/images/time_left_w.svg",
+                        //     fit: BoxFit.cover,
+                        //     height: SizeConfig.blockSizeVertical * 5,
+                        //     width: SizeConfig.blockSizeHorizontal * 12),
                         Text(
                             "  " +
                                 rs.startAt +
@@ -600,16 +620,20 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                             style: styles.moreInfo),
                         Text(rs.status)
                       ]),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            SvgPicture.asset("assets/images/ends_in.svg",
+                            Image.asset("assets/images/time_left.png",
                                 fit: BoxFit.cover,
                                 height: SizeConfig.blockSizeVertical * 5,
-                                width: SizeConfig.blockSizeHorizontal * 12),
+                                width: SizeConfig.blockSizeHorizontal * 10),
+                            // SvgPicture.asset("assets/images/ends_in_w.svg",
+                            //     fit: BoxFit.cover,
+                            //     height: SizeConfig.blockSizeVertical * 5,
+                            //     width: SizeConfig.blockSizeHorizontal * 12),
                             Text("  " + trans(context, 'ends_in') + "  ",
                                 style: styles.moreInfo),
                             Container(

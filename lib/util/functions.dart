@@ -153,14 +153,18 @@ Future<bool> onWillPop(BuildContext context) async {
 }
 
 void goToMap(BuildContext context) {
-  getIt<HOMEMAProvider>().makeshowSlidingPanelFalse();
-  getIt<HOMEMAProvider>().makeShowSepcializationsPadTrue();
-  getIt<HOMEMAProvider>().hideOffersHorizontalCards();
-  Navigator.pushNamedAndRemoveUntil(context, "/MapAsHome", (_) => false,
-      arguments: <String, dynamic>{
-        "home_map_lat": config.lat,
-        "home_map_long": config.long
-      });
+  try {
+    getIt<HOMEMAProvider>().makeshowSlidingPanelFalse();
+    getIt<HOMEMAProvider>().makeShowSepcializationsPadTrue();
+    getIt<HOMEMAProvider>().hideOffersHorizontalCards();
+    Navigator.pushNamedAndRemoveUntil(context, "/MapAsHome", (_) => false,
+        arguments: <String, dynamic>{
+          "home_map_lat": config.lat,
+          "home_map_long": config.long
+        });
+  } catch (err) {
+    print("errerr  $err");
+  }
 }
 
 void showFullText(BuildContext context, String text) {

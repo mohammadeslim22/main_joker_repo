@@ -296,6 +296,7 @@ class HOMEMAProvider with ChangeNotifier {
 
   void hideOffersHorizontalCards() {
     offersHorizontalCardsList = false;
+    if(controller!=null)
     controller.reverse();
     notifyListeners();
   }

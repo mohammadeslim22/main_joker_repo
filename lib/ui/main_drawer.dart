@@ -19,11 +19,13 @@ class MainMenu extends StatelessWidget {
       backgroundColor: colors.white,
       // appBar: AppBar(backgroundColor: colors.white),
       body: ListView(
-        padding: const EdgeInsets.only(top: 32, left: 16, bottom: 16, right: 16),
+        padding:
+            const EdgeInsets.only(top: 32, left: 16, bottom: 16, right: 16),
         shrinkWrap: true,
         children: <Widget>[
           Column(
             children: <Widget>[
+              // SvgPicture.asset("assets/images/bill_icon_w.svg",height: 50,width: 50,  color: colors.red),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,9 +44,7 @@ class MainMenu extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
+                              image: imageProvider, fit: BoxFit.cover),
                         ),
                       ),
                       placeholder: (BuildContext context, String url) =>
@@ -66,7 +66,7 @@ class MainMenu extends StatelessWidget {
                       },
                       child: Text(config.username, style: styles.username),
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -77,11 +77,15 @@ class MainMenu extends StatelessWidget {
                     Text("${trans(context, 'home')}"),
                   ],
                 ),
-                leading: SvgPicture.asset("assets/images/home_group.svg"),
+
+                leading: Image.asset("assets/images/menu_home.png"),
+
+                // SvgPicture.asset("assets/images/home_group.svg"),
                 onTap: () {
                   Navigator.pop(context);
                 },
               ),
+              const SizedBox(height: 8),
               // Row(
               //   children: <Widget>[
               //     Container(
@@ -103,84 +107,95 @@ class MainMenu extends StatelessWidget {
                     ),
                   ],
                 ),
-                leading:
-                    SvgPicture.asset("assets/images/notifications_group.svg"),
+                leading: Image.asset("assets/images/menu_notifications.png"),
+
+                // SvgPicture.asset("assets/images/bill_icon_w.svg",
+                //     height: 50, width: 50, color: colors.red),
                 onTap: () {
                   Navigator.pushNamed(context, "/Notifications");
                 },
               ),
-
-              ListTile(
-                contentPadding: const EdgeInsets.only(left: 0),
-                title: Text("${trans(context, 'sale_list')}"),
-                leading: SvgPicture.asset("assets/images/fave_group.svg"),
-                onTap: () {
-                  Navigator.pushNamed(context, "/Home");
-                },
-              ),
-              ListTile(
-                contentPadding: const EdgeInsets.only(left: 0),
-                title: Text("${trans(context, 'account')}"),
-                leading: SvgPicture.asset("assets/images/fave_group.svg"),
-                onTap: () {
-                  Navigator.pushNamed(context, "/Profile");
-                },
-              ),
+              const SizedBox(height: 8),
+              // ListTile(
+              //   contentPadding: const EdgeInsets.only(left: 0),
+              //   title: Text("${trans(context, 'sale_list')}"),
+              //   leading: SvgPicture.asset("assets/images/fave_group.svg"),
+              //   onTap: () {
+              //     Navigator.pushNamed(context, "/Home");
+              //   },
+              // ),
+              // ListTile(
+              //   contentPadding: const EdgeInsets.only(left: 0),
+              //   title: Text("${trans(context, 'account')}"),
+              //   leading: SvgPicture.asset("assets/images/fave_group.svg"),
+              //   onTap: () {
+              //     Navigator.pushNamed(context, "/Profile");
+              //   },
+              // ),
+              const SizedBox(height: 8),
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'membership')}"),
-                leading: SvgPicture.asset("assets/images/vip.svg"),
+                leading: Image.asset("assets/images/menu_membership.png"),
+
+                // SvgPicture.asset("assets/images/vip.svg"),
                 onTap: () {
                   Navigator.pushNamed(context, "/Membership");
                 },
               ),
+              const SizedBox(height: 8),
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'fav')}"),
-                leading: CircleAvatar(
-                  backgroundColor: colors.white,
-                  radius: 22,
-                  child: SvgPicture.asset(
-                    'assets/images/loveicon.svg',
-                    height: 20,
-                    width: 20,
-                  ),
-                ),
+                leading: Image.asset("assets/images/menu_favorite.png"),
+                // CircleAvatar(
+                //   backgroundColor: colors.white,
+                //   radius: 22,
+                //   child: SvgPicture.asset('assets/images/loveicon.svg',
+                //       height: 20, width: 20),
+                // ),
                 onTap: () {
                   Navigator.pushNamed(context, "/Fav");
                 },
               ),
+              const SizedBox(height: 8),
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'settings')}"),
-                leading: SvgPicture.asset("assets/images/settings_group.svg"),
+                leading: Image.asset("assets/images/menu_settings.png"),
                 onTap: () {
                   Navigator.pushNamed(context, '/settings');
                 },
               ),
+              const SizedBox(height: 8),
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'privacy')}"),
-                leading: SvgPicture.asset("assets/images/privecy_group.svg"),
+                leading: Image.asset("assets/images/menu_privacy.png"),
+                // SvgPicture.asset("assets/images/privecy_group.svg"),
                 onTap: () {
                   Navigator.pushNamed(context, '/AboutUs');
                 },
               ),
+              const SizedBox(height: 8),
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'support')}"),
-                leading: SvgPicture.asset("assets/images/support_group.svg"),
+                leading: Image.asset("assets/images/menu_support.png"),
+                // SvgPicture.asset("assets/images/support_group.svg"),
                 onTap: () {
                   Navigator.pushNamed(context, '/ContactUs');
                 },
               ),
             ],
           ),
+          const SizedBox(height: 8),
           // const SizedBox(height: 36.0),
           ListTile(
             contentPadding: const EdgeInsets.only(left: 0),
             title: Text("${trans(context, 'logout')}"),
-            leading: SvgPicture.asset("assets/images/logout.svg"),
+            leading: Image.asset("assets/images/menu_logout.png"),
+            // SvgPicture.asset("assets/images/logout.svg"),
             onTap: () async {
               await getIt<Auth>().signOut();
               // data.setData('authorization', "");
