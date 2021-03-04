@@ -296,8 +296,7 @@ class HOMEMAProvider with ChangeNotifier {
 
   void hideOffersHorizontalCards() {
     offersHorizontalCardsList = false;
-    if(controller!=null)
-    controller.reverse();
+    if (controller != null) controller.reverse();
     notifyListeners();
   }
 
@@ -351,11 +350,12 @@ class HOMEMAProvider with ChangeNotifier {
 
   void setSlelectedSpec(int id) {
     if (id == selectedSpecialize) {
-      selectedSpecialize = null;
+      // selectedSpecialize = null;
     } else {
       selectedSpecialize = id;
+      getBranchesData(selectedSpecialize);
     }
-    getBranchesData(selectedSpecialize);
+
     notifyListeners();
   }
 

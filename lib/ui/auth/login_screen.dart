@@ -204,9 +204,9 @@ class _MyLoginScreenState extends State<LoginScreen>
             );
           },
         ),
-        Expanded(
-          child: Container()
-        ),
+        // Expanded(
+        //   child: Container()
+        // ),
         Padding(
           padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
           child: Row(

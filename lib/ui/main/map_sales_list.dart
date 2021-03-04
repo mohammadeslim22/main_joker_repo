@@ -32,11 +32,11 @@ class MapSalesListState extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(top: 60),
             child: FadeIn(
-                child: MapSalesCard(context: context, sale: entry as SaleData)),
+                child: MapSalesCard( sale: entry as SaleData)),
           );
         }
         return FadeIn(
-            child: MapSalesCard(context: context, sale: entry as SaleData,close:close));
+            child: MapSalesCard( sale: entry as SaleData,close:close));
       },
       noItemsFoundBuilder: (BuildContext context) {
         return Text(trans(context, "noting_to_show"));

@@ -126,6 +126,11 @@ class Styles {
     color: Colors.red,
     fontSize: 24,
   );
+    TextStyle blackstyleForSaleScreen = const TextStyle(
+    fontWeight: FontWeight.w900,
+    color: Colors.red,
+    fontSize: 24,
+  );
   TextStyle timeLeftTextStyle = const TextStyle(
     fontWeight: FontWeight.w600,
     color: Colors.black,
@@ -165,6 +170,8 @@ class Styles {
   TextStyle showMore = const TextStyle(color: Color(0xFF707070), fontSize: 12);
   TextStyle moreInfo = const TextStyle(
       color: Color(0xFF707070), fontWeight: FontWeight.w100, fontSize: 15);
+        TextStyle moreInfoWhite = const TextStyle(
+      color: Color(0xFFFFFFFF), fontWeight: FontWeight.w100, fontSize: 15);
 
   TextStyle memberSipMessageText = const TextStyle(fontSize: 12.0, height: 1.7);
   TextStyle googlemapsG = const TextStyle(

@@ -273,11 +273,8 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                                     height: 24,
                                     width: 24),
                               if (index == 1)
-                                SvgPicture.asset(
-                                    "assets/images/coffee_w.svg",
-                                    color: color,
-                                    height: 24,
-                                    width: 24),
+                                SvgPicture.asset("assets/images/coffee_w.svg",
+                                    color: color, height: 24, width: 24),
                               const SizedBox(height: 8),
                               Text(
                                   getIt<HOMEMAProvider>()
@@ -488,8 +485,10 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
       final String minutesToEnd = rs.period[4] != 0
           ? rs.period[4].toString() + " " + trans(context, 'minute') + "."
           : "";
-      endsIn =
-          "$yearsToEnd $monthsToEnd  $ln$daysToEnd $lnn$hoursToEnd $ln$minutesToEnd";
+      // endsIn =
+      //     "$yearsToEnd $monthsToEnd  $ln$daysToEnd $lnn$hoursToEnd $ln$minutesToEnd";
+            endsIn =
+          "$yearsToEnd $monthsToEnd $daysToEnd $hoursToEnd $minutesToEnd";
     } else {
       endsIn = rs.period.toString();
     }
@@ -542,30 +541,40 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   )
                 ]),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
               child: Column(
                 children: <Widget>[
                   Align(
-                    alignment:
-                        isRTL ? Alignment.centerLeft : Alignment.centerRight,
-                    child: InkWell(
-                      radius: 12,
-                      splashColor: colors.orange,
-                      child: Text(trans(context, 'more_info'),
-                          style: styles.moreInfo),
-                      onTap: () {
-                        if (config.loggedin) {
-                          Navigator.pushNamed(context, "/SaleLoader",
-                              arguments: <String, dynamic>{
-                                "mapBranch": value.inFocusBranch,
-                                "sale": rs
-                              });
-                        } else {
-                          getIt<NavigationService>().navigateTo('/login', null);
-                        }
-                      },
-                    ),
-                  ),
+                      alignment:
+                          isRTL ? Alignment.centerLeft : Alignment.centerRight,
+                      child: Container(
+                        padding: EdgeInsets.zero,
+                        width: SizeConfig.blockSizeHorizontal * 20,
+                        // minWidth: SizeConfig.blockSizeHorizontal * 4,
+                       height: SizeConfig.blockSizeVertical * 4,
+                      //  buttonColor: colors.trans,
+
+                        child: RaisedButton(
+                          // radius: 12,
+                          color: colors.orange,
+                          padding: EdgeInsets.zero,
+                          splashColor: colors.orange,
+                          child: Text(trans(context, 'more_info_map_card'),
+                              style: styles.moreInfoWhite),
+                          onPressed: () {
+                            if (config.loggedin) {
+                              Navigator.pushNamed(context, "/SaleLoader",
+                                  arguments: <String, dynamic>{
+                                    "mapBranch": value.inFocusBranch,
+                                    "sale": rs
+                                  });
+                            } else {
+                              getIt<NavigationService>()
+                                  .navigateTo('/login', null);
+                            }
+                          },
+                        ),
+                      )),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -585,8 +594,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        
-                         Image.asset("assets/images/cash_png.png",
+                        Image.asset("assets/images/cash_png.png",
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
                             width: SizeConfig.blockSizeHorizontal * 10),

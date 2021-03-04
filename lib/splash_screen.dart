@@ -106,22 +106,22 @@ class _SplashScreenState extends State<SplashScreen> {
       });
 
       data.getData("profile_pic").then((String value) {
-        if (value.isEmpty || value == null) {
-          dio.get<dynamic>("user").then((Response<dynamic> value) {
-            if (value.statusCode == 200) {
-              print(value.data['data']['name'].toString());
-              config.username = value.data['data']['name'].toString();
+        if (value.isEmpty || value == null || value == "") {
+          if (config.loggedin)
+            dio.get<dynamic>("user").then((Response<dynamic> value) {
+              if (value.statusCode == 200) {
+                print(value.data['data']['name'].toString());
+                config.username = value.data['data']['name'].toString();
+                if (value.data['data']['image'].toString().trim() !=
+                    "http://joker.localhost.ps/web/image") {
+                  config.profileUrl =
+                      value.data['data']['image'].toString().trim();
+                  data.setData("profile_pic", config.profileUrl);
+                }
 
-              if (value.data['data']['image'].toString().trim() !=
-                  "http://joker.localhost.ps/web/image") {
-                config.profileUrl =
-                    value.data['data']['image'].toString().trim();
-                data.setData("profile_pic", config.profileUrl);
+                data.setData("username", value.data['data']['name'].toString());
               }
-
-              data.setData("username", value.data['data']['name'].toString());
-            }
-          });
+            });
         } else {
           if (value != "http://joker.localhost.ps/web/image") {
             config.profileUrl = value;

@@ -1,13 +1,13 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/services/navigationService.dart';
+import 'package:joker/util/functions.dart';
 import 'package:joker/util/service_locator.dart';
 
 class MainMenu extends StatelessWidget {
@@ -17,7 +17,6 @@ class MainMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colors.white,
-      // appBar: AppBar(backgroundColor: colors.white),
       body: ListView(
         padding:
             const EdgeInsets.only(top: 32, left: 16, bottom: 16, right: 16),
@@ -25,50 +24,79 @@ class MainMenu extends StatelessWidget {
         children: <Widget>[
           Column(
             children: <Widget>[
-              // SvgPicture.asset("assets/images/bill_icon_w.svg",height: 50,width: 50,  color: colors.red),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const SizedBox(width: 4),
-                  CircleAvatar(
-                    maxRadius: 40,
-                    minRadius: 30,
-                    child: CachedNetworkImage(
-                      placeholderFadeInDuration:
-                          const Duration(milliseconds: 300),
-                      imageUrl: config.profileUrl,
-                      imageBuilder:
-                          (BuildContext context, ImageProvider imageProvider) =>
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      const SizedBox(width: 4),
+                      CircleAvatar(
+                        maxRadius: 40,
+                        minRadius: 30,
+                        child: CachedNetworkImage(
+                          placeholderFadeInDuration:
+                              const Duration(milliseconds: 300),
+                          imageUrl: config.profileUrl,
+                          imageBuilder: (BuildContext context,
+                                  ImageProvider imageProvider) =>
                               Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.cover),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (BuildContext context, String url) =>
+                              const CircularProgressIndicator(),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              const Icon(Icons.error),
                         ),
                       ),
-                      placeholder: (BuildContext context, String url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget:
-                          (BuildContext context, String url, dynamic error) =>
-                              const Icon(Icons.error),
-                    ),
+                      const SizedBox(width: 4),
+                      Visibility(
+                        child: Text(config.username, style: styles.username),
+                        visible: config.loggedin,
+                        replacement: InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          radius: 30,
+                          onTap: () {
+                            getIt<NavigationService>()
+                                .navigateTo('/login', null);
+                          },
+                          child: Text(config.username, style: styles.username),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 4),
-                  Visibility(
-                    child: Text(config.username, style: styles.username),
-                    visible: config.loggedin,
-                    replacement: InkWell(
-                      borderRadius: BorderRadius.circular(15),
-                      radius: 30,
-                      onTap: () {
-                        getIt<NavigationService>().navigateTo('/login', null);
-                      },
-                      child: Text(config.username, style: styles.username),
-                    ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () {
+                          goToMap(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text(trans(context, 'back_to_map')),
+                              const SizedBox(width: 0),
+                              Icon(Icons.keyboard_return, color: colors.orange)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
+
               const SizedBox(height: 16),
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
@@ -77,21 +105,16 @@ class MainMenu extends StatelessWidget {
                     Text("${trans(context, 'home')}"),
                   ],
                 ),
-
                 leading: Image.asset("assets/images/menu_home.png"),
-
-                // SvgPicture.asset("assets/images/home_group.svg"),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.popAndPushNamed(context, '/Home',
+                      arguments: <String, dynamic>{
+                        "salesDataFilter": false,
+                        "FilterData": null
+                      });
                 },
               ),
               const SizedBox(height: 8),
-              // Row(
-              //   children: <Widget>[
-              //     Container(
-              //         child: SvgPicture.asset("assets/images/fav_icon.svg"))
-              //   ],
-              // ),
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Row(
@@ -108,9 +131,6 @@ class MainMenu extends StatelessWidget {
                   ],
                 ),
                 leading: Image.asset("assets/images/menu_notifications.png"),
-
-                // SvgPicture.asset("assets/images/bill_icon_w.svg",
-                //     height: 50, width: 50, color: colors.red),
                 onTap: () {
                   Navigator.pushNamed(context, "/Notifications");
                 },
@@ -132,18 +152,18 @@ class MainMenu extends StatelessWidget {
               //     Navigator.pushNamed(context, "/Profile");
               //   },
               // ),
-              const SizedBox(height: 8),
-              ListTile(
-                contentPadding: const EdgeInsets.only(left: 0),
-                title: Text("${trans(context, 'membership')}"),
-                leading: Image.asset("assets/images/menu_membership.png"),
 
-                // SvgPicture.asset("assets/images/vip.svg"),
-                onTap: () {
-                  Navigator.pushNamed(context, "/Membership");
-                },
-              ),
-              const SizedBox(height: 8),
+              // ListTile(
+              //   contentPadding: const EdgeInsets.only(left: 0),
+              //   title: Text("${trans(context, 'membership')}"),
+              //   leading: Image.asset("assets/images/menu_membership.png"),
+
+              //   // SvgPicture.asset("assets/images/vip.svg"),
+              //   onTap: () {
+              //     Navigator.pushNamed(context, "/Membership");
+              //   },
+              // ),
+              // const SizedBox(height: 8),
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'fav')}"),

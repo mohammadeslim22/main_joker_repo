@@ -439,10 +439,14 @@ class ShopDetailsPage extends State<SaleLoader>
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SvgPicture.asset("assets/images/discount.svg",
+                        Image.asset("assets/images/28_discount.png",
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
-                            width: SizeConfig.blockSizeHorizontal * 12),
+                            width: SizeConfig.blockSizeHorizontal * 10),
+                        // SvgPicture.asset("assets/images/discount.svg",
+                        //     fit: BoxFit.cover,
+                        //     height: SizeConfig.blockSizeVertical * 5,
+                        //     width: SizeConfig.blockSizeHorizontal * 12),
                         Text("  " + trans(context, 'discount') + "  ",
                             style: styles.moreInfo),
                         Text(rs.discount)
@@ -451,10 +455,14 @@ class ShopDetailsPage extends State<SaleLoader>
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SvgPicture.asset("assets/images/price.svg",
+                        Image.asset("assets/images/cash_png.png",
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
-                            width: SizeConfig.blockSizeHorizontal * 12),
+                            width: SizeConfig.blockSizeHorizontal * 10),
+                        // SvgPicture.asset("assets/images/price.svg",
+                        //     fit: BoxFit.cover,
+                        //     height: SizeConfig.blockSizeVertical * 5,
+                        //     width: SizeConfig.blockSizeHorizontal * 12),
                         Text("  " + rs.price + " currency",
                             style: styles.moreInfo)
                       ]),
@@ -462,10 +470,14 @@ class ShopDetailsPage extends State<SaleLoader>
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SvgPicture.asset("assets/images/time_left.svg",
+                        Image.asset("assets/images/sale_time.png",
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
-                            width: SizeConfig.blockSizeHorizontal * 12),
+                            width: SizeConfig.blockSizeHorizontal * 10),
+                        // SvgPicture.asset("assets/images/time_left.svg",
+                        //     fit: BoxFit.cover,
+                        //     height: SizeConfig.blockSizeVertical * 5,
+                        //     width: SizeConfig.blockSizeHorizontal * 12),
                         Text(
                             "  " +
                                 rs.startAt +
@@ -483,10 +495,14 @@ class ShopDetailsPage extends State<SaleLoader>
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            SvgPicture.asset("assets/images/ends_in.svg",
+                            Image.asset("assets/images/time_left.png",
                                 fit: BoxFit.cover,
                                 height: SizeConfig.blockSizeVertical * 5,
-                                width: SizeConfig.blockSizeHorizontal * 12),
+                                width: SizeConfig.blockSizeHorizontal * 10),
+                            // SvgPicture.asset("assets/images/ends_in.svg",
+                            //     fit: BoxFit.cover,
+                            //     height: SizeConfig.blockSizeVertical * 5,
+                            //     width: SizeConfig.blockSizeHorizontal * 12),
                             Text("  " + trans(context, 'ends_in') + "  ",
                                 style: styles.moreInfo),
                             Container(

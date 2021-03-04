@@ -66,6 +66,8 @@ Future<bool> get updateLocation async {
   try {
     coordinates = Coordinates(
         double.parse(loglat.elementAt(0)), double.parse(loglat.elementAt(1)));
+    // addresses = await Geocoder.google("AIzaSyDeUxKyBfZ1rlInBG6f0G4RT0tzgUstoes")
+    //     .findAddressesFromCoordinates(coordinates);
     addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     first = addresses.first;
     data.setData('address', first.toString());

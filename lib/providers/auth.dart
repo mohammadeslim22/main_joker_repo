@@ -106,7 +106,8 @@ class Auth with ChangeNotifier {
   }
 
   Future<bool> login(String username, String pass, BuildContext context) async {
-    print("loging info:${myCountryDialCode + username.replaceAll("^0+", "").toString().trim()}");
+    print(
+        "loging info:${myCountryDialCode + username.replaceAll("^0+", "").toString().trim()}");
     bool res;
     await dio.post<dynamic>("login", data: <String, dynamic>{
       "phone":
@@ -131,11 +132,13 @@ class Auth with ChangeNotifier {
               "authorization", "Bearer ${value.data['api_token']}");
           dio.options.headers['authorization'] =
               'Bearer ${value.data['api_token']}';
+     
           config.loggedin = true;
-          Navigator.pushNamed(context, '/Home', arguments: <String, dynamic>{
-            "salesDataFilter": false,
-            "FilterData": null
-          });
+          Navigator.popAndPushNamed(context, '/Home',
+              arguments: <String, dynamic>{
+                "salesDataFilter": false,
+                "FilterData": null
+              });
           res = true;
         } else {
           showToastWidget(
