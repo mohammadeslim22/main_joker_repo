@@ -18,6 +18,7 @@ import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
 import 'util/service_locator.dart';
 import 'package:joker/providers/globalVars.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 //import 'package:flutter/scheduler.dart';
 // import 'package:joker/models/user.dart';
@@ -39,8 +40,22 @@ Future<void> main() async {
     }
     print("loggedIn: ${config.loggedin}");
     dio.options.headers['authorization'] = '$auth';
-    
   });
+
+//Remove this method to stop OneSignal Debugging
+  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  // OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.debug);
+
+  OneSignal.shared.init(config.onesignal, iOSSettings: <OSiOSSettings, dynamic>{
+    OSiOSSettings.autoPrompt: false,
+    OSiOSSettings.inAppLaunchUrl: false
+  });
+  OneSignal.shared
+      .setInFocusDisplayType(OSNotificationDisplayType.notification);
+
+// The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  await OneSignal.shared
+      .promptUserForPushNotificationPermission(fallbackToSettings: true);
 
   runApp(
     MultiProvider(

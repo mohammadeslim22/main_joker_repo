@@ -44,6 +44,10 @@
 	<string>Display merchants and restaurants near you</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>App need your agree, can visit your album</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

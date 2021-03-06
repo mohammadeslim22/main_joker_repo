@@ -13,8 +13,7 @@ class Config {
 
   String baseUrl = "http://joker.localhost.ps/web/api/en/v1/customer/";
 
-  // TODO(fahjan): api key for onesignal push notifications
-  String onesignal = "bc4208c6-1-48c0-b4d5-390029a340dc"; // ca9a
+  String onesignal = "63367f9c-9d70-4ae8-9290-17ad17e2efd5"; // ca9a
   String qRCodeUrl = "https://www.space.co.ps/joker/ar/qr-code/";
   String registerURL = "https://www.space.co.ps/joker/en/registermerchant";
   // default country code prefix mobile number

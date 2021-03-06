@@ -1,4 +1,4 @@
-package com.example.joker
+package com.jokerindirim.app
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

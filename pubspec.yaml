@@ -79,6 +79,7 @@ dependencies:
   url_launcher: ^5.7.2
   flutter_swiper: ^1.1.6
   map_launcher: ^1.1.2
+  onesignal_flutter: ^2.6.3
 
 dev_dependencies:
   flutter_test:
