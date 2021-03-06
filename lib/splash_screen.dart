@@ -35,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     data.getData("lang").then((String value) async {
       if (value.isEmpty) {
+        print("lang storage is empty");
       } else {
         const String arabicBaseUrl =
             "http://joker.localhost.ps/web/api/ar/v1/customer/";
@@ -53,7 +54,6 @@ class _SplashScreenState extends State<SplashScreen> {
         if (value == "en") {
           dio.options.baseUrl = englishBaseUrl;
         } else if (value == "ar") {
-          print("sub bitch ");
           dio.options.baseUrl = arabicBaseUrl;
         } else {
           dio.options.baseUrl = turkishBaseUrl;

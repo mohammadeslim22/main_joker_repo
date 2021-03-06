@@ -15,6 +15,8 @@ class MainMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+
     return Scaffold(
       backgroundColor: colors.white,
       body: ListView(
@@ -73,7 +75,7 @@ class MainMenu extends StatelessWidget {
                     ],
                   ),
                   Align(
-                    alignment: Alignment.topRight,
+                    alignment: isRTL?Alignment.topLeft:Alignment.topRight,
                     child: InkWell(
                       onTap: () {
                         goToMap(context);

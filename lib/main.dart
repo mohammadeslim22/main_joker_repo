@@ -50,8 +50,18 @@ Future<void> main() async {
     OSiOSSettings.autoPrompt: false,
     OSiOSSettings.inAppLaunchUrl: false
   });
-  OneSignal.shared
-      .setInFocusDisplayType(OSNotificationDisplayType.notification);
+  final String notifications = await data.getData("notification_sound");
+  if (notifications.isEmpty || notifications == "" || notifications == null) {
+    OneSignal.shared
+        .setInFocusDisplayType(OSNotificationDisplayType.notification);
+  } else {
+    if (notifications == "on") {
+      OneSignal.shared
+          .setInFocusDisplayType(OSNotificationDisplayType.notification);
+    } else {
+      OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.none);
+    }
+  }
 
 // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
   await OneSignal.shared

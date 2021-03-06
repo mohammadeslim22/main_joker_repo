@@ -461,14 +461,14 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
   Widget mapCard(SaleData rs, HOMEMAProvider value) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     String endsIn = "";
-    String ln = "";
-    String lnn = "";
+    // String ln = "";
+    // String lnn = "";
     if (rs.period is! String) {
-      if (rs.period[0] != 0) {
-        ln = "\n";
-      } else {
-        lnn = "\n";
-      }
+      // if (rs.period[0] != 0) {
+      // //   ln = "\n";
+      // // } else {
+      // //   lnn = "\n";
+      // // }
 
       final String yearsToEnd = rs.period[0] != 0
           ? rs.period[0].toString() + " " + trans(context, 'year') + ","
@@ -644,39 +644,12 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                             //     width: SizeConfig.blockSizeHorizontal * 12),
                             Text("  " + trans(context, 'ends_in') + "  ",
                                 style: styles.moreInfo),
-                            // Row(
-                            //   children: <Widget>[
-                            //     Expanded(
-                            //       // add this
-                            //       child: Text(
-                            //         endsIn,
-                            //         maxLines:
-                            //             2, // you can change it accordingly
-                            //         overflow: TextOverflow.ellipsis, // and this
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
-                            // Row(
-                            //   children: [
-                            //     Flexible(
-                            //       child: Text(
-                            //         endsIn,
-                            //         textAlign: TextAlign.start,
-                            //         maxLines: 3,
-                            //         softWrap: false,
-                            //         overflow: TextOverflow.fade,
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
-                          
                             Container(
                                 padding: EdgeInsets.zero,
                                 constraints: BoxConstraints(
                                     maxWidth:
-                                        MediaQuery.of(context).size.width /2.85
-                                            ),
+                                        MediaQuery.of(context).size.width /
+                                            2.85),
                                 child: Text(
                                   endsIn,
                                   textAlign: TextAlign.start,

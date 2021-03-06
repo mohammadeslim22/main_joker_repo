@@ -30,13 +30,7 @@ class _SalesCardState extends State<MapSalesCard> {
   void initState() {
     super.initState();
     saledata = widget.sale;
-    if (saledata.status == "active") {
-      saleStatus = colors.green;
-    } else if (saledata.status == "coming") {
-      saleStatus = colors.yellow;
-    } else {
-      saleStatus = colors.red;
-    }
+    saleStatus = colors.red;
   }
 
   @override
@@ -54,7 +48,6 @@ class _SalesCardState extends State<MapSalesCard> {
         child: Row(
           children: <Widget>[
             Container(
-              
                 height: MediaQuery.of(context).size.width * .25,
                 width: MediaQuery.of(context).size.width * .25,
                 decoration: BoxDecoration(
@@ -97,7 +90,13 @@ class _SalesCardState extends State<MapSalesCard> {
                                   Text(saledata.status, style: styles.mylight),
                                   const SizedBox(width: 5),
                                   CircleAvatar(
-                                      backgroundColor: saleStatus, radius: 6)
+                                      backgroundColor:
+                                          saledata.status == "active"
+                                              ? colors.green
+                                              : saledata.status == "coming"
+                                                  ? colors.yellow
+                                                  : saleStatus,
+                                      radius: 6)
                                 ],
                               ),
                               const SizedBox(height: 8),
@@ -124,7 +123,7 @@ class _SalesCardState extends State<MapSalesCard> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Text(widget.sale.price ?? "",
-                                style: styles.redstyleForSaleScreen),
+                                style: styles.blackstyleForSaleScreen),
                             const SizedBox(width: 8),
                             Text(widget.sale.oldPrice,
                                 style: const TextStyle(

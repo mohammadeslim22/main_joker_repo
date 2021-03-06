@@ -30,6 +30,11 @@ class SettingsScreen extends StatefulWidget {
 class MySettingState extends State<SettingsScreen> {
   bool doOnce = true;
   int sountState = 0;
+  @override
+  void initState() {
+    super.initState();
+    data.setData("notification_sound", "on");
+  }
 
   Future<void> setStartingLang(MainProvider bolc, Language lang) async {
     await data.getData("lang").then<dynamic>((String value) async {
@@ -58,7 +63,7 @@ class MySettingState extends State<SettingsScreen> {
 
   Future<void> setNotifcationSound(MainProvider bolc) async {
     data.getData("notification_sound").then<dynamic>((String value) {
-      if (value == "true") {
+      if (value == "on") {
         bolc.changenotificationSit(0);
       } else {}
     });
@@ -112,10 +117,14 @@ class MySettingState extends State<SettingsScreen> {
                       });
                       if (index == 0) {
                         bolc.changenotificationSit(0);
-                        await data.setData("notification_sound", "true");
+                        await data.setData("notification_sound", "on");
+                        OneSignal.shared.setInFocusDisplayType(
+                            OSNotificationDisplayType.notification);
                       } else {
                         bolc.changenotificationSit(1);
-                        await data.setData("notification_sound", "false");
+                        await data.setData("notification_sound", "off");
+                        OneSignal.shared.setInFocusDisplayType(
+                            OSNotificationDisplayType.none);
                       }
                     },
                     isSelected: bolc.notificationSit,

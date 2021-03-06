@@ -37,6 +37,6 @@
             android:value="AIzaSyDeUxKyBfZ1rlInBG6f0G4RT0tzgUstoes"/>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@mipmap/ic_launcher" />
+            android:resource="@mipmap/ic_stat_onesignal_default" />
     </application>
 </manifest>

@@ -128,7 +128,7 @@ class Styles {
   );
     TextStyle blackstyleForSaleScreen = const TextStyle(
     fontWeight: FontWeight.w900,
-    color: Colors.red,
+    color: Colors.black,
     fontSize: 24,
   );
   TextStyle timeLeftTextStyle = const TextStyle(
