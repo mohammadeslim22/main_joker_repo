@@ -487,8 +487,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
           : "";
       // endsIn =
       //     "$yearsToEnd $monthsToEnd  $ln$daysToEnd $lnn$hoursToEnd $ln$minutesToEnd";
-            endsIn =
-          "$yearsToEnd $monthsToEnd $daysToEnd $hoursToEnd $minutesToEnd";
+      endsIn = "$yearsToEnd $monthsToEnd $daysToEnd $hoursToEnd $minutesToEnd";
     } else {
       endsIn = rs.period.toString();
     }
@@ -518,7 +517,8 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   Container(
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 2.20),
+                        // maxWidth: MediaQuery.of(context).size.width / 2.20
+                        ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -551,8 +551,8 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                         padding: EdgeInsets.zero,
                         width: SizeConfig.blockSizeHorizontal * 20,
                         // minWidth: SizeConfig.blockSizeHorizontal * 4,
-                       height: SizeConfig.blockSizeVertical * 4,
-                      //  buttonColor: colors.trans,
+                        height: SizeConfig.blockSizeVertical * 4,
+                        //  buttonColor: colors.trans,
 
                         child: RaisedButton(
                           // radius: 12,
@@ -644,12 +644,39 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                             //     width: SizeConfig.blockSizeHorizontal * 12),
                             Text("  " + trans(context, 'ends_in') + "  ",
                                 style: styles.moreInfo),
+                            // Row(
+                            //   children: <Widget>[
+                            //     Expanded(
+                            //       // add this
+                            //       child: Text(
+                            //         endsIn,
+                            //         maxLines:
+                            //             2, // you can change it accordingly
+                            //         overflow: TextOverflow.ellipsis, // and this
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Row(
+                            //   children: [
+                            //     Flexible(
+                            //       child: Text(
+                            //         endsIn,
+                            //         textAlign: TextAlign.start,
+                            //         maxLines: 3,
+                            //         softWrap: false,
+                            //         overflow: TextOverflow.fade,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                          
                             Container(
                                 padding: EdgeInsets.zero,
                                 constraints: BoxConstraints(
                                     maxWidth:
-                                        MediaQuery.of(context).size.width /
-                                            2.8),
+                                        MediaQuery.of(context).size.width /2.85
+                                            ),
                                 child: Text(
                                   endsIn,
                                   textAlign: TextAlign.start,

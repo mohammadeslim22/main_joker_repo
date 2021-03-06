@@ -24,9 +24,7 @@ class MainMenu extends StatelessWidget {
         children: <Widget>[
           Column(
             children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Stack(
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -57,43 +55,41 @@ class MainMenu extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 4),
-                      Visibility(
-                        child: Text(config.username, style: styles.username),
-                        visible: config.loggedin,
-                        replacement: InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          radius: 30,
-                          onTap: () {
-                            getIt<NavigationService>()
-                                .navigateTo('/login', null);
-                          },
-                          child: Text(config.username, style: styles.username),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
                       InkWell(
+                        borderRadius: BorderRadius.circular(15),
+                        radius: 30,
                         onTap: () {
-                          goToMap(context);
+                          if (config.loggedin)
+                            Navigator.popAndPushNamed(context, "/Profile");
+                          getIt<NavigationService>().navigateTo('/login', null);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Text(trans(context, 'back_to_map')),
-                              const SizedBox(width: 0),
-                              Icon(Icons.keyboard_return, color: colors.orange)
-                            ],
-                          ),
-                        ),
+                        child: Visibility(
+                            child:
+                                Text(config.username, style: styles.username),
+                            visible: config.loggedin,
+                            replacement:
+                                Text(config.username, style: styles.username)),
                       ),
                     ],
                   ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: InkWell(
+                      onTap: () {
+                        goToMap(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Wrap(
+                          children: <Widget>[
+                            Text(trans(context, 'back_to_map')),
+                            const SizedBox(width: 16),
+                            Icon(Icons.keyboard_return, color: colors.orange)
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
 
