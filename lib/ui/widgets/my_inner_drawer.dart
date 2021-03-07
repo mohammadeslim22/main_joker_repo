@@ -35,44 +35,9 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
         );
   }
 
-  String username = ".";
   @override
   void initState() {
     super.initState();
-    //if (config.username == null) {
-   if (config.loggedin) {
-      data.getData("username").then((String name) {
-        if (name.isEmpty || name == null) {
-          config.username = name;
-        } else {
-          config.username = trans(context, 'username');
-        }
-      });
-
-      data.getData("profile_pic").then((String value) {
-        if (value.isEmpty || value == null) {
-          dio.get<dynamic>("user").then((Response<dynamic> value) {
-            print(value.data['data']['name'].toString());
-            config.username = value.data['data']['name'].toString();
-
-            if (value.data['data']['image'].toString().trim() !=
-                "http://joker.localhost.ps/web/image") {
-              config.profileUrl = value.data['data']['image'].toString().trim();
-              data.setData("profile_pic", config.profileUrl);
-            }
-
-            data.setData("username", value.data['data']['name'].toString());
-          });
-        } else {
-          if (value != "http://joker.localhost.ps/web/image") {
-            config.profileUrl = value;
-          }
-        }
-      });
-    } else {
-      config.username =
-          getIt<NavigationService>().translateWithNoContext("Login or Sign up");
-    }
   }
 
   @override
@@ -110,7 +75,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text(username, style: styles.underHead),
+                                  Text(config.username, style: styles.underHead),
                                 ],
                               ),
                               decoration: BoxDecoration(

@@ -128,6 +128,7 @@ class Auth with ChangeNotifier {
       if (value.statusCode == 200) {
         if (value.data != "fail") {
           data.setData("username", value.data['name'].toString());
+          data.setData("profile_pic", value.data['image'].toString());
           await data.setData(
               "authorization", "Bearer ${value.data['api_token']}");
           dio.options.headers['authorization'] =
