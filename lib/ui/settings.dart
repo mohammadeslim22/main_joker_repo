@@ -11,7 +11,7 @@ import 'widgets/setting_bottombar.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/constants/config.dart';
-
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 class Settings extends StatelessWidget {
   const Settings({Key key}) : super(key: key);
   @override
