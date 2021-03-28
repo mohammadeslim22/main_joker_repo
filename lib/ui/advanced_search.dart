@@ -79,7 +79,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
     tt = t;
   }
 
-  void _onDaySelected(DateTime day, List<void> events) {
+  void _onDaySelected(DateTime day, List<void> events, List<dynamic> events2) {
     if (showingStartingDateCalendar) {
       setState(() {
         starttoday = day;

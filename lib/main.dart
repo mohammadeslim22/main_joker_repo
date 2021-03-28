@@ -19,8 +19,6 @@ import 'package:joker/util/data.dart';
 import 'util/service_locator.dart';
 import 'package:joker/providers/globalVars.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-//import 'package:flutter/scheduler.dart';
-// import 'package:joker/models/user.dart';
 
 Future<void> main() async {
   // ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>

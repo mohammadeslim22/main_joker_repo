@@ -719,7 +719,6 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                 target: LatLng(value.latitude, value.longitude),
                 zoom: 13,
               )));
-
           getIt<HOMEMAProvider>().lat = value.latitude;
           getIt<HOMEMAProvider>().long = value.longitude;
         });
