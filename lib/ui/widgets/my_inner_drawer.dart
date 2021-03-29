@@ -6,12 +6,8 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
-import 'package:joker/services/navigationService.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
-import 'package:joker/util/data.dart';
-import 'package:dio/dio.dart';
-import 'package:joker/util/dio.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/util/service_locator.dart';
 
@@ -128,7 +124,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                   children: <Widget>[
                     Text("${trans(context, 'notifications')}"),
                     Badge(
-                      position: BadgePosition.topRight(top: 16, right: 10),
+                      position: BadgePosition.topStart(top: 16, start: 10),
                       badgeContent: Container(
                         margin: const EdgeInsets.only(left: 24, right: 24),
                         padding: const EdgeInsets.all(4),

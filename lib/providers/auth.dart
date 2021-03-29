@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:country_codes/country_codes.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -11,7 +12,7 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
-import 'package:country_provider/country_provider.dart';
+// import 'package:country_provider/country_provider.dart';
 
 class Auth with ChangeNotifier {
   Auth() {
@@ -92,9 +93,13 @@ class Auth with ChangeNotifier {
   Map<String, String> resetPassValidationMap =
       Map<String, String>.fromIterables(resetPasskeys, resetPassValidators);
   Future<void> getCountry(String countryCode) async {
-    final Country result = await CountryProvider.getCountryByCode(countryCode);
-    myCountryDialCode = result.callingCodes.first;
-    print("numricCode:    ${result.callingCodes}");
+    await CountryCodes
+        .init(); // Optionally, you may provide a `Locale` to get countrie's localizadName
+
+    final CountryDetails details = CountryCodes.detailsForLocale();
+    // final Country result = await CountryProvider.getCountryByCode(countryCode);
+    myCountryDialCode = details.dialCode;
+    // print("numricCode:    ${result.callingCodes}");
   }
 
   void saveCountryCode(String code, String dialCode) {
@@ -133,7 +138,7 @@ class Auth with ChangeNotifier {
               "authorization", "Bearer ${value.data['api_token']}");
           dio.options.headers['authorization'] =
               'Bearer ${value.data['api_token']}';
-     
+
           config.loggedin = true;
           Navigator.popAndPushNamed(context, '/Home',
               arguments: <String, dynamic>{

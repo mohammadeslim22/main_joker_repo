@@ -119,7 +119,7 @@ class MainMenu extends StatelessWidget {
                   children: <Widget>[
                     Text("${trans(context, 'notifications')}"),
                     Badge(
-                      position: BadgePosition.topRight(top: 16, right: 10),
+                      position: BadgePosition.topStart(top: 16, start: 10),
                       badgeContent: Container(
                           margin: const EdgeInsets.only(left: 24, right: 24),
                           padding: const EdgeInsets.all(4),

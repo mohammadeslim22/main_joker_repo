@@ -15,6 +15,7 @@ ThemeData mainThemeData() {
     ),
     fontFamily: "Almarai",
     canvasColor: colors.white,
+    
     cursorColor: colors.orange,
     hintColor: colors.black,
     // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),

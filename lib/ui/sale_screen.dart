@@ -243,44 +243,20 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                             barrierDismissible: true,
                                             builder: (BuildContext context) {
                                               return RatingDialog(
-                                                icon: Container(
-                                                  height: 100,
-                                                  width: 200,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                      Radius.circular(12),
-                                                    ),
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          merchant.mydata.logo),
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
                                                 title: "Please Rate me",
-                                                description:
-                                                    "Yor feedback Give us Motivation",
-                                                submitButton: "SUBMIT",
-                                                alternativeButton:
-                                                    "Contact us instead?",
-                                                positiveComment:
-                                                    "We are so happy to hear :)",
-                                                negativeComment:
-                                                    "We're sad to hear :(",
-                                                accentColor: colors.blue,
-                                                onSubmitPressed:
-                                                    (int rating) async {
+                                                image: null,
+                                                message: '',
+                                                onSubmitted:
+                                                    (RatingDialogResponse) async {
                                                   await dio.post<dynamic>(
                                                       "rates",
                                                       data: <String, dynamic>{
                                                         'rateable_type':
                                                             "App\\Sale",
                                                         'rateable_id': sale.id,
-                                                        'rate_value': rating
+                                                        'rate_value': 5
                                                       });
-                                                },
-                                                onAlternativePressed: () {},
+                                                }, submitButton: trans(context,'submit'),
                                               );
                                             });
                                       }),

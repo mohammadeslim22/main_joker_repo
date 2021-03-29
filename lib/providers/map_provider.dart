@@ -180,7 +180,7 @@ class HOMEMAProvider with ChangeNotifier {
         'assets/images/location_icon.png',
         (SizeConfig.blockSizeHorizontal * 42).toInt());
     markers.add(Marker(
-      markerId: MarkerId("user"),
+      markerId:const MarkerId("user"),
       position: LatLng(config.lat, config.long),
       icon: BitmapDescriptor.fromBytes(markerIcon),
     ));

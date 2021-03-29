@@ -269,11 +269,11 @@ Function changeLanguage(String value) {
     if (value.isEmpty) {
     } else {
       const String arabicBaseUrl =
-          "http://joker.localhost.ps/web/api/ar/v1/customer/";
+          "http://joker.altariq.ps/api/ar/v1/customer/";
       const String englishBaseUrl =
-          "http://joker.localhost.ps/web/api/en/v1/customer/";
+          "http://joker.altariq.ps/api/en/v1/customer/";
       const String turkishBaseUrl =
-          "http://joker.localhost.ps/web/api/tr/v1/customer/";
+          "http://joker.altariq.ps/api/tr/v1/customer/";
       String baseUrl = await data.getData("baseUrl");
       if (baseUrl == "" || baseUrl.isEmpty || baseUrl == null) {
         baseUrl = config.baseUrl;

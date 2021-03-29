@@ -156,10 +156,12 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                   ],
                 ),
               ),
+
               // ignore: deprecated_member_use
-              tapHeaderToExpand: true,
+             
               // ignore: deprecated_member_use
-              hasIcon: true,
+              
+              collapsed: null,
             )));
   }
 }
