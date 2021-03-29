@@ -156,13 +156,12 @@ Widget errorScreen(dynamic detailsException) {
                   padding: const EdgeInsets.all(16.0),
                   child: Text('Exeption Details: $detailsException'),
                 ),
-                FlatButton(
-                  color: colors.blue,
-                  child: Text('Go Back', style: TextStyle(color: colors.white)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child:
+                        Text('Go Back', style: TextStyle(color: colors.white)))
               ],
             ),
           ),

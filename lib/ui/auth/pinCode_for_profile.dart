@@ -198,16 +198,17 @@ class _MyHomePageState extends State<PinCodeForProfile>
               ),
               Padding(
                   padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side:
-                              const BorderSide(color: Colors.deepPurpleAccent)),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: const BorderSide(
+                                  color: Colors.deepPurpleAccent)),
+                          onPrimary: Colors.deepPurpleAccent,
+                          textStyle: TextStyle(color: colors.white)),
                       onPressed: () {
                         verifyanewPhone();
                       },
-                      color: Colors.deepPurpleAccent,
-                      textColor: colors.white,
                       child: bolc.returnchild(trans(context, 'send_code')))),
               pinCode(bolc),
               const SizedBox(height: 15),
@@ -234,13 +235,15 @@ class _MyHomePageState extends State<PinCodeForProfile>
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      side: const BorderSide(color: Colors.black)),
-                  color: colors.white,
-                  textColor: Colors.orange,
-                  padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        side: const BorderSide(color: Colors.black)),
+                    onPrimary: colors.white,
+                    textStyle: TextStyle(color: colors.orange),
+                    padding: const EdgeInsets.all(8.0),
+                  ),
                   onPressed: () {},
                   child: Text(
                     trans(context, 'resend_code'),

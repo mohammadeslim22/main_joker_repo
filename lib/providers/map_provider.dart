@@ -180,7 +180,7 @@ class HOMEMAProvider with ChangeNotifier {
         'assets/images/location_icon.png',
         (SizeConfig.blockSizeHorizontal * 42).toInt());
     markers.add(Marker(
-      markerId:const MarkerId("user"),
+      markerId: const MarkerId("user"),
       position: LatLng(config.lat, config.long),
       icon: BitmapDescriptor.fromBytes(markerIcon),
     ));
@@ -296,7 +296,10 @@ class HOMEMAProvider with ChangeNotifier {
 
   void hideOffersHorizontalCards() {
     offersHorizontalCardsList = false;
-    if (controller != null) controller.reverse();
+    if (controller != null) {
+      controller.reverse();
+    }
+
     notifyListeners();
   }
 

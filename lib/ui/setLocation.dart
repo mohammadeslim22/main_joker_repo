@@ -125,10 +125,10 @@ class _AutoLocateState extends State<AutoLocate> {
               body: Stack(
                 children: <Widget>[
                   GoogleMap(
-                     myLocationEnabled: true,
+                    myLocationEnabled: true,
                     circles: <Circle>{
                       Circle(
-                          circleId: CircleId("id"),
+                          circleId:const CircleId("id"),
                           center: LatLng(lat, long),
                           fillColor: Colors.blue.withOpacity(.3),
                           radius: 40000,
@@ -230,7 +230,7 @@ class _AutoLocateState extends State<AutoLocate> {
                   //     ),
                   //   ),
                   // ),
-                  
+
                   accesptDeclineButtons(),
                 ],
               ),
@@ -308,26 +308,34 @@ class _AutoLocateState extends State<AutoLocate> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: const BorderSide(color: Colors.orange)),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: const BorderSide(color: Colors.orange)),
+                    textStyle: TextStyle(
+                      color: colors.orange,
+                    )),
                 onPressed: () {
                   config.locationController.text =
                       "Tap to get your Location...";
                   Navigator.pop(context);
                   Provider.of<MainProvider>(context, listen: false)
                       .togelocationloading(false);
-                  Scaffold.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  // Scaffold.of(context).hideCurrentSnackBar();
                 },
-                color: colors.white,
-                textColor: colors.orange,
+                // color: colors.white,
+
                 child: Text(trans(context, 'cancel'))),
             const SizedBox(width: 30),
-            RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: colors.orange)),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shadowColor: colors.orange,
+                    textStyle: TextStyle(color: colors.white),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: colors.orange))),
                 onPressed: () {
                   setState(() {
                     config.lat = lat;
@@ -337,8 +345,6 @@ class _AutoLocateState extends State<AutoLocate> {
                   functions[widget.choice].call();
                   Navigator.pop(context);
                 },
-                color: colors.orange,
-                textColor: colors.white,
                 child: Text(trans(context, 'pick'))),
           ],
         ),

@@ -109,8 +109,8 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Text(memFromMerchant.message),
-                    FlatButton(
-                      color: colors.orange,
+                    TextButton(
+                      style: ElevatedButton.styleFrom(onPrimary: colors.orange),
                       onPressed: () {
                         exp.toggle();
                         dio.post<dynamic>("usermemberships",
@@ -158,9 +158,9 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
               ),
 
               // ignore: deprecated_member_use
-             
+
               // ignore: deprecated_member_use
-              
+
               collapsed: null,
             )));
   }

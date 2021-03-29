@@ -56,7 +56,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 children: <Widget>[
                   const SizedBox(width: 4),
                   Stack(
-                    overflow: Overflow.visible,
+                    clipBehavior: Clip.hardEdge,
                     children: <Widget>[
                       Positioned.directional(
                           top: 10,

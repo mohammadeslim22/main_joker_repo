@@ -29,11 +29,11 @@ class _MyForgetPassState extends State<ForgetPassword>
             content: const Text('Do you want to exit the App'),
             actionsOverflowButtonSpacing: 50,
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: const Text('Cancel'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
                 child: const Text('Yes'),
               ),
@@ -148,10 +148,13 @@ class _MyForgetPassState extends State<ForgetPassword>
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: colors.orange)),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: colors.orange)),
+                                onPrimary: colors.orange,
+                                textStyle: TextStyle(color: colors.white)),
                             onPressed: () async {
                               if (_isButtonEnabled) {
                                 if (_formKey.currentState.validate()) {
@@ -186,20 +189,20 @@ class _MyForgetPassState extends State<ForgetPassword>
                                 }
                               }
                             },
-                            color: colors.orange,
-                            textColor: colors.white,
                             child: bolc
                                 .returnchild(trans(context, mainButtonkey))),
                       ),
                       const SizedBox(height: 36),
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            side: BorderSide(color: colors.black)),
-                        color: colors.white,
-                        textColor: colors.blue,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 28),
+                      TextButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              side: BorderSide(color: colors.black)),
+                          onPrimary: colors.white,
+                          textStyle: TextStyle(color: colors.blue),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 28),
+                        ),
                         onPressed: () {},
                         child: Text(
                           trans(context, 'resend_code'),

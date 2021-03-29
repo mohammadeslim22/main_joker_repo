@@ -15,8 +15,9 @@ ThemeData mainThemeData() {
     ),
     fontFamily: "Almarai",
     canvasColor: colors.white,
-    
-    cursorColor: colors.orange,
+
+    textSelectionTheme: TextSelectionThemeData(cursorColor: colors.orange),
+    // cursorColor: colors.orange,
     hintColor: colors.black,
     // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
     textTheme: TextTheme(
@@ -38,7 +39,7 @@ ThemeData mainThemeDatadark() {
     ),
     fontFamily: "Almarai",
     canvasColor: const Color(0xFF666666),
-    cursorColor: colors.orange,
+    textSelectionTheme: TextSelectionThemeData(cursorColor: colors.orange),
     hintColor: colors.black,
     // bottomSheetTheme:  BottomSheetThemeData(elevation: 10,backgroundColor: Colors.white.withOpacity(.75)),
     textTheme: TextTheme(

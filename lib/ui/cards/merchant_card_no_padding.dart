@@ -153,9 +153,11 @@ class _MerchantCardState extends State<MapMerchantCard> {
               ],
             ),
           ),
-          RaisedButton(
-              color: colors.yellow,
-              padding: const EdgeInsets.symmetric(horizontal: 130),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                onPrimary: colors.yellow,
+                padding: const EdgeInsets.symmetric(horizontal: 130),
+              ),
               child: Text(trans(context, 'more_info'), style: styles.moreInfo),
               onPressed: () {
                 if (config.loggedin) {

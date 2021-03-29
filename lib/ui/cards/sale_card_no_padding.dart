@@ -210,9 +210,11 @@ class _SalesCardState extends State<SalesCardNoPadding> {
             ],
           ),
         ),
-        RaisedButton(
-            color: colors.yellow,
-            padding: const EdgeInsets.symmetric(horizontal: 130),
+        ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              onPrimary: colors.yellow,
+              padding: const EdgeInsets.symmetric(horizontal: 130),
+            ),
             child: Text(trans(context, 'more_info'), style: styles.moreInfo),
             onPressed: () {
               if (config.loggedin) {
@@ -224,7 +226,6 @@ class _SalesCardState extends State<SalesCardNoPadding> {
                         ratesAverage: saledata.merchant.ratesAverage,
                         salesCount: saledata.merchant.salesCount));
                 getIt<HOMEMAProvider>().setinFocusBranch(m);
-                print("mmmmmmmmmmmmmmmm $m");
                 Navigator.pushNamed(context, "/SaleLoader",
                     arguments: <String, dynamic>{
                       "mapBranch": m,

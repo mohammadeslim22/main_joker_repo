@@ -19,7 +19,6 @@ import 'package:joker/util/functions.dart';
 import 'package:flutter/services.dart';
 import 'package:joker/providers/globalVars.dart';
 
-
 class AdvancedSearch extends StatefulWidget {
   const AdvancedSearch({Key key, this.scaffoldkey, this.specializations})
       : super(key: key);
@@ -154,19 +153,23 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                     childAspectRatio: 2,
                     addRepaintBoundaries: true,
                     children: widget.specializations.map((Specialization item) {
-                      return FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(38.0),
+                      return TextButton(
+                          style: ElevatedButton.styleFrom(
+                            shadowColor: colors.white,
+                            textStyle: TextStyle(
+                              color: selectedOptions.contains(item.id)
+                                  ? colors.orange
+                                  : colors.black,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(38.0),
+                            ),
                             side: BorderSide(
                               color: selectedOptions.contains(item.id)
                                   ? colors.orange
                                   : colors.ggrey,
                             ),
                           ),
-                          color: colors.white,
-                          textColor: selectedOptions.contains(item.id)
-                              ? colors.orange
-                              : colors.black,
                           onPressed: () {
                             setState(() {
                               if (!selectedOptions.add(item.id)) {
@@ -257,30 +260,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                 Text(trans(context, "accourding_offer_start_end_date"),
                     style: styles.mysmalllight),
                 const SizedBox(height: 10),
-                RaisedButton(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 11),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7.0),
-                      side: BorderSide(color: Colors.grey[300])),
-                  color: colors.white,
-                  elevation: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      const Icon(Icons.date_range),
-                      Text(
-                        trans(context, "offer_history"),
-                        style: styles.mysmalllight,
-                      ),
-                      Text(startDate),
-                      Icon(
-                        Icons.arrow_forward,
-                        color: colors.orange,
-                      ),
-                      Text(endDate),
-                    ],
-                  ),
+                ElevatedButton(
                   onPressed: () {
                     _errorController = _scaffoldkey.currentState
                         .showBottomSheet<dynamic>((BuildContext context) {
@@ -296,38 +276,36 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                             children: <Widget>[
                               Expanded(
                                 child: Container(
-                                  color: !showingStartingDateCalendar
-                                      ? colors.grey
-                                      : colors.trans,
-                                  child: FlatButton(
-                                    autofocus: true,
-                                    onPressed: () {
-                                      _errorController.setState(() {
-                                        showingStartingDateCalendar = true;
-                                        t = tt;
-                                      });
-                                    },
-                                    child: Text(
-                                        trans(context, "offer_starting_date")),
-                                  ),
-                                ),
+                                    color: !showingStartingDateCalendar
+                                        ? colors.grey
+                                        : colors.trans,
+                                    child: TextButton(
+                                      autofocus: true,
+                                      onPressed: () {
+                                        _errorController.setState(() {
+                                          showingStartingDateCalendar = true;
+                                          t = tt;
+                                        });
+                                      },
+                                      child: Text(trans(
+                                          context, "offer_starting_date")),
+                                    )),
                               ),
                               Expanded(
                                 child: Container(
-                                  color: showingStartingDateCalendar
-                                      ? colors.grey
-                                      : colors.trans,
-                                  child: FlatButton(
-                                    onPressed: () {
-                                      _errorController.setState(() {
-                                        showingStartingDateCalendar = false;
-                                        t = ttt;
-                                      });
-                                    },
-                                    child: Text(
-                                        trans(context, "offer_ending_date")),
-                                  ),
-                                ),
+                                    color: showingStartingDateCalendar
+                                        ? colors.grey
+                                        : colors.trans,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        _errorController.setState(() {
+                                          showingStartingDateCalendar = false;
+                                          t = ttt;
+                                        });
+                                      },
+                                      child: Text(
+                                          trans(context, "offer_ending_date")),
+                                    )),
                               ),
                             ],
                           ),
@@ -344,6 +322,31 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                       );
                     });
                   },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 11),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7.0),
+                        side: BorderSide(color: Colors.grey[300])),
+                    shadowColor: colors.white,
+                    elevation: 0,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      const Icon(Icons.date_range),
+                      Text(
+                        trans(context, "offer_history"),
+                        style: styles.mysmalllight,
+                      ),
+                      Text(startDate),
+                      Icon(
+                        Icons.arrow_forward,
+                        color: colors.orange,
+                      ),
+                      Text(endDate),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 5),
                 Row(
@@ -371,26 +374,32 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    RaisedButton(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 25),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: const BorderSide(color: Colors.grey)),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 25),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: const BorderSide(color: Colors.grey)),
+                          // color: colors.ggrey,
+                          textStyle: TextStyle(color: colors.white)
+                          // textColor: colors.white,
+                          ),
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      color: colors.ggrey,
-                      textColor: colors.white,
                       child: Text(trans(context, "cancel"),
                           style: styles.notificationNO),
                     ),
-                    RaisedButton(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 25),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.orange[900])),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 25),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.orange[900])),
+                        textStyle: TextStyle(color: colors.white),
+                      ),
                       onPressed: () {
                         getIt<GlobalVars>().filterData = FilterData(
                           merchantName.text,
@@ -407,8 +416,9 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                               "salesDataFilter": true,
                             });
                       },
-                      color: Colors.orange[600],
-                      textColor: colors.white,
+                      // color: Colors.orange[600],
+
+                      // textColor: colors.white,
                       child: Text(trans(context, "search"),
                           style: styles.notificationNO),
                     ),

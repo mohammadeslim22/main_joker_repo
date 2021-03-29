@@ -68,11 +68,7 @@ Future<bool> get updateLocation async {
         double.parse(loglat.elementAt(0)), double.parse(loglat.elementAt(1)));
     // addresses = await Geocoder.google("AIzaSyDeUxKyBfZ1rlInBG6f0G4RT0tzgUstoes")
     //     .findAddressesFromCoordinates(coordinates);
-    addresses = 
-    
-    
-    
-    await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     first = addresses.first;
     data.setData('address', first.toString());
   } catch (e) {
@@ -144,11 +140,11 @@ Future<bool> onWillPop(BuildContext context) async {
           content: Text(trans(context, 'do_u_want_to_exit')),
           actionsOverflowButtonSpacing: 50,
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(trans(context, 'cancel')),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(true),
               child: Text(trans(context, 'ok')),
             ),
@@ -198,8 +194,8 @@ void showFullText(BuildContext context, String text) {
               children: <Widget>[
                 Expanded(child: Text(text, style: styles.textInShowMore)),
                 const SizedBox(height: 15),
-                RaisedButton(
-                    color: colors.orange,
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(shadowColor: colors.orange),
                     child: Text(trans(context, "ok"),
                         style: styles.underHeadwhite),
                     onPressed: () {
@@ -254,8 +250,9 @@ void ifUpdateTur(BuildContext context, String text) {
                         style: styles.underHeadblack),
                   ),
                   const SizedBox(height: 15),
-                  RaisedButton(
-                      color: colors.orange,
+                  ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(shadowColor: colors.orange),
                       child: Text(trans(context, "ok"),
                           style: styles.underHeadwhite),
                       onPressed: () {

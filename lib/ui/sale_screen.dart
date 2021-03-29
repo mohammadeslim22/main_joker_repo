@@ -247,16 +247,18 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                                 image: null,
                                                 message: '',
                                                 onSubmitted:
-                                                    (RatingDialogResponse) async {
+                                                    (RatingDialogResponse ratingDialogResponse) async {
                                                   await dio.post<dynamic>(
                                                       "rates",
                                                       data: <String, dynamic>{
                                                         'rateable_type':
                                                             "App\\Sale",
                                                         'rateable_id': sale.id,
-                                                        'rate_value': 5
+                                                        'rate_value': ratingDialogResponse.rating
                                                       });
-                                                }, submitButton: trans(context,'submit'),
+                                                },
+                                                submitButton:
+                                                    trans(context, 'submit'),
                                               );
                                             });
                                       }),
@@ -425,17 +427,19 @@ class ShopDetailsPage extends State<SaleDetailPage>
                 if (!hasMemberShip)
                   Column(
                     children: <Widget>[
-                      RaisedButton(
-                          color: colors.orange,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: colors.orange)),
+                          ),
+                          // color: colors.orange,
                           child: Text(
                             trans(context, 'request_membership_for_merchant'),
                             style: styles.underHeadwhite,
                           ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: colors.orange)),
                           onPressed: () async {
                             Navigator.pushNamed(
                                 context, "/MemberShipsForMerchant",

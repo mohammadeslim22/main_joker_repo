@@ -87,10 +87,13 @@ class ContactUs extends StatelessWidget {
           simpleForm(3, 5, "message", message),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: colors.orange)),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: colors.orange)),
+                    onPrimary: colors.orange,
+                    textStyle: TextStyle(color: colors.white)),
                 onPressed: () async {
                   final Response<dynamic> response = await dio
                       .post<dynamic>("contact", data: <String, dynamic>{
@@ -126,8 +129,6 @@ class ContactUs extends StatelessWidget {
                         reverseCurve: Curves.linear);
                   }
                 },
-                color: colors.orange,
-                textColor: colors.white,
                 child: Text(trans(context, 'send'))),
           ),
           Row(

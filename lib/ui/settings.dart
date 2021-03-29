@@ -12,7 +12,7 @@ import 'widgets/setting_bottombar.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/constants/config.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+
 class Settings extends StatelessWidget {
   const Settings({Key key}) : super(key: key);
   @override
@@ -171,7 +171,7 @@ class MySettingState extends State<SettingsScreen> {
           const SizedBox(height: 10),
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-              child: FlatButton(
+              child: TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, "/ChangePassword");
                   },
@@ -188,12 +188,12 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
   final MainProvider bolc = Provider.of<MainProvider>(context);
   return Flexible(
       fit: FlexFit.tight,
-      child: FlatButton(
-          textColor: colors.black,
-          disabledColor: Colors.grey,
-          padding: const EdgeInsets.all(0),
-          splashColor: colors.trans,
-          highlightColor: colors.trans,
+      child: TextButton(
+          style: ElevatedButton.styleFrom(
+            textStyle: TextStyle(color: colors.black),
+            onSurface: Colors.grey,
+            padding: const EdgeInsets.all(0),
+          ),
           onPressed: () {
             if (category == "font")
               bolc.changefontindex(index);

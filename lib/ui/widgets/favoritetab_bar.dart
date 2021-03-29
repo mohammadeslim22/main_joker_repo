@@ -9,17 +9,17 @@ import 'package:provider/provider.dart';
 class FavoritBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.blue;
-      }
-      return Colors.red;
-    }
+    // Color getColor(Set<MaterialState> states) {
+    //   const Set<MaterialState> interactiveStates = <MaterialState>{
+    //     MaterialState.pressed,
+    //     MaterialState.hovered,
+    //     MaterialState.focused,
+    //   };
+    //   if (states.any(interactiveStates.contains)) {
+    //     return Colors.blue;
+    //   }
+    //   return Colors.red;
+    // }
 
     final MainProvider bolc = Provider.of<MainProvider>(context);
     return Container(
@@ -110,12 +110,14 @@ class FavoritBar extends StatelessWidget {
               ),
           Expanded(
             //  child: Visibility(
-            child: FlatButton(
-                padding: EdgeInsets.zero,
-                textColor: colors.black,
-                disabledColor: colors.grey,
-                splashColor: colors.trans,
-                highlightColor: colors.trans,
+            child: TextButton(
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    // textColor: colors.black,
+                    // disabledColor: colors.grey,
+                    // splashColor: colors.trans,
+                    // highlightColor: colors.trans,
+                    textStyle: TextStyle(color: colors.black)),
                 onPressed: () {
                   if (bolc.favocurrentIndex == 0) {
                     bolc.changeTabBarIndex(1);

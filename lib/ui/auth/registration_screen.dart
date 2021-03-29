@@ -201,7 +201,7 @@ class _MyRegistrationState extends State<Registration>
                         Vibration.vibrate(duration: 400);
                         mainProvider.togelocationloading(false);
 
-                        Scaffold.of(context).showSnackBar(snackBar);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         setState(() {
                           config.locationController.text =
                               trans(context, 'tab_set_ur_location');
@@ -210,7 +210,7 @@ class _MyRegistrationState extends State<Registration>
                     } catch (e) {
                       Vibration.vibrate(duration: 400);
                       mainProvider.togelocationloading(false);
-                      Scaffold.of(context).showSnackBar(snackBar);
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       setState(() {
                         config.locationController.text =
                             trans(context, 'tab_set_ur_location');
@@ -275,10 +275,14 @@ class _MyRegistrationState extends State<Registration>
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 32, vertical: 16),
-                    child: RaisedButton(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: colors.orange)),
+                            side: BorderSide(color: colors.orange))  ,onPrimary: colors.orange,
+                         textStyle: TextStyle(color: colors.white),
+                      ),
+                        
                         onPressed: () async {
                           if (_isButtonEnabled) {
                             if (_formKey.currentState.validate()) {
@@ -309,8 +313,7 @@ class _MyRegistrationState extends State<Registration>
                             });
                           }
                         },
-                        color: colors.orange,
-                        textColor: colors.white,
+                      
                         child: mainProvider
                             .returnchild(trans(context, 'regisration'))),
                   ),

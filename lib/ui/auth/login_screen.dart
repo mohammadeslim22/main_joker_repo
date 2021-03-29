@@ -158,10 +158,13 @@ class _MyLoginScreenState extends State<LoginScreen>
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: colors.orange)),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: colors.orange)),
+                          onPrimary: colors.orange,
+                          textStyle: TextStyle(color: colors.white)),
                       onPressed: () async {
                         print(
                             "_usernameController.text : ${_usernameController.text}");
@@ -187,8 +190,6 @@ class _MyLoginScreenState extends State<LoginScreen>
                           }
                         }
                       },
-                      color: colors.orange,
-                      textColor: colors.white,
                       child: mainProvider.returnchild(trans(context, 'login'))),
                 ),
                 const SizedBox(height: 40),

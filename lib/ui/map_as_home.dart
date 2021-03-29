@@ -175,7 +175,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                     borderRadius:
                         const BorderRadius.all(Radius.circular(18.0))),
                 width: MediaQuery.of(context).size.width,
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () async {
                     if (pc.isPanelOpen) {
                       await pc.close();
@@ -516,7 +516,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   const SizedBox(width: 8),
                   Container(
                     padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(
+                    constraints:const BoxConstraints(
                         // maxWidth: MediaQuery.of(context).size.width / 2.20
                         ),
                     child: Column(
@@ -554,11 +554,14 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                         height: SizeConfig.blockSizeVertical * 4,
                         //  buttonColor: colors.trans,
 
-                        child: RaisedButton(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            //  color: colors.orange,
+                            padding: EdgeInsets.zero,
+                            shadowColor: colors.orange,
+                          ),
                           // radius: 12,
-                          color: colors.orange,
-                          padding: EdgeInsets.zero,
-                          splashColor: colors.orange,
+
                           child: Text(trans(context, 'more_info_map_card'),
                               style: styles.moreInfoWhite),
                           onPressed: () {
@@ -681,13 +684,15 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
               ),
             ),
             const Spacer(),
-            RaisedButton(
-              disabledColor: colors.orange,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: colors.orange)),
-              color: colors.orange,
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                // disabledColor: colors.orange,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(color: colors.orange)),
+                // color: colors.orange,
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+              ),
               onPressed: () async {
                 final map_luncher.Coords crods = map_luncher.Coords(
                     value.inFocusBranch.latitude,

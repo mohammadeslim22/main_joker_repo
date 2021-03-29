@@ -19,8 +19,8 @@ class BottomContent extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          RaisedButton(
-            color: colors.trans,
+          ElevatedButton(
+            
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -64,8 +64,8 @@ class BottomContent extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: VerticalDivider(color: colors.orange, width: 1),
           ),
-          RaisedButton(
-            color: colors.trans,
+          ElevatedButton(
+            
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[

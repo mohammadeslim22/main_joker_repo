@@ -598,13 +598,15 @@ class ShopDetailsPage extends State<SaleLoader>
               ),
             ),
             const SizedBox(height: 24),
-            RaisedButton(
-              disabledColor: colors.orange,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: colors.orange)),
-              color: colors.orange,
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                onSurface: colors.orange,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(color: colors.orange)),
+                onPrimary: colors.orange,
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+              ),
               onPressed: () async {
                 final map_luncher.Coords crods = map_luncher.Coords(
                     value.inFocusBranch.latitude,
@@ -687,16 +689,18 @@ class ShopDetailsPage extends State<SaleLoader>
             if (!hasMemberShip)
               Column(
                 children: <Widget>[
-                  RaisedButton(
-                      color: colors.orange,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        onPrimary: colors.orange,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: colors.orange)),
+                      ),
                       child: Text(
                           trans(context, 'request_membership_for_merchant'),
                           style: styles.underHeadwhite),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: colors.orange)),
                       onPressed: () async {
                         Navigator.pushNamed(context, "/MemberShipsForMerchant",
                             arguments: <String, dynamic>{

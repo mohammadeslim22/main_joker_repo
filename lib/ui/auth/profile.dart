@@ -193,13 +193,13 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                           alignment: Alignment.topCenter,
                           child: Column(
                             children: <Widget>[
-                              FlatButton(
+                              TextButton(
                                   child: Text(trans(context, 'open_gallery'),
                                       style: styles.mysmall),
                                   onPressed: () async {
                                     getImage(ImageSource.gallery, mainProvider);
                                   }),
-                              FlatButton(
+                              TextButton(
                                 child: Text(trans(context, "take_photo"),
                                     style: styles.mysmall),
                                 onPressed: () async {
@@ -344,7 +344,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                             mainProvider
                                                 .togelocationloading(false);
 
-                                            Scaffold.of(context)
+                                            ScaffoldMessenger.of(context)
                                                 .showSnackBar(snackBar);
                                             setState(() {
                                               config.locationController.text =
@@ -355,7 +355,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                           Vibration.vibrate(duration: 400);
                                           mainProvider
                                               .togelocationloading(false);
-                                          Scaffold.of(context)
+                                          ScaffoldMessenger.of(context)
                                               .showSnackBar(snackBar);
                                           setState(() {
                                             config.locationController.text =
@@ -404,11 +404,15 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 70),
-                        child: RaisedButton(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: colors.orange)),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: colors.orange)),
+                                onPrimary: colors.orange,
+                                textStyle: TextStyle(color: colors.white)),
                             onPressed: () async {
                               if (_isButtonEnabled) {
                                 if (_formKey.currentState.validate()) {
@@ -441,8 +445,6 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                 }
                               }
                             },
-                            color: colors.orange,
-                            textColor: colors.white,
                             child: mainProvider.returnchildforProfile(
                               trans(context, 'save_changes'),
                               //  style: styles.notificationNO,

@@ -317,15 +317,17 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              RaisedButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 6, horizontal: 16),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(16.0)),
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 6, horizontal: 16),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0)),
+                                      onPrimary: Colors.grey[300],
+                                      textStyle:
+                                          const TextStyle(color: Colors.black)),
                                   onPressed: () {},
-                                  color: Colors.grey[300],
-                                  textColor: Colors.black,
                                   child: Text(trans(context, "send_complaint"),
                                       style: styles.mystyle)),
                               Column(
@@ -513,11 +515,11 @@ class ShimmerLoader extends StatelessWidget {
         Column(
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              color: Colors.orange,
-              height: 120,
-              width: 600
-            ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                color: Colors.orange,
+                height: 120,
+                width: 600),
             Container(
               color: Colors.red,
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
