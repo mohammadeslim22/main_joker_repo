@@ -20,14 +20,12 @@ class SettingBottom extends StatelessWidget {
         children: <Widget>[
           Text(trans(context, "user_account")),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              onPrimary: colors.trans
-            ),
+            style: ElevatedButton.styleFrom(onPrimary: colors.trans),
             // splashColor: Colors.transparent,
             // highlightElevation: 0,
             // highlightColor: Colors.transparent,
             // elevation: 0,
-            ,
+
             onPressed: () {
               AwesomeDialog(
                 context: context,
