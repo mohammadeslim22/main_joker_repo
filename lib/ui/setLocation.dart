@@ -128,7 +128,7 @@ class _AutoLocateState extends State<AutoLocate> {
                     myLocationEnabled: true,
                     circles: <Circle>{
                       Circle(
-                          circleId:const CircleId("id"),
+                          circleId: const CircleId("id"),
                           center: LatLng(lat, long),
                           fillColor: Colors.blue.withOpacity(.3),
                           radius: 40000,
@@ -313,6 +313,7 @@ class _AutoLocateState extends State<AutoLocate> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
                         side: const BorderSide(color: Colors.orange)),
+                    onPrimary: colors.white,
                     textStyle: TextStyle(
                       color: colors.orange,
                     )),
@@ -325,8 +326,6 @@ class _AutoLocateState extends State<AutoLocate> {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   // Scaffold.of(context).hideCurrentSnackBar();
                 },
-                // color: colors.white,
-
                 child: Text(trans(context, 'cancel'))),
             const SizedBox(width: 30),
             ElevatedButton(

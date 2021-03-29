@@ -381,7 +381,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
                               side: const BorderSide(color: Colors.grey)),
-                          // color: colors.ggrey,
+                          onPrimary: colors.ggrey,
                           textStyle: TextStyle(color: colors.white)
                           // textColor: colors.white,
                           ),
@@ -399,6 +399,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(18.0),
                             side: BorderSide(color: Colors.orange[900])),
                         textStyle: TextStyle(color: colors.white),
+                        onPrimary: Colors.orange[600],
                       ),
                       onPressed: () {
                         getIt<GlobalVars>().filterData = FilterData(
@@ -416,7 +417,6 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                               "salesDataFilter": true,
                             });
                       },
-                      // color: Colors.orange[600],
 
                       // textColor: colors.white,
                       child: Text(trans(context, "search"),

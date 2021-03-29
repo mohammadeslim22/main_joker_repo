@@ -208,8 +208,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                         borderRadius: BorderRadius.circular(18.0),
                         side: const BorderSide(color: Colors.grey)),
                     textStyle: const TextStyle(color: Colors.white),
-
-                    // color: Colors.grey,
+                    onPrimary: Colors.grey,
                   ),
                   onPressed: () {},
                   child: Text(trans(context, "cancel"),
@@ -353,7 +352,7 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                         borderRadius:
                                             BorderRadius.circular(18.0),
                                         side: BorderSide(color: colors.orange)),
-                                    // color: colors.orange,
+                                    onPrimary: colors.orange,
                                     textStyle: TextStyle(color: colors.white),
                                     // textColor: colors.white,
                                   ),
@@ -370,14 +369,12 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                               BorderRadius.circular(18.0),
                                           side: const BorderSide(
                                               color: Colors.grey)),
+                                      onPrimary: Colors.red,
                                       textStyle:
                                           const TextStyle(color: Colors.white)),
-
                                   onPressed: () {
                                     _errorController.close();
                                   },
-                                  // color: Colors.grey,
-
                                   child: Text(trans(context, "cancel"),
                                       style: styles.notificationNO),
                                 ),
@@ -388,8 +385,6 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                     ),
                   );
                 },
-                // color: Colors.red,
-                // textColor: Colors.white,
                 child: Text(trans(context, "update"),
                     style: styles.notificationNO),
               ),

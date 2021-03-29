@@ -20,7 +20,7 @@ BaseOptions options = BaseOptions(
     'authorization': ''
   },
   followRedirects: false,
-  validateStatus: (int status) => status < 500,
+  validateStatus: (int status) => status < 501,
 );
 
 Response<dynamic> response;
@@ -28,7 +28,7 @@ Response<dynamic> response;
 Dio dio = Dio(options);
 
 void dioDefaults() {
-  dio.options.headers['authorization'] = 'Bearer ${config.token}';
+  // dio.options.headers['authorization'] = 'Bearer ${config.token}';
   dio.interceptors.add(InterceptorsWrapper(onRequest:
       (RequestOptions options, RequestInterceptorHandler rHandlers) async {
     options.queryParameters.addAll(<String, String>{

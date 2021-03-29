@@ -690,7 +690,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                     side: BorderSide(color: colors.orange)),
-                // color: colors.orange,
+                onPrimary: colors.orange,
                 padding: const EdgeInsets.symmetric(horizontal: 24),
               ),
               onPressed: () async {

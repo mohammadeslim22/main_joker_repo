@@ -246,15 +246,17 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                                 title: "Please Rate me",
                                                 image: null,
                                                 message: '',
-                                                onSubmitted:
-                                                    (RatingDialogResponse ratingDialogResponse) async {
+                                                onSubmitted: (RatingDialogResponse
+                                                    ratingDialogResponse) async {
                                                   await dio.post<dynamic>(
                                                       "rates",
                                                       data: <String, dynamic>{
                                                         'rateable_type':
                                                             "App\\Sale",
                                                         'rateable_id': sale.id,
-                                                        'rate_value': ratingDialogResponse.rating
+                                                        'rate_value':
+                                                            ratingDialogResponse
+                                                                .rating
                                                       });
                                                 },
                                                 submitButton:
@@ -434,8 +436,8 @@ class ShopDetailsPage extends State<SaleDetailPage>
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                                 side: BorderSide(color: colors.orange)),
+                            onPrimary: colors.orange,
                           ),
-                          // color: colors.orange,
                           child: Text(
                             trans(context, 'request_membership_for_merchant'),
                             style: styles.underHeadwhite,

@@ -24,7 +24,7 @@ class SettingBottom extends StatelessWidget {
             // highlightElevation: 0,
             // highlightColor: Colors.transparent,
             // elevation: 0,
-            // color: colors.trans,
+            onPrimary: colors.trans,
             onPressed: () {
               AwesomeDialog(
                 context: context,
@@ -64,11 +64,13 @@ class SettingBottom extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  onPrimary: colors.red),
                               // splashColor: Colors.transparent,
                               // highlightElevation: 0,
                               // highlightColor: Colors.transparent,
                               // elevation: 0,
-                              // color: colors.red,
+
                               child: Text(trans(context, 'am sure'),
                                   style: styles.mywhitestyle),
                               onPressed: () {
