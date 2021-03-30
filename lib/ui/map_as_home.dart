@@ -208,7 +208,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                                 " ${value.getSpecializationName()} " +
                                 trans(context, 'nearby'),
                             style: const TextStyle(
-                                fontWeight: FontWeight.normal, fontSize: 24.0),
+                                fontWeight: FontWeight.normal, fontSize: 24.0,color: Colors.black),
                           ),
                         ],
                       ),
@@ -461,15 +461,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
   Widget mapCard(SaleData rs, HOMEMAProvider value) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     String endsIn = "";
-    // String ln = "";
-    // String lnn = "";
     if (rs.period is! String) {
-      // if (rs.period[0] != 0) {
-      // //   ln = "\n";
-      // // } else {
-      // //   lnn = "\n";
-      // // }
-
       final String yearsToEnd = rs.period[0] != 0
           ? rs.period[0].toString() + " " + trans(context, 'year') + ","
           : "";
@@ -485,8 +477,6 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
       final String minutesToEnd = rs.period[4] != 0
           ? rs.period[4].toString() + " " + trans(context, 'minute') + "."
           : "";
-      // endsIn =
-      //     "$yearsToEnd $monthsToEnd  $ln$daysToEnd $lnn$hoursToEnd $ln$minutesToEnd";
       endsIn = "$yearsToEnd $monthsToEnd $daysToEnd $hoursToEnd $minutesToEnd";
     } else {
       endsIn = rs.period.toString();
@@ -516,9 +506,6 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   const SizedBox(width: 8),
                   Container(
                     padding: EdgeInsets.zero,
-                    constraints:const BoxConstraints(
-                        // maxWidth: MediaQuery.of(context).size.width / 2.20
-                        ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -548,6 +535,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                       alignment:
                           isRTL ? Alignment.centerLeft : Alignment.centerRight,
                       child: Container(
+                        color: colors.orange,
                         padding: EdgeInsets.zero,
                         width: SizeConfig.blockSizeHorizontal * 20,
                         // minWidth: SizeConfig.blockSizeHorizontal * 4,
@@ -555,13 +543,28 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                         //  buttonColor: colors.trans,
 
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            //  color: colors.orange,
-                            padding: EdgeInsets.zero,
-                            shadowColor: colors.orange,
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.resolveWith<
+                                    EdgeInsetsGeometry>(
+                                (Set<MaterialState> states) {
+                              return EdgeInsets.zero;
+                            }),
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.green;
+                                return colors
+                                    .orange; // Use the component's default.
+                              },
+                            ),
                           ),
-                          // radius: 12,
-
+                          // style: ElevatedButton.styleFrom(
+                          //   onPrimary: colors.orange,
+                          //   padding: EdgeInsets.zero,
+                          //   shadowColor: colors.orange,
+                          //   onSurface: colors.orange,
+                          // ),
                           child: Text(trans(context, 'more_info_map_card'),
                               style: styles.moreInfoWhite),
                           onPressed: () {

@@ -15,7 +15,7 @@ class MainMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
     return Scaffold(
       backgroundColor: colors.white,
@@ -63,7 +63,9 @@ class MainMenu extends StatelessWidget {
                         onTap: () {
                           if (config.loggedin)
                             Navigator.popAndPushNamed(context, "/Profile");
-                          getIt<NavigationService>().navigateTo('/login', null);
+                          else
+                            getIt<NavigationService>()
+                                .navigateTo('/login', null);
                         },
                         child: Visibility(
                             child:
@@ -75,7 +77,7 @@ class MainMenu extends StatelessWidget {
                     ],
                   ),
                   Align(
-                    alignment: isRTL?Alignment.topLeft:Alignment.topRight,
+                    alignment: isRTL ? Alignment.topLeft : Alignment.topRight,
                     child: InkWell(
                       onTap: () {
                         goToMap(context);

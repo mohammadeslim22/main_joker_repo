@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:intl/intl.dart';
@@ -125,7 +127,7 @@ class SalesProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize ?? 1]
+      'specialization':  jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize ?? 1])
     });
     sales = Sales.fromJson(response.data);
     tempSales = sales;
@@ -138,7 +140,7 @@ class SalesProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+      'specialization': jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
     });
     sales = Sales.fromJson(response.data);
     tempSales = sales;

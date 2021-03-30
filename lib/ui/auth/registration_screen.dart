@@ -224,7 +224,7 @@ class _MyRegistrationState extends State<Registration>
                           arguments: <String, double>{
                             "lat": 51.0,
                             "long": 9.6,
-                            "choice":0
+                            "choice": 0
                           });
                     },
                   ),
@@ -276,13 +276,17 @@ class _MyRegistrationState extends State<Registration>
                     padding: const EdgeInsets.symmetric(
                         horizontal: 32, vertical: 16),
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: colors.orange))  ,onPrimary: colors.orange,
-                         textStyle: TextStyle(color: colors.white),
-                      ),
-                        
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) => colors.orange),
+                            shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+                                (Set<MaterialState> states) => RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: colors.orange))),
+                            textStyle:
+                                MaterialStateProperty.resolveWith<TextStyle>(
+                                    (Set<MaterialState> states) =>
+                                        TextStyle(color: colors.white))),
                         onPressed: () async {
                           if (_isButtonEnabled) {
                             if (_formKey.currentState.validate()) {
@@ -313,7 +317,6 @@ class _MyRegistrationState extends State<Registration>
                             });
                           }
                         },
-                      
                         child: mainProvider
                             .returnchild(trans(context, 'regisration'))),
                   ),

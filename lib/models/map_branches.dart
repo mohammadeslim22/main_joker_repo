@@ -38,6 +38,8 @@ class MapBranch {
     address = json['address'].toString();
     phone = json['phone'].toString();
     // latitude = double.parse(json['latitude'].toString());
+    print("json['latitude'].toString()  ${json['latitude'].toString()}");
+    print("json['longitude'].toString()  ${json['longitude'].toString()}");
     latitude = double.parse(json['latitude'].toString());
     longitude = double.parse(json['longitude'].toString());
     ratesCount = json['rates_count'] as int;

@@ -8,7 +8,7 @@ import 'package:joker/ui/about_us.dart';
 import 'package:joker/ui/address_list.dart';
 import 'package:joker/ui/advanced_search.dart';
 import 'package:joker/ui/contact_us.dart';
-import 'package:joker/ui/main_drawer.dart';
+import 'package:joker/ui/widgets/main_drawer.dart';
 import 'package:joker/ui/merchant_memberships.dart';
 import 'package:joker/ui/auth/registration_screen.dart';
 import 'package:joker/ui/membership_details.dart';

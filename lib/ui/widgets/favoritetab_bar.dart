@@ -26,10 +26,7 @@ class FavoritBar extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: colors.white,
-          border: Border.all(
-            color: colors.orange,
-            width: 1,
-          )),
+          border: Border.all(color: colors.orange, width: 1)),
       margin: const EdgeInsets.symmetric(horizontal: 12),
       // color: Colors.grey[100],
       child: Row(
@@ -42,10 +39,20 @@ class FavoritBar extends StatelessWidget {
                 bolc.changeTabBarIndex(0);
               }
             },
-            style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                shadowColor: colors.ggrey),
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) => colors.orange),
+                shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+                    (Set<MaterialState> states) => RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: colors.orange))),
+                textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                    (Set<MaterialState> states) =>
+                        TextStyle(color: colors.white))),
+            // style: ElevatedButton.styleFrom(
+            //     padding:
+            //         const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+            //     shadowColor: colors.ggrey),
             child: Stack(
               children: <Widget>[
                 Container(

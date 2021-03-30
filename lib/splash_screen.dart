@@ -38,11 +38,11 @@ class _SplashScreenState extends State<SplashScreen> {
         print("lang storage is empty");
       } else {
         const String arabicBaseUrl =
-            "http://joker.altariq.ps/api/ar/v1/customer/";
+            "https://joker.altariq.ps/api/ar/v1/customer/";
         const String englishBaseUrl =
-            "http://joker.altariq.ps/api/en/v1/customer/";
+            "https://joker.altariq.ps/api/en/v1/customer/";
         const String turkishBaseUrl =
-            "http://joker.altariq.ps/api/tr/v1/customer/";
+            "https://joker.altariq.ps/api/tr/v1/customer/";
         String baseUrl = await data.getData("baseUrl");
         if (baseUrl == "" || baseUrl.isEmpty || baseUrl == null) {
           baseUrl = config.baseUrl;
@@ -80,7 +80,8 @@ class _SplashScreenState extends State<SplashScreen> {
       platformVersion = await FlutterSimCountryCode.simCountryCode;
       print("platform country code : $platformVersion");
       auth.dialCodeFav = platformVersion;
-      auth.getCountry(platformVersion);
+      // auth.setDialCodee(platformVersion);
+      await auth.getCountry(platformVersion);
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -106,28 +107,28 @@ class _SplashScreenState extends State<SplashScreen> {
       });
 
       data.getData("profile_pic").then((String value) {
-        if (value.isEmpty || value == null || value == "") {
-          if (config.loggedin)
-            dio.get<dynamic>("user").then((Response<dynamic> value) {
-              if (value.statusCode == 200) {
-                print(value.data['data']['name'].toString());
-                config.username = value.data['data']['name'].toString();
-                if (value.data['data']['image'].toString().trim() !=
-                    "http://joker.localhost.ps/web/image") {
-                  config.profileUrl =
-                      value.data['data']['image'].toString().trim();
-                  data.setData("profile_pic", config.profileUrl);
-                }
-
-                data.setData("username", value.data['data']['name'].toString());
+        if (value.isEmpty || value == "null" || value == "" || value ==null) {
+          dio.get<dynamic>("user").then((Response<dynamic> value) {
+            if (value.statusCode == 200) {
+              print(value.data['data']['image'].toString());
+              config.username = value.data['data']['name'].toString();
+              if (value.data['data']['image'].toString().trim() !=
+                  "https://joker.altariq.ps/ar/image/") {
+                config.imageUrl = value.data['data']['image'].toString().trim();
+                data.setData("profile_pic", config.profileUrl);
               }
-            });
+
+              data.setData("username", value.data['data']['name'].toString());
+            }
+          });
         } else {
-          if (value != "http://joker.localhost.ps/web/image") {
+          print("bbbbbbbbbbbbbbbbbbbbbbbbbb  ${config.profileUrl}  $value");
+          if (value != "https://joker.altariq.ps/ar/image/") {
             config.profileUrl = value;
           }
         }
       });
+      print("value.data['data']['image'].toString()  ${config.imageUrl}");
     } else {
       config.username =
           getIt<NavigationService>().translateWithNoContext("Login or Sign up");

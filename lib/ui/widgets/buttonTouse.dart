@@ -13,11 +13,12 @@ class ButtonToUse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          tapTargetSize: MaterialTapTargetSize.padded,
-          shadowColor: colors.trans,
-          elevation: 0,
-        ),
+        style: ButtonStyle(
+            tapTargetSize: MaterialTapTargetSize.padded,
+            elevation: MaterialStateProperty.resolveWith<double>(
+                (Set<MaterialState> states) => 0),
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) => colors.trans)),
         child: Container(
           width: width,
           alignment: Alignment.center,

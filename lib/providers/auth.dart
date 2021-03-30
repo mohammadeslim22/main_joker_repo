@@ -12,6 +12,7 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 // import 'package:country_provider/country_provider.dart';
 
 class Auth with ChangeNotifier {
@@ -20,7 +21,7 @@ class Auth with ChangeNotifier {
   }
   String myCountryCode;
   String myCountryDialCode;
-  String dialCodeFav;
+  String dialCodeFav = "TR";
   String errorMessage;
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
@@ -96,9 +97,13 @@ class Auth with ChangeNotifier {
     await CountryCodes
         .init(); // Optionally, you may provide a `Locale` to get countrie's localizadName
 
-    final CountryDetails details = CountryCodes.detailsForLocale();
+    print("dialCodeFav $myCountryDialCode $dialCodeFav");
+    final CountryDetails details =
+        CountryCodes.detailsForLocale(Locale(dialCodeFav, dialCodeFav));
     // final Country result = await CountryProvider.getCountryByCode(countryCode);
     myCountryDialCode = details.dialCode;
+    print("myCountryDialCode $myCountryDialCode $dialCodeFav");
+    notifyListeners();
     // print("numricCode:    ${result.callingCodes}");
   }
 
@@ -110,14 +115,25 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
+  // void setDialCodee(String dialCode) {
+  //   myCountryDialCode = dialCode;
+  //
+  //   notifyListeners();
+  // }
+
   Future<bool> login(String username, String pass, BuildContext context) async {
     print(
         "loging info:${myCountryDialCode + username.replaceAll("^0+", "").toString().trim()}");
     bool res;
+    final OSPermissionSubscriptionState status =
+        await OneSignal.shared.getPermissionSubscriptionState();
+
+    final String playerId = status.subscriptionStatus.userId;
     await dio.post<dynamic>("login", data: <String, dynamic>{
       "phone":
           myCountryDialCode + username.replaceAll("^0+", "").toString().trim(),
-      "password": pass.toString()
+      "password": pass.toString(),
+      "onesignal_player_id": playerId
     }).then((Response<dynamic> value) async {
       // print(value.data);
 

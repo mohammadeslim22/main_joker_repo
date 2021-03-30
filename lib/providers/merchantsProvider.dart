@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/models/map_branches.dart';
@@ -28,7 +30,7 @@ class MerchantProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("pbranches", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+      'specialization':  jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
     });
 
     branches = Branches.fromJson(response.data);
@@ -43,7 +45,7 @@ class MerchantProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("branches", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+      'specialization': jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
     });
     branches = Branches.fromJson(response.data);
     branches.data.forEach((BranchData element) {

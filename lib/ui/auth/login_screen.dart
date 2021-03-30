@@ -159,12 +159,19 @@ class _MyLoginScreenState extends State<LoginScreen>
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: colors.orange)),
-                          onPrimary: colors.orange,
-                          textStyle: TextStyle(color: colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) => colors.orange),
+                          shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+                              (Set<MaterialState> states) =>
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(color: colors.orange))),
+                          textStyle:
+                              MaterialStateProperty.resolveWith<TextStyle>(
+                                  (Set<MaterialState> states) =>
+                                      TextStyle(color: colors.white))),
                       onPressed: () async {
                         print(
                             "_usernameController.text : ${_usernameController.text}");

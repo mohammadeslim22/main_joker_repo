@@ -9,9 +9,9 @@ class Config {
   Config._internal();
 
   static final Config _config = Config._internal();
-  String imageUrl = "http://joker.altariq.ps/ar/image/";
+  String imageUrl = "https://joker.altariq.ps/ar/image/";
 
-  String baseUrl = "http://joker.altariq.ps/api/en/v1/customer/";
+  String baseUrl = "https://joker.altariq.ps/api/en/v1/customer/";
 
   String onesignal = "63367f9c-9d70-4ae8-9290-17ad17e2efd5"; // ca9a
   String qRCodeUrl = "https://www.joker.altariq.ps/ar/qr-code/";

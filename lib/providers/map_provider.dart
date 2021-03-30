@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -143,19 +144,23 @@ class HOMEMAProvider with ChangeNotifier {
   Future<void> getBranchesData(int specId) async {
     Response<dynamic> response;
     if (config.loggedin) {
+      print("config.loggedin ****-----**** ${config.loggedin} ");
       response =
           await dio.get<dynamic>("map2", queryParameters: <String, dynamic>{
-        'specialization': <int>[specId ?? selectedSpecialize],
+        'specialization': jsonEncode(<int>[specId ?? selectedSpecialize]),
         'limit': 20
       });
     } else {
+      print("config.loggedin ----****----  ${config.loggedin} ${[
+        specId ?? selectedSpecialize
+      ]}");
       response =
           await dio.get<dynamic>("map", queryParameters: <String, dynamic>{
-        'specialization': <int>[specId ?? selectedSpecialize],
+        'specialization': jsonEncode(<int>[specId ?? selectedSpecialize]),
         'limit': 20
       });
     }
-
+    print(response.data);
     branches = MapBranches.fromJson(response.data);
     markers.clear();
     addUserIcon();
@@ -324,10 +329,10 @@ class HOMEMAProvider with ChangeNotifier {
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     final ByteData data = await rootBundle.load(path);
-    final Codec codec = await instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: width);
-    final FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ImageByteFormat.png))
+    final ui.Codec codec = await ui
+        .instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    final ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
         .buffer
         .asUint8List();
   }

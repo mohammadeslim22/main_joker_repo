@@ -54,13 +54,20 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   final FocusNode focus3 = FocusNode();
   final FocusNode focus4 = FocusNode();
   File myimage;
-  Future<Profile> getProfileData() async {
-    final Response<dynamic> response = await dio.get<dynamic>("user");
-    if (response.statusCode == 200) {
-      profile = Profile.fromJson(response.data);
-      return profile;
-    } else {
-      return null;
+  Future<void> getProfileData() async {
+    if (config.loggedin) {
+      final Response<dynamic> response = await dio.get<dynamic>("user");
+      if (response.statusCode == 200) {
+        setState(() {
+          profile = Profile.fromJson(response.data);
+          usernameController.text = profile.name;
+          emailController.text = profile.email;
+          mobileNoController.text = profile.phone;
+          tempPhone = profile.phone;
+          birthDateController.text = profile.birthDate;
+          config.locationController.text = profile.address;
+        });
+      } else {}
     }
   }
 
@@ -86,18 +93,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   @override
   void initState() {
     super.initState();
-
     _isButtonEnabled = true;
-    getProfileData().then((Profile value) {
-      setState(() {
-        usernameController.text = value.name;
-        emailController.text = value.email;
-        mobileNoController.text = value.phone;
-        tempPhone = value.phone;
-        birthDateController.text = value.birthDate;
-        config.locationController.text = value.address;
-      });
-    });
+    getProfileData();
   }
 
   void shoeTosted() {
@@ -123,9 +120,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(trans(context, "my_account"), style: styles.appBars),
-          centerTitle: true,
-        ),
+            title: Text(trans(context, "my_account"), style: styles.appBars),
+            centerTitle: true),
         body: Builder(
             builder: (BuildContext context) => GestureDetector(
                 onTap: () {

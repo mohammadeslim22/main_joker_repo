@@ -20,7 +20,12 @@ class BottomContent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           ElevatedButton(
-            
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) => colors.black),
+                textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                    (Set<MaterialState> states) =>
+                        TextStyle(color: colors.white))),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -65,7 +70,12 @@ class BottomContent extends StatelessWidget {
             child: VerticalDivider(color: colors.orange, width: 1),
           ),
           ElevatedButton(
-            
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) => colors.black),
+                textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                    (Set<MaterialState> states) =>
+                        TextStyle(color: colors.white))),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
