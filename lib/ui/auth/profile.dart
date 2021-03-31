@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:after_layout/after_layout.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,13 +25,15 @@ import 'package:joker/ui/widgets/text_form_input.dart';
 import 'package:joker/util/functions.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:dio/dio.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class MyAccount extends StatefulWidget {
   @override
   MyAccountPage createState() => MyAccountPage();
 }
 
-class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
+class MyAccountPage extends State<MyAccount>
+    with AfterLayoutMixin<MyAccount>, TickerProviderStateMixin {
   List<String> location2;
   SnackBar snackBar = SnackBar(
     content: const Text("Location Service was not aloowed  !"),
@@ -90,11 +93,20 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   String tempPhone;
   bool showImageOptions = false;
   bool _isButtonEnabled;
+  String imageUrl;
+  bool imageUplaoding = true;
+  AnimationController animationController1,
+      animationController2,
+      animationController3;
+
+  Animation<double> animation1, animation2, animation3;
+
   @override
   void initState() {
     super.initState();
     _isButtonEnabled = true;
     getProfileData();
+    imageUrl = config.profileUrl;
   }
 
   void shoeTosted() {
@@ -112,6 +124,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
     return;
   }
 
+  Widget t;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -142,25 +155,53 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                       ),
                     ),
                     ListView(children: <Widget>[
+                      const SizedBox(height: 6),
                       Stack(
                         children: <Widget>[
                           Align(
                             alignment: Alignment.topCenter,
                             child: GestureDetector(
                               onTap: () {},
-                              child: Hero(
-                                child: CircularProfileAvatar(
-                                  config.profileUrl ?? "",
-                                  radius: 80,
-                                  backgroundColor: Colors.transparent,
-                                  borderWidth: 5,
-                                  placeHolder:
-                                      (BuildContext context, String url) =>
-                                          const CircularProgressIndicator(),
-                                  borderColor: colors.orange,
-                                  cacheImage: true,
+                              child: Visibility(
+                                visible: !imageUplaoding,
+                                child: Hero(
+                                  child: CircularProfileAvatar(
+                                      imageUrl ?? config.profileUrl,
+                                      animateFromOldImageOnUrlChange: true,
+                                      radius: 80,
+                                      backgroundColor: Colors.transparent,
+                                      borderWidth: 5,
+                                      progressIndicatorBuilder:
+                                          (BuildContext context, String s,
+                                                  DownloadProgress url) =>
+                                              const CircularProgressIndicator(),
+                                      borderColor: colors.orange,
+                                      cacheImage: true),
+                                  tag: "generate_a_unique_tag",
                                 ),
-                                tag: "generate_a_unique_tag",
+                                replacement: Stack(
+                                  children: <Widget>[
+                                    SizedBox(
+                                        child: CircularProgressIndicator(
+                                            backgroundColor: colors.trans),
+                                        height: 160,
+                                        width: 160),
+                                    Container(
+                                        height: 160,
+                                        width: 160,
+                                      child: Center(
+                                        child: SizedBox(
+                                          height: 100,
+                                          width: 100,
+                                          child: LoadingIndicator(
+                                            color: Colors.orange,
+                                            indicatorType: Indicator.values[19],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -516,6 +557,10 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
       final FormData formData = FormData.fromMap(<String, dynamic>{
         "avatar": await MultipartFile.fromFile(image.path)
       });
+      setState(() {
+        imageUrl = "";
+        imageUplaoding = false;
+      });
       getIt<Auth>().changeProfilePic(formData).then((dynamic result) {
         print(result.data);
         if (result.statusCode == 200) {
@@ -525,6 +570,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
           setState(() {
             showImageOptions = !showImageOptions;
             config.profileUrl = result.data['image'].toString();
+            imageUrl = result.data['image'].toString();
+            imageUplaoding = true;
           });
         } else {
           Fluttertoast.showToast(msg: trans(context, "error_happened"));

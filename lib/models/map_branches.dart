@@ -37,11 +37,14 @@ class MapBranch {
     name = json['name'].toString();
     address = json['address'].toString();
     phone = json['phone'].toString();
+    if (json['latitude'] != null) {
+      latitude = double.parse(json['latitude'].toString());
+    }
+    if (json['longitude'] != null) {
+      longitude = double.parse(json['longitude'].toString());
+    }
     // latitude = double.parse(json['latitude'].toString());
-    print("json['latitude'].toString()  ${json['latitude'].toString()}");
-    print("json['longitude'].toString()  ${json['longitude'].toString()}");
-    latitude = double.parse(json['latitude'].toString());
-    longitude = double.parse(json['longitude'].toString());
+
     ratesCount = json['rates_count'] as int;
     likesCount = json['likes_count'] as int;
     isliked = json['isliked'] as int;
@@ -53,11 +56,12 @@ class MapBranch {
         json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
     if (json['specialization'] != null)
       spec = json['specialization'].toString();
-
-    rateAverage = double.parse(json['rates_average'].toString());
-    json['lastsales'].forEach((dynamic v) {
-      lastsales.add(SaleData.fromJson(v));
-    });
+    if (json['rates_average'] != null)
+      rateAverage = double.parse(json['rates_average'].toString());
+    if (json['lastsales'] != null)
+      json['lastsales'].forEach((dynamic v) {
+        lastsales.add(SaleData.fromJson(v));
+      });
   }
   int id;
   String name;

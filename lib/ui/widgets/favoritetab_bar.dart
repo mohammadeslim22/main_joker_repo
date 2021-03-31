@@ -40,12 +40,9 @@ class FavoritBar extends StatelessWidget {
               }
             },
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) => colors.orange),
-                shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
-                    (Set<MaterialState> states) => RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: colors.orange))),
+                padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
+                    (Set<MaterialState> stets) => EdgeInsets.zero),
+        
                 textStyle: MaterialStateProperty.resolveWith<TextStyle>(
                     (Set<MaterialState> states) =>
                         TextStyle(color: colors.white))),
@@ -118,13 +115,22 @@ class FavoritBar extends StatelessWidget {
           Expanded(
             //  child: Visibility(
             child: TextButton(
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    // textColor: colors.black,
-                    // disabledColor: colors.grey,
-                    // splashColor: colors.trans,
-                    // highlightColor: colors.trans,
-                    textStyle: TextStyle(color: colors.black)),
+                style: ButtonStyle(
+                    padding:
+                        MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
+                            (Set<MaterialState> stets) => EdgeInsets.zero),
+                    // backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    //     (Set<MaterialState> states) => colors.orange),
+                    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                        (Set<MaterialState> states) =>
+                            TextStyle(color: colors.white))),
+                // style: ElevatedButton.styleFrom(
+                //     padding: EdgeInsets.zero,
+                //     // textColor: colors.black,
+                //     // disabledColor: colors.grey,
+                //     // splashColor: colors.trans,
+                //     // highlightColor: colors.trans,
+                //     textStyle: TextStyle(color: colors.black)),
                 onPressed: () {
                   if (bolc.favocurrentIndex == 0) {
                     bolc.changeTabBarIndex(1);

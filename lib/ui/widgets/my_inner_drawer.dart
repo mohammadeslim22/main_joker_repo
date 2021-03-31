@@ -6,6 +6,8 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
+import 'package:joker/models/notification.dart';
+import 'package:joker/providers/mainprovider.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
 import 'package:joker/providers/auth.dart';
@@ -31,9 +33,17 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
         );
   }
 
+  String notificationsNumber = "";
   @override
   void initState() {
     super.initState();
+    getIt<MainProvider>()
+        .getNotifications()
+        .then((List<NotificationData> value) {
+      setState(() {
+        notificationsNumber = value.length.toString();
+      });
+    });
   }
 
   @override
@@ -62,7 +72,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                           top: 10,
                           start: 60,
                           child: ConstrainedBox(
-                            constraints: const BoxConstraints(minHeight: 60),
+                            constraints: const BoxConstraints(
+                                minHeight: 60, minWidth: 250,maxWidth: 260),
                             child: Container(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 30),
@@ -71,11 +82,13 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text(config.username, style: styles.underHead),
+                                  Text("config.username hjfuo",
+                                      style: styles.underHead),
                                 ],
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFFFFFFF),
+                                // color: const Color(0xFFFFFFFF)
+                                color: colors.red,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: Colors.white,
@@ -128,7 +141,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                       badgeContent: Container(
                         margin: const EdgeInsets.only(left: 24, right: 24),
                         padding: const EdgeInsets.all(4),
-                        child: const Text("10"),
+                        child: Text(notificationsNumber),
                       ),
                       badgeColor: colors.yellow,
                     ),

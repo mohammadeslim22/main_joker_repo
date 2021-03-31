@@ -599,14 +599,19 @@ class ShopDetailsPage extends State<SaleLoader>
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                onSurface: colors.orange,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: colors.orange)),
-                onPrimary: colors.orange,
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-              ),
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+                      (Set<MaterialState> states) => RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(color: colors.orange))),
+                  padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
+                      (Set<MaterialState> stets) =>
+                          const EdgeInsets.symmetric(horizontal: 24)),
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) => colors.orange),
+                  textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                      (Set<MaterialState> states) =>
+                          TextStyle(color: colors.white))),
               onPressed: () async {
                 final map_luncher.Coords crods = map_luncher.Coords(
                     value.inFocusBranch.latitude,
@@ -690,17 +695,19 @@ class ShopDetailsPage extends State<SaleLoader>
               Column(
                 children: <Widget>[
                   ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        onPrimary: colors.orange,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: colors.orange)),
-                      ),
-                      child: Text(
-                          trans(context, 'request_membership_for_merchant'),
-                          style: styles.underHeadwhite),
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+                              (Set<MaterialState> states) => RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(color: colors.orange))),
+                          padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
+                              (Set<MaterialState> stets) => const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6)),
+                          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) => colors.orange),
+                          textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                              (Set<MaterialState> states) => TextStyle(color: colors.white))),
+                      child: Text(trans(context, 'request_membership_for_merchant'), style: styles.underHeadwhite),
                       onPressed: () async {
                         Navigator.pushNamed(context, "/MemberShipsForMerchant",
                             arguments: <String, dynamic>{

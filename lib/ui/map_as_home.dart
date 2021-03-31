@@ -13,8 +13,10 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/models/notification.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/providers/globalVars.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/services/navigationService.dart';
@@ -136,6 +138,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
       _animationController.reverse();
     } else {
       // Fluttertoast.showToast(msg: "TODO: open menu");
+      getIt<MainProvider>().getNotifications();
       Navigator.pushNamed(context, "/MainMenu");
       //open menu
       // _animationController.reverse();
@@ -208,7 +211,9 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                                 " ${value.getSpecializationName()} " +
                                 trans(context, 'nearby'),
                             style: const TextStyle(
-                                fontWeight: FontWeight.normal, fontSize: 24.0,color: Colors.black),
+                                fontWeight: FontWeight.normal,
+                                fontSize: 24.0,
+                                color: Colors.black),
                           ),
                         ],
                       ),

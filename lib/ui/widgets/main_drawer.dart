@@ -5,18 +5,37 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/models/notification.dart';
 import 'package:joker/providers/auth.dart';
+import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/service_locator.dart';
 
-class MainMenu extends StatelessWidget {
+class MainMenu extends StatefulWidget {
   const MainMenu({Key key}) : super(key: key);
+
+  @override
+  _MainMenuState createState() => _MainMenuState();
+}
+
+class _MainMenuState extends State<MainMenu> {
+  String notificationsNumber = "";
+  @override
+  void initState() {
+    super.initState();
+    getIt<MainProvider>()
+        .getNotifications()
+        .then((List<NotificationData> value) {
+      setState(() {
+        notificationsNumber = value.length.toString();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
-
     return Scaffold(
       backgroundColor: colors.white,
       body: ListView(
@@ -125,7 +144,7 @@ class MainMenu extends StatelessWidget {
                       badgeContent: Container(
                           margin: const EdgeInsets.only(left: 24, right: 24),
                           padding: const EdgeInsets.all(4),
-                          child: const Text("10")),
+                          child: Text(notificationsNumber)),
                       badgeColor: colors.yellow,
                     ),
                   ],
