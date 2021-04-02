@@ -20,8 +20,18 @@ class MainProvider extends ChangeNotifier {
   bool _visible = true;
   bool __visible = false;
   bool visibilityObs = false;
-  Jnotification n;
+  Jnotification n = Jnotification(data: <NotificationData>[]);
   List<bool> notificationSit = <bool>[true, false];
+
+  Future<void> openNotifications(int nId) async {
+    await dio.post<dynamic>("notifications",
+        queryParameters: <String, dynamic>{"id": nId});
+    n.data.firstWhere((NotificationData element) {
+      return element.id == nId;
+    }).isread = 1;
+    notifyListeners();
+  }
+
   Future<List<NotificationData>> getNotifications() async {
     final Response<dynamic> response = await dio.get<dynamic>("notifications");
     n = Jnotification.fromJson(response.data);

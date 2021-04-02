@@ -24,13 +24,16 @@ class _MainMenuState extends State<MainMenu> {
   @override
   void initState() {
     super.initState();
-    getIt<MainProvider>()
-        .getNotifications()
-        .then((List<NotificationData> value) {
-      setState(() {
-        notificationsNumber = value.length.toString();
+    if (config.loggedin) {
+      getIt<MainProvider>()
+          .getNotifications()
+          .then((List<NotificationData> value) {
+        setState(() {
+          notificationsNumber = value.length.toString();
+        });
+        print("notifications have arrived $value");
       });
-    });
+    }
   }
 
   @override

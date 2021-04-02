@@ -156,11 +156,17 @@ class Auth with ChangeNotifier {
               'Bearer ${value.data['api_token']}';
 
           config.loggedin = true;
-          Navigator.popAndPushNamed(context, '/Home',
+
+          Navigator.popAndPushNamed(context, '/MapAsHome',
               arguments: <String, dynamic>{
-                "salesDataFilter": false,
-                "FilterData": null
+                "lat": config.lat,
+                "long": config.long
               });
+          // Navigator.popAndPushNamed(context, '/Home',
+          //     arguments: <String, dynamic>{
+          //       "salesDataFilter": false,
+          //       "FilterData": null
+          //     });
           res = true;
         } else {
           showToastWidget(

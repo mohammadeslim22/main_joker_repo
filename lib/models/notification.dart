@@ -28,7 +28,14 @@ class NotificationData {
     userId = json['user_id'] as int;
     message = json['message'].toString();
     title = json['title'].toString();
+     image = json['image'].toString();
     isread = json['isread'] as int;
+    if (json['period'] != null) {
+      period = <int>[];
+      json['period'].forEach((dynamic v) {
+        period.add(v as int);
+      });
+    }
   }
   int id;
   int userId;

@@ -163,7 +163,7 @@ class MyAccountPage extends State<MyAccount>
                             child: GestureDetector(
                               onTap: () {},
                               child: Visibility(
-                                visible: !imageUplaoding,
+                                visible: imageUplaoding,
                                 child: Hero(
                                   child: CircularProfileAvatar(
                                       imageUrl ?? config.profileUrl,

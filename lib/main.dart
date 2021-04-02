@@ -71,7 +71,9 @@ Future<void> main() async {
           value: getIt<Auth>(),
         ),
         ChangeNotifierProvider<Language>(create: (_) => Language()),
-        ChangeNotifierProvider<MainProvider>(create: (_) => MainProvider()),
+        // ChangeNotifierProvider<MainProvider>(create: (_) => MainProvider()),
+        ChangeNotifierProvider<MainProvider>.value(
+            value: getIt<MainProvider>()),
         ChangeNotifierProvider<HOMEMAProvider>.value(
             value: getIt<HOMEMAProvider>()),
         ChangeNotifierProvider<MerchantProvider>.value(
