@@ -29,14 +29,14 @@ class MapSalesListState extends StatelessWidget {
       padding: const EdgeInsets.all(6.0),
       itemBuilder: (BuildContext context, dynamic entry, int index) {
         if (index == 0) {
+          print("this is zero index with padding");
           return Padding(
-            padding: const EdgeInsets.only(top: 60),
-            child: FadeIn(
-                child: MapSalesCard( sale: entry as SaleData)),
+            padding: const EdgeInsets.only(top: 75),
+            child: FadeIn(child: MapSalesCard(sale: entry as SaleData)),
           );
         }
         return FadeIn(
-            child: MapSalesCard( sale: entry as SaleData,close:close));
+            child: MapSalesCard(sale: entry as SaleData, close: close));
       },
       noItemsFoundBuilder: (BuildContext context) {
         return Text(trans(context, "noting_to_show"));

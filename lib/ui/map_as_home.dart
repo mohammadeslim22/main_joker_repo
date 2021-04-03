@@ -13,10 +13,8 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/models/notification.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/providers/globalVars.dart';
-import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/services/navigationService.dart';
@@ -138,7 +136,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
       _animationController.reverse();
     } else {
       // Fluttertoast.showToast(msg: "TODO: open menu");
-      getIt<MainProvider>().getNotifications();
+      // getIt<MainProvider>().getNotifications();
       Navigator.pushNamed(context, "/MainMenu");
       //open menu
       // _animationController.reverse();
@@ -768,11 +766,12 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
       initialCameraPosition:
           CameraPosition(target: LatLng(config.lat, config.long), zoom: 13),
       onCameraMove: (CameraPosition pos) {
+        value.setLatLomg(pos.target.latitude, pos.target.longitude);
         value.lat = pos.target.latitude;
         value.long = pos.target.longitude;
       },
       onCameraIdle: () {
-        getIt<HOMEMAProvider>().getBranchesData(value.selectedSpecialize);
+        value.getBranchesData(value.selectedSpecialize);
       },
     );
   }

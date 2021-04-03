@@ -37,13 +37,15 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
   @override
   void initState() {
     super.initState();
-    getIt<MainProvider>()
-        .getNotifications()
-        .then((List<NotificationData> value) {
-      setState(() {
-        notificationsNumber = value.length.toString();
+    if (config.loggedin) {
+      getIt<MainProvider>()
+          .getNotifications()
+          .then((List<NotificationData> value) {
+        setState(() {
+          notificationsNumber = value.length.toString();
+        });
       });
-    });
+    }
   }
 
   @override
@@ -66,14 +68,12 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 children: <Widget>[
                   const SizedBox(width: 4),
                   Stack(
-                    clipBehavior: Clip.hardEdge,
                     children: <Widget>[
                       Positioned.directional(
                           top: 10,
                           start: 60,
                           child: ConstrainedBox(
-                            constraints: const BoxConstraints(
-                                minHeight: 60, minWidth: 250,maxWidth: 260),
+                            constraints: const BoxConstraints(minHeight: 60),
                             child: Container(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 30),
@@ -82,13 +82,13 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text("config.username hjfuo",
+                                  Text(
+                                     "getIt<Auth>().username ?? config.username",
                                       style: styles.underHead),
                                 ],
                               ),
                               decoration: BoxDecoration(
-                                // color: const Color(0xFFFFFFFF)
-                                color: colors.red,
+                                color: const Color(0xFFFFFFFF),
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: Colors.white,
@@ -106,7 +106,9 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                         child: CachedNetworkImage(
                           placeholderFadeInDuration:
                               const Duration(milliseconds: 300),
-                          imageUrl: config.profileUrl,
+                          imageUrl: getIt<Auth>().userPicture ??
+                              config.profileUrl.trim() ??
+                              "",
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
                               Container(
@@ -128,6 +130,69 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                       )),
                     ],
                   ),
+                  // Stack(
+                  //   clipBehavior: Clip.hardEdge,
+                  //   children: <Widget>[
+                  //     Positioned.directional(
+                  //         top: 10,
+                  //         start: 60,
+                  //         child: ConstrainedBox(
+                  //           constraints: const BoxConstraints(
+                  //               minHeight: 60, minWidth: 250,maxWidth: 260),
+                  //           child: Container(
+                  //             padding:
+                  //                 const EdgeInsets.symmetric(horizontal: 30),
+                  //             width: 250,
+                  //             child: Column(
+                  //               crossAxisAlignment: CrossAxisAlignment.center,
+                  //               mainAxisAlignment: MainAxisAlignment.center,
+                  //               children: <Widget>[
+                  //                 Text("config.username hjfuo",
+                  //                     style: styles.underHead),
+                  //               ],
+                  //             ),
+                  //             decoration: BoxDecoration(
+                  //               // color: const Color(0xFFFFFFFF)
+                  //               color: colors.red,
+                  //               borderRadius: BorderRadius.circular(12),
+                  //               border: Border.all(
+                  //                 color: Colors.white,
+                  //                 width: 2,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         textDirection:
+                  //             isRTL ? TextDirection.rtl : TextDirection.ltr),
+                  //     Positioned(
+                  //         child: CircleAvatar(
+                  //       maxRadius: 40,
+                  //       minRadius: 30,
+                  //       child: CachedNetworkImage(
+                  //         placeholderFadeInDuration:
+                  //             const Duration(milliseconds: 300),
+                  //         imageUrl: config.profileUrl,
+                  //         imageBuilder: (BuildContext context,
+                  //                 ImageProvider imageProvider) =>
+                  //             Container(
+                  //           decoration: BoxDecoration(
+                  //             shape: BoxShape.circle,
+                  //             image: DecorationImage(
+                  //                 image: imageProvider,
+                  //                 fit: BoxFit.cover,
+                  //                 colorFilter: const ColorFilter.mode(
+                  //                     Colors.white, BlendMode.colorBurn)),
+                  //           ),
+                  //         ),
+                  //         placeholder: (BuildContext context, String url) =>
+                  //             const CircularProgressIndicator(),
+                  //         errorWidget: (BuildContext context, String url,
+                  //                 dynamic error) =>
+                  //             const Icon(Icons.error),
+                  //       ),
+                  //     )),
+                  //   ],
+                  // ),
                 ],
               ),
               const SizedBox(height: 32),

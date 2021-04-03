@@ -23,6 +23,9 @@ class Auth with ChangeNotifier {
   String myCountryDialCode;
   String dialCodeFav = "TR";
   String errorMessage;
+  String username = "username";
+  String userPicture =
+      "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg";
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
     'phone',
@@ -107,6 +110,11 @@ class Auth with ChangeNotifier {
     // print("numricCode:    ${result.callingCodes}");
   }
 
+  void changeUsername(String name) {
+    username = name;
+    notifyListeners();
+  }
+
   void saveCountryCode(String code, String dialCode) {
     myCountryCode = code;
     myCountryDialCode = dialCode;
@@ -154,7 +162,8 @@ class Auth with ChangeNotifier {
               "authorization", "Bearer ${value.data['api_token']}");
           dio.options.headers['authorization'] =
               'Bearer ${value.data['api_token']}';
-
+          config.username = value.data['name'].toString();
+          changeUsername(value.data['name'].toString());
           config.loggedin = true;
 
           Navigator.popAndPushNamed(context, '/MapAsHome',
@@ -201,6 +210,11 @@ class Auth with ChangeNotifier {
     });
     notifyListeners();
     return res;
+  }
+
+  void setUserPicture(String pic) {
+    userPicture = pic;
+    notifyListeners();
   }
 
   Future<bool> register(

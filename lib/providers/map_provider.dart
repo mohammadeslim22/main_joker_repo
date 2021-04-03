@@ -45,6 +45,12 @@ class HOMEMAProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setLatLomg(double newLat, double newLong) {
+    lat = newLat;
+    long = newLong;
+    notifyListeners();
+  }
+
   void setLikeSale(int saleId) {
     try {
       inFocusBranch.lastsales.firstWhere((SaleData element) {
@@ -144,23 +150,19 @@ class HOMEMAProvider with ChangeNotifier {
   Future<void> getBranchesData(int specId) async {
     Response<dynamic> response;
     if (config.loggedin) {
-      print("config.loggedin ****-----**** ${config.loggedin} ");
       response =
           await dio.get<dynamic>("map2", queryParameters: <String, dynamic>{
         'specialization': jsonEncode(<int>[specId ?? selectedSpecialize]),
         'limit': 20
       });
     } else {
-      print("config.loggedin ----****----  ${config.loggedin} ${[
-        specId ?? selectedSpecialize
-      ]}");
       response =
           await dio.get<dynamic>("map", queryParameters: <String, dynamic>{
         'specialization': jsonEncode(<int>[specId ?? selectedSpecialize]),
         'limit': 20
       });
     }
-    print(response.data);
+   
     branches = MapBranches.fromJson(response.data);
     markers.clear();
     addUserIcon();

@@ -5,6 +5,7 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/main.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:joker/providers/map_provider.dart';
 
 String token;
 // String baseUrl = config.baseUrl
@@ -32,8 +33,10 @@ void dioDefaults() {
   dio.interceptors.add(InterceptorsWrapper(onRequest:
       (RequestOptions options, RequestInterceptorHandler rHandlers) async {
     options.queryParameters.addAll(<String, String>{
-      'latitude': config.lat.toString(),
-      'longitude': config.long.toString()
+      'latitude':
+          getIt<HOMEMAProvider>().lat.toString() ?? config.lat.toString(),
+      'longitude':
+          getIt<HOMEMAProvider>().long.toString() ?? config.long.toString()
     });
     rHandlers.next(options);
   }, onResponse:

@@ -1,10 +1,10 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/config.dart';
-import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/services/navigationService.dart';
@@ -13,6 +13,7 @@ import 'package:joker/util/functions.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';
+import 'localization/trans.dart';
 import 'providers/language.dart';
 import 'package:provider/provider.dart';
 import 'package:joker/util/size_config.dart';
@@ -24,7 +25,8 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with AfterLayoutMixin<SplashScreen> {
   bool locationTurnOn;
 
   Future<void> askUser(Language lang, Auth auth) async {
@@ -90,49 +92,51 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  Auth auth;
   @override
   void initState() {
     super.initState();
     final Language lang = Provider.of<Language>(context, listen: false);
-    final Auth auth = Provider.of<Auth>(context, listen: false);
+    auth = Provider.of<Auth>(context, listen: false);
     askUser(lang, auth);
     initPlatformState(auth);
-    if (config.loggedin) {
-      data.getData("username").then((String name) {
-        if (name.isEmpty || name == null) {
-          config.username = name;
-        } else {
-          config.username = trans(context, 'username');
-        }
-      });
+    // if (config.loggedin) {
+    //   data.getData("username").then((String name) {
+    //     if (name.isEmpty || name == null) {
+    //       config.username ='username';
+    //       auth.changeUsername('username');
+    //     } else {
+    //       auth.changeUsername(name);
+    //       config.username = name;
+    //     }
+    //   });
 
-      data.getData("profile_pic").then((String value) {
-        if (value.isEmpty || value == "null" || value == "" || value ==null) {
-          dio.get<dynamic>("user").then((Response<dynamic> value) {
-            if (value.statusCode == 200) {
-              print(value.data['data']['image'].toString());
-              config.username = value.data['data']['name'].toString();
-              if (value.data['data']['image'].toString().trim() !=
-                  "https://joker.altariq.ps/ar/image/") {
-                config.imageUrl = value.data['data']['image'].toString().trim();
-                data.setData("profile_pic", config.profileUrl);
-              }
+    //   data.getData("profile_pic").then((String value) {
+    //     if (value.isEmpty || value == "null" || value == "" || value == null) {
+    //       dio.get<dynamic>("user").then((Response<dynamic> value) {
+    //         if (value.statusCode == 200) {
+    //           auth.changeUsername(value.data['data']['name'].toString());
+    //           config.username = value.data['data']['name'].toString();
+    //           if (value.data['data']['image'].toString().trim() !=
+    //               "https://joker.altariq.ps/ar/image/") {
+    //             config.imageUrl = value.data['data']['image'].toString().trim();
+    //             data.setData("profile_pic", config.profileUrl);
+    //           }
 
-              data.setData("username", value.data['data']['name'].toString());
-            }
-          });
-        } else {
-          print("bbbbbbbbbbbbbbbbbbbbbbbbbb  ${config.profileUrl}  $value");
-          if (value != "https://joker.altariq.ps/ar/image/") {
-            config.profileUrl = value;
-          }
-        }
-      });
-      print("value.data['data']['image'].toString()  ${config.imageUrl}");
-    } else {
-      config.username =
-          getIt<NavigationService>().translateWithNoContext("Login or Sign up");
-    }
+    //           data.setData("username", value.data['data']['name'].toString());
+    //         }
+    //       });
+    //     } else {
+    //       if (value != "https://joker.altariq.ps/ar/image/") {
+    //         config.profileUrl = value;
+    //       }
+    //     }
+    //   });
+    // } else {
+    //   auth.changeUsername("Login or Sign up");
+    //   config.username = getIt<NavigationService>()
+    //       .translateWithNoContext("Login or Sign up");
+    // }
   }
 
   @override
@@ -144,5 +148,54 @@ class _SplashScreenState extends State<SplashScreen> {
           alignment: Alignment.center,
           child: SvgPicture.asset("assets/images/Layer.svg", width: 200)),
     );
+  }
+
+  void setUserAndPicture(Auth auth) {
+    if (config.loggedin) {
+      data.getData("username").then((String name) {
+        if (name.isEmpty || name == null) {
+          config.username = trans(context, 'username');
+          auth.changeUsername(trans(context, 'username'));
+        } else {
+          auth.changeUsername(name);
+          config.username = name;
+        }
+      });
+
+      data.getData("profile_pic").then((String value) {
+        if (value.isEmpty || value == "null" || value == "" || value == null) {
+          dio.get<dynamic>("user").then((Response<dynamic> value) async {
+            if (value.statusCode == 200) {
+              auth.changeUsername(value.data['data']['name'].toString());
+              config.username = value.data['data']['name'].toString();
+              if (value.data['data']['image'].toString().trim() !=
+                  "https://joker.altariq.ps/ar/image/") {
+                auth.setUserPicture(
+                    value.data['data']['image'].toString().trim());
+                config.imageUrl = value.data['data']['image'].toString().trim();
+                await data.setData("profile_pic", config.profileUrl);
+              }
+
+              await data.setData(
+                  "username", value.data['data']['name'].toString());
+            }
+          });
+        } else {
+          if (value != "https://joker.altariq.ps/ar/image/") {
+            auth.setUserPicture(value);
+            config.profileUrl = value;
+          }
+        }
+      });
+    } else {
+      auth.changeUsername(trans(context, "login_or_sign_up"));
+      config.username = getIt<NavigationService>()
+          .translateWithNoContext(trans(context, "login_or_sign_up"));
+    }
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    setUserAndPicture(auth);
   }
 }

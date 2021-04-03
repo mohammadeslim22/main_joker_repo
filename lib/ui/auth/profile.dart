@@ -106,7 +106,7 @@ class MyAccountPage extends State<MyAccount>
     super.initState();
     _isButtonEnabled = true;
     getProfileData();
-    imageUrl = config.profileUrl;
+    imageUrl = getIt<Auth>().userPicture ?? config.profileUrl;
   }
 
   void shoeTosted() {
@@ -166,7 +166,9 @@ class MyAccountPage extends State<MyAccount>
                                 visible: imageUplaoding,
                                 child: Hero(
                                   child: CircularProfileAvatar(
-                                      imageUrl ?? config.profileUrl,
+                                      imageUrl ??
+                                          getIt<Auth>().userPicture ??
+                                          config.profileUrl,
                                       animateFromOldImageOnUrlChange: true,
                                       radius: 80,
                                       backgroundColor: Colors.transparent,
@@ -187,8 +189,8 @@ class MyAccountPage extends State<MyAccount>
                                         height: 160,
                                         width: 160),
                                     Container(
-                                        height: 160,
-                                        width: 160,
+                                      height: 160,
+                                      width: 160,
                                       child: Center(
                                         child: SizedBox(
                                           height: 100,
@@ -566,13 +568,13 @@ class MyAccountPage extends State<MyAccount>
         if (result.statusCode == 200) {
           bolc.changeImageUrl(result.data['image'].toString());
           data.setData('profile_pic', result.data['image'].toString());
-
           setState(() {
             showImageOptions = !showImageOptions;
             config.profileUrl = result.data['image'].toString();
             imageUrl = result.data['image'].toString();
             imageUplaoding = true;
           });
+          getIt<Auth>().setUserPicture(result.data['image'].toString());
         } else {
           Fluttertoast.showToast(msg: trans(context, "error_happened"));
         }

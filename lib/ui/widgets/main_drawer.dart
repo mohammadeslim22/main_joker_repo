@@ -61,7 +61,7 @@ class _MainMenuState extends State<MainMenu> {
                         child: CachedNetworkImage(
                           placeholderFadeInDuration:
                               const Duration(milliseconds: 300),
-                          imageUrl: config.profileUrl,
+                          imageUrl:getIt<Auth>().userPicture?? config.profileUrl,
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
                               Container(
@@ -89,12 +89,8 @@ class _MainMenuState extends State<MainMenu> {
                             getIt<NavigationService>()
                                 .navigateTo('/login', null);
                         },
-                        child: Visibility(
-                            child:
-                                Text(config.username, style: styles.username),
-                            visible: config.loggedin,
-                            replacement:
-                                Text(config.username, style: styles.username)),
+                        child: Text(getIt<Auth>().username ?? config.username,
+                            style: styles.username),
                       ),
                     ],
                   ),

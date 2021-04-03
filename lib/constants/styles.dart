@@ -38,6 +38,8 @@ class Styles {
       fontWeight: FontWeight.w100, color: Colors.grey, fontSize: 15);
   TextStyle mysmalllight = const TextStyle(
       fontWeight: FontWeight.w100, color: Colors.grey, fontSize: 12);
+        TextStyle searchDate = const TextStyle(
+      fontWeight: FontWeight.w100, color: Colors.black, fontSize: 12);
   TextStyle pleazeCheck = TextStyle(
       fontWeight: FontWeight.values.first,
       color: const Color(0xFF303030),
