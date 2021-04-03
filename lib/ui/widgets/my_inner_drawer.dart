@@ -83,7 +83,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
-                                     "getIt<Auth>().username ?? config.username",
+                                      getIt<Auth>().username ?? config.username,
                                       style: styles.underHead),
                                 ],
                               ),
