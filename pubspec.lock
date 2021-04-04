@@ -195,6 +195,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_barcode_scanner:
+    dependency: "direct main"
+    description:
+      name: flutter_barcode_scanner
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0-nullsafety.0"
   flutter_blurhash:
     dependency: transitive
     description:
@@ -644,13 +651,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.4"
-  qrscan:
-    dependency: "direct main"
-    description:
-      name: qrscan
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.22"
   rating_bar:
     dependency: "direct main"
     description:

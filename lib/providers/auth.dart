@@ -26,6 +26,8 @@ class Auth with ChangeNotifier {
   String username = "username";
   String userPicture =
       "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg";
+
+  int unredNotifications;
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
     'phone',
@@ -110,6 +112,14 @@ class Auth with ChangeNotifier {
     // print("numricCode:    ${result.callingCodes}");
   }
 
+  void setnotificationdCount(int count) {
+    unredNotifications = count;
+    notifyListeners();
+  }
+ void minnotificationdCount1() {
+    unredNotifications--;
+    notifyListeners();
+  }
   void changeUsername(String name) {
     username = name;
     notifyListeners();
@@ -156,14 +166,19 @@ class Auth with ChangeNotifier {
 
       if (value.statusCode == 200) {
         if (value.data != "fail") {
-          data.setData("username", value.data['name'].toString());
-          data.setData("profile_pic", value.data['image'].toString());
-          await data.setData(
-              "authorization", "Bearer ${value.data['api_token']}");
+          data.setData("username", value.data['data']['name'].toString());
+          data.setData("profile_pic", value.data['data']['image'].toString());
+          config.profileUrl = value.data['data']['image'].toString();
+          setUserPicture(value.data['data']['image'].toString());
+          unredNotifications = value.data['data']['unread_count'] as int;
+          print("auth header ======= ${value.data['data']['api_token']}");
           dio.options.headers['authorization'] =
-              'Bearer ${value.data['api_token']}';
-          config.username = value.data['name'].toString();
-          changeUsername(value.data['name'].toString());
+              'Bearer ${value.data['data']['api_token']}';
+          print("dio header ======= ${dio.options.headers['authorization']}");
+          await data.setData(
+              "authorization", "Bearer ${value.data['data']['api_token']}");
+          config.username = value.data['data']['name'].toString();
+          changeUsername(value.data['data']['name'].toString());
           config.loggedin = true;
 
           Navigator.popAndPushNamed(context, '/MapAsHome',

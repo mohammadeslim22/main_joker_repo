@@ -459,6 +459,7 @@ class MyAccountPage extends State<MyAccount>
                                   setState(() {
                                     _isButtonEnabled = false;
                                   });
+                                  print(" birthDateController.text ${ birthDateController.text}");
                                   await getIt<Auth>()
                                       .updateProfile(
                                           usernameController.text,

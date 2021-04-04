@@ -30,11 +30,12 @@ class _SplashScreenState extends State<SplashScreen>
   bool locationTurnOn;
 
   Future<void> askUser(Language lang, Auth auth) async {
-    data.getData("countryCodeTemp").then((String value1) {
-      data.getData("countryDialCodeTemp").then((String value2) {
-        auth.saveCountryCode(value1, value2);
-      });
-    });
+    await initPlatformState(auth);
+    // data.getData("countryCodeTemp").then((String value1) {
+    //   data.getData("countryDialCodeTemp").then((String value2) {
+    //     auth.saveCountryCode(value1, value2);
+    //   });
+    // });
     data.getData("lang").then((String value) async {
       if (value.isEmpty) {
         print("lang storage is empty");
@@ -99,7 +100,7 @@ class _SplashScreenState extends State<SplashScreen>
     final Language lang = Provider.of<Language>(context, listen: false);
     auth = Provider.of<Auth>(context, listen: false);
     askUser(lang, auth);
-    initPlatformState(auth);
+    // initPlatformState(auth);
     // if (config.loggedin) {
     //   data.getData("username").then((String name) {
     //     if (name.isEmpty || name == null) {
@@ -164,22 +165,25 @@ class _SplashScreenState extends State<SplashScreen>
 
       data.getData("profile_pic").then((String value) {
         if (value.isEmpty || value == "null" || value == "" || value == null) {
-          dio.get<dynamic>("user").then((Response<dynamic> value) async {
-            if (value.statusCode == 200) {
-              auth.changeUsername(value.data['data']['name'].toString());
-              config.username = value.data['data']['name'].toString();
-              if (value.data['data']['image'].toString().trim() !=
-                  "https://joker.altariq.ps/ar/image/") {
-                auth.setUserPicture(
-                    value.data['data']['image'].toString().trim());
-                config.imageUrl = value.data['data']['image'].toString().trim();
-                await data.setData("profile_pic", config.profileUrl);
-              }
+          if (config.loggedin) {
+            dio.get<dynamic>("user").then((Response<dynamic> value) async {
+              if (value.statusCode == 200) {
+                auth.changeUsername(value.data['data']['name'].toString());
+                config.username = value.data['data']['name'].toString();
+                if (value.data['data']['image'].toString().trim() !=
+                    "https://joker.altariq.ps/ar/image/") {
+                  auth.setUserPicture(
+                      value.data['data']['image'].toString().trim());
+                  config.imageUrl =
+                      value.data['data']['image'].toString().trim();
+                  await data.setData("profile_pic", config.profileUrl);
+                }
 
-              await data.setData(
-                  "username", value.data['data']['name'].toString());
-            }
-          });
+                await data.setData(
+                    "username", value.data['data']['name'].toString());
+              }
+            });
+          }
         } else {
           if (value != "https://joker.altariq.ps/ar/image/") {
             auth.setUserPicture(value);

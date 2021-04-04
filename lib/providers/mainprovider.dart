@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:joker/models/notification.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/util/dio.dart';
+import 'package:joker/util/service_locator.dart';
 import '../constants/colors.dart';
 
 class MainProvider extends ChangeNotifier {
@@ -29,6 +31,7 @@ class MainProvider extends ChangeNotifier {
     n.data.firstWhere((NotificationData element) {
       return element.id == nId;
     }).isread = 1;
+    getIt<Auth>().minnotificationdCount1();
     notifyListeners();
   }
 

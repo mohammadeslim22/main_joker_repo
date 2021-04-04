@@ -32,6 +32,7 @@ void dioDefaults() {
   // dio.options.headers['authorization'] = 'Bearer ${config.token}';
   dio.interceptors.add(InterceptorsWrapper(onRequest:
       (RequestOptions options, RequestInterceptorHandler rHandlers) async {
+    print("options.headers['authorization']  ${options.headers['authorization']}");
     options.queryParameters.addAll(<String, String>{
       'latitude':
           getIt<HOMEMAProvider>().lat.toString() ?? config.lat.toString(),

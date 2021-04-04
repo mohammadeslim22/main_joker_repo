@@ -10,7 +10,7 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(trans(context, 'about_us'),style: styles.appBars),
+        title: Text(trans(context, 'about_us'), style: styles.appBars),
         centerTitle: true,
       ),
       body: Padding(
@@ -26,17 +26,24 @@ class AboutUs extends StatelessWidget {
               style: styles.mystyle,
             ),
             Center(
-              child: SvgPicture.asset(
-                'assets/images/logo.svg',
-                width: 120.0,
-                height: 120.0,
-              ),
+              child: SvgPicture.asset("assets/images/Layer.svg",
+                  width: 120.0, height: 120.0),
             ),
+            // Center(
+            //   child: SvgPicture.asset(
+            //     'assets/images/logo.svg',
+            //     width: 120.0,
+            //     height: 120.0,
+            //   ),
+            // ),
             const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-               Text(trans(context, 'update_app'),style: TextStyle(color: colors.red),),
+                Text(
+                  trans(context, 'update_app'),
+                  style: TextStyle(color: colors.red),
+                ),
                 const Text("v0.0.01")
               ],
             ),

@@ -6,7 +6,6 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
-import 'package:joker/models/notification.dart';
 import 'package:joker/providers/mainprovider.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
@@ -24,6 +23,7 @@ class MyInnerDrawer extends StatefulWidget {
 }
 
 class _MyInnerDrawerState extends State<MyInnerDrawer> {
+  int numberOfNotifications;
   void toggle() {
     widget.drawerKey.currentState.toggle(
         // direction is optional
@@ -33,19 +33,13 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
         );
   }
 
-  String notificationsNumber = "";
   @override
   void initState() {
     super.initState();
     if (config.loggedin) {
-      getIt<MainProvider>()
-          .getNotifications()
-          .then((List<NotificationData> value) {
-        setState(() {
-          notificationsNumber = value.length.toString();
-        });
-      });
+      getIt<MainProvider>().getNotifications();
     }
+    numberOfNotifications = getIt<Auth>().unredNotifications ?? 0;
   }
 
   @override
@@ -206,7 +200,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                       badgeContent: Container(
                         margin: const EdgeInsets.only(left: 24, right: 24),
                         padding: const EdgeInsets.all(4),
-                        child: Text(notificationsNumber),
+                        child: Text(numberOfNotifications.toString()),
                       ),
                       badgeColor: colors.yellow,
                     ),

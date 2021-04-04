@@ -5,7 +5,6 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/models/notification.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/services/navigationService.dart';
@@ -20,20 +19,14 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
-  String notificationsNumber = "";
+  int numberOfNotifications;
   @override
   void initState() {
     super.initState();
     if (config.loggedin) {
-      getIt<MainProvider>()
-          .getNotifications()
-          .then((List<NotificationData> value) {
-        setState(() {
-          notificationsNumber = value.length.toString();
-        });
-        print("notifications have arrived $value");
-      });
+      getIt<MainProvider>().getNotifications();
     }
+    numberOfNotifications = getIt<Auth>().unredNotifications ?? 0;
   }
 
   @override
@@ -61,7 +54,8 @@ class _MainMenuState extends State<MainMenu> {
                         child: CachedNetworkImage(
                           placeholderFadeInDuration:
                               const Duration(milliseconds: 300),
-                          imageUrl:getIt<Auth>().userPicture?? config.profileUrl,
+                          imageUrl:
+                              getIt<Auth>().userPicture ?? config.profileUrl,
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
                               Container(
@@ -143,7 +137,7 @@ class _MainMenuState extends State<MainMenu> {
                       badgeContent: Container(
                           margin: const EdgeInsets.only(left: 24, right: 24),
                           padding: const EdgeInsets.all(4),
-                          child: Text(notificationsNumber)),
+                          child: Text(numberOfNotifications.toString())),
                       badgeColor: colors.yellow,
                     ),
                   ],

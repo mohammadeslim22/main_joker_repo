@@ -85,8 +85,8 @@ class _NotifcationsState extends State<Notifcations> {
       endsIn = nD.period.toString();
     }
     return Dismissible(
-      onDismissed: (DismissDirection dDirection) {
-        value.openNotifications(nD.id);
+      onDismissed: (DismissDirection dDirection) async {
+       await value.openNotifications(nD.id);
       },
       key: const Key("c"),
       child: Container(
