@@ -1,6 +1,8 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
@@ -79,12 +81,23 @@ class _MainMenuState extends State<MainMenu> {
                         InkWell(
                           borderRadius: BorderRadius.circular(15),
                           radius: 30,
-                          onTap: () {
-                            if (config.loggedin)
+                          onTap: () async {
+                            if (config.loggedin) {
                               Navigator.popAndPushNamed(context, "/Profile");
-                            else
+                            } else {
+                              try {
+                                final String platformVersion =
+                                    await FlutterSimCountryCode.simCountryCode;
+                                print(
+                                    "platform country code : $platformVersion");
+                                value.dialCodeFav = platformVersion;
+                                await value.getCountry(platformVersion);
+                              } on PlatformException {
+                                print('Failed to get platform version.');
+                              }
                               getIt<NavigationService>()
                                   .navigateTo('/login', null);
+                            }
                           },
                           child: Text(getIt<Auth>().username ?? config.username,
                               style: styles.username),

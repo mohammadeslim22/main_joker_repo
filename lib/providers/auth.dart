@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
@@ -29,7 +30,7 @@ class Auth with ChangeNotifier {
   String userPicture =
       "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg";
 
-  int unredNotifications;
+  int unredNotifications = 0;
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
     'phone',
@@ -101,13 +102,10 @@ class Auth with ChangeNotifier {
   Map<String, String> resetPassValidationMap =
       Map<String, String>.fromIterables(resetPasskeys, resetPassValidators);
   Future<void> getCountry(String countryCode) async {
-    await CountryCodes
-        .init(); // Optionally, you may provide a `Locale` to get countrie's localizadName
-
+    await CountryCodes.init();
     print("dialCodeFav $myCountryDialCode $dialCodeFav");
     final CountryDetails details =
         CountryCodes.detailsForLocale(Locale(dialCodeFav, dialCodeFav));
-    // final Country result = await CountryProvider.getCountryByCode(countryCode);
     myCountryDialCode = details.dialCode;
     print("myCountryDialCode $myCountryDialCode $dialCodeFav");
     notifyListeners();
@@ -317,9 +315,10 @@ class Auth with ChangeNotifier {
     try {
       final String platformVersion = await FlutterSimCountryCode.simCountryCode;
       print("platform country code : $platformVersion");
-      getIt<Auth>().dialCodeFav = platformVersion;
+      dialCodeFav = platformVersion;
+      Fluttertoast.showToast(msg: platformVersion);
       // auth.setDialCodee(platformVersion);
-      await getIt<Auth>().getCountry(platformVersion);
+      await getCountry(platformVersion);
     } on PlatformException {
       print('Failed to get platform version.');
     }
