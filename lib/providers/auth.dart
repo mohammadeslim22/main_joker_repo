@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:country_codes/country_codes.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
@@ -116,10 +118,12 @@ class Auth with ChangeNotifier {
     unredNotifications = count;
     notifyListeners();
   }
- void minnotificationdCount1() {
+
+  void minnotificationdCount1() {
     unredNotifications--;
     notifyListeners();
   }
+
   void changeUsername(String name) {
     username = name;
     notifyListeners();
@@ -309,6 +313,16 @@ class Auth with ChangeNotifier {
     await data.setData('authorization', null);
     dio.options.headers['authorization'] = "";
     config.loggedin = false;
+    // await auth.getCountry(platformVersion);
+    try {
+      final String platformVersion = await FlutterSimCountryCode.simCountryCode;
+      print("platform country code : $platformVersion");
+      getIt<Auth>().dialCodeFav = platformVersion;
+      // auth.setDialCodee(platformVersion);
+      await getIt<Auth>().getCountry(platformVersion);
+    } on PlatformException {
+      print('Failed to get platform version.');
+    }
     getIt<NavigationService>().navigateTo('/login', null);
   }
 

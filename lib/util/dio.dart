@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/main.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/providers/map_provider.dart';
@@ -53,6 +56,16 @@ void dioDefaults() {
     }
     rHandlers.next(response);
   }, onError: (DioError e, ErrorInterceptorHandler eHandler) async {
+    //  await auth.getCountry(platformVersion);
+      try {
+     final String platformVersion = await FlutterSimCountryCode.simCountryCode;
+      print("platform country code : $platformVersion");
+      getIt<Auth>().dialCodeFav = platformVersion;
+      // auth.setDialCodee(platformVersion);
+      await  getIt<Auth>().getCountry(platformVersion);
+    } on PlatformException {
+     print('Failed to get platform version.');
+    }
     Navigator.pushNamed(navigatorState.currentContext, "/login");
     print(
         "status code: ${response.statusCode}  endpoint : ${response.realUri}");

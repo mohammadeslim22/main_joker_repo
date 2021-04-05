@@ -84,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen>
       print("platform country code : $platformVersion");
       auth.dialCodeFav = platformVersion;
       // auth.setDialCodee(platformVersion);
-      await auth.getCountry(platformVersion);
+      // await auth.getCountry(platformVersion);
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
