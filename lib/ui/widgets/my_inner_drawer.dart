@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:package_info/package_info.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
 import 'package:joker/providers/auth.dart';
@@ -263,8 +264,19 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'privacy')}"),
                 leading: SvgPicture.asset("assets/images/privacy.svg"),
-                onTap: () {
-                  Navigator.pushNamed(context, '/AboutUs');
+                onTap: () async {
+                  final PackageInfo packageInfo =
+                      await PackageInfo.fromPlatform();
+                  final String appName = packageInfo.appName;
+
+                  final String version = packageInfo.version;
+
+                  Navigator.pushNamed(context, '/AboutUs',
+                      arguments: <String, String>{
+                        "appName": appName,
+                        "appVersion": version
+                      });
+
                   toggle();
                 },
               ),

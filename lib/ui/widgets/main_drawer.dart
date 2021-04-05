@@ -12,6 +12,7 @@ import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
 class MainMenu extends StatefulWidget {
@@ -221,8 +222,18 @@ class _MainMenuState extends State<MainMenu> {
                   title: Text("${trans(context, 'privacy')}"),
                   leading: Image.asset("assets/images/menu_privacy.png"),
                   // SvgPicture.asset("assets/images/privecy_group.svg"),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/AboutUs');
+                  onTap: () async {
+                    final PackageInfo packageInfo =
+                        await PackageInfo.fromPlatform();
+                    final String appName = packageInfo.appName;
+
+                    final String version = packageInfo.version;
+
+                    Navigator.pushNamed(context, '/AboutUs',
+                        arguments: <String, String>{
+                          "appName": appName,
+                          "appVersion": version
+                        });
                   },
                 ),
                 const SizedBox(height: 8),

@@ -189,7 +189,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       break;
     case "/AboutUs":
       page = PageTransition<PageController>(
-        child: AboutUs(),
+        child: AboutUs(appName:args["appName"].toString(),appVersion: args["appVersion"].toString(),),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
