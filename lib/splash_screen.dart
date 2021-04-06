@@ -29,8 +29,8 @@ class _SplashScreenState extends State<SplashScreen>
     with AfterLayoutMixin<SplashScreen> {
   bool locationTurnOn;
 
-  Future<void> askUser(Language lang, Auth auth) async {
-    await initPlatformState(auth);
+  Future<void> askUser(Language lang) async {
+    // await initPlatformState(auth);
     // data.getData("countryCodeTemp").then((String value1) {
     //   data.getData("countryDialCodeTemp").then((String value2) {
     //     auth.saveCountryCode(value1, value2);
@@ -83,8 +83,8 @@ class _SplashScreenState extends State<SplashScreen>
       platformVersion = await FlutterSimCountryCode.simCountryCode;
       print("platform country code : $platformVersion");
       auth.dialCodeFav = platformVersion;
-      // auth.setDialCodee(platformVersion);
-      // await auth.getCountry(platformVersion);
+
+      auth.getCountry(platformVersion);
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -99,8 +99,8 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     final Language lang = Provider.of<Language>(context, listen: false);
     auth = Provider.of<Auth>(context, listen: false);
-    askUser(lang, auth);
-    // initPlatformState(auth);
+    askUser(lang);
+    initPlatformState(auth);
     // if (config.loggedin) {
     //   data.getData("username").then((String name) {
     //     if (name.isEmpty || name == null) {

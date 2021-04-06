@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/ui/widgets/countryCodePicker.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/functions.dart';
@@ -14,7 +13,6 @@ import 'package:joker/util/functions.dart';
 class ContactUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     final TextEditingController name = TextEditingController();
     final TextEditingController email = TextEditingController();
     final TextEditingController mobile = TextEditingController();
