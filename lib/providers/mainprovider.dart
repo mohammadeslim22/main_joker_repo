@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:joker/models/notification.dart';
 import 'package:joker/providers/auth.dart';
@@ -24,6 +25,7 @@ class MainProvider extends ChangeNotifier {
   bool visibilityObs = false;
   Jnotification n = Jnotification(data: <NotificationData>[]);
   List<bool> notificationSit = <bool>[true, false];
+  PagewiseLoadController<dynamic> pagewiseNotificationsController;
 
   Future<void> openNotifications(int nId) async {
     await dio.post<dynamic>("notifications",
@@ -35,8 +37,9 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<NotificationData>> getNotifications() async {
-    final Response<dynamic> response = await dio.get<dynamic>("notifications");
+  Future<List<NotificationData>> getNotifications(int pageNumber) async {
+    final Response<dynamic> response = await dio.get<dynamic>("notifications",
+        queryParameters: <String, int>{"page": pageNumber+1});
     n = Jnotification.fromJson(response.data);
     notifyListeners();
     return n.data;

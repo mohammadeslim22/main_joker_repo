@@ -38,7 +38,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
   void initState() {
     super.initState();
     if (config.loggedin) {
-      getIt<MainProvider>().getNotifications();
+      // getIt<MainProvider>().getNotifications();
     }
     numberOfNotifications = getIt<Auth>().unredNotifications ?? 0;
   }

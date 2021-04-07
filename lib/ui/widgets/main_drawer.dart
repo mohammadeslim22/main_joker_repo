@@ -1,13 +1,17 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/models/notification.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/services/navigationService.dart';
+import 'package:joker/util/dio.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:package_info/package_info.dart';
@@ -22,11 +26,26 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> {
   // int numberOfNotifications;
+  Jnotification n = Jnotification(data: <NotificationData>[]);
+  Future<List<NotificationData>> getNotifications(int pageNumber) async {
+    final Response<dynamic> response = await dio.get<dynamic>("notifications",
+        queryParameters: <String, int>{"page": pageNumber+1});
+    n = Jnotification.fromJson(response.data);
+
+    return n.data;
+  }
+
   @override
   void initState() {
     super.initState();
     if (config.loggedin) {
-      getIt<MainProvider>().getNotifications();
+      print("notifications getting in");
+      getIt<MainProvider>().pagewiseNotificationsController =
+          PagewiseLoadController<dynamic>(
+              pageSize: 15,
+              pageFuture: (int pageIndex) async {
+                return getIt<MainProvider>().getNotifications(pageIndex);
+              });
     }
     // numberOfNotifications = getIt<Auth>().unredNotifications ?? 0;
   }
@@ -84,7 +103,6 @@ class _MainMenuState extends State<MainMenu> {
                             if (config.loggedin) {
                               Navigator.popAndPushNamed(context, "/Profile");
                             } else {
-            
                               getIt<NavigationService>()
                                   .navigateTo('/login', null);
                             }

@@ -71,8 +71,7 @@ class _DiscountsListState extends State<DiscountsList> {
         loadingBuilder: (BuildContext context) {
           return const Center(
               child: CircularProgressIndicator(
-            backgroundColor: Colors.transparent,
-          ));
+                  backgroundColor: Colors.transparent));
         },
         pageLoadController: getIt<SalesProvider>().pagewiseSalesController,
         padding: const EdgeInsets.all(15.0),

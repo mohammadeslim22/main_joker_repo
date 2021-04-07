@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/models/notification.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:provider/provider.dart';
 import '../localization/trans.dart';
-import 'package:animated_card/animated_card.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/constants/styles.dart';
@@ -31,30 +31,44 @@ class _NotifcationsState extends State<Notifcations> {
           centerTitle: true),
       body: Consumer<MainProvider>(
         builder: (BuildContext context, MainProvider value, Widget child) {
-          if (value.n.data.isEmpty) {
-            return const NoNotificationsToday();
-          } else {
-            return ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 0),
-              shrinkWrap: true,
+          return PagewiseListView<dynamic>(
+            physics: const ScrollPhysics(),
+            shrinkWrap: true,
+            loadingBuilder: (BuildContext context) {
+              return const Center(
+                  child: CircularProgressIndicator(
+                      backgroundColor: Colors.transparent));
+            },
+            pageLoadController: value.pagewiseNotificationsController,
+            padding: const EdgeInsets.all(15.0),
+            itemBuilder: (BuildContext context, dynamic entry, int index) {
+              return _itemBuilder(context, entry as NotificationData, value);
+            },
+            noItemsFoundBuilder: (BuildContext context) {
+              return const NoNotificationsToday();
+            },
+          );
 
-              itemCount: value.n.data.length,
-              addRepaintBoundaries: true,
-              itemBuilder: (BuildContext context, int index) {
+          // ListView.builder(
+          //   padding: const EdgeInsets.symmetric(vertical: 0),
+          //   shrinkWrap: true,
 
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 2,horizontal: 4),
-                  child: AnimatedCard(
-                    direction: AnimatedCardDirection.left,
-                    initDelay: const Duration(milliseconds: 0),
-                    duration: const Duration(seconds: 1),
-                    curve: Curves.ease,
-                    child: _itemBuilder(context, value.n.data[index], value),
-                  ),
-                );
-              },
-            );
-          }
+          //   itemCount: value.n.data.length,
+          //   addRepaintBoundaries: true,
+          //   itemBuilder: (BuildContext context, int index) {
+
+          //     return Container(
+          //       margin: const EdgeInsets.symmetric(vertical: 2,horizontal: 4),
+          //       child: AnimatedCard(
+          //         direction: AnimatedCardDirection.left,
+          //         initDelay: const Duration(milliseconds: 0),
+          //         duration: const Duration(seconds: 1),
+          //         curve: Curves.ease,
+          //         child: _itemBuilder(context, value.n.data[index], value),
+          //       ),
+          //     );
+          //   },
+          // );
         },
       ),
     );
@@ -86,35 +100,33 @@ class _NotifcationsState extends State<Notifcations> {
     }
     return Dismissible(
       onDismissed: (DismissDirection dDirection) async {
-       await value.openNotifications(nD.id);
+        await value.openNotifications(nD.id);
       },
       key: const Key("c"),
       child: Container(
         color: Colors.white,
         margin: const EdgeInsets.symmetric(vertical: 3),
         child: ListTile(
-          
-          tileColor: nD.isread == 1?colors.grey:colors.white,
+          tileColor: nD.isread == 1 ? colors.grey : colors.white,
           leading: Visibility(
-            visible: nD.image == "https://joker.altariq.ps/image",
+            visible: nD.image == "",
             child: SvgPicture.asset('assets/images/notification.svg'),
-             replacement: CachedNetworkImage(
-                 imageUrl: nD.image, fit: BoxFit.cover, height: 50, width: 50),
+            replacement: CachedNetworkImage(
+                imageUrl: nD.image, fit: BoxFit.cover, height: 50, width: 50),
           ),
           title: Text(nD.title),
           subtitle: Text(nD.message),
           trailing: Visibility(
-              visible: nD.isread == 0,
-              child: Text(endsIn),
-              replacement: 
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text("${trans(context, 'read')}"),
-                  const Icon(Icons.check_circle_outline, color: Colors.orange)
-                ],
-              ),
-              ),
+            visible: nD.isread == 0,
+            child: Text(endsIn),
+            replacement: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text("${trans(context, 'read')}"),
+                const Icon(Icons.check_circle_outline, color: Colors.orange)
+              ],
+            ),
+          ),
         ),
       ),
     );
