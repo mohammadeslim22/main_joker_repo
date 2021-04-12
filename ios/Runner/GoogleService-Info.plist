@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>249023455839-hnjp5te42tt3qaoo3e2uq0la0vm1ekra.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.249023455839-hnjp5te42tt3qaoo3e2uq0la0vm1ekra</string>
+	<key>API_KEY</key>
+	<string>AIzaSyArBagvDirT49o44Ur1gz6gKAqCPyU48v8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>249023455839</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.jokerindirim.app</string>
+	<key>PROJECT_ID</key>
+	<string>joker-indirim</string>
+	<key>STORAGE_BUCKET</key>
+	<string>joker-indirim.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:249023455839:ios:32d2ceee07346d9639b1ea</string>
+</dict>
+</plist>
