@@ -27,10 +27,10 @@ class _MyResetPasswordState extends State<ResetPassword>
             content: const Text('Do you want to exit the App'),
             actionsOverflowButtonSpacing: 50,
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
                   child: const Text('Cancel')),
-              FlatButton(
+              TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: const Text('Yes')),
             ],
@@ -147,10 +147,13 @@ class _MyResetPasswordState extends State<ResetPassword>
                 customcard(context),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: colors.jokerBlue)),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: colors.orange)),
+                          onPrimary: Colors.deepPurpleAccent,
+                          textStyle:const TextStyle(color: Colors.white)),
                       onPressed: () async {
                         if (_isButtonEnabled) {
                           if (newpasswordController.text.trim() !=
@@ -164,7 +167,7 @@ class _MyResetPasswordState extends State<ResetPassword>
                                 animDuration: const Duration(seconds: 1),
                                 duration: const Duration(seconds: 2),
                                 curve: Curves.elasticOut,
-                                backgroundColor: colors.jokerBlue,
+                                backgroundColor: colors.orange,
                                 reverseCurve: Curves.decelerate);
                           } else {
                             if (_formKey.currentState.validate()) {
@@ -203,8 +206,6 @@ class _MyResetPasswordState extends State<ResetPassword>
                           }
                         }
                       },
-                      color: Colors.deepPurpleAccent,
-                      textColor: Colors.white,
                       child: bolc.returnchild(trans(context, 'restore'))),
                 ),
               ],

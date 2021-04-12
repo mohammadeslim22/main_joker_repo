@@ -148,7 +148,7 @@ class _MyRegistrationState extends State<Registration>
                       (_obscureText == false)
                           ? Icons.visibility
                           : Icons.visibility_off,
-                      color: colors.blue,
+                      color: colors.orange,
                     ),
                     onPressed: () {
                       setState(() {
@@ -176,7 +176,7 @@ class _MyRegistrationState extends State<Registration>
                   },
                   suffixicon: Icon(
                     Icons.calendar_today,
-                    color: colors.blue,
+                    color: colors.orange,
                   ),
                   focusNode: focus3,
                   validator: (String value) {
@@ -201,7 +201,7 @@ class _MyRegistrationState extends State<Registration>
                         Vibration.vibrate(duration: 400);
                         mainProvider.togelocationloading(false);
 
-                        Scaffold.of(context).showSnackBar(snackBar);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         setState(() {
                           config.locationController.text =
                               trans(context, 'tab_set_ur_location');
@@ -210,7 +210,7 @@ class _MyRegistrationState extends State<Registration>
                     } catch (e) {
                       Vibration.vibrate(duration: 400);
                       mainProvider.togelocationloading(false);
-                      Scaffold.of(context).showSnackBar(snackBar);
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       setState(() {
                         config.locationController.text =
                             trans(context, 'tab_set_ur_location');
@@ -218,13 +218,13 @@ class _MyRegistrationState extends State<Registration>
                     }
                   },
                   suffixicon: IconButton(
-                    icon: const Icon(Icons.add_location, color: Colors.blue),
+                    icon: const Icon(Icons.add_location, color: Colors.orange),
                     onPressed: () {
                       Navigator.pushNamed(context, '/AutoLocate',
                           arguments: <String, double>{
                             "lat": 51.0,
                             "long": 9.6,
-                            "choice":0
+                            "choice": 0
                           });
                     },
                   ),
@@ -275,10 +275,18 @@ class _MyRegistrationState extends State<Registration>
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 32, vertical: 16),
-                    child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: colors.blue)),
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) => colors.orange),
+                            shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+                                (Set<MaterialState> states) => RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: colors.orange))),
+                            textStyle:
+                                MaterialStateProperty.resolveWith<TextStyle>(
+                                    (Set<MaterialState> states) =>
+                                        TextStyle(color: colors.white))),
                         onPressed: () async {
                           if (_isButtonEnabled) {
                             if (_formKey.currentState.validate()) {
@@ -309,8 +317,6 @@ class _MyRegistrationState extends State<Registration>
                             });
                           }
                         },
-                        color: colors.blue,
-                        textColor: colors.white,
                         child: mainProvider
                             .returnchild(trans(context, 'regisration'))),
                   ),

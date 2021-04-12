@@ -20,10 +20,8 @@ class DiscountsListStateless extends StatelessWidget {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: WaterDropHeader(
-        complete: Container(),
-        waterDropColor: colors.blue,
-      ),
+      header:
+          WaterDropHeader(complete: Container(), waterDropColor: colors.orange),
       footer: CustomFooter(
         builder: (BuildContext context, LoadStatus mode) {
           Widget body;

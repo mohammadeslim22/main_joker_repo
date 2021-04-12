@@ -6,11 +6,10 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
+import 'package:joker/providers/mainprovider.dart';
+import 'package:package_info/package_info.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
-import 'package:joker/util/data.dart';
-import 'package:dio/dio.dart';
-import 'package:joker/util/dio.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/util/service_locator.dart';
 
@@ -25,6 +24,7 @@ class MyInnerDrawer extends StatefulWidget {
 }
 
 class _MyInnerDrawerState extends State<MyInnerDrawer> {
+  int numberOfNotifications;
   void toggle() {
     widget.drawerKey.currentState.toggle(
         // direction is optional
@@ -34,48 +34,13 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
         );
   }
 
-  String username = ".";
   @override
   void initState() {
     super.initState();
-    //if (config.username == null) {
-      data.getData("username").then((String value) {
-        setState(() {
-          username = value ?? "";
-        });
-      });
-    // } else {
-    //   username = config.username;
-  //  }
-    // print("profile pic ${config.profileUrl}");
     if (config.loggedin) {
-      data.getData("profile_pic").then((String value) {
-        if (value.isEmpty || value == config.imageUrl) {
-          print("error here ?");
-          dio.get<dynamic>("user").then((Response<dynamic> value) {
-            print(value.data['data']['name'].toString());
-            setState(() {
-              username = value.data['data']['name'].toString();
-              config.username = value.data['data']['name'].toString();
-              config.profileUrl = value.data['data']['image'].toString().trim();
-              if (config.profileUrl == config.imageUrl|| config.profileUrl==null) {
-                config.profileUrl =
-                    "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg";
-              }
-              print("Image ${config.profileUrl}");
-            });
-
-            data.setData("profile_pic", config.profileUrl);
-            data.setData("username", value.data['data']['name'].toString());
-          });
-        } else {
-          print("profile drawer pic:   $value");
-          setState(() {
-            config.profileUrl = value;
-          });
-        }
-      });
+      // getIt<MainProvider>().getNotifications();
     }
+    numberOfNotifications = getIt<Auth>().unredNotifications ?? 0;
   }
 
   @override
@@ -98,7 +63,6 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 children: <Widget>[
                   const SizedBox(width: 4),
                   Stack(
-                    overflow: Overflow.visible,
                     children: <Widget>[
                       Positioned.directional(
                           top: 10,
@@ -113,7 +77,9 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text(username, style: styles.underHead),
+                                  Text(
+                                      getIt<Auth>().username ?? config.username,
+                                      style: styles.underHead),
                                 ],
                               ),
                               decoration: BoxDecoration(
@@ -135,7 +101,9 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                         child: CachedNetworkImage(
                           placeholderFadeInDuration:
                               const Duration(milliseconds: 300),
-                          imageUrl: config.profileUrl,
+                          imageUrl: getIt<Auth>().userPicture ??
+                              config.profileUrl.trim() ??
+                              "",
                           imageBuilder: (BuildContext context,
                                   ImageProvider imageProvider) =>
                               Container(
@@ -157,6 +125,69 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                       )),
                     ],
                   ),
+                  // Stack(
+                  //   clipBehavior: Clip.hardEdge,
+                  //   children: <Widget>[
+                  //     Positioned.directional(
+                  //         top: 10,
+                  //         start: 60,
+                  //         child: ConstrainedBox(
+                  //           constraints: const BoxConstraints(
+                  //               minHeight: 60, minWidth: 250,maxWidth: 260),
+                  //           child: Container(
+                  //             padding:
+                  //                 const EdgeInsets.symmetric(horizontal: 30),
+                  //             width: 250,
+                  //             child: Column(
+                  //               crossAxisAlignment: CrossAxisAlignment.center,
+                  //               mainAxisAlignment: MainAxisAlignment.center,
+                  //               children: <Widget>[
+                  //                 Text("config.username hjfuo",
+                  //                     style: styles.underHead),
+                  //               ],
+                  //             ),
+                  //             decoration: BoxDecoration(
+                  //               // color: const Color(0xFFFFFFFF)
+                  //               color: colors.red,
+                  //               borderRadius: BorderRadius.circular(12),
+                  //               border: Border.all(
+                  //                 color: Colors.white,
+                  //                 width: 2,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         textDirection:
+                  //             isRTL ? TextDirection.rtl : TextDirection.ltr),
+                  //     Positioned(
+                  //         child: CircleAvatar(
+                  //       maxRadius: 40,
+                  //       minRadius: 30,
+                  //       child: CachedNetworkImage(
+                  //         placeholderFadeInDuration:
+                  //             const Duration(milliseconds: 300),
+                  //         imageUrl: config.profileUrl,
+                  //         imageBuilder: (BuildContext context,
+                  //                 ImageProvider imageProvider) =>
+                  //             Container(
+                  //           decoration: BoxDecoration(
+                  //             shape: BoxShape.circle,
+                  //             image: DecorationImage(
+                  //                 image: imageProvider,
+                  //                 fit: BoxFit.cover,
+                  //                 colorFilter: const ColorFilter.mode(
+                  //                     Colors.white, BlendMode.colorBurn)),
+                  //           ),
+                  //         ),
+                  //         placeholder: (BuildContext context, String url) =>
+                  //             const CircularProgressIndicator(),
+                  //         errorWidget: (BuildContext context, String url,
+                  //                 dynamic error) =>
+                  //             const Icon(Icons.error),
+                  //       ),
+                  //     )),
+                  //   ],
+                  // ),
                 ],
               ),
               const SizedBox(height: 32),
@@ -166,11 +197,11 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                   children: <Widget>[
                     Text("${trans(context, 'notifications')}"),
                     Badge(
-                      position: BadgePosition.topRight(top: 16, right: 10),
+                      position: BadgePosition.topStart(top: 16, start: 10),
                       badgeContent: Container(
                         margin: const EdgeInsets.only(left: 24, right: 24),
                         padding: const EdgeInsets.all(4),
-                        child: const Text("10"),
+                        child: Text(numberOfNotifications.toString()),
                       ),
                       badgeColor: colors.yellow,
                     ),
@@ -233,8 +264,19 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'privacy')}"),
                 leading: SvgPicture.asset("assets/images/privacy.svg"),
-                onTap: () {
-                  Navigator.pushNamed(context, '/AboutUs');
+                onTap: () async {
+                  final PackageInfo packageInfo =
+                      await PackageInfo.fromPlatform();
+                  final String appName = packageInfo.appName;
+
+                  final String version = packageInfo.version;
+
+                  Navigator.pushNamed(context, '/AboutUs',
+                      arguments: <String, String>{
+                        "appName": appName,
+                        "appVersion": version
+                      });
+
                   toggle();
                 },
               ),

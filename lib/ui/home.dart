@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:convert';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/providers/mainprovider.dart';
@@ -17,12 +18,12 @@ import '../ui/widgets/my_inner_drawer.dart';
 import 'main/merchant_list_statless.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:joker/constants/config.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+// import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/providers/globalVars.dart';
-
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'main/sales_list_stateless.dart';
 
 class Home extends StatefulWidget {
@@ -65,6 +66,30 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 350),
     );
     _hide.forward();
+    getIt<SalesProvider>().pagewiseSalesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: config.loggedin ? 15 : 6,
+            pageFuture: (int pageIndex) async {
+              return config.loggedin
+                  ? (getIt<GlobalVars>().filterData != null)
+                      ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
+                          pageIndex, getIt<GlobalVars>().filterData)
+                      : getIt<SalesProvider>()
+                          .getSalesDataAuthenticated(pageIndex)
+                  : (getIt<GlobalVars>().filterData != null)
+                      ? getIt<SalesProvider>().getSalesDataFilterd(
+                          pageIndex, getIt<GlobalVars>().filterData)
+                      : getIt<SalesProvider>().getSalesData(pageIndex);
+            });
+    getIt<MerchantProvider>().pagewiseBranchesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 5,
+            pageFuture: (int pageIndex) async {
+              return config.loggedin
+                  ? getIt<MerchantProvider>()
+                      .getBranchesDataAuthintecated(pageIndex)
+                  : getIt<MerchantProvider>().getBranchesData(pageIndex);
+            });
   }
 
   @override
@@ -155,10 +180,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   automaticallyImplyLeading: true,
                   actions: <Widget>[
                     IconButton(
-                      icon: Icon(
-                        Icons.map,
-                        color: colors.jokerBlue,
-                      ),
+                      icon: Icon(Icons.map, color: colors.orange),
                       onPressed: () {
                         if (_errorController != null) {
                           Navigator.pop(context);
@@ -169,10 +191,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       },
                     ),
                     IconButton(
-                      icon: Icon(
-                        Icons.clear,
-                        color: colors.jokerBlue,
-                      ),
+                      icon: Icon(Icons.clear, color: colors.orange),
                       onPressed: () {
                         AwesomeDialog(
                           context: context,
@@ -189,7 +208,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.search, color: colors.jokerBlue),
+                      icon: Icon(Icons.search, color: colors.orange),
                       onPressed: () {
                         Navigator.pushNamed(context, "/AdvancedSearch",
                             arguments: <String, dynamic>{
@@ -210,14 +229,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     //   ),
                     // ),
                     IconButton(
-                      icon: Icon(Icons.camera, color: colors.jokerBlue),
+                      icon: Icon(Icons.camera, color: colors.orange),
                       onPressed: () async {
-                        final ScanResult result = await BarcodeScanner.scan();
-
+                        final String barcodeScanRes =
+                            await FlutterBarcodeScanner.scanBarcode(
+                                "#ff6666", "Cancel", true, ScanMode.QR);
                         try {
-                          final Map<String, dynamic> map =
-                              json.decode(result.rawContent)
-                                  as Map<String, dynamic>;
+                          final Map<String, dynamic> map = json
+                              .decode(barcodeScanRes) as Map<String, dynamic>;
                           getIt<MerchantProvider>().vistBranch(
                               int.parse(map['id'].toString()),
                               source: 'qr');
@@ -228,8 +247,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 "branchId": int.parse(map['id'].toString()),
                                 "source": "qr"
                               });
-                          print(result.rawContent);
-                          Fluttertoast.showToast(msg: result.rawContent);
+                          print(barcodeScanRes);
+                          Fluttertoast.showToast(msg: barcodeScanRes);
                         } catch (e) {
                           Fluttertoast.showToast(
                               msg: trans(context, 'use_right_qr_code'));
@@ -276,7 +295,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             decoration: BoxDecoration(
                 color: Colors.black.withOpacity(.1),
                 border:
-                    Border(top: BorderSide(color: colors.blue, width: 7.0))),
+                    Border(top: BorderSide(color: colors.orange, width: 7.0))),
             child: Text(
               "${trans(context, 'location_setting')}",
               textAlign: TextAlign.center,
@@ -332,10 +351,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         title: Text("${trans(context, 'set_from_map')}"),
-        trailing: Icon(
-          Icons.add,
-          color: colors.black,
-        ),
+        trailing: Icon(Icons.add, color: colors.black),
         onTap: () async {
           config.amIcomingFromHome = true;
           String lat;

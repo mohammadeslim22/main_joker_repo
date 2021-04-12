@@ -252,13 +252,13 @@
 //             borderRadius: BorderRadius.circular(38.0),
 //             side: BorderSide(
 //               color: selectedOptions.contains(item.id)
-//                   ? colors.jokerBlue
+//                   ? colors.orange
 //                   : colors.ggrey,
 //             ),
 //           ),
 //           color: colors.white,
 //           textColor: selectedOptions.contains(item.id)
-//               ? colors.jokerBlue
+//               ? colors.orange
 //               : colors.black,
 //           onPressed: () {
 //             setState(() {

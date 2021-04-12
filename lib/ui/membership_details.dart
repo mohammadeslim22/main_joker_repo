@@ -200,24 +200,26 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              RaisedButton(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 25),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: const BorderSide(color: Colors.grey)),
-                onPressed: () {},
-                color: Colors.grey,
-                textColor: Colors.white,
-                child: Text(trans(context, "cancel"),
-                    style: styles.notificationNO),
-              ),
-              RaisedButton(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: const BorderSide(color: Colors.red)),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 25),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: const BorderSide(color: Colors.grey)),
+                    textStyle: const TextStyle(color: Colors.white),
+                    onPrimary: Colors.grey,
+                  ),
+                  onPressed: () {},
+                  child: Text(trans(context, "cancel"),
+                      style: styles.notificationNO)),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 24),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: const BorderSide(color: Colors.red))),
                 onPressed: () async {
                   _errorController =
                       _scaffoldkey.currentState.showBottomSheet<dynamic>(
@@ -279,25 +281,27 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                 childAspectRatio: 2,
                                 addRepaintBoundaries: true,
                                 children: options.map((String item) {
-                                  return FlatButton(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(38.0),
-                                        side: BorderSide(
-                                          color: selectedOptions.contains(
+                                  return TextButton(
+                                      style: ElevatedButton.styleFrom(
+                                          onPrimary: selectedOptions.contains(
                                                   options.indexOf(item))
-                                              ? colors.jokerBlue
-                                              : colors.grey,
-                                        ),
-                                      ),
-                                      color: selectedOptions
-                                              .contains(options.indexOf(item))
-                                          ? colors.white
-                                          : colors.white.withOpacity(.45),
-                                      textColor: selectedOptions
-                                              .contains(options.indexOf(item))
-                                          ? colors.jokerBlue
-                                          : colors.white,
+                                              ? colors.white
+                                              : colors.white.withOpacity(.45),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(38.0),
+                                            side: BorderSide(
+                                              color: selectedOptions.contains(
+                                                      options.indexOf(item))
+                                                  ? colors.orange
+                                                  : colors.grey,
+                                            ),
+                                          ),
+                                          textStyle: TextStyle(
+                                              color: selectedOptions.contains(
+                                                      options.indexOf(item))
+                                                  ? colors.orange
+                                                  : colors.white)),
                                       onPressed: () {
                                         _errorController.setState(() {
                                           selectedOptions.clear();
@@ -325,13 +329,13 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                                       trans(context, 'activated'),
                                       trans(context, 'deactivated')
                                     ],
-                                    icons:const  <IconData>[
+                                    icons: const <IconData>[
                                       Icons.power_settings_new,
                                       Icons.blur_off
                                     ],
                                     activeBgColors: <Color>[
-                                      colors.blue,
-                                      colors.blue,
+                                      colors.orange,
+                                      colors.orange,
                                     ],
                                     onToggle: (int index) {}),
                               ],
@@ -340,32 +344,37 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                RaisedButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 25),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(
-                                        color: colors.blue,
-                                      )),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12, horizontal: 25),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                        side: BorderSide(color: colors.orange)),
+                                    onPrimary: colors.orange,
+                                    textStyle: TextStyle(color: colors.white),
+                                    // textColor: colors.white,
+                                  ),
                                   onPressed: () {},
-                                  color: colors.blue,
-                                  textColor: colors.white,
                                   child: Text(trans(context, "search"),
                                       style: styles.notificationNO),
                                 ),
-                                RaisedButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 25),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side:
-                                          const BorderSide(color: Colors.grey)),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 25),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                          side: const BorderSide(
+                                              color: Colors.grey)),
+                                      onPrimary: Colors.red,
+                                      textStyle:
+                                          const TextStyle(color: Colors.white)),
                                   onPressed: () {
                                     _errorController.close();
                                   },
-                                  color: Colors.grey,
-                                  textColor: Colors.white,
                                   child: Text(trans(context, "cancel"),
                                       style: styles.notificationNO),
                                 ),
@@ -376,8 +385,6 @@ class _MemberShipDetailsState extends State<MemberShipDetails> {
                     ),
                   );
                 },
-                color: Colors.red,
-                textColor: Colors.white,
                 child: Text(trans(context, "update"),
                     style: styles.notificationNO),
               ),

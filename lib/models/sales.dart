@@ -28,17 +28,31 @@ class SaleData {
       this.merchant,
       this.isfavorite,
       this.isliked,
-      this.branches});
+      this.branches,
+      this.discount,
+      this.startPeriod});
 
   SaleData.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'] as String;
-    oldPrice = json['old_price'] as String;
-    price = json['new_price'] as String;
-    startAt = json['start_at'] as String;
-    endAt = json['end_at'] as String;
-    details = json['details'] as String;
-    status = json['status'] as String;
+    oldPrice = json['old_price'].toString();
+    price = json['new_price'].toString();
+    discount = json['discount'].toString();
+    startAt = json['start_at'].toString();
+
+    if (json['period'] != null) {
+      if (json['period'] is String) {
+        period = json['period'].toString();
+      } else {
+        period = <int>[];
+        json['period'].forEach((dynamic v) {
+          period.add(v as int);
+        });
+      }
+    }
+    endAt = json['end_at'].toString();
+    details = json['details'].toString();
+    status = json['status'].toString();
     mainImage = json['main_image'] as String;
     cropedImage = json['croped_image'] as String;
     if (json['images'] != null) {
@@ -51,11 +65,16 @@ class SaleData {
       merchant = MerchantForSale.fromJson(json['merchant']);
     isliked = json['isliked'] as int;
     isfavorite = json['isfavorite'] as int;
-    print("is favorite $id $isfavorite");
     if (json['branches'] != null) {
       branches = <BranchesMini>[];
       json['branches'].forEach((dynamic v) {
         branches.add(BranchesMini.fromJson(v));
+      });
+    }
+    if (json['start_period'] != null) {
+      startPeriod = <int>[];
+      json['start_period'].forEach((dynamic v) {
+        startPeriod.add(v as int);
       });
     }
   }
@@ -64,7 +83,9 @@ class SaleData {
   String name;
   String oldPrice;
   String price;
+  String discount;
   String startAt;
+  dynamic period;
   String endAt;
   String details;
   String status;
@@ -75,6 +96,7 @@ class SaleData {
   int isliked;
   int isfavorite;
   List<BranchesMini> branches;
+  List<int> startPeriod;
 }
 
 class BranchesMini {

@@ -27,9 +27,9 @@ class CountryPickerCode extends StatelessWidget {
           : const EdgeInsets.fromLTRB(32, 0, 0, 0),
     );
   }
-    void _onCountryChange(CountryCode countryCode) {
-  getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
 
+  void _onCountryChange(CountryCode countryCode) {
+    getIt<Auth>().saveCountryCode(countryCode.code, countryCode.dialCode);
 
     FocusScope.of(context).requestFocus(FocusNode());
   }

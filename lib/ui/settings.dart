@@ -6,6 +6,7 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/language.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'widgets/setting_bottombar.dart';
 import 'package:joker/util/data.dart';
@@ -30,15 +31,17 @@ class SettingsScreen extends StatefulWidget {
 class MySettingState extends State<SettingsScreen> {
   bool doOnce = true;
   int sountState = 0;
+  @override
+  void initState() {
+    super.initState();
+    data.setData("notification_sound", "on");
+  }
 
   Future<void> setStartingLang(MainProvider bolc, Language lang) async {
     await data.getData("lang").then<dynamic>((String value) async {
       if (value.isEmpty) {
         print("here in settings and this is lang empty");
-
         await data.getData("initlang").then<dynamic>((String local) {
-          print("here in settings and this is lang $local");
-
           if (local == 'en') {
             bolc.changelanguageindex(1);
           } else if (local == 'ar') {
@@ -48,7 +51,6 @@ class MySettingState extends State<SettingsScreen> {
           }
         });
       } else {
-        print("here in settings and this is lang $value");
         if (value == 'en') {
           bolc.changelanguageindex(1);
         } else if (value == 'ar') {
@@ -62,7 +64,7 @@ class MySettingState extends State<SettingsScreen> {
 
   Future<void> setNotifcationSound(MainProvider bolc) async {
     data.getData("notification_sound").then<dynamic>((String value) {
-      if (value == "true") {
+      if (value == "on") {
         bolc.changenotificationSit(0);
       } else {}
     });
@@ -83,22 +85,17 @@ class MySettingState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: Text(
-            trans(context, "settings"),
-            style: styles.mystyle,
-          )),
+          title: Text(trans(context, "settings"), style: styles.mystyle)),
       body: ListView(
         shrinkWrap: true,
         children: <Widget>[
-          SvgPicture.asset(
-            'assets/images/settingsvg.svg',
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * .35,
-          ), 
+          SvgPicture.asset('assets/images/settingsvg.svg',
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * .35),
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            color: Colors.white,
+            color: colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -109,8 +106,8 @@ class MySettingState extends State<SettingsScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: ToggleButtons(
                     color: Colors.grey,
-                    fillColor: Colors.blue[100],
-                    selectedColor: colors.blue,
+                    fillColor: Colors.orange[100],
+                    selectedColor: colors.orange,
                     children: const <Widget>[
                       Icon(Icons.notifications_active),
                       Icon(Icons.notifications_paused),
@@ -121,10 +118,14 @@ class MySettingState extends State<SettingsScreen> {
                       });
                       if (index == 0) {
                         bolc.changenotificationSit(0);
-                        await data.setData("notification_sound", "true");
+                        await data.setData("notification_sound", "on");
+                        OneSignal.shared.setInFocusDisplayType(
+                            OSNotificationDisplayType.notification);
                       } else {
                         bolc.changenotificationSit(1);
-                        await data.setData("notification_sound", "false");
+                        await data.setData("notification_sound", "off");
+                        OneSignal.shared.setInFocusDisplayType(
+                            OSNotificationDisplayType.none);
                       }
                     },
                     isSelected: bolc.notificationSit,
@@ -145,7 +146,7 @@ class MySettingState extends State<SettingsScreen> {
                   style: styles.mystyle,
                 ),
                 Switch(
-                  activeColor: colors.blue,
+                  activeColor: colors.orange,
                   onChanged: (bool value) {
                     dio.post<dynamic>("settings", data: <String, dynamic>{
                       'recieve_notify': value ? "on" : "off"
@@ -170,7 +171,7 @@ class MySettingState extends State<SettingsScreen> {
           const SizedBox(height: 10),
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-              child: FlatButton(
+              child: TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, "/ChangePassword");
                   },
@@ -187,12 +188,12 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
   final MainProvider bolc = Provider.of<MainProvider>(context);
   return Flexible(
       fit: FlexFit.tight,
-      child: FlatButton(
-          textColor: colors.black,
-          disabledColor: Colors.grey,
-          padding: const EdgeInsets.all(0),
-          splashColor: colors.trans,
-          highlightColor: colors.trans,
+      child: TextButton(
+          style: ElevatedButton.styleFrom(
+            textStyle: TextStyle(color: colors.black),
+            onSurface: Colors.grey,
+            padding: const EdgeInsets.all(0),
+          ),
           onPressed: () {
             if (category == "font")
               bolc.changefontindex(index);
@@ -221,11 +222,11 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
                   opacity: list[index] ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 800),
                   child: Container(
-                    decoration:  BoxDecoration(
-                        borderRadius:const BorderRadius.only(
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             topRight: Radius.circular(12)),
-                        color: colors.blue),
+                        color: colors.orange),
                     alignment: Alignment.bottomCenter,
                     height: 3,
                     width: MediaQuery.of(context).size.width * .15,
@@ -243,22 +244,50 @@ Widget languagBar(BuildContext context) {
       children: <Widget>[
         fontBarChoice(context, "arabic", 0, bolc.language, "language", () {
           lang.setLanguage(const Locale('ar'));
+          changeLanguage("ar");
           config.userLnag = const Locale('ar');
         }),
         verticalDiv(),
         fontBarChoice(context, "english", 1, bolc.language, "language", () {
           lang.setLanguage(const Locale('en'));
-          // setState(() {});
+          changeLanguage("en");
           config.userLnag = const Locale('en');
         }),
         verticalDiv(),
         fontBarChoice(context, "turkish", 2, bolc.language, "language", () {
           lang.setLanguage(const Locale('tr'));
+          changeLanguage("tr");
           config.userLnag = const Locale('tr');
         }),
       ],
     ),
   );
+}
+
+Function changeLanguage(String value) {
+  return () async {
+    if (value.isEmpty) {
+    } else {
+      const String arabicBaseUrl =
+          "https://joker.altariq.ps/api/ar/v1/customer/";
+      const String englishBaseUrl =
+          "https://joker.altariq.ps/api/en/v1/customer/";
+      const String turkishBaseUrl =
+          "https://joker.altariq.ps/api/tr/v1/customer/";
+      String baseUrl = await data.getData("baseUrl");
+      if (baseUrl == "" || baseUrl.isEmpty || baseUrl == null) {
+        baseUrl = config.baseUrl;
+      }
+      if (value == "en") {
+        dio.options.baseUrl = englishBaseUrl;
+      } else if (value == "ar") {
+        dio.options.baseUrl = arabicBaseUrl;
+      } else {
+        dio.options.baseUrl = turkishBaseUrl;
+      }
+      await data.setData("baseUrl", dio.options.baseUrl);
+    }
+  };
 }
 
 Widget verticalDiv() {

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:joker/constants/colors.dart';
 
 class ButtonToUse extends StatelessWidget {
-  const ButtonToUse(this.buttonstring, {this.fontWait, this.fontColors, this.onPressed, this.width});
+  const ButtonToUse(this.buttonstring,
+      {this.fontWait, this.fontColors, this.onPressed, this.width});
   final String buttonstring;
   final FontWeight fontWait;
   final Color fontColors;
@@ -11,11 +12,13 @@ class ButtonToUse extends StatelessWidget {
   final double width;
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      materialTapTargetSize: MaterialTapTargetSize.padded,
-        highlightElevation: 0,
-        color: colors.trans,
-        elevation: 0,
+    return ElevatedButton(
+        style: ButtonStyle(
+            tapTargetSize: MaterialTapTargetSize.padded,
+            elevation: MaterialStateProperty.resolveWith<double>(
+                (Set<MaterialState> states) => 0),
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) => colors.trans)),
         child: Container(
           width: width,
           alignment: Alignment.center,

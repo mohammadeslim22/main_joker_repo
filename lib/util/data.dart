@@ -8,7 +8,7 @@ class Storage {
 
   Future<bool> setData(String key, String value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString(key, value);
+    return prefs.setString(key, value??"");
   }
 }
 

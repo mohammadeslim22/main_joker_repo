@@ -37,10 +37,10 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
           future: getMemebershipsData(widget.merchantId),
           builder: (BuildContext ctx,
               AsyncSnapshot<List<MemFromMerchant>> snapshot) {
-            if (snapshot.data == null) {
-              return Center(child: Text(trans(context, 'nothing_to_show')));
-            }
             if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data == null) {
+                return Center(child: Text(trans(context, 'nothing_to_show')));
+              }
               return ListView.builder(
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
@@ -74,7 +74,7 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
         child: ExpandableNotifier(
             controller: exp,
             child: ExpandablePanel(
-              theme: ExpandableThemeData(iconColor: colors.blue),
+              theme: ExpandableThemeData(iconColor: colors.orange),
               controller: exp,
               header: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -109,8 +109,8 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Text(memFromMerchant.message),
-                    FlatButton(
-                      color: colors.blue,
+                    TextButton(
+                      style: ElevatedButton.styleFrom(onPrimary: colors.orange),
                       onPressed: () {
                         exp.toggle();
                         dio.post<dynamic>("usermemberships",
@@ -156,10 +156,12 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                   ],
                 ),
               ),
+
               // ignore: deprecated_member_use
-              tapHeaderToExpand: true,
+
               // ignore: deprecated_member_use
-              hasIcon: true,
+
+              collapsed: null,
             )));
   }
 }

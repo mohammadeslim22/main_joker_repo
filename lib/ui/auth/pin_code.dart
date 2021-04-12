@@ -159,12 +159,16 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                 Padding(
                                     padding: const EdgeInsets.fromLTRB(
                                         20, 30, 20, 10),
-                                    child: RaisedButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(18.0),
-                                            side:
-                                                BorderSide(color: colors.blue)),
+                                    child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0),
+                                                side: BorderSide(
+                                                    color: colors.orange)),
+                                            onPrimary: Colors.deepPurpleAccent,
+                                            textStyle:
+                                                TextStyle(color: colors.white)),
                                         onPressed: () async {
                                           if (await auth.sendPinNewPhone(
                                               mobileNoController.text,
@@ -174,8 +178,6 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                             });
                                           }
                                         },
-                                        color: Colors.deepPurpleAccent,
-                                        textColor: colors.white,
                                         child: bolc.returnchild(
                                             trans(context, 'send_code')))),
                               ],
@@ -206,7 +208,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
               pinCode(bolc, auth),
               CircularPercentIndicator(
                   radius: 130.0,
-                  progressColor: Colors.blue[300],
+                  progressColor: Colors.orange[300],
                   circularStrokeCap: CircularStrokeCap.round,
                   animation: true,
                   animationDuration: 31500,
@@ -220,26 +222,29 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
               const SizedBox(height: 15),
               Padding(
                   padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: const BorderSide(color: Colors.blue)),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: const BorderSide(color: Colors.orange)),
+                          onPrimary: Colors.deepPurpleAccent,
+                          textStyle: const TextStyle(color: Colors.white)),
                       onPressed: () {},
-                      color: Colors.deepPurpleAccent,
-                      textColor: Colors.white,
                       child: bolc.returnchild(trans(context, 'aprove')))),
               const SizedBox(height: 15),
               Text(trans(context, 'code_not_recieved'),
                   textAlign: TextAlign.center, style: styles.underHead),
               Padding(
                 padding: const EdgeInsets.fromLTRB(100, 20, 100, 20),
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      side: const BorderSide(color: Colors.black)),
-                  color: Colors.white,
-                  textColor: colors.blue,
-                  padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        side: const BorderSide(color: Colors.black)),
+                    onPrimary: Colors.white,
+                    textStyle: TextStyle(color: colors.orange),
+                    padding: const EdgeInsets.all(8.0),
+                  ),
                   onPressed: () async {
                     if (await auth.sendPinNewPhone(
                         mobileNoController.text, context)) {

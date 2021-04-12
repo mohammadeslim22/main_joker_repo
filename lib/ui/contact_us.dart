@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/ui/widgets/countryCodePicker.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/functions.dart';
@@ -14,7 +13,6 @@ import 'package:joker/util/functions.dart';
 class ContactUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     final TextEditingController name = TextEditingController();
     final TextEditingController email = TextEditingController();
     final TextEditingController mobile = TextEditingController();
@@ -75,22 +73,25 @@ class ContactUs extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           simpleForm(1, 3, "name", name),
-          const SizedBox(height: 16),
-          simpleForm(1, 3, "email", email),
-          const SizedBox(height: 16),
-          simpleForm(1, 3, "mobile_number", mobile,
-              sufixIcon: CountryPickerCode(context: context, isRTL: isRTL),
-              tit: TextInputType.number),
+          // const SizedBox(height: 16),
+          // simpleForm(1, 3, "email", email),
+          // const SizedBox(height: 16),
+          // simpleForm(1, 3, "mobile_number", mobile,
+          //     sufixIcon: CountryPickerCode(context: context, isRTL: isRTL),
+          //     tit: TextInputType.number),
           const SizedBox(height: 8),
           simpleForm(1, 3, "address", address),
           const SizedBox(height: 8),
           simpleForm(3, 5, "message", message),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: colors.jokerBlue)),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: colors.orange)),
+                    onPrimary: colors.orange,
+                    textStyle: TextStyle(color: colors.white)),
                 onPressed: () async {
                   final Response<dynamic> response = await dio
                       .post<dynamic>("contact", data: <String, dynamic>{
@@ -126,8 +127,6 @@ class ContactUs extends StatelessWidget {
                         reverseCurve: Curves.linear);
                   }
                 },
-                color: colors.blue,
-                textColor: colors.white,
                 child: Text(trans(context, 'send'))),
           ),
           Row(

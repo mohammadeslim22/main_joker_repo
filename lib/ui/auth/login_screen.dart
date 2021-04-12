@@ -124,7 +124,7 @@ class _MyLoginScreenState extends State<LoginScreen>
               children: <Widget>[
                 Text(trans(context, 'back_to_map')),
                 const SizedBox(width: 16),
-                Icon(Icons.keyboard_return, color: colors.jokerBlue)
+                Icon(Icons.keyboard_return, color: colors.orange)
               ],
             ),
           ),
@@ -158,10 +158,20 @@ class _MyLoginScreenState extends State<LoginScreen>
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: colors.jokerBlue)),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) => colors.orange),
+                          shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+                              (Set<MaterialState> states) =>
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(color: colors.orange))),
+                          textStyle:
+                              MaterialStateProperty.resolveWith<TextStyle>(
+                                  (Set<MaterialState> states) =>
+                                      TextStyle(color: colors.white))),
                       onPressed: () async {
                         print(
                             "_usernameController.text : ${_usernameController.text}");
@@ -187,8 +197,6 @@ class _MyLoginScreenState extends State<LoginScreen>
                           }
                         }
                       },
-                      color: colors.blue,
-                      textColor: colors.white,
                       child: mainProvider.returnchild(trans(context, 'login'))),
                 ),
                 const SizedBox(height: 40),
@@ -204,6 +212,9 @@ class _MyLoginScreenState extends State<LoginScreen>
             );
           },
         ),
+        // Expanded(
+        //   child: Container()
+        // ),
         Padding(
           padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
           child: Row(

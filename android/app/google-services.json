@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "249023455839",
+    "project_id": "joker-indirim",
+    "storage_bucket": "joker-indirim.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:249023455839:android:bc4f0c7e54fbb24b39b1ea",
+        "android_client_info": {
+          "package_name": "com.jokerindirim.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "249023455839-3rk1hk4ef6hckggoi0ketbsp2ieugmah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTcEKOvgDo4aPCILXJ9RZ0uHlhc5OB5so"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "249023455839-3rk1hk4ef6hckggoi0ketbsp2ieugmah.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "249023455839-hnjp5te42tt3qaoo3e2uq0la0vm1ekra.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jokerindirim.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

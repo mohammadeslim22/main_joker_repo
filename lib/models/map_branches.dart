@@ -1,3 +1,4 @@
+import 'package:joker/models/sales.dart';
 
 class MapBranches {
   MapBranches({this.mapBranches});
@@ -28,16 +29,22 @@ class MapBranch {
       this.salesCount,
       this.merchant,
       this.spec,
-      this.rateAverage});
+      this.rateAverage,
+      this.lastsales});
 
   MapBranch.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'].toString();
     address = json['address'].toString();
     phone = json['phone'].toString();
+    if (json['latitude'] != null) {
+      latitude = double.parse(json['latitude'].toString());
+    }
+    if (json['longitude'] != null) {
+      longitude = double.parse(json['longitude'].toString());
+    }
     // latitude = double.parse(json['latitude'].toString());
-    latitude = double.parse(json['latitude'].toString());
-    longitude = double.parse(json['longitude'].toString());
+
     ratesCount = json['rates_count'] as int;
     likesCount = json['likes_count'] as int;
     isliked = json['isliked'] as int;
@@ -45,11 +52,16 @@ class MapBranch {
     if (json['sales'] != null) {
       salesCount = json['sales'] as int;
     }
-    merchant = json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
+    merchant =
+        json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
     if (json['specialization'] != null)
       spec = json['specialization'].toString();
-
-    rateAverage = double.parse(json['rates_average'].toString());
+    if (json['rates_average'] != null)
+      rateAverage = double.parse(json['rates_average'].toString());
+    if (json['lastsales'] != null)
+      json['lastsales'].forEach((dynamic v) {
+        lastsales.add(SaleData.fromJson(v));
+      });
   }
   int id;
   String name;
@@ -65,10 +77,11 @@ class MapBranch {
   Merchant merchant;
   String spec;
   double rateAverage;
+  List<SaleData> lastsales = <SaleData>[];
 }
 
-// class TwoSales {
-//   TwoSales(
+// class RecentSale {
+//   RecentSale(
 //       {this.id,
 //       this.userId,
 //       this.name,
@@ -84,7 +97,7 @@ class MapBranch {
 //       this.updatedAt,
 //       this.pivot});
 
-//   TwoSales.fromJson(dynamic json) {
+//   RecentSale.fromJson(dynamic json) {
 //     id = json['id'] as int;
 //     userId = json['user_id'].toString();
 //     name = json['name'].toString();
@@ -116,16 +129,16 @@ class MapBranch {
 //   Pivot pivot;
 // }
 
-class Pivot {
-  Pivot({this.branchId, this.saleId});
+// class Pivot {
+//   Pivot({this.branchId, this.saleId});
 
-  Pivot.fromJson(dynamic json) {
-    branchId = json['branch_id'].toString();
-    saleId = json['sale_id'].toString();
-  }
-  String branchId;
-  String saleId;
-}
+//   Pivot.fromJson(dynamic json) {
+//     branchId = json['branch_id'].toString();
+//     saleId = json['sale_id'].toString();
+//   }
+//   String branchId;
+//   String saleId;
+// }
 
 class Merchant {
   Merchant({this.id, this.name, this.logo, this.ratesAverage, this.salesCount});

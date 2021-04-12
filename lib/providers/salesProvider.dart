@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:intl/intl.dart';
+import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/models/simplesales.dart';
@@ -56,8 +59,25 @@ class SalesProvider with ChangeNotifier {
     return merchantSales.data;
   }
 
-  void setFavSale(int saleId) {
+  void setFavSale(int saleId, {int bId}) {
     try {
+      if (bId != null) {
+        print("bId $bId");
+        getIt<HOMEMAProvider>()
+            .branches
+            .mapBranches
+            .firstWhere((MapBranch element) {
+              print(" element.id  ${element.id}  bId $bId");
+              return element.id == bId;
+            })
+            .lastsales
+            .firstWhere((SaleData element) {
+              print(" element.id  ${element.id}  saleId $saleId");
+              return element.id == saleId;
+            })
+            .isfavorite = 1;
+      }
+
       sales.data.firstWhere((SaleData element) {
         return element.id == saleId;
       }).isfavorite = 1;
@@ -78,6 +98,7 @@ class SalesProvider with ChangeNotifier {
       print("orrrrr");
     }
   }
+
   void setLikeSale(int saleId) {
     try {
       sales.data.firstWhere((SaleData element) {
@@ -100,12 +121,13 @@ class SalesProvider with ChangeNotifier {
       print("orrrrr");
     }
   }
+
   Future<List<SaleData>> getSalesData(int pageIndex) async {
-    print("page index $pageIndex");
+    print("here is p-sales page index $pageIndex");
     final Response<dynamic> response =
         await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+      'specialization':  jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize ?? 1])
     });
     sales = Sales.fromJson(response.data);
     tempSales = sales;
@@ -118,7 +140,7 @@ class SalesProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+      'specialization': jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
     });
     sales = Sales.fromJson(response.data);
     tempSales = sales;

@@ -31,10 +31,8 @@ class _DiscountsListState extends State<DiscountsList> {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: WaterDropHeader(
-        complete: Container(),
-        waterDropColor: colors.blue,
-      ),
+      header:
+          WaterDropHeader(complete: Container(), waterDropColor: colors.orange),
       footer: CustomFooter(
         builder: (BuildContext context, LoadStatus mode) {
           Widget body;
@@ -57,7 +55,6 @@ class _DiscountsListState extends State<DiscountsList> {
       ),
       controller: _refreshController,
       onRefresh: () async {
-        
         getIt<SalesProvider>().pagewiseSalesController.reset();
         _refreshController.refreshCompleted();
       },
@@ -74,8 +71,7 @@ class _DiscountsListState extends State<DiscountsList> {
         loadingBuilder: (BuildContext context) {
           return const Center(
               child: CircularProgressIndicator(
-            backgroundColor: Colors.transparent,
-          ));
+                  backgroundColor: Colors.transparent));
         },
         pageLoadController: getIt<SalesProvider>().pagewiseSalesController,
         padding: const EdgeInsets.all(15.0),

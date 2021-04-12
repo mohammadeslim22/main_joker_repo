@@ -18,9 +18,7 @@ import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
 import 'util/service_locator.dart';
 import 'package:joker/providers/globalVars.dart';
-
-//import 'package:flutter/scheduler.dart';
-// import 'package:joker/models/user.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 Future<void> main() async {
   // ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>
@@ -31,6 +29,7 @@ Future<void> main() async {
   dioDefaults();
   await data.getData('authorization').then<dynamic>((String auth) {
     print("auth what :$auth");
+
     if (auth.isEmpty) {
       config.loggedin = false;
     } else {
@@ -40,9 +39,30 @@ Future<void> main() async {
     dio.options.headers['authorization'] = '$auth';
   });
 
-  //  data.getData("lang").then((String value) {
-  //   config.userLnag = Locale(value);
-  // });
+//Remove this method to stop OneSignal Debugging
+  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  // OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.debug);
+
+  OneSignal.shared.init(config.onesignal, iOSSettings: <OSiOSSettings, dynamic>{
+    OSiOSSettings.autoPrompt: false,
+    OSiOSSettings.inAppLaunchUrl: false
+  });
+  final String notifications = await data.getData("notification_sound");
+  if (notifications.isEmpty || notifications == "" || notifications == null) {
+    OneSignal.shared
+        .setInFocusDisplayType(OSNotificationDisplayType.notification);
+  } else {
+    if (notifications == "on") {
+      OneSignal.shared
+          .setInFocusDisplayType(OSNotificationDisplayType.notification);
+    } else {
+      OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.none);
+    }
+  }
+
+// The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  await OneSignal.shared
+      .promptUserForPushNotificationPermission(fallbackToSettings: true);
 
   runApp(
     MultiProvider(
@@ -50,24 +70,17 @@ Future<void> main() async {
         ChangeNotifierProvider<Auth>.value(
           value: getIt<Auth>(),
         ),
-        ChangeNotifierProvider<Language>(
-          create: (_) => Language(),
-        ),
-        ChangeNotifierProvider<MainProvider>(
-          create: (_) => MainProvider(),
-        ),
+        ChangeNotifierProvider<Language>(create: (_) => Language()),
+        // ChangeNotifierProvider<MainProvider>(create: (_) => MainProvider()),
+        ChangeNotifierProvider<MainProvider>.value(
+            value: getIt<MainProvider>()),
         ChangeNotifierProvider<HOMEMAProvider>.value(
-          value: getIt<HOMEMAProvider>(),
-        ),
+            value: getIt<HOMEMAProvider>()),
         ChangeNotifierProvider<MerchantProvider>.value(
-          value: getIt<MerchantProvider>(),
-        ),
+            value: getIt<MerchantProvider>()),
         ChangeNotifierProvider<SalesProvider>.value(
-          value: getIt<SalesProvider>(),
-        ),
-        ChangeNotifierProvider<GlobalVars>.value(
-          value: getIt<GlobalVars>(),
-        ),
+            value: getIt<SalesProvider>()),
+        ChangeNotifierProvider<GlobalVars>.value(value: getIt<GlobalVars>()),
       ],
       child: MyApp(),
     ),
@@ -80,6 +93,7 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
+
 class _MyAppState extends State<MyApp> {
   bool doOnce = true;
   @override
@@ -144,18 +158,12 @@ Widget errorScreen(dynamic detailsException) {
                   padding: const EdgeInsets.all(16.0),
                   child: Text('Exeption Details: $detailsException'),
                 ),
-                FlatButton(
-                  color: colors.blue,
-                  child: Text(
-                    'Go Back',
-                    style: TextStyle(
-                      color: colors.white,
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child:
+                        Text('Go Back', style: TextStyle(color: colors.white)))
               ],
             ),
           ),

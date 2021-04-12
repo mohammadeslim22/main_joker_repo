@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/models/map_branches.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../ui/cards/merchant_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
-import 'package:joker/models/branches_model.dart';
 import 'package:joker/constants/colors.dart';
+import 'package:joker/ui/cards/favBranchCard.dart';
 
 class FavoritMerchantsList extends StatelessWidget {
   final RefreshController _refreshController =
@@ -20,7 +20,7 @@ class FavoritMerchantsList extends StatelessWidget {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: WaterDropHeader(waterDropColor: colors.blue),
+      header: WaterDropHeader(waterDropColor: colors.orange),
       footer: CustomFooter(
         builder: (BuildContext context, LoadStatus mode) {
           Widget body;
@@ -56,7 +56,7 @@ class FavoritMerchantsList extends StatelessWidget {
           pageSize: 10,
           padding: const EdgeInsets.all(15.0),
           itemBuilder: (BuildContext context, dynamic entry, int index) {
-            return FadeIn(child: MerchantCard(branchData: entry as BranchData));
+            return FadeIn(child: FaveBranchCard(branch: entry as MapBranch));
           },
           noItemsFoundBuilder: (BuildContext context) {
             return Text(trans(context, "noting_to_show"));

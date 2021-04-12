@@ -226,5 +226,14 @@
     "pull_up_load": "اسحب لتحميل المزيد",
     "no_data": "لا يوجد بيانات للعرض",
     "Merchant_MemberShips": "عضويات المتجر",
+    "u_subscribed_already": "لديك اشتراك سابق",
+    "offers": "عروض",
+    "discount": "خصم",
+    "ends_in": "ينتهي في",
+    "sale_list":"قائمة العروض",
+    "more_info_map_card":"المزيد",
+    "login_or_sign_up":"سجل دخول أو أنشئ حساب",
+    "joker_app":"تطبيق جوكر",
     "u_subscribed_already": "لديك اشتراك سابق"
+
 }

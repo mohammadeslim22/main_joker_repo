@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:after_layout/after_layout.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,13 +25,15 @@ import 'package:joker/ui/widgets/text_form_input.dart';
 import 'package:joker/util/functions.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:dio/dio.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class MyAccount extends StatefulWidget {
   @override
   MyAccountPage createState() => MyAccountPage();
 }
 
-class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
+class MyAccountPage extends State<MyAccount>
+    with AfterLayoutMixin<MyAccount>, TickerProviderStateMixin {
   List<String> location2;
   SnackBar snackBar = SnackBar(
     content: const Text("Location Service was not aloowed  !"),
@@ -54,13 +57,20 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   final FocusNode focus3 = FocusNode();
   final FocusNode focus4 = FocusNode();
   File myimage;
-  Future<Profile> getProfileData() async {
-    final Response<dynamic> response = await dio.get<dynamic>("user");
-    if (response.statusCode == 200) {
-      profile = Profile.fromJson(response.data);
-      return profile;
-    } else {
-      return null;
+  Future<void> getProfileData() async {
+    if (config.loggedin) {
+      final Response<dynamic> response = await dio.get<dynamic>("user");
+      if (response.statusCode == 200) {
+        setState(() {
+          profile = Profile.fromJson(response.data);
+          usernameController.text = profile.name;
+          emailController.text = profile.email;
+          mobileNoController.text = profile.phone;
+          tempPhone = profile.phone;
+          birthDateController.text = profile.birthDate;
+          config.locationController.text = profile.address;
+        });
+      } else {}
     }
   }
 
@@ -83,21 +93,20 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   String tempPhone;
   bool showImageOptions = false;
   bool _isButtonEnabled;
+  String imageUrl;
+  bool imageUplaoding = true;
+  AnimationController animationController1,
+      animationController2,
+      animationController3;
+
+  Animation<double> animation1, animation2, animation3;
+
   @override
   void initState() {
     super.initState();
-
     _isButtonEnabled = true;
-    getProfileData().then((Profile value) {
-      setState(() {
-        usernameController.text = value.name;
-        emailController.text = value.email;
-        mobileNoController.text = value.phone;
-        tempPhone = value.phone;
-        birthDateController.text = value.birthDate;
-        config.locationController.text = value.address;
-      });
-    });
+    getProfileData();
+    imageUrl = getIt<Auth>().userPicture ?? config.profileUrl;
   }
 
   void shoeTosted() {
@@ -115,6 +124,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
     return;
   }
 
+  Widget t;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -123,9 +133,8 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(trans(context, "my_account"), style: styles.appBars),
-          centerTitle: true,
-        ),
+            title: Text(trans(context, "my_account"), style: styles.appBars),
+            centerTitle: true),
         body: Builder(
             builder: (BuildContext context) => GestureDetector(
                 onTap: () {
@@ -142,29 +151,59 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                     ClipPath(
                       clipper: HeaderColor(),
                       child: Container(
-                        color: Colors.blue[300].withOpacity(0.3),
+                        color: Colors.orange[300].withOpacity(0.3),
                       ),
                     ),
                     ListView(children: <Widget>[
+                      const SizedBox(height: 6),
                       Stack(
                         children: <Widget>[
                           Align(
                             alignment: Alignment.topCenter,
                             child: GestureDetector(
                               onTap: () {},
-                              child: Hero(
-                                child: CircularProfileAvatar(
-                                  config.profileUrl ?? "",
-                                  radius: 80,
-                                  backgroundColor: Colors.transparent,
-                                  borderWidth: 5,
-                                  placeHolder:
-                                      (BuildContext context, String url) =>
-                                          const CircularProgressIndicator(),
-                                  borderColor: colors.blue,
-                                  cacheImage: true,
+                              child: Visibility(
+                                visible: imageUplaoding,
+                                child: Hero(
+                                  child: CircularProfileAvatar(
+                                      imageUrl ??
+                                          getIt<Auth>().userPicture ??
+                                          config.profileUrl,
+                                      animateFromOldImageOnUrlChange: true,
+                                      radius: 80,
+                                      backgroundColor: Colors.transparent,
+                                      borderWidth: 5,
+                                      progressIndicatorBuilder:
+                                          (BuildContext context, String s,
+                                                  DownloadProgress url) =>
+                                              const CircularProgressIndicator(),
+                                      borderColor: colors.orange,
+                                      cacheImage: true),
+                                  tag: "generate_a_unique_tag",
                                 ),
-                                tag: "generate_a_unique_tag",
+                                replacement: Stack(
+                                  children: <Widget>[
+                                    SizedBox(
+                                        child: CircularProgressIndicator(
+                                            backgroundColor: colors.trans),
+                                        height: 160,
+                                        width: 160),
+                                    Container(
+                                      height: 160,
+                                      width: 160,
+                                      child: Center(
+                                        child: SizedBox(
+                                          height: 100,
+                                          width: 100,
+                                          child: LoadingIndicator(
+                                            color: Colors.orange,
+                                            indicatorType: Indicator.values[19],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -193,13 +232,13 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                           alignment: Alignment.topCenter,
                           child: Column(
                             children: <Widget>[
-                              FlatButton(
+                              TextButton(
                                   child: Text(trans(context, 'open_gallery'),
                                       style: styles.mysmall),
                                   onPressed: () async {
                                     getImage(ImageSource.gallery, mainProvider);
                                   }),
-                              FlatButton(
+                              TextButton(
                                 child: Text(trans(context, "take_photo"),
                                     style: styles.mysmall),
                                 onPressed: () async {
@@ -253,7 +292,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       focusNode: focus,
                                       suffixicon: IconButton(
                                         icon: Icon(Icons.edit,
-                                            color: colors.blue),
+                                            color: colors.orange),
                                         onPressed: () {},
                                       ),
                                       onTab: () {},
@@ -285,7 +324,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       },
                                       suffixicon: IconButton(
                                         icon: Icon(Icons.edit,
-                                            color: colors.blue),
+                                            color: colors.orange),
                                         onPressed: () {},
                                       ),
                                       focusNode: focus1,
@@ -310,7 +349,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                         _selectDate(context);
                                       },
                                       suffixicon: IconButton(
-                                        color: colors.blue,
+                                        color: colors.orange,
                                         icon: const Icon(Icons.calendar_today),
                                         onPressed: () {
                                           //   _selectDate(context);
@@ -344,7 +383,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                             mainProvider
                                                 .togelocationloading(false);
 
-                                            Scaffold.of(context)
+                                            ScaffoldMessenger.of(context)
                                                 .showSnackBar(snackBar);
                                             setState(() {
                                               config.locationController.text =
@@ -355,7 +394,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                           Vibration.vibrate(duration: 400);
                                           mainProvider
                                               .togelocationloading(false);
-                                          Scaffold.of(context)
+                                          ScaffoldMessenger.of(context)
                                               .showSnackBar(snackBar);
                                           setState(() {
                                             config.locationController.text =
@@ -365,7 +404,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                       },
                                       suffixicon: IconButton(
                                         icon: Icon(Icons.add_location,
-                                            color: colors.blue),
+                                            color: colors.orange),
                                         onPressed: () {
                                           Navigator.pushNamed(
                                               context, '/AutoLocate',
@@ -391,9 +430,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                     child: mainProvider.visibilityObs
                                         ? Row(
                                             children: <Widget>[
-                                              Expanded(
-                                                child: spinkit,
-                                              ),
+                                              Expanded(child: spinkit),
                                             ],
                                           )
                                         : Container(),
@@ -406,11 +443,15 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 70),
-                        child: RaisedButton(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: colors.jokerBlue)),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: colors.orange)),
+                                onPrimary: colors.orange,
+                                textStyle: TextStyle(color: colors.white)),
                             onPressed: () async {
                               if (_isButtonEnabled) {
                                 if (_formKey.currentState.validate()) {
@@ -418,6 +459,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                   setState(() {
                                     _isButtonEnabled = false;
                                   });
+                                  print(" birthDateController.text ${ birthDateController.text}");
                                   await getIt<Auth>()
                                       .updateProfile(
                                           usernameController.text,
@@ -443,8 +485,6 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
                                 }
                               }
                             },
-                            color: colors.blue,
-                            textColor: colors.white,
                             child: mainProvider.returnchildforProfile(
                               trans(context, 'save_changes'),
                               //  style: styles.notificationNO,
@@ -488,7 +528,7 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
   //                   ),
   //                   const SizedBox(height: 15),
   //                   RaisedButton(
-  //                       color: colors.jokerBlue,
+  //                       color: colors.orange,
   //                       child: Text(trans(context, "ok"),
   //                           style: styles.underHeadwhite),
   //                       onPressed: () {
@@ -520,16 +560,22 @@ class MyAccountPage extends State<MyAccount> with AfterLayoutMixin<MyAccount> {
       final FormData formData = FormData.fromMap(<String, dynamic>{
         "avatar": await MultipartFile.fromFile(image.path)
       });
+      setState(() {
+        imageUrl = "";
+        imageUplaoding = false;
+      });
       getIt<Auth>().changeProfilePic(formData).then((dynamic result) {
         print(result.data);
         if (result.statusCode == 200) {
           bolc.changeImageUrl(result.data['image'].toString());
           data.setData('profile_pic', result.data['image'].toString());
-
           setState(() {
             showImageOptions = !showImageOptions;
             config.profileUrl = result.data['image'].toString();
+            imageUrl = result.data['image'].toString();
+            imageUplaoding = true;
           });
+          getIt<Auth>().setUserPicture(result.data['image'].toString());
         } else {
           Fluttertoast.showToast(msg: trans(context, "error_happened"));
         }

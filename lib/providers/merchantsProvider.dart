@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
-import 'package:joker/models/merchant.dart';
+import 'package:joker/models/map_branches.dart';
+import 'package:joker/models/merchant.dart' as merchant_main_model;
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/models/branches_model.dart';
@@ -8,16 +11,17 @@ import 'package:joker/util/service_locator.dart';
 import 'map_provider.dart';
 
 class MerchantProvider with ChangeNotifier {
-  Merchant merchant;
+  merchant_main_model.Merchant merchant;
   Branches branches;
-  Branches favbranches;
+  List<MapBranch> favbranches;
 
   PagewiseLoadController<dynamic> pagewiseBranchesController;
 
-  Future<Merchant> getMerchantData(int id, String source, int ignore) async {
+  Future<merchant_main_model.Merchant> getMerchantData(
+      int id, String source, int ignore) async {
     final dynamic response = await dio.get<dynamic>("merchants/$id",
         queryParameters: <String, dynamic>{"source": source, "ignore": ignore});
-    merchant = Merchant.fromJson(response.data);
+    merchant = merchant_main_model.Merchant.fromJson(response.data);
     notifyListeners();
     return merchant;
   }
@@ -26,7 +30,7 @@ class MerchantProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("pbranches", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+      'specialization':  jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
     });
 
     branches = Branches.fromJson(response.data);
@@ -41,7 +45,7 @@ class MerchantProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("branches", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': <int>[getIt<HOMEMAProvider>().selectedSpecialize]
+      'specialization': jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
     });
     branches = Branches.fromJson(response.data);
     branches.data.forEach((BranchData element) {
@@ -52,15 +56,19 @@ class MerchantProvider with ChangeNotifier {
     return branches.data;
   }
 
-  Future<List<BranchData>> getFavoritData(int pageIndex) async {
+  Future<List<MapBranch>> getFavoritData(int pageIndex) async {
     final Response<dynamic> response = await dio.get<dynamic>("favorites",
         queryParameters: <String, dynamic>{
           'page': pageIndex + 1,
           'model': "App\\Branch"
         });
-    favbranches = Branches.fromJson(response.data);
+    response.data['data'].forEach((dynamic v) {
+      favbranches.add(MapBranch.fromJson(v));
+    });
+
+    MapBranch.fromJson(response.data);
     notifyListeners();
-    return favbranches.data;
+    return favbranches;
   }
 
   Future<void> vistBranch(int branchId, {String source = 'click'}) async {

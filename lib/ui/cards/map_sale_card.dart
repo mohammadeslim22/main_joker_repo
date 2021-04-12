@@ -9,12 +9,13 @@ import 'package:joker/models/sales.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/providers/map_provider.dart';
-import '../../ui/cards/sale_card_no_padding.dart';
 
 class MapSalesCard extends StatefulWidget {
-  const MapSalesCard({Key key, this.context, this.sale}) : super(key: key);
+  const MapSalesCard({Key key, this.context, this.sale, this.close})
+      : super(key: key);
   final BuildContext context;
   final SaleData sale;
+  final Function close;
 
   @override
   _SalesCardState createState() => _SalesCardState();
@@ -29,13 +30,7 @@ class _SalesCardState extends State<MapSalesCard> {
   void initState() {
     super.initState();
     saledata = widget.sale;
-    if (saledata.status == "active") {
-      saleStatus = colors.green;
-    } else if (saledata.status == "coming") {
-      saleStatus = colors.yellow;
-    } else {
-      saleStatus = colors.red;
-    }
+    saleStatus = colors.red;
   }
 
   @override
@@ -48,53 +43,33 @@ class _SalesCardState extends State<MapSalesCard> {
       child: InkWell(
         onTap: () {
           getIt<HOMEMAProvider>().getSaleLotLang(saledata.branches.first.id);
-          getIt<HOMEMAProvider>().pc.close();
-          getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
-              .scaffoldkey
-              .currentState
-              .showBottomSheet<dynamic>((BuildContext context) => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      MediaQuery.removePadding(
-                          context: context,
-                          removeTop: true,
-                          removeBottom: true,
-                          removeLeft: true,
-                          removeRight: true,
-                          child: SalesCardNoPadding(sale: saledata)),
-                    ],
-                  ));
+          widget.close();
         },
         child: Row(
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 6),
-              height: MediaQuery.of(context).size.width * .25,
-              width: MediaQuery.of(context).size.width * .25,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12)),
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: CachedNetworkImageProvider(
-                      saledata.cropedImage,
-                    )),
-              ),
-              child: saledata.isfavorite != 0
-                  ? Stack(children: <Widget>[
-                      Positioned(
-                        left: 8.0,
-                        top: 8.0,
-                        child: CircleAvatar(
-                          backgroundColor: colors.white,
-                          radius: 12,
-                          child: SvgPicture.asset('assets/images/loveicon.svg'),
+                height: MediaQuery.of(context).size.width * .25,
+                width: MediaQuery.of(context).size.width * .25,
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image:
+                            CachedNetworkImageProvider(saledata.cropedImage))),
+                child: saledata.isfavorite != 0
+                    ? Stack(children: <Widget>[
+                        Positioned(
+                          left: 8.0,
+                          top: 8.0,
+                          child: CircleAvatar(
+                            backgroundColor: colors.white,
+                            radius: 8,
+                            child:
+                                SvgPicture.asset('assets/images/loveicon.svg'),
+                          ),
                         ),
-                      ),
-                    ])
-                  : Container(),
-            ),
+                      ])
+                    : Container()),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
@@ -114,8 +89,14 @@ class _SalesCardState extends State<MapSalesCard> {
                                 children: <Widget>[
                                   Text(saledata.status, style: styles.mylight),
                                   const SizedBox(width: 5),
-                                  const CircleAvatar(
-                                      backgroundColor: Colors.green, radius: 6)
+                                  CircleAvatar(
+                                      backgroundColor:
+                                          saledata.status == "active"
+                                              ? colors.green
+                                              : saledata.status == "coming"
+                                                  ? colors.yellow
+                                                  : saleStatus,
+                                      radius: 6)
                                 ],
                               ),
                               const SizedBox(height: 8),
@@ -142,14 +123,12 @@ class _SalesCardState extends State<MapSalesCard> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Text(widget.sale.price ?? "",
-                                style: styles.redstyleForSaleScreen),
+                                style: styles.blackstyleForSaleScreen),
                             const SizedBox(width: 8),
-                            Text(
-                              widget.sale.oldPrice,
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  decoration: TextDecoration.lineThrough),
-                            ),
+                            Text(widget.sale.oldPrice,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    decoration: TextDecoration.lineThrough)),
                           ],
                         ),
                       ],
@@ -178,7 +157,7 @@ class _SalesCardState extends State<MapSalesCard> {
                               decoration: BoxDecoration(
                                 color: !isLiked
                                     ? Colors.black.withOpacity(.5)
-                                    : Colors.blue,
+                                    : Colors.orange,
                                 borderRadius: BorderRadius.circular(70),
                               ),
                               child: Image.asset("assets/images/like.png",

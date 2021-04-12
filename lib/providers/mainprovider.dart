@@ -1,8 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:joker/models/notification.dart';
+import 'package:joker/providers/auth.dart';
+import 'package:joker/util/dio.dart';
+import 'package:joker/util/service_locator.dart';
 import '../constants/colors.dart';
-
 
 class MainProvider extends ChangeNotifier {
   bool darkthemeIson = false;
@@ -18,26 +23,27 @@ class MainProvider extends ChangeNotifier {
   bool _visible = true;
   bool __visible = false;
   bool visibilityObs = false;
+  Jnotification n = Jnotification(data: <NotificationData>[]);
   List<bool> notificationSit = <bool>[true, false];
-  // String countryCode;
-  // String countryDialCode;
-  // void saveCountryCode(String code, String dialCode) {
-  //   countryCode = code;
-  //   countryDialCode = dialCode;
-  //   data.setData("countryCodeTemp", code);
-  //   data.setData("countryDialCodeTemp", dialCode);
+  PagewiseLoadController<dynamic> pagewiseNotificationsController;
 
-  //   notifyListeners();
-  // }
+  Future<void> openNotifications(int nId) async {
+    await dio.post<dynamic>("notifications",
+        queryParameters: <String, dynamic>{"id": nId});
+    n.data.firstWhere((NotificationData element) {
+      return element.id == nId;
+    }).isread = 1;
+    getIt<Auth>().minnotificationdCount1();
+    notifyListeners();
+  }
 
-  // void onCountryChange(CountryCode countryCodee, BuildContext context) {
-  //   saveCountryCode(countryCodee.code, countryCodee.dialCode);
-
-  //   countryDialCode = countryCodee.dialCode;
-  //   notifyListeners();
-
-  //   FocusScope.of(context).requestFocus(FocusNode());
-  // }
+  Future<List<NotificationData>> getNotifications(int pageNumber) async {
+    final Response<dynamic> response = await dio.get<dynamic>("notifications",
+        queryParameters: <String, int>{"page": pageNumber+1});
+    n = Jnotification.fromJson(response.data);
+    notifyListeners();
+    return n.data;
+  }
 
   int get bottomNavIndex => _currentIndex;
   bool get visible1 => _visible;
@@ -104,7 +110,7 @@ class MainProvider extends ChangeNotifier {
     loginbase = login;
     if (loading) {
       f = Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Text(loginbase,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
@@ -133,6 +139,7 @@ class MainProvider extends ChangeNotifier {
       return spinkit;
     }
   }
+
   Widget returnchildforProfile(String login) {
     loginbase = login;
     if (!loading) {

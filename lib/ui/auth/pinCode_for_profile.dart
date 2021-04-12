@@ -78,7 +78,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                 onCompleted: (String v) async {
                   bolc.togelf(true);
                   if (await getIt<Auth>()
-                      .getPinCodeSave(v.trim(), mobileNoController.text)) {
+                      .getPinCodeSave(v.trim(), mobileNoController.text) != null) {
                     setState(() {
                       config.prifleNoVerfiyDone = true;
                     });
@@ -198,23 +198,24 @@ class _MyHomePageState extends State<PinCodeForProfile>
               ),
               Padding(
                   padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side:
-                              const BorderSide(color: Colors.deepPurpleAccent)),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: const BorderSide(
+                                  color: Colors.deepPurpleAccent)),
+                          onPrimary: Colors.deepPurpleAccent,
+                          textStyle: TextStyle(color: colors.white)),
                       onPressed: () {
                         verifyanewPhone();
                       },
-                      color: Colors.deepPurpleAccent,
-                      textColor: colors.white,
                       child: bolc.returnchild(trans(context, 'send_code')))),
               pinCode(bolc),
               const SizedBox(height: 15),
               if (enabeld)
                 CircularPercentIndicator(
                     radius: 130.0,
-                    progressColor: Colors.blue[300],
+                    progressColor: Colors.orange[300],
                     circularStrokeCap: CircularStrokeCap.round,
                     animation: true,
                     animationDuration: 31500,
@@ -234,13 +235,15 @@ class _MyHomePageState extends State<PinCodeForProfile>
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      side: const BorderSide(color: Colors.black)),
-                  color: colors.white,
-                  textColor: Colors.blue,
-                  padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        side: const BorderSide(color: Colors.black)),
+                    onPrimary: colors.white,
+                    textStyle: TextStyle(color: colors.orange),
+                    padding: const EdgeInsets.all(8.0),
+                  ),
                   onPressed: () {},
                   child: Text(
                     trans(context, 'resend_code'),

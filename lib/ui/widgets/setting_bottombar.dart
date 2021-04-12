@@ -19,12 +19,13 @@ class SettingBottom extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(trans(context, "user_account")),
-          RaisedButton(
-            splashColor: Colors.transparent,
-            highlightElevation: 0,
-            highlightColor: Colors.transparent,
-            elevation: 0,
-            color: colors.trans,
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(onPrimary: colors.trans),
+            // splashColor: Colors.transparent,
+            // highlightElevation: 0,
+            // highlightColor: Colors.transparent,
+            // elevation: 0,
+
             onPressed: () {
               AwesomeDialog(
                 context: context,
@@ -48,10 +49,8 @@ class SettingBottom extends StatelessWidget {
                           fillColor: Colors.white70,
                           hintText: trans(context,
                               'Help us to get better please write some feedback'),
-                          hintStyle: TextStyle(
-                            color: colors.ggrey,
-                            fontSize: 15,
-                          ),
+                          hintStyle:
+                              TextStyle(color: colors.ggrey, fontSize: 15),
                           disabledBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
                             color: Colors.grey,
@@ -63,12 +62,14 @@ class SettingBottom extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          RaisedButton(
-                              splashColor: Colors.transparent,
-                              highlightElevation: 0,
-                              highlightColor: Colors.transparent,
-                              elevation: 0,
-                              color: colors.red,
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  onPrimary: colors.red),
+                              // splashColor: Colors.transparent,
+                              // highlightElevation: 0,
+                              // highlightColor: Colors.transparent,
+                              // elevation: 0,
+
                               child: Text(trans(context, 'am sure'),
                                   style: styles.mywhitestyle),
                               onPressed: () {
@@ -80,12 +81,11 @@ class SettingBottom extends StatelessWidget {
                                 Navigator.pushNamedAndRemoveUntil(
                                     context, '/login', (_) => false);
                               }),
-                          RaisedButton(
-                              splashColor: Colors.transparent,
-                              highlightElevation: 0,
-                              highlightColor: Colors.transparent,
-                              elevation: 0,
-                              color: colors.yellow,
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                shadowColor: colors.yellow,
+                              ),
                               child: Text(trans(context, 'cancel'),
                                   style: styles.mywhitestyle),
                               onPressed: () {

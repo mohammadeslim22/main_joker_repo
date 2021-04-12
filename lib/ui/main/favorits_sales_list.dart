@@ -3,10 +3,12 @@ import 'package:flutter/rendering.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/salesProvider.dart';
+import 'package:joker/ui/cards/favSaleCard.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../ui/cards/sale_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/constants/colors.dart';
@@ -17,6 +19,8 @@ class FavoritDiscountsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HOMEMAProvider value = Provider.of<HOMEMAProvider>(context);
+
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
@@ -53,13 +57,13 @@ class FavoritDiscountsList extends StatelessWidget {
           loadingBuilder: (BuildContext context) {
             return const Center(
                 child: CircularProgressIndicator(
-              backgroundColor: Colors.transparent,
-            ));
+                    backgroundColor: Colors.transparent));
           },
           pageSize: 10,
           padding: const EdgeInsets.all(15.0),
           itemBuilder: (BuildContext context, dynamic entry, int index) {
-            return FadeIn(child: SalesCard(sale: entry as SaleData));
+            return FadeIn(
+                child: FaveCard(sale: entry as SaleData, value: value));
           },
           noItemsFoundBuilder: (BuildContext context) {
             return Text(trans(context, "noting_to_show"));

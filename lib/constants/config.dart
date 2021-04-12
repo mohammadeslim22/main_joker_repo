@@ -9,19 +9,18 @@ class Config {
   Config._internal();
 
   static final Config _config = Config._internal();
-  String imageUrl = "https://www.space.co.ps/joker/image";
+  String imageUrl = "https://joker.altariq.ps/ar/image/";
 
-  String baseUrl = "https://www.space.co.ps/joker/api/ar/v1/customer/";
+  String baseUrl = "https://joker.altariq.ps/api/en/v1/customer/";
 
-  // TODO(fahjan): api key for onesignal push notifications
-  String onesignal = "bc4208c6-1-48c0-b4d5-390029a340dc"; // ca9a
-  String qRCodeUrl = "https://www.space.co.ps/joker/ar/qr-code/";
-  String registerURL = "https://www.space.co.ps/joker/en/registermerchant";
+  String onesignal = "63367f9c-9d70-4ae8-9290-17ad17e2efd5"; // ca9a
+  String qRCodeUrl = "https://www.joker.altariq.ps/ar/qr-code/";
+  String registerURL = "https://joker.altariq.ps/en/registermerchant";
   // default country code prefix mobile number
   String countryCode = '+970';
 
   final TextEditingController locationController = TextEditingController();
-  bool loggedin = true;
+  bool loggedin = false;
   Locale userLnag;
   Address first;
   Coordinates coordinates;

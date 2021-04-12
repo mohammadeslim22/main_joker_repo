@@ -24,10 +24,10 @@ class _MyChangePasswordState extends State<ChangePassword>
             content: const Text('Do you want to exit the App'),
             actionsOverflowButtonSpacing: 50,
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
                   child: const Text('Cancel')),
-              FlatButton(
+              TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: const Text('Yes')),
             ],
@@ -160,10 +160,13 @@ class _MyChangePasswordState extends State<ChangePassword>
                 const Divider(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: colors.jokerBlue)),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: colors.orange)),
+                          onPrimary: colors.orange,
+                          textStyle: TextStyle(color: colors.white)),
                       onPressed: () async {
                         if (_isButtonEnabled) {
                           if (_formKey.currentState.validate()) {
@@ -189,8 +192,6 @@ class _MyChangePasswordState extends State<ChangePassword>
                           }
                         }
                       },
-                      color: colors.jokerBlue,
-                      textColor: colors.white,
                       child: bolc
                           .returnchild(trans(context, 'change_my_password'))),
                 ),

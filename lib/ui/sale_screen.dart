@@ -1,7 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/service_locator.dart';
@@ -120,7 +120,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    // final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
     return Scaffold(
       key: scaffoldkey,
@@ -130,7 +130,8 @@ class ShopDetailsPage extends State<SaleDetailPage>
             return <Widget>[
               SliverAppBar(
                 centerTitle: true,
-                expandedHeight: SizeConfig.screenHeight * .473 + extededPlus,
+                expandedHeight:
+                    SizeConfig.blockSizeVertical * 46.4 + extededPlus,
                 elevation: 0,
                 backgroundColor: Colors.transparent,
                 stretch: true,
@@ -149,8 +150,8 @@ class ShopDetailsPage extends State<SaleDetailPage>
                           children: <Widget>[
                             CurasolSlider(sale: sale, myindex: index),
                             Positioned(
-                              left: 6,
-                              top: 220,
+                              left: SizeConfig.blockSizeHorizontal,
+                              top: SizeConfig.blockSizeVertical * 32,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -232,7 +233,8 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                   ),
                                   InkWell(
                                       child: const Padding(
-                                        padding: EdgeInsets.all(6.0),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 6.0),
                                         child: Icon(Icons.star_border),
                                       ),
                                       onTap: () {
@@ -241,44 +243,24 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                             barrierDismissible: true,
                                             builder: (BuildContext context) {
                                               return RatingDialog(
-                                                icon: Container(
-                                                  height: 100,
-                                                  width: 200,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                      Radius.circular(12),
-                                                    ),
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          merchant.mydata.logo),
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
                                                 title: "Please Rate me",
-                                                description:
-                                                    "Yor feedback Give us Motivation",
-                                                submitButton: "SUBMIT",
-                                                alternativeButton:
-                                                    "Contact us instead?",
-                                                positiveComment:
-                                                    "We are so happy to hear :)",
-                                                negativeComment:
-                                                    "We're sad to hear :(",
-                                                accentColor: colors.blue,
-                                                onSubmitPressed:
-                                                    (int rating) async {
+                                                image: null,
+                                                message: '',
+                                                onSubmitted: (RatingDialogResponse
+                                                    ratingDialogResponse) async {
                                                   await dio.post<dynamic>(
                                                       "rates",
                                                       data: <String, dynamic>{
                                                         'rateable_type':
                                                             "App\\Sale",
                                                         'rateable_id': sale.id,
-                                                        'rate_value': rating
+                                                        'rate_value':
+                                                            ratingDialogResponse
+                                                                .rating
                                                       });
                                                 },
-                                                onAlternativePressed: () {},
+                                                submitButton:
+                                                    trans(context, 'submit'),
                                               );
                                             });
                                       }),
@@ -301,7 +283,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
             ];
           },
           body: Container(
-            color: colors.white,
+            color: colors.whiteArrow,
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 0),
               children: <Widget>[
@@ -315,15 +297,14 @@ class ShopDetailsPage extends State<SaleDetailPage>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text("merchant_name", style: styles.mysmall),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                SvgPicture.asset(
-                                  "assets/images/merchants.svg",
-                                  color: colors.black,
-                                ),
+                                CachedNetworkImage(
+                                    imageUrl: merchant.mydata.logo,
+                                    fit: BoxFit.cover,
+                                    height: SizeConfig.blockSizeVertical * 4),
                                 const SizedBox(width: 12),
                                 Text(merchant.mydata.name,
                                     style: styles.underHead),
@@ -336,127 +317,30 @@ class ShopDetailsPage extends State<SaleDetailPage>
                       Expanded(
                         child: Column(
                           children: <Widget>[
-                            Text(trans(context, "client_rating"),
-                                style: styles.mysmall),
-                            const SizedBox(height: 12),
                             RatingBar(
-                              onRatingChanged: (double rating) async {
-                                print(
-                                    "${merchant.mydata.id}   ${merchant.mydata.ratesAverage}");
-                                await dio.post<dynamic>("rates",
-                                    data: <String, dynamic>{
-                                      'rateable_type': "App\\Merchant",
-                                      'rateable_id': merchant.mydata.id,
-                                      'rate_value': rating
-                                    });
-                              },
-                              filledIcon: Icons.star,
-                              initialRating: double.parse(
-                                  merchant.mydata.ratesAverage.toString()),
-                              emptyIcon: Icons.star_border,
-                              halfFilledIcon: Icons.star_half,
-                              isHalfAllowed: true,
-                              filledColor: Colors.amberAccent,
-                              emptyColor: Colors.grey,
-                              halfFilledColor: Colors.blue[300],
-                              size: 26,
-                            ),
-                            const SizedBox(height: 12),
-                            InkWell(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(trans(context, "rate_shop"),
-                                      style: styles.myredstyle),
-                                  const SizedBox(width: 12),
-                                  Icon(
-                                    Icons.arrow_forward,
-                                    color: colors.blue,
-                                    size: 20,
-                                  ),
-                                ],
-                              ),
-                              onTap: () {},
-                            )
+                                onRatingChanged: (double rating) async {
+                                  await dio.post<dynamic>("rates",
+                                      data: <String, dynamic>{
+                                        'rateable_type': "App\\Merchant",
+                                        'rateable_id': merchant.mydata.id,
+                                        'rate_value': rating
+                                      });
+                                },
+                                filledIcon: Icons.star,
+                                initialRating: double.parse(
+                                    merchant.mydata.ratesAverage.toString()),
+                                emptyIcon: Icons.star_border,
+                                halfFilledIcon: Icons.star_half,
+                                isHalfAllowed: true,
+                                filledColor: Colors.amberAccent,
+                                emptyColor: Colors.grey,
+                                halfFilledColor: Colors.blue[300],
+                                size: 26),
                           ],
                         ),
                       ),
                     ],
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    const SizedBox(width: 12),
-                    Container(height: 30, width: 3, color: colors.blue),
-                    const SizedBox(width: 12),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          trans(context, "sale_history"),
-                          style: styles.underHeadblack,
-                        ),
-                        const SizedBox(height: 8),
-                      ],
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                        child: Container(
-                      height: 3,
-                      color: Colors.grey,
-                    ))
-                  ],
-                ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    SvgPicture.asset(
-                      "assets/images/from_to_shape.svg",
-                      color: Colors.transparent.withOpacity(.15),
-                    ),
-                    Positioned(
-                      top: 10,
-                      bottom: 10,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const SizedBox(width: 7),
-                          Column(
-                            children: <Widget>[
-                              Text(trans(context, "from")),
-                              const SizedBox(height: 7),
-                              Text(
-                                sale.startAt,
-                                style: styles.mystyle,
-                              )
-                            ],
-                          ),
-                          const SizedBox(width: 96),
-                          Column(
-                            children: <Widget>[
-                              Text(trans(context, "to")),
-                              const SizedBox(height: 7),
-                              Text(sale.endAt, style: styles.mystyle)
-                            ],
-                          ),
-                          const SizedBox(width: 7),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 12,
-                      bottom: 10,
-                      child: isRTL
-                          ? SvgPicture.asset(
-                              "assets/images/arrow_andclipped_line.svg",
-                            )
-                          : SvgPicture.asset(
-                              "assets/images/arrow_andclipped_line2.svg",
-                            ),
-                    )
-                  ],
                 ),
                 const SizedBox(height: 12),
                 Row(
@@ -477,7 +361,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                     const SizedBox(width: 12),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 DefaultTabController(
                   length: merchant.mydata.branches.length,
                   child: Column(
@@ -503,7 +387,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                         Radius.circular(8)),
                                     color: index != tab.id
                                         ? tabBackgroundColor
-                                        : colors.jokerBlue,
+                                        : colors.orange,
                                   ),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 8),
@@ -515,25 +399,25 @@ class ShopDetailsPage extends State<SaleDetailPage>
                             }).toList()),
                       ),
                       Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-                        width: MediaQuery.of(context).size.width,
-                        height: 96,
+                        color: colors.white,
+                        padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
+                        height: SizeConfig.blockSizeVertical * 5,
                         child: TabBarView(
                             children: merchant.mydata.branches
                                 .map((MerchantBranches tab) {
                           return Column(
                             children: <Widget>[
                               Row(children: <Widget>[
-                                Image.asset(
-                                  "assets/images/addreess_icon.png",
-                                  scale: 3.5,
-                                  fit: BoxFit.cover,
-                                ),
+                                Image.asset("assets/images/addreess_icon.png",
+                                    scale: 3.5, fit: BoxFit.cover),
                                 const SizedBox(width: 5),
-                                Text(tab.address != "null"
-                                    ? tab.address
-                                    : trans(context, "data_no_available"))
+                                Flexible(
+                                  child: Text(
+                                      tab.address != "null"
+                                          ? tab.address
+                                          : trans(context, "data_no_available"),
+                                      maxLines: 3),
+                                )
                               ]),
                             ],
                           );
@@ -545,17 +429,19 @@ class ShopDetailsPage extends State<SaleDetailPage>
                 if (!hasMemberShip)
                   Column(
                     children: <Widget>[
-                      RaisedButton(
-                          color: colors.jokerBlue,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 12),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: colors.orange)),
+                            onPrimary: colors.orange,
+                          ),
                           child: Text(
                             trans(context, 'request_membership_for_merchant'),
                             style: styles.underHeadwhite,
                           ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: colors.jokerBlue)),
                           onPressed: () async {
                             Navigator.pushNamed(
                                 context, "/MemberShipsForMerchant",
@@ -565,7 +451,7 @@ class ShopDetailsPage extends State<SaleDetailPage>
                           }),
                       const SizedBox(height: 16),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Text(
                           trans(context,
                               "join_merchant_members_have_more_offers_for_qrcode_on_entrance"),
@@ -829,44 +715,16 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
         tp.layout(maxWidth: size.maxWidth);
         final bool exceeded = tp.didExceedMaxLines;
         return Column(children: <Widget>[
-          Text.rich(
-            span,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 3,
-          ),
+          Text.rich(span, overflow: TextOverflow.ellipsis, maxLines: 3),
           if (exceeded)
-            InkWell(
-              child: Container(
-                height: 30,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(trans(context, "show_more"), style: styles.showMore),
-                  ],
-                ),
+            Container(
+              height: SizeConfig.blockSizeVertical * .2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(trans(context, "show_more"), style: styles.showMore),
+                ],
               ),
-              onTap: () {
-                SystemChannels.textInput.invokeMethod<String>('TextInput.hide');
-                widget.bottomSheetController = widget.scaffoldkey.currentState
-                    .showBottomSheet<dynamic>((BuildContext context) {
-                  return Container(
-                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(color: colors.blue, width: 7.0),
-                        bottom: BorderSide(color: colors.blue, width: 7.0),
-                        right: BorderSide(color: colors.blue, width: 7.0),
-                        left: BorderSide(color: colors.blue, width: 7.0),
-                      ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(24),
-                      ),
-                      color: colors.white,
-                    ),
-                    child: Text(widget.mytext, style: styles.mystyle),
-                  );
-                }, backgroundColor: Colors.transparent);
-              },
             )
           else
             Container(),
@@ -908,23 +766,22 @@ class _CurasolSliderState extends State<CurasolSlider> {
       children: <Widget>[
         CarouselSlider(
           options: CarouselOptions(
-            height: SizeConfig.screenHeight * .5,
-            viewportFraction: 1,
-            initialPage: 0,
-            enableInfiniteScroll: true,
-            reverse: true,
-            autoPlay: true,
-            autoPlayInterval: const Duration(seconds: 3),
-            autoPlayAnimationDuration: const Duration(milliseconds: 800),
-            autoPlayCurve: Curves.fastOutSlowIn,
-            scrollDirection: Axis.horizontal,
-            onPageChanged: (int index, CarouselPageChangedReason reason) {
-              setState(() {
-                widget.myindex = index;
-              });
-            },
-            pageViewKey: const PageStorageKey<dynamic>('carousel_slider'),
-          ),
+              height: SizeConfig.screenHeight * .5,
+              viewportFraction: 1,
+              initialPage: 0,
+              enableInfiniteScroll: true,
+              reverse: true,
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 3),
+              autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              scrollDirection: Axis.horizontal,
+              onPageChanged: (int index, CarouselPageChangedReason reason) {
+                setState(() {
+                  widget.myindex = index;
+                });
+              },
+              pageViewKey: const PageStorageKey<dynamic>('carousel_slider')),
           items: widget.sale.images.map((Images image) {
             return Builder(
               builder: (BuildContext context) {
@@ -985,16 +842,17 @@ class _CurasolSliderState extends State<CurasolSlider> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
+                  const Icon(Icons.av_timer, size: 16),
+                  Text("2 d, 8 h", style: styles.timeLeftTextStyle),
+                  const SizedBox(width: 16),
                   Text(
                     widget.sale.price ?? "30",
                     style: styles.redstyleForSaleScreen,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    widget.sale.oldPrice,
-                    style:
-                        const TextStyle(decoration: TextDecoration.lineThrough),
-                  ),
+                  Text(widget.sale.oldPrice,
+                      style: const TextStyle(
+                          decoration: TextDecoration.lineThrough)),
                 ],
               ),
               const SizedBox(height: 8),

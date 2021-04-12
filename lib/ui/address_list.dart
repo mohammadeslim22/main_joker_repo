@@ -106,10 +106,9 @@ class AddressListState extends State<AddressList> {
               ],
             ),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 36),
-              child: RaisedButton(
-                  color: colors.jokerBlue,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 36),
+                child: ElevatedButton(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -120,6 +119,10 @@ class AddressListState extends State<AddressList> {
                         color: colors.white,
                       )
                     ],
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    shadowColor: colors.orange,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                   onPressed: () async {
                     String lat;
@@ -133,8 +136,8 @@ class AddressListState extends State<AddressList> {
                           "long": double.parse(long) ?? 51.6565,
                           "choice": 2
                         });
-                  }),
-            ),
+                  },
+                )),
             Expanded(
               child: PagewiseListView<dynamic>(
                 physics: const ScrollPhysics(),
@@ -195,14 +198,14 @@ class AddressListState extends State<AddressList> {
                   currentId = locationData.id;
                 });
                 if (getIt<MerchantProvider>().pagewiseBranchesController !=
-                    null){
-                      getIt<MerchantProvider>().pagewiseBranchesController.reset();
-                    }
-                  
-                if (getIt<SalesProvider>().pagewiseSalesController != null){
-                   getIt<SalesProvider>().pagewiseSalesController.reset();
+                    null) {
+                  getIt<MerchantProvider>().pagewiseBranchesController.reset();
                 }
-                 
+
+                if (getIt<SalesProvider>().pagewiseSalesController != null) {
+                  getIt<SalesProvider>().pagewiseSalesController.reset();
+                }
+
                 Navigator.pop(context);
                 Navigator.pop(context);
               },

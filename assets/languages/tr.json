@@ -222,6 +222,18 @@
     "message_sending_failed": "Mesaj Gönderilemedi :(",
     "pull_up_load": "yüklemeyi çek",
     "no_data": "Başka Veri Yok",
-    "Merchant_MemberShips":"Tüccar Üye Gemileri",
-    "u_subscribed_already":"Önceki bir aboneliğiniz var"
+    "Merchant_MemberShips": "Tüccar Üye Gemileri",
+    "u_subscribed_already": "Önceki bir aboneliğiniz var",
+    "offers": "Satışlar",
+    "discount": "İndirim",
+    "ends_in": "İçinde biter",
+    "sale_list": "satış listesi",
+    "month": "ay",
+    "year": "yıl",
+    "day": "gün",
+    "hour": "saat",
+    "minute": "dakika",
+    "more_info_map_card":"Daha fazla bilgi",
+    "login_or_sign_up":"Giriş veya kayıt olun",
+    "joker_app":"Joker Uygulaması"
 }
