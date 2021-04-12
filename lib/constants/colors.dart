@@ -23,6 +23,7 @@ class MyColors {
   Color ggrey = Colors.grey;
   Color orange = Colors.orange;
   Color mapCardIcons = const Color(0x00F4F4F4);
+
 }
 
 final MyColors colors = MyColors();
