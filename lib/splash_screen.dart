@@ -101,6 +101,7 @@ class _SplashScreenState extends State<SplashScreen>
     auth = Provider.of<Auth>(context, listen: false);
     askUser(lang);
     initPlatformState(auth);
+    auth.getNotificationsCount();
     // if (config.loggedin) {
     //   data.getData("username").then((String name) {
     //     if (name.isEmpty || name == null) {

@@ -100,7 +100,9 @@ class _NotifcationsState extends State<Notifcations> {
     }
     return Dismissible(
       onDismissed: (DismissDirection dDirection) async {
-        await value.openNotifications(nD.id);
+        if (nD.isread == 0){
+           await value.openNotifications(nD.id);
+        }
       },
       key: const Key("c"),
       child: Container(

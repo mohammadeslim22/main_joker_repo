@@ -19,7 +19,7 @@ class Auth with ChangeNotifier {
     // TODO(ahmed): do login by dio library
   }
   String myCountryCode;
-  String myCountryDialCode="+90";
+  String myCountryDialCode = "+90";
   String dialCodeFav = "TR";
   String errorMessage;
   String username = "username";
@@ -97,7 +97,7 @@ class Auth with ChangeNotifier {
   ];
   Map<String, String> resetPassValidationMap =
       Map<String, String>.fromIterables(resetPasskeys, resetPassValidators);
-  void getCountry(String countryCode)  {
+  void getCountry(String countryCode) {
     // await CountryCodes.init();
     // print("dialCodeFav $myCountryDialCode $dialCodeFav");
     // final CountryDetails details =
@@ -112,6 +112,20 @@ class Auth with ChangeNotifier {
   void setnotificationdCount(int count) {
     unredNotifications = count;
     notifyListeners();
+  }
+
+  Future<void> getNotificationsCount() async {
+    print(dio.options.headers['authorization'].toString().split(" ")[1]);
+    final Response<dynamic> res = await dio.get<dynamic>("notif_count",
+        queryParameters: <String, String>{
+          "token": dio.options.headers['authorization'].toString().split(" ")[1]
+        });
+    if (res.data.toString() == "unauthinicated") {
+    } else {
+      setnotificationdCount(int.parse(res.data.toString()));
+    }
+    print("Notification count in splash ${res.data}");
+    //
   }
 
   void minnotificationdCount1() {
@@ -169,7 +183,9 @@ class Auth with ChangeNotifier {
           data.setData("profile_pic", value.data['data']['image'].toString());
           config.profileUrl = value.data['data']['image'].toString();
           setUserPicture(value.data['data']['image'].toString());
+          print("unredNotifications ${value.data['data']['unread_count']}");
           unredNotifications = value.data['data']['unread_count'] as int;
+          notifyListeners();
           print("auth header ======= ${value.data['data']['api_token']}");
           dio.options.headers['authorization'] =
               'Bearer ${value.data['data']['api_token']}';
@@ -732,7 +748,6 @@ class Auth with ChangeNotifier {
     "PL": "+48",
     "PT": "+351",
     "PR": "+1939",
-    
     "QA": "+974",
     "RO": "+40",
     "RU": "+7",
