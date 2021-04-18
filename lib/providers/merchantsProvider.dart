@@ -30,13 +30,14 @@ class MerchantProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("pbranches", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization':  jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
+      'specialization':
+          jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
     });
 
     branches = Branches.fromJson(response.data);
-    branches.data.forEach((BranchData element) {
-      print("branch no auth ${element.id}");
-    });
+    // branches.data.forEach((BranchData element) {
+    //   print("branch no auth ${element.id}");
+    // });
     notifyListeners();
     return branches.data;
   }
@@ -45,12 +46,13 @@ class MerchantProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("branches", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
+      'specialization':
+          jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
     });
     branches = Branches.fromJson(response.data);
-    branches.data.forEach((BranchData element) {
-      print("branch auth -- ${element.id}");
-    });
+    // branches.data.forEach((BranchData element) {
+    //   print("branch auth -- ${element.id}");
+    // });
     notifyListeners();
 
     return branches.data;

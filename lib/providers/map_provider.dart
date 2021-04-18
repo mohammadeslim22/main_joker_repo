@@ -162,7 +162,7 @@ class HOMEMAProvider with ChangeNotifier {
         'limit': 20
       });
     }
-   
+
     branches = MapBranches.fromJson(response.data);
     markers.clear();
     addUserIcon();
@@ -238,9 +238,9 @@ class HOMEMAProvider with ChangeNotifier {
           showOffersHorizontalCards(element.id);
           selectedBranchId = element.id;
           swipController.move(0);
-          element.lastsales.forEach((SaleData element) {
-            print("is favorite ${element.id} ${element.isfavorite}");
-          });
+          // element.lastsales.forEach((SaleData element) {
+          //   print("is favorite ${element.id} ${element.isfavorite}");
+          // });
 
           // getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
           //     .scaffoldkey

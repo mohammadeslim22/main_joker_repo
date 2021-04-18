@@ -6,7 +6,6 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
-import 'package:joker/providers/mainprovider.dart';
 import 'package:package_info/package_info.dart';
 import '../../localization/trans.dart';
 import '../../constants/colors.dart';
