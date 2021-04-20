@@ -54,7 +54,9 @@ dependencies:
   latlong: ^0.6.1
   font_awesome_flutter: ^9.0.0
   google_maps_flutter: ^2.0.1
+  
   geocoder: ^0.2.1
+  # geocoding: ^2.0.0
   percent_indicator: ^3.0.1
   timer_count_down: ^2.0.0
   vibration: ^1.7.3
