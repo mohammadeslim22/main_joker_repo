@@ -40,7 +40,7 @@ Future<void> main() async {
   });
 
 //Remove this method to stop OneSignal Debugging
-  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  OneSignal.shared.setLogLevel(OSLogLevel.none, OSLogLevel.none);
   // OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.debug);
 
   OneSignal.shared.init(config.onesignal, iOSSettings: <OSiOSSettings, dynamic>{

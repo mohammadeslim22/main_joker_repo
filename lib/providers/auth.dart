@@ -115,6 +115,8 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> getNotificationsCount() async {
+    // TODO(isleem): the application stops at split(" ")[1])
+   
     final Response<dynamic> res = await dio.get<dynamic>("notif_count",
         queryParameters: <String, String>{
           "token": dio.options.headers['authorization'].toString().split(" ")[1]??""
@@ -185,10 +187,8 @@ class Auth with ChangeNotifier {
           print("unredNotifications ${value.data['data']['unread_count']}");
           unredNotifications = value.data['data']['unread_count'] as int;
           notifyListeners();
-          print("auth header ======= ${value.data['data']['api_token']}");
           dio.options.headers['authorization'] =
               'Bearer ${value.data['data']['api_token']}';
-          print("dio header ======= ${dio.options.headers['authorization']}");
           await data.setData(
               "authorization", "Bearer ${value.data['data']['api_token']}");
           config.username = value.data['data']['name'].toString();

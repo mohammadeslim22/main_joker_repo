@@ -37,7 +37,8 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
   String startDate = "${starttoday.toLocal()}".split(' ')[0];
   String endDate = "${endtoday.toLocal()}".split(' ')[0];
   AnimationController _animationController;
-  final CalendarController _calendarController = CalendarController();
+  // final CalendarController _calendarController = CalendarController();
+  
   double _ratingStar = 0;
   bool showingStartingDateCalendar = true;
   Widget t;
@@ -56,13 +57,16 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
 
     _animationController.forward();
 
-    t = TableCalendar(
-      calendarController: _calendarController,
+    t = TableCalendar<dynamic>(
+      firstDay: DateTime.now().subtract(const Duration(days: 500)),
+      lastDay: DateTime.now().subtract(const Duration(days: 500)),
+focusedDay: DateTime.now(),
+      // calendarController: _calendarController,
       startingDayOfWeek: StartingDayOfWeek.monday,
-      calendarStyle: CalendarStyle(
-          selectedColor: Colors.orange[400],
-          todayColor: Colors.orange[200],
-          markersColor: Colors.brown[700],
+      calendarStyle: const CalendarStyle(
+          // selectedColor: Colors.orange[400],
+          // todayColor: Colors.orange[200],
+          // markersColor: Colors.brown[700],
           outsideDaysVisible: false),
       headerStyle: HeaderStyle(
         formatButtonTextStyle:
@@ -78,7 +82,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
     tt = t;
   }
 
-  void _onDaySelected(DateTime day, List<void> events, List<dynamic> events2) {
+  void _onDaySelected(DateTime day, DateTime events) {
     if (showingStartingDateCalendar) {
       setState(() {
         starttoday = day;
