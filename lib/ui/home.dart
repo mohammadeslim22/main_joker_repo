@@ -23,7 +23,7 @@ import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/providers/globalVars.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+// import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'main/sales_list_stateless.dart';
 
 class Home extends StatefulWidget {
@@ -231,28 +231,28 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     IconButton(
                       icon: Icon(Icons.camera, color: colors.orange),
                       onPressed: () async {
-                        final String barcodeScanRes =
-                            await FlutterBarcodeScanner.scanBarcode(
-                                "#ff6666", "Cancel", true, ScanMode.QR);
-                        try {
-                          final Map<String, dynamic> map = json
-                              .decode(barcodeScanRes) as Map<String, dynamic>;
-                          getIt<MerchantProvider>().vistBranch(
-                              int.parse(map['id'].toString()),
-                              source: 'qr');
-                          Navigator.pushNamed(context, "/MerchantDetails",
-                              arguments: <String, dynamic>{
-                                "merchantId":
-                                    int.parse(map['merchant_id'].toString()),
-                                "branchId": int.parse(map['id'].toString()),
-                                "source": "qr"
-                              });
-                          print(barcodeScanRes);
-                          Fluttertoast.showToast(msg: barcodeScanRes);
-                        } catch (e) {
-                          Fluttertoast.showToast(
-                              msg: trans(context, 'use_right_qr_code'));
-                        }
+                        // final String barcodeScanRes =
+                        //     await FlutterBarcodeScanner.scanBarcode(
+                        //         "#ff6666", "Cancel", true, ScanMode.QR);
+                        // try {
+                        //   final Map<String, dynamic> map = json
+                        //       .decode(barcodeScanRes) as Map<String, dynamic>;
+                        //   getIt<MerchantProvider>().vistBranch(
+                        //       int.parse(map['id'].toString()),
+                        //       source: 'qr');
+                        //   Navigator.pushNamed(context, "/MerchantDetails",
+                        //       arguments: <String, dynamic>{
+                        //         "merchantId":
+                        //             int.parse(map['merchant_id'].toString()),
+                        //         "branchId": int.parse(map['id'].toString()),
+                        //         "source": "qr"
+                        //       });
+                        //   print(barcodeScanRes);
+                        //   Fluttertoast.showToast(msg: barcodeScanRes);
+                        // } catch (e) {
+                        //   Fluttertoast.showToast(
+                        //       msg: trans(context, 'use_right_qr_code'));
+                        // }
                       },
                     ),
                   ],
