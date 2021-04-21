@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'pac
+kage:flutter_localizations/flutter_localizations.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/splash_screen.dart';
