@@ -247,7 +247,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 "branchId": int.parse(map['id'].toString()),
                                 "source": "qr"
                               });
-                          print(barcodeScanRes);
                           Fluttertoast.showToast(msg: barcodeScanRes);
                         } catch (e) {
                           Fluttertoast.showToast(

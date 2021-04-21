@@ -691,13 +691,16 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
             ),
             const Spacer(),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                // disabledColor: colors.orange,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: colors.orange)),
-                onPrimary: colors.orange,
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith(
+                    (Set<MaterialState> states) => colors.orange),
+                shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+                    (Set<MaterialState> states) => RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(color: colors.orange))),
+                padding: MaterialStateProperty.resolveWith(
+                    (Set<MaterialState> states) =>
+                        const EdgeInsets.symmetric(horizontal: 24)),
               ),
               onPressed: () async {
                 final map_luncher.Coords crods = map_luncher.Coords(
