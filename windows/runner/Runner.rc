@@ -89,11 +89,11 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.joker.app" "\0"
+            VALUE "CompanyName", "com.jokerindirim.app" "\0"
             VALUE "FileDescription", "A new Flutter project." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "joker" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2021 com.joker.app. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2021 com.jokerindirim.app. All rights reserved." "\0"
             VALUE "OriginalFilename", "joker.exe" "\0"
             VALUE "ProductName", "joker" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
