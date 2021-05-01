@@ -191,6 +191,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
               ),
               const SizedBox(height: 32),
               ListTile(
+                enabled: config.loggedin,
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Row(
                   children: <Widget>[
@@ -213,6 +214,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 },
               ),
               ListTile(
+                
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'account')}"),
                 leading: SvgPicture.asset("assets/images/account.svg"),
