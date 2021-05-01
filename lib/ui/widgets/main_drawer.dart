@@ -29,7 +29,7 @@ class _MainMenuState extends State<MainMenu> {
   Jnotification n = Jnotification(data: <NotificationData>[]);
   Future<List<NotificationData>> getNotifications(int pageNumber) async {
     final Response<dynamic> response = await dio.get<dynamic>("notifications",
-        queryParameters: <String, int>{"page": pageNumber+1});
+        queryParameters: <String, int>{"page": pageNumber + 1});
     n = Jnotification.fromJson(response.data);
 
     return n.data;
@@ -259,17 +259,32 @@ class _MainMenuState extends State<MainMenu> {
             ),
             const SizedBox(height: 8),
             // const SizedBox(height: 36.0),
-            ListTile(
-              contentPadding: const EdgeInsets.only(left: 0),
-              title: Text("${trans(context, 'logout')}"),
-              leading: Image.asset("assets/images/menu_logout.png"),
-              // SvgPicture.asset("assets/images/logout.svg"),
-              onTap: () async {
-                await getIt<Auth>().signOut();
-                // data.setData('authorization', "");
-                // Navigator.pushNamedAndRemoveUntil(
-                //     context, '/login', (_) => false);
-              },
+            Visibility(
+              visible: getIt<Auth>().isAuthintecated,
+              child: ListTile(
+                contentPadding: const EdgeInsets.only(left: 0),
+                title: Text("${trans(context, 'logout')}"),
+                leading: Image.asset("assets/images/menu_logout.png"),
+                // SvgPicture.asset("assets/images/logout.svg"),
+                onTap: () async {
+                  await getIt<Auth>().signOut();
+                  // data.setData('authorization', "");
+                  // Navigator.pushNamedAndRemoveUntil(
+                  //     context, '/login', (_) => false);
+                },
+              ),
+              // replacement:  ListTile(
+              //   contentPadding: const EdgeInsets.only(left: 0),
+              //   title: Text("${trans(context, 'login')}"),
+              //   leading: Image.asset("assets/images/menu_logout.png"),
+              //   // SvgPicture.asset("assets/images/logout.svg"),
+              //   onTap: () async {
+              //     await getIt<Auth>().signOut();
+              //     // data.setData('authorization', "");
+              //     // Navigator.pushNamedAndRemoveUntil(
+              //     //     context, '/login', (_) => false);
+              //   },
+              // ),
             ),
           ],
         );

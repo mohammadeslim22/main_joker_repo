@@ -221,7 +221,7 @@ class _MyRegistrationState extends State<Registration>
                     icon: const Icon(Icons.add_location, color: Colors.orange),
                     onPressed: () {
                       Navigator.pushNamed(context, '/AutoLocate',
-                          arguments: <String, double>{
+                          arguments: <String, dynamic>{
                             "lat": 51.0,
                             "long": 9.6,
                             "choice": 0
