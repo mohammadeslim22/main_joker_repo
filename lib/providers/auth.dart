@@ -302,14 +302,14 @@ class Auth with ChangeNotifier {
         print(value.data);
 
         Navigator.pushNamed(context, '/pin', arguments: <String, String>{
-          'mobileNo': myCountryDialCode + mobile.replaceAll("^0+", "")
+          'mobileNo': myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')
         });
         config.locationController.clear();
         await data.setData("id", value.data['data']['id'].toString());
         data.setData("email", email);
         data.setData("username", username);
         data.setData("password", pass);
-        data.setData("phone", myCountryDialCode + mobile.replaceAll("^0+", ""));
+        data.setData("phone", myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), ''));
         data.setData("lat", config.lat.toString());
         data.setData("long", config.long.toString());
         data.setData("address", config.locationController.text.toString());
