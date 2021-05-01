@@ -7,6 +7,7 @@ import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/models/simplesales.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/constants/config.dart';
@@ -21,7 +22,8 @@ class SalesProvider with ChangeNotifier {
   PagewiseLoadController<dynamic> pagewiseSalesController;
   Sales favSales;
   Future<void> getSale(int saleId) async {
-    if (config.loggedin)
+    // if (config.loggedin)
+    if (getIt<Auth>().isAuthintecated)
       dio.get<dynamic>("sales/$saleId").then((Response<dynamic> value) {});
   }
 
@@ -127,7 +129,8 @@ class SalesProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization':  jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize ?? 1])
+      'specialization':
+          jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize ?? 1])
     });
     sales = Sales.fromJson(response.data);
     tempSales = sales;
@@ -140,7 +143,8 @@ class SalesProvider with ChangeNotifier {
     final Response<dynamic> response =
         await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'specialization': jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
+      'specialization':
+          jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
     });
     sales = Sales.fromJson(response.data);
     tempSales = sales;

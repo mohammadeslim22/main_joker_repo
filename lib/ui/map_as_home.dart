@@ -104,11 +104,12 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
       await pc.hide();
     });
     getIt<HOMEMAProvider>().getBranchesData(1);
+
     getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
-            pageSize: config.loggedin ? 15 : 6,
+            pageSize: getIt<Auth>().isAuthintecated ? 15 : 6,
             pageFuture: (int pageIndex) async {
-              return config.loggedin
+              return getIt<Auth>().isAuthintecated
                   ? (getIt<GlobalVars>().filterData != null)
                       ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
                           pageIndex, getIt<GlobalVars>().filterData)
@@ -119,6 +120,20 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                           pageIndex, getIt<GlobalVars>().filterData)
                       : getIt<SalesProvider>().getSalesData(pageIndex);
             });
+    // PagewiseLoadController<dynamic>(
+    //     pageSize: config.loggedin ? 15 : 6,
+    //     pageFuture: (int pageIndex) async {
+    //       return config.loggedin
+    //           ? (getIt<GlobalVars>().filterData != null)
+    //               ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
+    //                   pageIndex, getIt<GlobalVars>().filterData)
+    //               : getIt<SalesProvider>()
+    //                   .getSalesDataAuthenticated(pageIndex)
+    //           : (getIt<GlobalVars>().filterData != null)
+    //               ? getIt<SalesProvider>().getSalesDataFilterd(
+    //                   pageIndex, getIt<GlobalVars>().filterData)
+    //               : getIt<SalesProvider>().getSalesData(pageIndex);
+    //     });
   }
 
   @override

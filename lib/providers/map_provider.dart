@@ -9,9 +9,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/models/specializations.dart';
 import 'package:joker/models/location_images.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:joker/util/size_config.dart';
 
 class HOMEMAProvider with ChangeNotifier {
@@ -149,13 +151,15 @@ class HOMEMAProvider with ChangeNotifier {
 
   Future<void> getBranchesData(int specId) async {
     Response<dynamic> response;
-    if (config.loggedin) {
+    // if (config.loggedin) {
+       if (getIt<Auth>().isAuthintecated) {
       response =
           await dio.get<dynamic>("map2", queryParameters: <String, dynamic>{
         'specialization': jsonEncode(<int>[specId ?? selectedSpecialize]),
         'limit': 20
       });
-    } else {
+    }
+     else {
       response =
           await dio.get<dynamic>("map", queryParameters: <String, dynamic>{
         'specialization': jsonEncode(<int>[specId ?? selectedSpecialize]),

@@ -102,8 +102,8 @@ class _SplashScreenState extends State<SplashScreen>
     askUser(lang);
     initPlatformState(auth);
     // TODO(isleem): remove or solve this
-    
-     auth.getNotificationsCount();
+
+    auth.getNotificationsCount();
     // if (config.loggedin) {
     //   data.getData("username").then((String name) {
     //     if (name.isEmpty || name == null) {
@@ -156,6 +156,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   void setUserAndPicture(Auth auth) {
     if (config.loggedin) {
+      auth.changeIsAuthToTrue();
+
       data.getData("username").then((String name) {
         if (name.isEmpty || name == null) {
           config.username = trans(context, 'username');
@@ -195,6 +197,7 @@ class _SplashScreenState extends State<SplashScreen>
         }
       });
     } else {
+      auth.changeIsAuthToFalse();
       auth.changeUsername(trans(context, "login_or_sign_up"));
       config.username = getIt<NavigationService>()
           .translateWithNoContext(trans(context, "login_or_sign_up"));

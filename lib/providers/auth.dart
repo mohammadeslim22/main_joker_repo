@@ -15,9 +15,10 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 // import 'package:country_provider/country_provider.dart';
 
 class Auth with ChangeNotifier {
-  Auth() {
-    // TODO(ahmed): do login by dio library
-  }
+  bool isAuthintecated = false;
+  // Auth() {
+  //   // TODO(ahmed): do login by dio library
+  // }
   String myCountryCode;
   String myCountryDialCode = "+90";
   String dialCodeFav = "TR";
@@ -109,14 +110,25 @@ class Auth with ChangeNotifier {
     // print("numricCode:    ${result.callingCodes}");
   }
 
+  void changeIsAuthToFalse() {
+    isAuthintecated = false;
+    notifyListeners();
+  }
+
+  void changeIsAuthToTrue() {
+    isAuthintecated = true;
+    notifyListeners();
+  }
+
   void setnotificationdCount(int count) {
     unredNotifications = count;
     notifyListeners();
   }
 
   Future<void> getNotificationsCount() async {
-    print("dio.options.headers['authorization']  ${dio.options.headers['authorization']}");
- 
+    print(
+        "dio.options.headers['authorization']  ${dio.options.headers['authorization']}");
+
     if (dio.options.headers['authorization'] != null &&
         dio.options.headers['authorization'].toString().trim() == "" &&
         dio.options.headers['authorization'].toString().trim() == "null" &&
@@ -167,8 +179,8 @@ class Auth with ChangeNotifier {
 
     final String playerId = status.subscriptionStatus.userId;
     await dio.post<dynamic>("login", data: <String, dynamic>{
-      "phone":
-          myCountryDialCode + username.replaceAll(RegExp(r'^0+(?=.)'), '').toString().trim(),
+      "phone": myCountryDialCode +
+          username.replaceAll(RegExp(r'^0+(?=.)'), '').toString().trim(),
       "password": pass.toString(),
       "onesignal_player_id": playerId
     }).then((Response<dynamic> value) async {
@@ -199,7 +211,7 @@ class Auth with ChangeNotifier {
           config.username = value.data['data']['name'].toString();
           changeUsername(value.data['data']['name'].toString());
           config.loggedin = true;
-
+          isAuthintecated = true;
           Navigator.popAndPushNamed(context, '/MapAsHome',
               arguments: <String, dynamic>{
                 "lat": config.lat,
@@ -260,7 +272,8 @@ class Auth with ChangeNotifier {
     String email,
     String mobile,
   ) async {
-    print("loging info:${myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')}");
+    print(
+        "loging info:${myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')}");
     bool res;
     await dio.post<dynamic>("register", data: <String, dynamic>{
       "name": username,
@@ -285,14 +298,16 @@ class Auth with ChangeNotifier {
         print(value.data);
 
         Navigator.pushNamed(context, '/pin', arguments: <String, String>{
-          'mobileNo': myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')
+          'mobileNo':
+              myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')
         });
         config.locationController.clear();
         await data.setData("id", value.data['data']['id'].toString());
         data.setData("email", email);
         data.setData("username", username);
         data.setData("password", pass);
-        data.setData("phone", myCountryDialCode + mobile.replaceAll("^0+", ""));
+        data.setData("phone",
+            myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), ''));
         data.setData("lat", config.lat.toString());
         data.setData("long", config.long.toString());
         data.setData("address", config.locationController.text.toString());
@@ -318,9 +333,9 @@ class Auth with ChangeNotifier {
     super.dispose();
   }
 
-  bool get isAuthenticated {
-    return user != null;
-  }
+  // bool get isAuthenticated {
+  //   return user != null;
+  // }
 
   void signInAnonymously() {}
 
@@ -328,6 +343,7 @@ class Auth with ChangeNotifier {
     await data.setData('authorization', null);
     dio.options.headers['authorization'] = "";
     config.loggedin = false;
+    isAuthintecated = false;
 
     getIt<NavigationService>().navigateTo('/login', null);
   }
