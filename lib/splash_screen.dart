@@ -103,7 +103,7 @@ class _SplashScreenState extends State<SplashScreen>
     initPlatformState(auth);
     // TODO(isleem): remove or solve this
     //
-    // auth.getNotificationsCount();
+     auth.getNotificationsCount();
     // if (config.loggedin) {
     //   data.getData("username").then((String name) {
     //     if (name.isEmpty || name == null) {
