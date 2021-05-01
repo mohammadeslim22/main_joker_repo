@@ -178,6 +178,10 @@ class MainProvider extends ChangeNotifier {
     loadingRegister = state;
     notifyListeners();
   }
+    void togelfLoading(bool state) {
+    loadingRegister = state;
+    notifyListeners();
+  }
 
   void togelocationloading(bool state) {
     visibilityObs = state;

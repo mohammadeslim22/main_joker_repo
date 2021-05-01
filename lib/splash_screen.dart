@@ -81,7 +81,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await FlutterSimCountryCode.simCountryCode;
-      auth.dialCodeFav = platformVersion;
+      auth.dialCodeFav = platformVersion.toUpperCase();
       platformVersion = platformVersion.toUpperCase();
       print("platform country code : $platformVersion");
 
