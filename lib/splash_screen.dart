@@ -81,8 +81,9 @@ class _SplashScreenState extends State<SplashScreen>
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await FlutterSimCountryCode.simCountryCode;
-      print("platform country code : $platformVersion");
       auth.dialCodeFav = platformVersion;
+      platformVersion = platformVersion.toUpperCase();
+      print("platform country code : $platformVersion");
 
       auth.getCountry(platformVersion);
     } on PlatformException {
@@ -103,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen>
     initPlatformState(auth);
     // TODO(isleem): remove or solve this
     //
-     auth.getNotificationsCount();
+    auth.getNotificationsCount();
     // if (config.loggedin) {
     //   data.getData("username").then((String name) {
     //     if (name.isEmpty || name == null) {

@@ -11,7 +11,8 @@ import '../constants/colors.dart';
 
 class MainProvider extends ChangeNotifier {
   bool darkthemeIson = false;
-  bool loading = false;
+  bool loadingRegister = false;
+  bool loadingLogin = false;
   static TickerProvider c;
   static String loginbase = "login";
   static AnimationController _controller;
@@ -108,7 +109,24 @@ class MainProvider extends ChangeNotifier {
   Widget f;
   void changechild(String login) {
     loginbase = login;
-    if (loading) {
+    if (loadingRegister) {
+      f = Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+          child: Text(loginbase,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 25,
+              )));
+    } else {
+      f = spinkit;
+    }
+
+    notifyListeners();
+  }
+  void changechildLogin(String login) {
+    loginbase = login;
+    if (loadingRegister) {
       f = Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Text(loginbase,
@@ -126,7 +144,7 @@ class MainProvider extends ChangeNotifier {
 
   Widget returnchild(String login) {
     loginbase = login;
-    if (!loading) {
+    if (!loadingRegister) {
       return Padding(
           padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
           child: Text(loginbase,
@@ -142,7 +160,7 @@ class MainProvider extends ChangeNotifier {
 
   Widget returnchildforProfile(String login) {
     loginbase = login;
-    if (!loading) {
+    if (!loadingRegister) {
       return Padding(
           padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
           child: Text(loginbase,
@@ -157,7 +175,7 @@ class MainProvider extends ChangeNotifier {
   }
 
   void togelf(bool state) {
-    loading = state;
+    loadingRegister = state;
     notifyListeners();
   }
 
