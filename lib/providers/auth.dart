@@ -175,7 +175,7 @@ class Auth with ChangeNotifier {
 
   Future<bool> login(String username, String pass, BuildContext context) async {
     print(
-        "loging info:${myCountryDialCode + username.replaceAll("^0+", "").toString().trim()}");
+        "loging info:${myCountryDialCode + username.replaceAll(RegExp(r'^0+(?=.)'), '').toString().trim()}");
     bool res;
     final OSPermissionSubscriptionState status =
         await OneSignal.shared.getPermissionSubscriptionState();
@@ -183,7 +183,7 @@ class Auth with ChangeNotifier {
     final String playerId = status.subscriptionStatus.userId;
     await dio.post<dynamic>("login", data: <String, dynamic>{
       "phone":
-          myCountryDialCode + username.replaceAll("^0+", "").toString().trim(),
+          myCountryDialCode + username.replaceAll(RegExp(r'^0+(?=.)'), '').toString().trim(),
       "password": pass.toString(),
       "onesignal_player_id": playerId
     }).then((Response<dynamic> value) async {
@@ -277,7 +277,7 @@ class Auth with ChangeNotifier {
     String email,
     String mobile,
   ) async {
-    print("loging info:${myCountryDialCode + mobile.replaceAll("^0+", "")}");
+    print("loging info:${myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')}");
     bool res;
     await dio.post<dynamic>("register", data: <String, dynamic>{
       "name": username,
@@ -285,7 +285,7 @@ class Auth with ChangeNotifier {
       "password_confirmation": pass,
       "birth_date": birth,
       "email": email,
-      "phone": myCountryDialCode + mobile.replaceAll("^0+", ""),
+      "phone": myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), ''),
       "country_id": 1,
       "city_id": 1,
       "address": config.locationController.text,
