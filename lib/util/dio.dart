@@ -53,16 +53,7 @@ void dioDefaults() {
     }
     rHandlers.next(response);
   }, onError: (DioError e, ErrorInterceptorHandler eHandler) async {
-    //  await auth.getCountry(platformVersion);
-    //   try {
-    //  final String platformVersion = await FlutterSimCountryCode.simCountryCode;
-    //   print("platform country code : $platformVersion");
-    //   getIt<Auth>().dialCodeFav = platformVersion;
-    //   // auth.setDialCodee(platformVersion);
-    //   await  getIt<Auth>().getCountry(platformVersion);
-    // } on PlatformException {
-    //  print('Failed to get platform version.');
-    // }
+
     Navigator.pushNamed(navigatorState.currentContext, "/login");
     print(
         "status code: ${response.statusCode}  endpoint : ${response.realUri}");
