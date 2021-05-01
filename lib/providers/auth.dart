@@ -15,9 +15,10 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 // import 'package:country_provider/country_provider.dart';
 
 class Auth with ChangeNotifier {
-  Auth() {
-    // TODO(ahmed): do login by dio library
-  }
+  bool isAuthintecated = false;
+  // Auth() {
+  //   // TODO(ahmed): do login by dio library
+  // }
   String myCountryCode;
   String myCountryDialCode = "+90";
   String dialCodeFav = "TR";
@@ -109,14 +110,30 @@ class Auth with ChangeNotifier {
     // print("numricCode:    ${result.callingCodes}");
   }
 
+  void changeIsAuthToFalse() {
+    isAuthintecated = false;
+    notifyListeners();
+  }
+
+  void changeIsAuthToTrue() {
+    isAuthintecated = true;
+    notifyListeners();
+  }
+
   void setnotificationdCount(int count) {
     unredNotifications = count;
     notifyListeners();
   }
 
   Future<void> getNotificationsCount() async {
+<<<<<<< HEAD
     print("dio.options.headers['authorization']  ${dio.options.headers['authorization']}");
  
+=======
+    print(
+        "dio.options.headers['authorization']  ${dio.options.headers['authorization']}");
+
+>>>>>>> features/android-modify
     if (dio.options.headers['authorization'] != null &&
         dio.options.headers['authorization'].toString().trim() == "" &&
         dio.options.headers['authorization'].toString().trim() == "null" &&
@@ -182,8 +199,13 @@ class Auth with ChangeNotifier {
 
     final String playerId = status.subscriptionStatus.userId;
     await dio.post<dynamic>("login", data: <String, dynamic>{
+<<<<<<< HEAD
       "phone":
           myCountryDialCode + username.replaceAll(RegExp(r'^0+(?=.)'), '').toString().trim(),
+=======
+      "phone": myCountryDialCode +
+          username.replaceAll(RegExp(r'^0+(?=.)'), '').toString().trim(),
+>>>>>>> features/android-modify
       "password": pass.toString(),
       "onesignal_player_id": playerId
     }).then((Response<dynamic> value) async {
@@ -207,16 +229,14 @@ class Auth with ChangeNotifier {
           print("unredNotifications ${value.data['data']['unread_count']}");
           unredNotifications = value.data['data']['unread_count'] as int;
           notifyListeners();
-          print("auth header ======= ${value.data['data']['api_token']}");
           dio.options.headers['authorization'] =
               'Bearer ${value.data['data']['api_token']}';
-          print("dio header ======= ${dio.options.headers['authorization']}");
           await data.setData(
               "authorization", "Bearer ${value.data['data']['api_token']}");
           config.username = value.data['data']['name'].toString();
           changeUsername(value.data['data']['name'].toString());
           config.loggedin = true;
-
+          isAuthintecated = true;
           Navigator.popAndPushNamed(context, '/MapAsHome',
               arguments: <String, dynamic>{
                 "lat": config.lat,
@@ -277,7 +297,12 @@ class Auth with ChangeNotifier {
     String email,
     String mobile,
   ) async {
+<<<<<<< HEAD
     print("loging info:${myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')}");
+=======
+    print(
+        "loging info:${myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')}");
+>>>>>>> features/android-modify
     bool res;
     await dio.post<dynamic>("register", data: <String, dynamic>{
       "name": username,
@@ -302,14 +327,24 @@ class Auth with ChangeNotifier {
         print(value.data);
 
         Navigator.pushNamed(context, '/pin', arguments: <String, String>{
+<<<<<<< HEAD
           'mobileNo': myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')
+=======
+          'mobileNo':
+              myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')
+>>>>>>> features/android-modify
         });
         config.locationController.clear();
         await data.setData("id", value.data['data']['id'].toString());
         data.setData("email", email);
         data.setData("username", username);
         data.setData("password", pass);
+<<<<<<< HEAD
         data.setData("phone", myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), ''));
+=======
+        data.setData("phone",
+            myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), ''));
+>>>>>>> features/android-modify
         data.setData("lat", config.lat.toString());
         data.setData("long", config.long.toString());
         data.setData("address", config.locationController.text.toString());
@@ -335,9 +370,9 @@ class Auth with ChangeNotifier {
     super.dispose();
   }
 
-  bool get isAuthenticated {
-    return user != null;
-  }
+  // bool get isAuthenticated {
+  //   return user != null;
+  // }
 
   void signInAnonymously() {}
 
@@ -345,17 +380,8 @@ class Auth with ChangeNotifier {
     await data.setData('authorization', null);
     dio.options.headers['authorization'] = "";
     config.loggedin = false;
-    // await auth.getCountry(platformVersion);
-    // try {
-    //   final String platformVersion = await FlutterSimCountryCode.simCountryCode;
-    //   print("platform country code : $platformVersion");
-    //   dialCodeFav = platformVersion;
-    //   Fluttertoast.showToast(msg: platformVersion);
-    //   // auth.setDialCodee(platformVersion);
-    //   await getCountry(platformVersion);
-    // } on PlatformException {
-    //   print('Failed to get platform version.');
-    // }
+    isAuthintecated = false;
+
     getIt<NavigationService>().navigateTo('/login', null);
   }
 

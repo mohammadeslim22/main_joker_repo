@@ -62,7 +62,8 @@ dev_dependencies:
   get_it: ^6.1.1
   intl: ^0.17.0
   package_info: ^2.0.0
-  flutter_plugin_android_lifecycle: ^2.0.1
+  # flutter_plugin_android_lifecycle: ^2.0.0
+  flutter_plugin_android_lifecycle: ^2.0.0-nullsafety.2
   carousel_slider: ^3.0.0
   onesignal_flutter: ^2.6.3
   provider: ^5.0.0

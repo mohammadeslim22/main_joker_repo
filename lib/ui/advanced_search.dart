@@ -38,7 +38,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
   String endDate = "${endtoday.toLocal()}".split(' ')[0];
   AnimationController _animationController;
   // final CalendarController _calendarController = CalendarController();
-  
+
   double _ratingStar = 0;
   bool showingStartingDateCalendar = true;
   Widget t;
@@ -60,7 +60,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
     t = TableCalendar<dynamic>(
       firstDay: DateTime.now().subtract(const Duration(days: 500)),
       lastDay: DateTime.now().subtract(const Duration(days: 500)),
-focusedDay: DateTime.now(),
+      focusedDay: DateTime.now(),
       // calendarController: _calendarController,
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: const CalendarStyle(
@@ -157,30 +157,28 @@ focusedDay: DateTime.now(),
                     children: widget.specializations.map((Specialization item) {
                       return TextButton(
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.resolveWith<
-                                      OutlinedBorder>(
-                                  (Set<MaterialState> states) =>
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(38.0),
-                                      )),
-                              side:
-                                  MaterialStateProperty.resolveWith<BorderSide>(
-                                (Set<MaterialState> states) => BorderSide(
-                                  color: selectedOptions.contains(item.id)
-                                      ? colors.orange
-                                      : colors.ggrey,
-                                ),
+                            shape: MaterialStateProperty.resolveWith<
+                                    OutlinedBorder>(
+                                (Set<MaterialState> states) =>
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(38.0),
+                                    )),
+                            side: MaterialStateProperty.resolveWith<BorderSide>(
+                              (Set<MaterialState> states) => BorderSide(
+                                color: selectedOptions.contains(item.id)
+                                    ? colors.orange
+                                    : colors.ggrey,
                               ),
-                              // textStyle:
-                              //     MaterialStateProperty.resolveWith<TextStyle>(
-                              //   (Set<MaterialState> states) => TextStyle(
-                              //       color: selectedOptions.contains(item.id)
-                              //           ? colors.orange
-                              //           : colors.black,
-                              //       fontSize: 16),
-                              // )
-                              ),
+                            ),
+                            // textStyle:
+                            //     MaterialStateProperty.resolveWith<TextStyle>(
+                            //   (Set<MaterialState> states) => TextStyle(
+                            //       color: selectedOptions.contains(item.id)
+                            //           ? colors.orange
+                            //           : colors.black,
+                            //       fontSize: 16),
+                            // )
+                          ),
                           onPressed: () {
                             setState(() {
                               if (!selectedOptions.add(item.id)) {

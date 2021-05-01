@@ -5,6 +5,7 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
@@ -67,10 +68,25 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
     _hide.forward();
     getIt<SalesProvider>().pagewiseSalesController =
+        // PagewiseLoadController<dynamic>(
+        //     pageSize: config.loggedin ? 15 : 6,
+        //     pageFuture: (int pageIndex) async {
+        //       return config.loggedin
+        //           ? (getIt<GlobalVars>().filterData != null)
+        //               ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
+        //                   pageIndex, getIt<GlobalVars>().filterData)
+        //               : getIt<SalesProvider>()
+        //                   .getSalesDataAuthenticated(pageIndex)
+        //           : (getIt<GlobalVars>().filterData != null)
+        //               ? getIt<SalesProvider>().getSalesDataFilterd(
+        //                   pageIndex, getIt<GlobalVars>().filterData)
+        //               : getIt<SalesProvider>().getSalesData(pageIndex);
+        //     });
+              getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
-            pageSize: config.loggedin ? 15 : 6,
+            pageSize: getIt<Auth>().isAuthintecated ? 15 : 6,
             pageFuture: (int pageIndex) async {
-              return config.loggedin
+              return getIt<Auth>().isAuthintecated
                   ? (getIt<GlobalVars>().filterData != null)
                       ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
                           pageIndex, getIt<GlobalVars>().filterData)
@@ -81,11 +97,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           pageIndex, getIt<GlobalVars>().filterData)
                       : getIt<SalesProvider>().getSalesData(pageIndex);
             });
-    getIt<MerchantProvider>().pagewiseBranchesController =
+    // getIt<MerchantProvider>().pagewiseBranchesController =
+    //     PagewiseLoadController<dynamic>(
+    //         pageSize: 5,
+    //         pageFuture: (int pageIndex) async {
+    //           return config.loggedin
+    //               ? getIt<MerchantProvider>()
+    //                   .getBranchesDataAuthintecated(pageIndex)
+    //               : getIt<MerchantProvider>().getBranchesData(pageIndex);
+    //         });
+                getIt<MerchantProvider>().pagewiseBranchesController =
         PagewiseLoadController<dynamic>(
             pageSize: 5,
             pageFuture: (int pageIndex) async {
-              return config.loggedin
+              return getIt<Auth>().isAuthintecated
                   ? getIt<MerchantProvider>()
                       .getBranchesDataAuthintecated(pageIndex)
                   : getIt<MerchantProvider>().getBranchesData(pageIndex);
@@ -247,7 +272,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 "branchId": int.parse(map['id'].toString()),
                                 "source": "qr"
                               });
-                          print(barcodeScanRes);
                           Fluttertoast.showToast(msg: barcodeScanRes);
                         } catch (e) {
                           Fluttertoast.showToast(
