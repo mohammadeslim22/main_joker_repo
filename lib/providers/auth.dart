@@ -115,19 +115,39 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> getNotificationsCount() async {
-    // TODO(isleem): the application stops at split(" ")[1])
-    print(dio.options.headers['authorization'].toString().split(" ")[1]);
-    final Response<dynamic> res = await dio.get<dynamic>("notif_count",
-        queryParameters: <String, String>{
-          "token": dio.options.headers['authorization'].toString().split(" ")[1]
-        });
-    if (res.data.toString() == "unauthinicated") {
-    } else {
-      setnotificationdCount(int.parse(res.data.toString()));
+    print("dio.options.headers['authorization']  ${dio.options.headers['authorization']}");
+ 
+    if (dio.options.headers['authorization'] != null &&
+        dio.options.headers['authorization'].toString().trim() == "" &&
+        dio.options.headers['authorization'].toString().trim() == "null" &&
+        dio.options.headers['authorization'].toString().isNotEmpty) {
+      final Response<dynamic> res = await dio
+          .get<dynamic>("notif_count", queryParameters: <String, String>{
+        "token":
+            dio.options.headers['authorization'].toString().split(" ")[1] ?? ""
+      });
+      if (res.data.toString() == "unauthinicated") {
+      } else {
+        setnotificationdCount(int.parse(res.data.toString()));
+      }
+      print("Notification count in splash ${res.data}");
     }
-    print("Notification count in splash ${res.data}");
-    //
   }
+
+//   Future<void> getNotificationsCount() async {
+//     // TODO(isleem): the application stops at split(" ")[1])
+//     print(dio.options.headers['authorization'].toString().split(" ")[1]);
+//     final Response<dynamic> res = await dio.get<dynamic>("notif_count",
+//         queryParameters: <String, String>{
+//           "token": dio.options.headers['authorization'].toString().split(" ")[1]
+//         });
+//     if (res.data.toString() == "unauthinicated") {
+//     } else {
+//       setnotificationdCount(int.parse(res.data.toString()));
+//     }
+//     print("Notification count in splash ${res.data}");
+//     //
+//   }
 
   void minnotificationdCount1() {
     unredNotifications--;
