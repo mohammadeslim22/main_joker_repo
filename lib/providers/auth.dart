@@ -115,6 +115,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> getNotificationsCount() async {
+    // TODO(isleem): the application stops at split(" ")[1])
     print(dio.options.headers['authorization'].toString().split(" ")[1]);
     final Response<dynamic> res = await dio.get<dynamic>("notif_count",
         queryParameters: <String, String>{
