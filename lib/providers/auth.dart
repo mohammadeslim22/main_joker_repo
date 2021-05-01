@@ -126,14 +126,9 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> getNotificationsCount() async {
-<<<<<<< HEAD
-    print("dio.options.headers['authorization']  ${dio.options.headers['authorization']}");
- 
-=======
     print(
         "dio.options.headers['authorization']  ${dio.options.headers['authorization']}");
 
->>>>>>> features/android-modify
     if (dio.options.headers['authorization'] != null &&
         dio.options.headers['authorization'].toString().trim() == "" &&
         dio.options.headers['authorization'].toString().trim() == "null" &&
@@ -150,9 +145,8 @@ class Auth with ChangeNotifier {
       print("Notification count in splash ${res.data}");
     }
   }
-
+  // TODO(isleem): the application stops at split(" ")[1])
 //   Future<void> getNotificationsCount() async {
-//     // TODO(isleem): the application stops at split(" ")[1])
 //     print(dio.options.headers['authorization'].toString().split(" ")[1]);
 //     final Response<dynamic> res = await dio.get<dynamic>("notif_count",
 //         queryParameters: <String, String>{
@@ -199,13 +193,8 @@ class Auth with ChangeNotifier {
 
     final String playerId = status.subscriptionStatus.userId;
     await dio.post<dynamic>("login", data: <String, dynamic>{
-<<<<<<< HEAD
-      "phone":
-          myCountryDialCode + username.replaceAll(RegExp(r'^0+(?=.)'), '').toString().trim(),
-=======
       "phone": myCountryDialCode +
           username.replaceAll(RegExp(r'^0+(?=.)'), '').toString().trim(),
->>>>>>> features/android-modify
       "password": pass.toString(),
       "onesignal_player_id": playerId
     }).then((Response<dynamic> value) async {
@@ -221,6 +210,7 @@ class Auth with ChangeNotifier {
       }
 
       if (value.statusCode == 200) {
+        print("login data ${value.data}");
         if (value.data != "fail") {
           data.setData("username", value.data['data']['name'].toString());
           data.setData("profile_pic", value.data['data']['image'].toString());
@@ -297,12 +287,8 @@ class Auth with ChangeNotifier {
     String email,
     String mobile,
   ) async {
-<<<<<<< HEAD
-    print("loging info:${myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')}");
-=======
     print(
         "loging info:${myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')}");
->>>>>>> features/android-modify
     bool res;
     await dio.post<dynamic>("register", data: <String, dynamic>{
       "name": username,
@@ -327,24 +313,16 @@ class Auth with ChangeNotifier {
         print(value.data);
 
         Navigator.pushNamed(context, '/pin', arguments: <String, String>{
-<<<<<<< HEAD
-          'mobileNo': myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')
-=======
           'mobileNo':
               myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')
->>>>>>> features/android-modify
         });
         config.locationController.clear();
         await data.setData("id", value.data['data']['id'].toString());
         data.setData("email", email);
         data.setData("username", username);
         data.setData("password", pass);
-<<<<<<< HEAD
-        data.setData("phone", myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), ''));
-=======
         data.setData("phone",
             myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), ''));
->>>>>>> features/android-modify
         data.setData("lat", config.lat.toString());
         data.setData("long", config.long.toString());
         data.setData("address", config.locationController.text.toString());

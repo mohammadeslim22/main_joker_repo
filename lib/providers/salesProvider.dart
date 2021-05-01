@@ -10,7 +10,6 @@ import 'package:joker/models/simplesales.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
-import 'package:joker/constants/config.dart';
 import 'package:joker/util/service_locator.dart';
 
 import 'map_provider.dart';
