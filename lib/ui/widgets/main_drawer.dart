@@ -152,6 +152,7 @@ class _MainMenuState extends State<MainMenu> {
                 ),
                 const SizedBox(height: 8),
                 ListTile(
+                  enabled: config.loggedin,
                   contentPadding: const EdgeInsets.only(left: 0),
                   title: Row(
                     children: <Widget>[
@@ -201,6 +202,7 @@ class _MainMenuState extends State<MainMenu> {
                 // ),
                 // const SizedBox(height: 8),
                 ListTile(
+                  enabled: config.loggedin,
                   contentPadding: const EdgeInsets.only(left: 0),
                   title: Text("${trans(context, 'fav')}"),
                   leading: Image.asset("assets/images/menu_favorite.png"),
