@@ -58,7 +58,8 @@ class MyAccountPage extends State<MyAccount>
   final FocusNode focus4 = FocusNode();
   File myimage;
   Future<void> getProfileData() async {
-    if (config.loggedin) {
+    // if (config.loggedin) {
+    if(getIt<Auth>().isAuthintecated){
       final Response<dynamic> response = await dio.get<dynamic>("user");
       if (response.statusCode == 200) {
         setState(() {

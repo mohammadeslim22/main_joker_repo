@@ -13,7 +13,7 @@ import 'map_provider.dart';
 class MerchantProvider with ChangeNotifier {
   merchant_main_model.Merchant merchant;
   Branches branches;
-  List<MapBranch> favbranches;
+  List<MapBranch> favbranches=<MapBranch>[];
 
   PagewiseLoadController<dynamic> pagewiseBranchesController;
 
@@ -64,11 +64,12 @@ class MerchantProvider with ChangeNotifier {
           'page': pageIndex + 1,
           'model': "App\\Branch"
         });
+    print("response.data fav    ${response.data}");
     response.data['data'].forEach((dynamic v) {
       favbranches.add(MapBranch.fromJson(v));
     });
 
-    MapBranch.fromJson(response.data);
+    // MapBranch.fromJson(response.data);
     notifyListeners();
     return favbranches;
   }

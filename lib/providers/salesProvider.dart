@@ -19,7 +19,8 @@ class SalesProvider with ChangeNotifier {
   Sales tempSales;
   Sales merchantSales;
   PagewiseLoadController<dynamic> pagewiseSalesController;
-  Sales favSales;
+  // Sales favSales ;
+  List<SaleData> favSales = <SaleData>[];
   Future<void> getSale(int saleId) async {
     // if (config.loggedin)
     if (getIt<Auth>().isAuthintecated)
@@ -45,8 +46,11 @@ class SalesProvider with ChangeNotifier {
       'page': pageIndex + 1,
       'model': 'App\\Sale',
     });
-    favSales = Sales.fromJson(response.data);
-    return favSales.data;
+    response.data['data'].forEach((dynamic v) {
+      favSales.add(SaleData.fromJson(v));
+    });
+    // favSales = Sales.fromJson(response.data);
+    return favSales;
   }
 
   Future<List<SaleData>> getMerchantSalesData(

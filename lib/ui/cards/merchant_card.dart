@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
@@ -39,7 +39,8 @@ class _MerchantCardState extends State<MerchantCard> {
       ),
       child: InkWell(
         onTap: () async {
-          if (config.loggedin) {
+          // if (config.loggedin) {
+            if(getIt<Auth>().isAuthintecated){
             getIt<MerchantProvider>().vistBranch(branchData.id);
             Navigator.pushNamed(context, "/MerchantDetails",
                 arguments: <String, dynamic>{

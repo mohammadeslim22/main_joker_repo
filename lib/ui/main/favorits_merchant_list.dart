@@ -4,7 +4,6 @@ import 'package:joker/localization/trans.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/providers/merchantsProvider.dart';
-import 'package:joker/util/service_locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
@@ -12,9 +11,10 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/ui/cards/favBranchCard.dart';
 
 class FavoritMerchantsList extends StatelessWidget {
+  FavoritMerchantsList({Key key, this.merchantProvider}) : super(key: key);
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-
+  final MerchantProvider merchantProvider;
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
@@ -50,8 +50,7 @@ class FavoritMerchantsList extends StatelessWidget {
           loadingBuilder: (BuildContext context) {
             return const Center(
                 child: CircularProgressIndicator(
-              backgroundColor: Colors.transparent,
-            ));
+                    backgroundColor: Colors.transparent));
           },
           pageSize: 10,
           padding: const EdgeInsets.all(15.0),
@@ -59,10 +58,10 @@ class FavoritMerchantsList extends StatelessWidget {
             return FadeIn(child: FaveBranchCard(branch: entry as MapBranch));
           },
           noItemsFoundBuilder: (BuildContext context) {
-            return Text(trans(context, "noting_to_show"));
+            return Text(trans(context, "no_fav_saved"));
           },
           pageFuture: (int pageIndex) {
-            return getIt<MerchantProvider>().getFavoritData(pageIndex);
+            return merchantProvider.getFavoritData(pageIndex);
           }),
     );
   }

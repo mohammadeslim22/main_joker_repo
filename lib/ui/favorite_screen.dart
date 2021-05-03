@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/size_config.dart';
 import 'package:provider/provider.dart';
 import 'main/favorits_merchant_list.dart';
@@ -14,6 +16,9 @@ class Favorite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MainProvider bolc = Provider.of<MainProvider>(context);
+    final MerchantProvider merchantProvider =
+        Provider.of<MerchantProvider>(context);
+    final SalesProvider salesProvider = Provider.of<SalesProvider>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -26,9 +31,8 @@ class Favorite extends StatelessWidget {
         body: Container(
           color: colors.white,
           child: (bolc.favocurrentIndex == 0)
-              ? FavoritMerchantsList()
-              : FavoritDiscountsList(),
-        )
-        );
+              ? FavoritMerchantsList(merchantProvider: merchantProvider)
+              : FavoritDiscountsList(salesProvider: salesProvider),
+        ));
   }
 }

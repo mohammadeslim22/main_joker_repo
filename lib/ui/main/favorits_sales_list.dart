@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/ui/cards/favSaleCard.dart';
-import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:joker/ui/widgets/fadein.dart';
@@ -14,9 +13,10 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/constants/colors.dart';
 
 class FavoritDiscountsList extends StatelessWidget {
+  FavoritDiscountsList({Key key, this.salesProvider}) : super(key: key);
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-
+  final SalesProvider salesProvider;
   @override
   Widget build(BuildContext context) {
     final HOMEMAProvider value = Provider.of<HOMEMAProvider>(context);
@@ -66,10 +66,10 @@ class FavoritDiscountsList extends StatelessWidget {
                 child: FaveCard(sale: entry as SaleData, value: value));
           },
           noItemsFoundBuilder: (BuildContext context) {
-            return Text(trans(context, "noting_to_show"));
+            return Text(trans(context, "nothing_to_show"));
           },
           pageFuture: (int pageIndex) {
-            return getIt<SalesProvider>().getFavoritData(pageIndex);
+            return salesProvider.getFavoritData(pageIndex);
           }),
     );
   }

@@ -153,7 +153,7 @@ class AddressListState extends State<AddressList> {
                   return FadeIn(child: showItem(entry as LocationsData));
                 },
                 noItemsFoundBuilder: (BuildContext context) {
-                  return Text(trans(context, "noting_to_show"));
+                  return Text(trans(context, "nothing_to_show"));
                 },
                 pageLoadController:
                     getIt<LocationProvider>().pagewiseLocationController,

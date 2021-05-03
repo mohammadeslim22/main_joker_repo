@@ -112,6 +112,7 @@ class Auth with ChangeNotifier {
 
   void changeIsAuthToFalse() {
     isAuthintecated = false;
+
     notifyListeners();
   }
 
@@ -226,6 +227,7 @@ class Auth with ChangeNotifier {
           config.username = value.data['data']['name'].toString();
           changeUsername(value.data['data']['name'].toString());
           config.loggedin = true;
+
           isAuthintecated = true;
           Navigator.popAndPushNamed(context, '/MapAsHome',
               arguments: <String, dynamic>{
@@ -354,13 +356,17 @@ class Auth with ChangeNotifier {
 
   void signInAnonymously() {}
 
-  Future<void> signOut() async {
+  Future<void> signOut(BuildContext c) async {
     await data.setData('authorization', null);
     dio.options.headers['authorization'] = "";
     config.loggedin = false;
     isAuthintecated = false;
-
+    setUserPicture(
+        "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg");
+   
     getIt<NavigationService>().navigateTo('/login', null);
+    changeUsername(trans(c, "login_or_sign_up"));
+    notifyListeners();
   }
 
   Future<bool> changePassword(

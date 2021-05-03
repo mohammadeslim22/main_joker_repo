@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
@@ -48,7 +48,8 @@ class _SalesCardState extends State<SalesCard> {
       ),
       child: InkWell(
         onTap: () {
-          if (config.loggedin) {
+          // if (config.loggedin) {
+            if(getIt<Auth>().isAuthintecated){
             final MapBranch m = MapBranch(
                 merchant: Merchant(
                     id: saledata.merchant.id,

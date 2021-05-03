@@ -12,7 +12,7 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 class ShopListStaeless extends StatelessWidget {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-      
+
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
@@ -62,7 +62,7 @@ class ShopListStaeless extends StatelessWidget {
           return FadeIn(child: MerchantCard(branchData: entry as BranchData));
         },
         noItemsFoundBuilder: (BuildContext context) {
-          return Text(trans(context, "noting_to_show"));
+          return Text(trans(context, "nothing_to_show"));
         },
       ),
     );

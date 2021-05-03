@@ -11,6 +11,7 @@ import '../../localization/trans.dart';
 import '../../constants/colors.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/util/service_locator.dart';
+import 'package:provider/provider.dart';
 
 class MyInnerDrawer extends StatefulWidget {
   const MyInnerDrawer({this.scaffold, this.drawerKey});
@@ -36,7 +37,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
   @override
   void initState() {
     super.initState();
-    if (config.loggedin) {
+    // if (config.loggedin) {
+    if (getIt<Auth>().isAuthintecated) {
       // getIt<MainProvider>().getNotifications();
     }
     numberOfNotifications = getIt<Auth>().unredNotifications ?? 0;
@@ -45,6 +47,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
   @override
   Widget build(BuildContext context) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    final Auth auth = Provider.of<Auth>(context);
 
     final Scaffold menu = Scaffold(
       backgroundColor: colors.grey,
@@ -77,7 +80,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
-                                      getIt<Auth>().username ?? config.username,
+                                      auth.username ?? config.username,
                                       style: styles.underHead),
                                 ],
                               ),
@@ -100,7 +103,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                         child: CachedNetworkImage(
                           placeholderFadeInDuration:
                               const Duration(milliseconds: 300),
-                          imageUrl: getIt<Auth>().userPicture ??
+                          imageUrl: auth.userPicture ??
                               config.profileUrl.trim() ??
                               "",
                           imageBuilder: (BuildContext context,
@@ -191,7 +194,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
               ),
               const SizedBox(height: 32),
               ListTile(
-                enabled: config.loggedin,
+                enabled: /*config.loggedin*/ auth.isAuthintecated,
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Row(
                   children: <Widget>[
@@ -214,7 +217,6 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 },
               ),
               ListTile(
-                
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'account')}"),
                 leading: SvgPicture.asset("assets/images/account.svg"),
@@ -298,7 +300,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
             title: Text("${trans(context, 'logout')}"),
             leading: SvgPicture.asset("assets/images/logout.svg"),
             onTap: () async {
-              await getIt<Auth>().signOut();
+              await auth.signOut(context);
               // data.setData('authorization', "");
               // Navigator.pushNamedAndRemoveUntil(
               //     context, '/login', (_) => false);

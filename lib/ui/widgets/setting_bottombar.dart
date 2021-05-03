@@ -70,7 +70,7 @@ class SettingBottom extends StatelessWidget {
                               // highlightColor: Colors.transparent,
                               // elevation: 0,
 
-                              child: Text(trans(context, 'am sure'),
+                              child: Text(trans(context, 'am_sure'),
                                   style: styles.mywhitestyle),
                               onPressed: () {
                                 dio.post<dynamic>("deleteaccount",

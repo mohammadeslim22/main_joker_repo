@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:joker/models/map_branches.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/service_locator.dart';
@@ -160,7 +160,8 @@ class _MerchantCardState extends State<MapMerchantCard> {
               ),
               child: Text(trans(context, 'more_info'), style: styles.moreInfo),
               onPressed: () {
-                if (config.loggedin) {
+                // if (config.loggedin) {
+                  if(getIt<Auth>().isAuthintecated){
                   Navigator.pushNamed(context, "/MerchantDetails",
                       arguments: <String, dynamic>{
                         "merchantId": branchData.merchant.id,

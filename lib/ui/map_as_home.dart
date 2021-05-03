@@ -587,7 +587,8 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                           child: Text(trans(context, 'more_info_map_card'),
                               style: styles.moreInfoWhite),
                           onPressed: () {
-                            if (config.loggedin) {
+                            // if (config.loggedin) {
+                            if(getIt<Auth>().isAuthintecated){
                               Navigator.pushNamed(context, "/SaleLoader",
                                   arguments: <String, dynamic>{
                                     "mapBranch": value.inFocusBranch,

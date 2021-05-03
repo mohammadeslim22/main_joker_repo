@@ -67,9 +67,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
-        ChangeNotifierProvider<Auth>.value(
-          value: getIt<Auth>(),
-        ),
+        ChangeNotifierProvider<Auth>.value(value: getIt<Auth>()),
         ChangeNotifierProvider<Language>(create: (_) => Language()),
         // ChangeNotifierProvider<MainProvider>(create: (_) => MainProvider()),
         ChangeNotifierProvider<MainProvider>.value(

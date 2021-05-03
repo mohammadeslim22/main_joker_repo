@@ -85,7 +85,7 @@ class _ShopListState extends State<ShopList> {
           return FadeIn(child: MerchantCard(branchData: entry as BranchData));
         },
         noItemsFoundBuilder: (BuildContext context) {
-          return Text(trans(context, "noting_to_show"));
+          return Text(trans(context, "nothing_to_show"));
         },
       ),
     );

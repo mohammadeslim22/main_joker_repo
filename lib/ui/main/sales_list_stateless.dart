@@ -63,7 +63,7 @@ class DiscountsListStateless extends StatelessWidget {
           return FadeIn(child: SalesCard(sale: entry as SaleData));
         },
         noItemsFoundBuilder: (BuildContext context) {
-          return Text(trans(context, "noting_to_show"));
+          return Text(trans(context, "nothing_to_show"));
         },
       ),
     );

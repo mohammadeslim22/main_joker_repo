@@ -156,9 +156,10 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void setUserAndPicture(Auth auth) {
+    // if (config.loggedin) {
     if (config.loggedin) {
       auth.changeIsAuthToTrue();
-
+      print("auth.changeIsAuthToTrue()  ${auth.isAuthintecated}");
       data.getData("username").then((String name) {
         if (name.isEmpty || name == null) {
           config.username = trans(context, 'username');
@@ -171,7 +172,8 @@ class _SplashScreenState extends State<SplashScreen>
 
       data.getData("profile_pic").then((String value) {
         if (value.isEmpty || value == "null" || value == "" || value == null) {
-          if (config.loggedin) {
+          // if (config.loggedin) {
+          if (getIt<Auth>().isAuthintecated) {
             dio.get<dynamic>("user").then((Response<dynamic> value) async {
               if (value.statusCode == 200) {
                 auth.changeUsername(value.data['data']['name'].toString());

@@ -38,7 +38,8 @@ class _MainMenuState extends State<MainMenu> {
   @override
   void initState() {
     super.initState();
-    if (config.loggedin) {
+    // if (config.loggedin) {
+      if(getIt<Auth>().isAuthintecated){
       print("notifications getting in");
       getIt<MainProvider>().pagewiseNotificationsController =
           PagewiseLoadController<dynamic>(
@@ -78,7 +79,7 @@ class _MainMenuState extends State<MainMenu> {
                             placeholderFadeInDuration:
                                 const Duration(milliseconds: 300),
                             imageUrl:
-                                getIt<Auth>().userPicture ?? config.profileUrl,
+                                value.userPicture ?? config.profileUrl,
                             imageBuilder: (BuildContext context,
                                     ImageProvider imageProvider) =>
                                 Container(
@@ -100,14 +101,15 @@ class _MainMenuState extends State<MainMenu> {
                           borderRadius: BorderRadius.circular(15),
                           radius: 30,
                           onTap: () async {
-                            if (config.loggedin) {
+                            // if (config.loggedin) {
+                              if(value.isAuthintecated){
                               Navigator.popAndPushNamed(context, "/Profile");
                             } else {
                               getIt<NavigationService>()
                                   .navigateTo('/login', null);
                             }
                           },
-                          child: Text(getIt<Auth>().username ?? config.username,
+                          child: Text(value.username ?? config.username,
                               style: styles.username),
                         ),
                       ],
@@ -152,7 +154,7 @@ class _MainMenuState extends State<MainMenu> {
                 ),
                 const SizedBox(height: 8),
                 ListTile(
-                  enabled: config.loggedin,
+                  enabled: /*config.loggedin*/value.isAuthintecated,
                   contentPadding: const EdgeInsets.only(left: 0),
                   title: Row(
                     children: <Widget>[
@@ -202,7 +204,7 @@ class _MainMenuState extends State<MainMenu> {
                 // ),
                 // const SizedBox(height: 8),
                 ListTile(
-                  enabled: config.loggedin,
+                  enabled: /*config.loggedin*/value.isAuthintecated,
                   contentPadding: const EdgeInsets.only(left: 0),
                   title: Text("${trans(context, 'fav')}"),
                   leading: Image.asset("assets/images/menu_favorite.png"),
@@ -260,14 +262,14 @@ class _MainMenuState extends State<MainMenu> {
             const SizedBox(height: 8),
             // const SizedBox(height: 36.0),
             Visibility(
-              visible: getIt<Auth>().isAuthintecated,
+              visible: value.isAuthintecated,
               child: ListTile(
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'logout')}"),
                 leading: Image.asset("assets/images/menu_logout.png"),
                 // SvgPicture.asset("assets/images/logout.svg"),
                 onTap: () async {
-                  await getIt<Auth>().signOut();
+                  await value.signOut(context);
                   // data.setData('authorization', "");
                   // Navigator.pushNamedAndRemoveUntil(
                   //     context, '/login', (_) => false);
