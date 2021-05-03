@@ -287,38 +287,41 @@ class _MyRegistrationState extends State<Registration>
                                 MaterialStateProperty.resolveWith<TextStyle>(
                                     (Set<MaterialState> states) =>
                                         TextStyle(color: colors.white))),
-                        onPressed: () async {
-                          if (_isButtonEnabled) {
-                            if (_formKey.currentState.validate()) {
-                              mainProvider.togelf(true);
-                              setState(() {
-                                _isButtonEnabled = false;
-                              });
-                              await auth.register(
-                                context,
-                                mainProvider,
-                                usernameController.text,
-                                passwordController.text,
-                                birthDateController.text,
-                                emailController.text,
-                                mobileNoController.text,
-                              );
+                        onPressed: !_isButtonEnabled
+                            ? null
+                            : () async {
+                                // if (_isButtonEnabled) {
+                                if (_formKey.currentState.validate()) {
+                                  mainProvider.togelfRegister(true);
+                                  setState(() {
+                                    _isButtonEnabled = false;
+                                  });
+                                  if (await auth.register(
+                                    context,
+                                    mainProvider,
+                                    usernameController.text,
+                                    passwordController.text,
+                                    birthDateController.text,
+                                    emailController.text,
+                                    mobileNoController.text,
+                                  )) {
+                                  } else {
+                                    _formKey.currentState.validate();
+                                  }
 
-                              _formKey.currentState.validate();
-
-                              auth.regValidationMap
-                                  .updateAll((String key, String value) {
-                                return null;
-                              });
-                            }
-                            setState(() {
-                              print("fuck u all");
-                              _isButtonEnabled = true;
-                            });
-                          }
-                        },
-                        child: mainProvider
-                            .returnchild(trans(context, 'regisration'))),
+                                  auth.regValidationMap
+                                      .updateAll((String key, String value) {
+                                    return null;
+                                  });
+                                }
+                                setState(() {
+                                  _isButtonEnabled = true;
+                                });
+                                mainProvider.togelfRegister(false);
+                                // }
+                              },
+                        child: mainProvider.changechildforRegister(
+                            trans(context, 'regisration'))),
                   ),
                   const Padding(
                       padding: EdgeInsets.fromLTRB(30, 0, 30, 10),

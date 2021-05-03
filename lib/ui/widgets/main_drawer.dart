@@ -39,7 +39,7 @@ class _MainMenuState extends State<MainMenu> {
   void initState() {
     super.initState();
     // if (config.loggedin) {
-      if(getIt<Auth>().isAuthintecated){
+    if (getIt<Auth>().isAuthintecated) {
       print("notifications getting in");
       getIt<MainProvider>().pagewiseNotificationsController =
           PagewiseLoadController<dynamic>(
@@ -47,6 +47,7 @@ class _MainMenuState extends State<MainMenu> {
               pageFuture: (int pageIndex) async {
                 return getIt<MainProvider>().getNotifications(pageIndex);
               });
+      print(getIt<Auth>().userPicture);
     }
     // numberOfNotifications = getIt<Auth>().unredNotifications ?? 0;
   }
@@ -78,8 +79,7 @@ class _MainMenuState extends State<MainMenu> {
                           child: CachedNetworkImage(
                             placeholderFadeInDuration:
                                 const Duration(milliseconds: 300),
-                            imageUrl:
-                                value.userPicture ?? config.profileUrl,
+                            imageUrl: value.userPicture.replaceFirst('http:', 'https:') ?? config.profileUrl,
                             imageBuilder: (BuildContext context,
                                     ImageProvider imageProvider) =>
                                 Container(
@@ -102,7 +102,7 @@ class _MainMenuState extends State<MainMenu> {
                           radius: 30,
                           onTap: () async {
                             // if (config.loggedin) {
-                              if(value.isAuthintecated){
+                            if (value.isAuthintecated) {
                               Navigator.popAndPushNamed(context, "/Profile");
                             } else {
                               getIt<NavigationService>()
@@ -154,7 +154,7 @@ class _MainMenuState extends State<MainMenu> {
                 ),
                 const SizedBox(height: 8),
                 ListTile(
-                  enabled: /*config.loggedin*/value.isAuthintecated,
+                  enabled: /*config.loggedin*/ value.isAuthintecated,
                   contentPadding: const EdgeInsets.only(left: 0),
                   title: Row(
                     children: <Widget>[
@@ -204,7 +204,7 @@ class _MainMenuState extends State<MainMenu> {
                 // ),
                 // const SizedBox(height: 8),
                 ListTile(
-                  enabled: /*config.loggedin*/value.isAuthintecated,
+                  enabled: /*config.loggedin*/ value.isAuthintecated,
                   contentPadding: const EdgeInsets.only(left: 0),
                   title: Text("${trans(context, 'fav')}"),
                   leading: Image.asset("assets/images/menu_favorite.png"),

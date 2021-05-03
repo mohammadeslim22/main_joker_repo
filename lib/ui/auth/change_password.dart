@@ -170,7 +170,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                       onPressed: () async {
                         if (_isButtonEnabled) {
                           if (_formKey.currentState.validate()) {
-                            bolc.togelf(true);
+                            bolc.togelfChangePass(true);
                             setState(() {
                               _isButtonEnabled = false;
                             });
@@ -188,12 +188,12 @@ class _MyChangePasswordState extends State<ChangePassword>
                               });
                             });
 
-                            bolc.togelf(false);
+                            bolc.togelfChangePass(false);
                           }
                         }
                       },
                       child: bolc
-                          .returnchild(trans(context, 'change_my_password'))),
+                          .returnchildChangePass(trans(context, 'change_my_password'))),
                 ),
               ],
             ),

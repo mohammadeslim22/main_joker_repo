@@ -27,6 +27,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   dioDefaults();
+
   await data.getData('authorization').then<dynamic>((String auth) {
     print("auth what :$auth");
 
@@ -48,14 +49,14 @@ Future<void> main() async {
     OSiOSSettings.inAppLaunchUrl: false
   });
   final String notifications = await data.getData("notification_sound");
-  if (notifications.isEmpty || notifications == "" || notifications == null) {
+  if (notifications.isEmpty ||
+      notifications == "" ||
+      notifications == null ||
+      notifications == "on") {
     OneSignal.shared
         .setInFocusDisplayType(OSNotificationDisplayType.notification);
   } else {
-    if (notifications == "on") {
-      OneSignal.shared
-          .setInFocusDisplayType(OSNotificationDisplayType.notification);
-    } else {
+    if (notifications == "off") {
       OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.none);
     }
   }

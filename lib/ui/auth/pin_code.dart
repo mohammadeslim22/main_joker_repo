@@ -64,11 +64,11 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                 animationDuration: const Duration(milliseconds: 300),
                 keyboardType: TextInputType.phone,
                 onCompleted: (String v) async {
-                  bolc.togelf(true);
+                  bolc.togelfPinCode(true);
                   if (await auth.getPinCode(v.trim())) {
                     Navigator.pushNamed(context, '/login');
                   }
-                  bolc.togelf(false);
+                  bolc.togelfPinCode(false);
                 },
                 onChanged: (String value) {
                   setState(() {
@@ -178,7 +178,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                                             });
                                           }
                                         },
-                                        child: bolc.returnchild(
+                                        child: bolc.returnchildforProfile(
                                             trans(context, 'send_code')))),
                               ],
                             ),
@@ -230,7 +230,7 @@ class _MyHomePageState extends State<PinCode> with TickerProviderStateMixin {
                           onPrimary: Colors.deepPurpleAccent,
                           textStyle: const TextStyle(color: Colors.white)),
                       onPressed: () {},
-                      child: bolc.returnchild(trans(context, 'aprove')))),
+                      child: bolc.returnchildforProfile(trans(context, 'aprove')))),
               const SizedBox(height: 15),
               Text(trans(context, 'code_not_recieved'),
                   textAlign: TextAlign.center, style: styles.underHead),

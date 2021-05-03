@@ -172,7 +172,7 @@ class _MyResetPasswordState extends State<ResetPassword>
                           } else {
                             if (_formKey.currentState.validate()) {
                               final String phone = await data.getData("phone");
-                              bolc.togelf(true);
+                              bolc.togelfResetPass(true);
                               if (await getIt<Auth>().resetpassword(
                                   phone, newpasswordController.text)) {
                                 AwesomeDialog(
@@ -201,12 +201,12 @@ class _MyResetPasswordState extends State<ResetPassword>
                                 return null;
                               });
 
-                              bolc.togelf(false);
+                              bolc.togelfResetPass(false);
                             }
                           }
                         }
                       },
-                      child: bolc.returnchild(trans(context, 'restore'))),
+                      child: bolc.returnchildResetPass(trans(context, 'restore'))),
                 ),
               ],
             ),

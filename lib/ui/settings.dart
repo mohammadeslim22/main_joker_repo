@@ -34,7 +34,6 @@ class MySettingState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    data.setData("notification_sound", "on");
   }
 
   Future<void> setStartingLang(MainProvider bolc, Language lang) async {
@@ -63,10 +62,18 @@ class MySettingState extends State<SettingsScreen> {
   }
 
   Future<void> setNotifcationSound(MainProvider bolc) async {
-    data.getData("notification_sound").then<dynamic>((String value) {
-      if (value == "on") {
+    data.getData("notification_sound").then<dynamic>((String value) async {
+      if (value.isEmpty || value == "" || value == null || value == "on") {
+        OneSignal.shared
+            .setInFocusDisplayType(OSNotificationDisplayType.notification);
         bolc.changenotificationSit(0);
-      } else {}
+      } else {
+        if (value == "off") {
+          OneSignal.shared
+              .setInFocusDisplayType(OSNotificationDisplayType.none);
+          bolc.changenotificationSit(1);
+        }
+      }
     });
   }
 

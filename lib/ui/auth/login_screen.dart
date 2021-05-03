@@ -132,7 +132,7 @@ class _MyLoginScreenState extends State<LoginScreen>
         Padding(
           padding: const EdgeInsets.all(16),
           child: SvgPicture.asset(
-            "assets/images/Layer.svg",
+            "assets/images/joker_indirim.svg",
             width: 120.0,
             height: 120.0,
           ),
@@ -177,7 +177,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                             "_usernameController.text : ${_usernameController.text}");
                         if (_isButtonEnabled) {
                           if (_formKey.currentState.validate()) {
-                            mainProvider.togelf(true);
+                            mainProvider.togelfLogin(true);
                             setState(() {
                               _isButtonEnabled = false;
                             });
@@ -193,11 +193,11 @@ class _MyLoginScreenState extends State<LoginScreen>
                             setState(() {
                               _isButtonEnabled = true;
                             });
-                            mainProvider.togelf(false);
+                            mainProvider.togelfLogin(false);
                           }
                         }
                       },
-                      child: mainProvider.returnchild(trans(context, 'login'))),
+                      child: mainProvider.changechildLogin(trans(context, 'login'))),
                 ),
                 const SizedBox(height: 40),
                 Text(trans(context, 'dont_have_account'),

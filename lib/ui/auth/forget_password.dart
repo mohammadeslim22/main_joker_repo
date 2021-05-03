@@ -160,7 +160,7 @@ class _MyForgetPassState extends State<ForgetPassword>
                                 if (_formKey.currentState.validate()) {
                                   if (codeArrived) {
                                   } else {
-                                    bolc.togelf(true);
+                                    bolc.togelfForgetPass(true);
                                     setState(() {
                                       _isButtonEnabled = false;
                                     });
@@ -185,12 +185,12 @@ class _MyForgetPassState extends State<ForgetPassword>
                                     });
                                   }
 
-                                  bolc.togelf(false);
+                                  bolc.togelfForgetPass(false);
                                 }
                               }
                             },
                             child: bolc
-                                .returnchild(trans(context, mainButtonkey))),
+                                .returnchildForgetPass(trans(context, mainButtonkey))),
                       ),
                       const SizedBox(height: 36),
                       TextButton(

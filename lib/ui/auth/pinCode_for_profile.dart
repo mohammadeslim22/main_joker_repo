@@ -76,7 +76,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                 // fieldWidth: 30,
                 keyboardType: TextInputType.phone,
                 onCompleted: (String v) async {
-                  bolc.togelf(true);
+                  bolc.togelfPinCodeProfile(true);
                   if (await getIt<Auth>()
                       .getPinCodeSave(v.trim(), mobileNoController.text) != null) {
                     setState(() {
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                     });
                     Navigator.pushNamed(context, '/Profile');
                   }
-                  bolc.togelf(false);
+                  bolc.togelfPinCodeProfile(false);
                 },
                 onChanged: (String value) {
                   setState(() {
@@ -209,7 +209,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                       onPressed: () {
                         verifyanewPhone();
                       },
-                      child: bolc.returnchild(trans(context, 'send_code')))),
+                      child: bolc.returnchildPinforProfile(trans(context, 'send_code')))),
               pinCode(bolc),
               const SizedBox(height: 15),
               if (enabeld)

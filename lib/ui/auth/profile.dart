@@ -456,7 +456,7 @@ class MyAccountPage extends State<MyAccount>
                             onPressed: () async {
                               if (_isButtonEnabled) {
                                 if (_formKey.currentState.validate()) {
-                                  mainProvider.togelf(true);
+                                  mainProvider.togelfProfile(true);
                                   setState(() {
                                     _isButtonEnabled = false;
                                   });
@@ -481,7 +481,7 @@ class MyAccountPage extends State<MyAccount>
                                         .updateAll((String key, String value) {
                                       return null;
                                     });
-                                    mainProvider.togelf(false);
+                                    mainProvider.togelfProfile(false);
                                   });
                                 }
                               }
