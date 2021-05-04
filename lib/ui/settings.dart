@@ -182,7 +182,8 @@ class MySettingState extends State<SettingsScreen> {
                   onPressed: () {
                     Navigator.pushNamed(context, "/ChangePassword");
                   },
-                  child: Text(trans(context, "change_password"))))
+                  child: Text(trans(context, "change_password"),
+                style: TextStyle(color: colors.black))))
         ],
       ),
       bottomNavigationBar: SettingBottom(),
@@ -223,6 +224,7 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
               Text(
                 trans(context, choice),
                 textAlign: TextAlign.center,
+                style: TextStyle(color: colors.black),
               ),
               const SizedBox(height: 3),
               AnimatedOpacity(

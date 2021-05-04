@@ -49,7 +49,7 @@ class LoadWhereToGo extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     SvgPicture.asset("assets/images/joker_indirim.svg",
-                        fit: BoxFit.cover),
+                        fit: BoxFit.cover,width:200),
                     const SizedBox(height: 12),
                     const CupertinoActivityIndicator(radius: 24)
                   ],

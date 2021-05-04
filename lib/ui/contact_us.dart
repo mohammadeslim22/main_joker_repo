@@ -86,16 +86,19 @@ class ContactUs extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: colors.orange)),
-                    onPrimary: colors.orange,
-                    textStyle: TextStyle(color: colors.white)),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (Set<MaterialState> state) => colors.orange),
+                    shape: MaterialStateProperty.resolveWith((Set<MaterialState> states) =>
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: colors.orange))),
+                    textStyle: MaterialStateProperty.resolveWith(
+                        (Set<MaterialState> states) => TextStyle(color: colors.white))),
                 onPressed: () async {
                   final Response<dynamic> response = await dio
                       .post<dynamic>("contact", data: <String, dynamic>{
-                    "email": email.text,
+                    "email": email.text ?? await data.getData("email"),
                     "phone": mobile.text ?? await data.getData("phone"),
                     "address": address.text ?? await data.getData("address"),
                     "body": message.text ?? ""

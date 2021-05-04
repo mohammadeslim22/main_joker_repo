@@ -4,6 +4,38 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/constants/colors.dart';
+import 'package:joker/util/dio.dart';
+import 'package:dio/dio.dart';
+
+class LoadAboutUs extends StatelessWidget {
+  const LoadAboutUs({Key key, this.appName, this.appVersion}) : super(key: key);
+  final String appName;
+  final String appVersion;
+  Future<String> getAboutUs() async {
+    final Response<dynamic> response = await dio.get<dynamic>("about");
+    return response.data.toString();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+      future: getAboutUs(),
+      builder: (BuildContext ctx, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return AboutUs(appName: appName, appVersion: appVersion);
+        } else {
+          return Container(
+            color: colors.white,
+            child: const Align(
+              alignment: Alignment.center,
+              child: CupertinoActivityIndicator(radius: 24),
+            ),
+          );
+        }
+      },
+    );
+  }
+}
 
 class AboutUs extends StatelessWidget {
   const AboutUs({Key key, this.appName, this.appVersion}) : super(key: key);
@@ -29,7 +61,7 @@ class AboutUs extends StatelessWidget {
               style: styles.mystyle,
             ),
             Center(
-              child: SvgPicture.asset("assets/images/Layer.svg",
+              child: SvgPicture.asset("assets/images/joker_indirim.svg",
                   width: 120.0, height: 120.0),
             ),
             // Center(
@@ -47,7 +79,7 @@ class AboutUs extends StatelessWidget {
                   trans(context, 'update_app'),
                   style: TextStyle(color: colors.red),
                 ),
-                 Text(appVersion)
+                Text(appVersion)
               ],
             ),
             const SizedBox(height: 12)

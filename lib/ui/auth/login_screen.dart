@@ -131,11 +131,8 @@ class _MyLoginScreenState extends State<LoginScreen>
         ),
         Padding(
           padding: const EdgeInsets.all(16),
-          child: SvgPicture.asset(
-            "assets/images/joker_indirim.svg",
-            width: 120.0,
-            height: 120.0,
-          ),
+          child: SvgPicture.asset("assets/images/joker_indirim.svg",
+              width: 120.0, height: 120.0),
         ),
         Consumer<Auth>(
           builder: (BuildContext context, Auth auth, Widget child) {
@@ -197,7 +194,8 @@ class _MyLoginScreenState extends State<LoginScreen>
                           }
                         }
                       },
-                      child: mainProvider.changechildLogin(trans(context, 'login'))),
+                      child: mainProvider
+                          .changechildLogin(trans(context, 'login'))),
                 ),
                 const SizedBox(height: 40),
                 Text(trans(context, 'dont_have_account'),

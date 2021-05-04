@@ -20,7 +20,12 @@ class SettingBottom extends StatelessWidget {
         children: <Widget>[
           Text(trans(context, "user_account")),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(onPrimary: colors.trans),
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.resolveWith(
+                    (Set<MaterialState> states) => 0),
+                backgroundColor: MaterialStateProperty.resolveWith(
+                    (Set<MaterialState> states) => colors.trans)),
+
             // splashColor: Colors.transparent,
             // highlightElevation: 0,
             // highlightColor: Colors.transparent,
@@ -47,8 +52,8 @@ class SettingBottom extends StatelessWidget {
                           )),
                           filled: true,
                           fillColor: Colors.white70,
-                          hintText: trans(context,
-                              'Help us to get better please write some feedback'),
+                          hintText:
+                              trans(context, 'help_to_get_better_feed_back'),
                           hintStyle:
                               TextStyle(color: colors.ggrey, fontSize: 15),
                           disabledBorder: const OutlineInputBorder(
@@ -96,19 +101,14 @@ class SettingBottom extends StatelessWidget {
                     ],
                   ),
                 ),
-                desc: trans(context,
-                    'Help us to get better please write some feedback'),
+                desc: trans(context, 'help_to_get_better_feed_back'),
               ).show();
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Image.asset(
-                  "assets/images/delete.png",
-                  height: 20,
-                  width: 20,
-                  color: Colors.red,
-                ),
+                Image.asset("assets/images/delete.png",
+                    height: 20, width: 20, color: Colors.red),
                 const SizedBox(width: 8),
                 Text(trans(context, "cancel_account"), style: styles.redstyle),
               ],
