@@ -12,7 +12,7 @@ class LoadAboutUs extends StatelessWidget {
   final String appName;
   final String appVersion;
   Future<String> getAboutUs() async {
-    final Response<dynamic> response = await dio.get<dynamic>("about");
+    final Response<dynamic> response = await dio.get<dynamic>("privacy");
     return response.data.toString();
   }
 
@@ -22,7 +22,8 @@ class LoadAboutUs extends StatelessWidget {
       future: getAboutUs(),
       builder: (BuildContext ctx, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return AboutUs(appName: appName, appVersion: appVersion);
+          return AboutUs(
+              appName: appName, appVersion: appVersion, about: snapshot.data);
         } else {
           return Container(
             color: colors.white,
@@ -38,9 +39,11 @@ class LoadAboutUs extends StatelessWidget {
 }
 
 class AboutUs extends StatelessWidget {
-  const AboutUs({Key key, this.appName, this.appVersion}) : super(key: key);
+  const AboutUs({Key key, this.appName, this.appVersion, this.about})
+      : super(key: key);
   final String appName;
   final String appVersion;
+  final String about;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,13 +53,13 @@ class AboutUs extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 28),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(appName, style: styles.mystyle2),
             const SizedBox(height: 10),
             Text(
-              "هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام  فتجعلها تبدو (أي الأحرف) وكأنها نص مقروء. العديد من برامح النشر المكتبي وبرامح تحرير صفحات الويب تستخدم لوريم إيبسوم بشكل إفتراضي كنموذج عن النص، وإذا قمت بإدخال  في أي محرك بحث ستظهر العديد من المواقع الحديثة العهد في نتائج البحث. على مدى السنين ظهرت نسخ جديدة ومختلفة من نص لوريم إيبسوم، أحياناً عن طريق الصدفة، وأحياناً عن عمد كإدخال بعض العبارات الفكاهية إليها.",
+              about,
               softWrap: true,
               style: styles.mystyle,
             ),
@@ -71,7 +74,7 @@ class AboutUs extends StatelessWidget {
             //     height: 120.0,
             //   ),
             // ),
-            const Spacer(),
+             const SizedBox(height:36),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
