@@ -10,6 +10,7 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/models/notification.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/dio.dart';
@@ -54,7 +55,12 @@ class _MainMenuState extends State<MainMenu> {
             pageFuture: (int pageIndex) async {
               return getIt<SalesProvider>().getFavoritData(pageIndex);
             });
-
+    getIt<MerchantProvider>().pagewiseFavBranchesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 10,
+            pageFuture: (int pageIndex) async {
+              return getIt<MerchantProvider>().getFavoritData(pageIndex);
+            });
     // numberOfNotifications = getIt<Auth>().unredNotifications ?? 0;
   }
 
@@ -154,10 +160,7 @@ class _MainMenuState extends State<MainMenu> {
                   leading: Image.asset("assets/images/menu_home.png"),
                   onTap: () {
                     Navigator.popAndPushNamed(context, '/Home',
-                        arguments: <String, dynamic>{
-                          "salesDataFilter": false,
-                          "FilterData": null
-                        });
+                        arguments: <String, dynamic>{"salesDataFilter": false});
                   },
                 ),
                 const SizedBox(height: 8),

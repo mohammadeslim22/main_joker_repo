@@ -9,7 +9,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../cards/merchant_card.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 
-class ShopListStaeless extends StatelessWidget {
+class ShopListStaeless extends StatefulWidget {
+  @override
+  _ShopListStaelessState createState() => _ShopListStaelessState();
+}
+
+class _ShopListStaelessState extends State<ShopListStaeless> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 

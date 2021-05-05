@@ -185,6 +185,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                 start: Colors.white, end: Colors.purple),
                             onTap: (bool loved) async {
                               likeFunction("App\\Merchant", merchant.mydata.id);
+                              likeFunction("App\\Branch", merchant.mydata.branches.first.id);
                               isliked = !isliked;
                               return isliked;
                             },
@@ -210,6 +211,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                     start: colors.blue, end: Colors.purple),
                                 onTap: (bool loved) async {
                                   favFunction("App\\Branch", widget.branchId);
+                                  
                                   if (!loved) {
                                     getIt<MerchantProvider>()
                                         .setFavBraanch(widget.branchId);

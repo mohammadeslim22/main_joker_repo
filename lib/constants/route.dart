@@ -3,6 +3,7 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/membership.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/models/specializations.dart';
 import 'package:joker/ui/about_us.dart';
 import 'package:joker/ui/address_list.dart';
@@ -40,7 +41,7 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case "/Home":
       page = PageTransition<PageController>(
-          child: const Home(), type: PageTransitionType.rightToLeftWithFade);
+          child:  Home(salesDataFilter: args["salesDataFilter"]as bool??false,filterData: args["filterDate"]as FilterData), type: PageTransitionType.rightToLeftWithFade);
       break;
     // case "/HomeMap":
     //   page = PageTransition<PageController>(

@@ -5,6 +5,7 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/map_provider.dart';
@@ -28,7 +29,10 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'main/sales_list_stateless.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
+  const Home({Key key, this.salesDataFilter, this.filterData})
+      : super(key: key);
+  final bool salesDataFilter;
+  final FilterData filterData;
   @override
   _HomeState createState() => _HomeState();
 }
@@ -38,7 +42,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   AnimationController _hide;
   GlobalKey<ScaffoldState> _scaffoldkey;
   PersistentBottomSheetController<dynamic> _errorController;
-
+  bool salesDataFilter;
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification.depth == 0) {
       if (notification is UserScrollNotification) {
@@ -61,6 +65,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    salesDataFilter = widget.salesDataFilter;
     _scaffoldkey = GlobalKey<ScaffoldState>();
     _hide = AnimationController(
       vsync: this,
@@ -68,33 +73,33 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
     _hide.forward();
     // getIt<SalesProvider>().pagewiseSalesController =
-        // PagewiseLoadController<dynamic>(
-        //     pageSize: config.loggedin ? 15 : 6,
-        //     pageFuture: (int pageIndex) async {
-        //       return config.loggedin
-        //           ? (getIt<GlobalVars>().filterData != null)
-        //               ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
-        //                   pageIndex, getIt<GlobalVars>().filterData)
-        //               : getIt<SalesProvider>()
-        //                   .getSalesDataAuthenticated(pageIndex)
-        //           : (getIt<GlobalVars>().filterData != null)
-        //               ? getIt<SalesProvider>().getSalesDataFilterd(
-        //                   pageIndex, getIt<GlobalVars>().filterData)
-        //               : getIt<SalesProvider>().getSalesData(pageIndex);
-        //     });
-              getIt<SalesProvider>().pagewiseSalesController =
+    // PagewiseLoadController<dynamic>(
+    //     pageSize: config.loggedin ? 15 : 6,
+    //     pageFuture: (int pageIndex) async {
+    //       return config.loggedin
+    //           ? (getIt<GlobalVars>().filterData != null)
+    //               ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
+    //                   pageIndex, getIt<GlobalVars>().filterData)
+    //               : getIt<SalesProvider>()
+    //                   .getSalesDataAuthenticated(pageIndex)
+    //           : (getIt<GlobalVars>().filterData != null)
+    //               ? getIt<SalesProvider>().getSalesDataFilterd(
+    //                   pageIndex, getIt<GlobalVars>().filterData)
+    //               : getIt<SalesProvider>().getSalesData(pageIndex);
+    //     });
+    getIt<SalesProvider>().pagewiseSalesController =
         PagewiseLoadController<dynamic>(
             pageSize: getIt<Auth>().isAuthintecated ? 15 : 6,
             pageFuture: (int pageIndex) async {
               return getIt<Auth>().isAuthintecated
-                  ? (getIt<GlobalVars>().filterData != null)
+                  ? salesDataFilter
                       ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
-                          pageIndex, getIt<GlobalVars>().filterData)
+                          pageIndex, widget.filterData)
                       : getIt<SalesProvider>()
                           .getSalesDataAuthenticated(pageIndex)
-                  : (getIt<GlobalVars>().filterData != null)
-                      ? getIt<SalesProvider>().getSalesDataFilterd(
-                          pageIndex, getIt<GlobalVars>().filterData)
+                  : salesDataFilter
+                      ? getIt<SalesProvider>()
+                          .getSalesDataFilterd(pageIndex, widget.filterData)
                       : getIt<SalesProvider>().getSalesData(pageIndex);
             });
     // getIt<MerchantProvider>().pagewiseBranchesController =
@@ -106,7 +111,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     //                   .getBranchesDataAuthintecated(pageIndex)
     //               : getIt<MerchantProvider>().getBranchesData(pageIndex);
     //         });
-                getIt<MerchantProvider>().pagewiseBranchesController =
+    getIt<MerchantProvider>().pagewiseBranchesController =
         PagewiseLoadController<dynamic>(
             pageSize: 5,
             pageFuture: (int pageIndex) async {
@@ -227,7 +232,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           desc: 'Clearing Filter Data',
                           btnCancelOnPress: () {},
                           btnOkOnPress: () {
-                            getIt<GlobalVars>().filterData = null;
+                            getIt<GlobalVars>().clearilterDate();
+                            setState(() {
+                              salesDataFilter = false;
+                            });
+                            getIt<SalesProvider>()
+                                .pagewiseSalesController
+                                .reset();
                           },
                         ).show();
                       },
@@ -235,7 +246,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     IconButton(
                       icon: Icon(Icons.search, color: colors.orange),
                       onPressed: () {
-                        Navigator.pushNamed(context, "/AdvancedSearch",
+                        Navigator.popAndPushNamed(context, "/AdvancedSearch",
                             arguments: <String, dynamic>{
                               "specializations":
                                   getIt<HOMEMAProvider>().specializations

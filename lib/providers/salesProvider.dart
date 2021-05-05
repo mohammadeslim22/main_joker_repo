@@ -98,7 +98,7 @@ class SalesProvider with ChangeNotifier {
 
   void setunFavSale(int saleId, {int bId}) {
     try {
-       if (bId != null) {
+      if (bId != null) {
         getIt<HOMEMAProvider>()
             .branches
             .mapBranches
@@ -184,7 +184,7 @@ class SalesProvider with ChangeNotifier {
     final String startDate = formatter.format(filterData.startingdate);
     final String endDate = formatter.format(filterData.endingdate);
     final Response<dynamic> response =
-        await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
+        await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
       'merchant_name': filterData.merchantNameOrPartOfit,
       'name': filterData.saleNameOrPartOfit,
@@ -200,18 +200,25 @@ class SalesProvider with ChangeNotifier {
 
   Future<List<SaleData>> getSalesDataFilterdAuthenticated(
       int pageIndex, FilterData filterData) async {
+    print(
+        "filterData  ${filterData.merchantNameOrPartOfit} ${filterData.saleNameOrPartOfit} ${filterData.fromPrice} ${filterData.specifications} ${filterData.startingdate}");
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String startDate = formatter.format(filterData.startingdate);
     final String endDate = formatter.format(filterData.endingdate);
     final Response<dynamic> response =
         await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
-      'merchant_name': filterData.merchantNameOrPartOfit,
-      'name': filterData.saleNameOrPartOfit,
-      'from_date': startDate,
-      'to_date': endDate,
-      'rate': filterData.rating,
-      'specifications': filterData.specifications
+      'merchant_name': filterData.merchantNameOrPartOfit.isEmpty
+          ? ""
+          : filterData.merchantNameOrPartOfit,
+      'name': filterData.saleNameOrPartOfit.isNotEmpty
+          ? filterData.saleNameOrPartOfit
+          : "",
+      // 'from_date': startDate,
+      // 'to_date': endDate,
+      'specifications': filterData.specifications.isEmpty
+          ? <int>[1, 2]
+          : filterData.specifications
     });
     sales = Sales.fromJson(response.data);
     notifyListeners();

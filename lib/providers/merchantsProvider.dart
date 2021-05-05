@@ -13,9 +13,11 @@ import 'map_provider.dart';
 class MerchantProvider with ChangeNotifier {
   merchant_main_model.Merchant merchant;
   Branches branches;
+  Branches tempbBranches;
   List<MapBranch> favbranches = <MapBranch>[];
 
   PagewiseLoadController<dynamic> pagewiseBranchesController;
+  PagewiseLoadController<dynamic> pagewiseFavBranchesController;
 
   Future<merchant_main_model.Merchant> getMerchantData(
       int id, String source, int ignore) async {
@@ -35,6 +37,7 @@ class MerchantProvider with ChangeNotifier {
     });
 
     branches = Branches.fromJson(response.data);
+    tempbBranches = branches;
     // branches.data.forEach((BranchData element) {
     //   print("branch no auth ${element.id}");
     // });
@@ -50,6 +53,7 @@ class MerchantProvider with ChangeNotifier {
           jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
     });
     branches = Branches.fromJson(response.data);
+    tempbBranches = branches;
     // branches.data.forEach((BranchData element) {
     //   print("branch auth -- ${element.id}");
     // });
@@ -81,7 +85,7 @@ class MerchantProvider with ChangeNotifier {
 
   void setFavBraanch(int branchId) {
     try {
-      if (branches != null)
+      if (branches != null&& branches.data.isNotEmpty){
         branches.data.firstWhere((BranchData element) {
           return element.id == branchId;
         }).isfavorite = 1;
@@ -103,6 +107,9 @@ class MerchantProvider with ChangeNotifier {
               logo: temp.merchant.logo,
               ratesAverage: temp.merchant.rateAverage,
               salesCount: temp.sales)));
+      }
+        
+      
       notifyListeners();
     } catch (err) {
       print("error in branch fitch $err");
@@ -112,7 +119,7 @@ class MerchantProvider with ChangeNotifier {
 
   void setunFavBranch(int branchId) {
     try {
-      if (branches != null)
+      if (branches != null&& branches.data.isNotEmpty)
         branches.data.firstWhere((BranchData element) {
           return element.id == branchId;
         }).isfavorite = 1;

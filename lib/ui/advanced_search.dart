@@ -32,21 +32,23 @@ class AdvancedSearch extends StatefulWidget {
 class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
   Set<int> selectedOptions = <int>{};
   PersistentBottomSheetController<dynamic> _errorController;
-  static DateTime starttoday = DateTime.now();
-  static DateTime endtoday = DateTime.now();
+  static DateTime starttoday = DateTime.now().subtract(const Duration(days: 1500));
+  static DateTime endtoday = DateTime.now().add(const Duration(days: 1500));
   String startDate = "${starttoday.toLocal()}".split(' ')[0];
   String endDate = "${endtoday.toLocal()}".split(' ')[0];
   AnimationController _animationController;
   // final CalendarController _calendarController = CalendarController();
+  DateTime focusDay = DateTime.now();
 
-  double _ratingStar = 0;
   bool showingStartingDateCalendar = true;
   Widget t;
   Widget tt;
   Widget ttt;
-  double startingPrive = 50.0;
+  double startingPrive = 0.0;
   double endingPrive = 450.0;
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
+  final CalendarController _calendarController = CalendarController();
+
   @override
   void initState() {
     super.initState();
@@ -56,33 +58,59 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
     );
 
     _animationController.forward();
-
-    t = TableCalendar<dynamic>(
-      firstDay: DateTime.now().subtract(const Duration(days: 500)),
-      lastDay: DateTime.now().subtract(const Duration(days: 500)),
-      focusedDay: DateTime.now(),
-      // calendarController: _calendarController,
+    t = TableCalendar(
+      calendarController: _calendarController,
       startingDayOfWeek: StartingDayOfWeek.monday,
-      calendarStyle: const CalendarStyle(
-          // selectedColor: Colors.orange[400],
-          // todayColor: Colors.orange[200],
-          // markersColor: Colors.brown[700],
-          outsideDaysVisible: false),
+      calendarStyle: CalendarStyle(
+        selectedColor: Colors.deepOrange[400],
+        todayColor: Colors.deepOrange[200],
+        markersColor: Colors.brown[700],
+        outsideDaysVisible: false,
+      ),
       headerStyle: HeaderStyle(
         formatButtonTextStyle:
             const TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
         formatButtonDecoration: BoxDecoration(
-          color: Colors.orange[400],
+          color: Colors.deepOrange[400],
           borderRadius: BorderRadius.circular(16.0),
         ),
       ),
       onDaySelected: _onDaySelected,
     );
+    // t = TableCalendar<dynamic>(
+    //   firstDay: DateTime.now().subtract(const Duration(days: 500)),
+    //   lastDay: DateTime.now().add(const Duration(days: 500)),
+    //   focusedDay: focusDay,
+
+    //   // calendarController: _calendarController,
+    //   startingDayOfWeek: StartingDayOfWeek.monday,
+    //   selectedDayPredicate: (DateTime dt) {
+
+    //     return dt == focusDay;
+    //   },
+    //   calendarStyle: CalendarStyle(
+    //       selectedDecoration: BoxDecoration(
+    //         color: colors.orange,
+    //       ),
+    //       // selectedColor: Colors.orange[400],
+    //       // todayColor: Colors.orange[200],
+    //       // markersColor: Colors.brown[700],
+    //       outsideDaysVisible: true),
+    //   headerStyle: HeaderStyle(
+    //     formatButtonTextStyle:
+    //         const TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
+    //     formatButtonDecoration: BoxDecoration(
+    //       color: Colors.orange[400],
+    //       borderRadius: BorderRadius.circular(16.0),
+    //     ),
+    //   ),
+    //   onDaySelected: _onDaySelected,
+    // );
     ttt = Container(child: t);
     tt = t;
   }
 
-  void _onDaySelected(DateTime day, DateTime events) {
+  void _onDaySelected(DateTime day, List<dynamic> events, List<dynamic> event) {
     if (showingStartingDateCalendar) {
       setState(() {
         starttoday = day;
@@ -97,6 +125,24 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
       });
     }
   }
+  // void _onDaySelected(DateTime day, DateTime events) {
+  //   if (showingStartingDateCalendar) {
+  //     setState(() {
+  //       focusDay = day;
+  //       print("focusDay $focusDay");
+
+  //       starttoday = day;
+  //       startDate = "${starttoday.toLocal()}".split(' ')[0];
+  //     });
+  //   } else {
+  //     setState(() {
+  //       endtoday = day;
+  //       endDate = "${endtoday.toLocal()}".split(' ')[0];
+  //       showingStartingDateCalendar = true;
+  //       _errorController.close();
+  //     });
+  //   }
+  // }
 
   String selectedValue;
   final TextEditingController merchantName = TextEditingController();
@@ -354,28 +400,28 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                   ),
                 ),
                 const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(trans(context, "accourding_to_rating"),
-                        style: styles.mystyle),
-                    RatingBar(
-                      onRatingChanged: (double rating) {
-                        setState(() => _ratingStar = rating);
-                        // TODO(mislem): use this var to send raiting to API
-                      },
-                      filledIcon: Icons.star,
-                      emptyIcon: Icons.star_border,
-                      halfFilledIcon: Icons.star_half,
-                      isHalfAllowed: true,
-                      filledColor: Colors.amberAccent,
-                      emptyColor: colors.grey,
-                      halfFilledColor: Colors.orange[300],
-                      size: 30,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 5),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: <Widget>[
+                //     Text(trans(context, "accourding_to_rating"),
+                //         style: styles.mystyle),
+                //     RatingBar(
+                //       onRatingChanged: (double rating) {
+                //         setState(() => _ratingStar = rating);
+                //         // TODO(mislem): use this var to send raiting to API
+                //       },
+                //       filledIcon: Icons.star,
+                //       emptyIcon: Icons.star_border,
+                //       halfFilledIcon: Icons.star_half,
+                //       isHalfAllowed: true,
+                //       filledColor: Colors.amberAccent,
+                //       emptyColor: colors.grey,
+                //       halfFilledColor: Colors.orange[300],
+                //       size: 30,
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -424,19 +470,22 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                                     side: const BorderSide(color: Colors.grey)),
                           )),
                       onPressed: () {
-                        getIt<GlobalVars>().filterData = FilterData(
-                          merchantName.text,
-                          saleName.text,
-                          starttoday,
-                          endtoday,
-                          _ratingStar,
-                          List<int>.from(selectedOptions),
-                          startingPrive,
-                          endingPrive,
-                        );
-                        Navigator.pushNamed(context, "/Home",
+                        getIt<GlobalVars>().setFilterDate(FilterData(
+                          merchantNameOrPartOfit: merchantName.text??"",
+                          saleNameOrPartOfit: saleName.text??"",
+                          startingdate: starttoday??DateTime(2020,0,0),
+                          endingdate: endtoday?? DateTime(2900,0,0),
+                          // _ratingStar,
+                          specifications: List<int>.from(selectedOptions)??<int>[1, 2],
+                          fromPrice: startingPrive??0,
+                          toPrice: endingPrive??9999,
+                        ));
+
+                        // .filterData =;
+                        Navigator.popAndPushNamed(context, "/Home",
                             arguments: <String, dynamic>{
                               "salesDataFilter": true,
+                              "filterDate":getIt<GlobalVars>().filterData
                             });
                       },
 

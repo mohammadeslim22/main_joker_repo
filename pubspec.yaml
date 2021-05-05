@@ -49,7 +49,7 @@ dev_dependencies:
   latlong: ^0.6.1
   font_awesome_flutter: ^9.0.0
   badges: ^1.2.0
-  table_calendar: ^3.0.0
+  table_calendar: ^2.2.3
   flutter_sim_country_code: ^0.1.0
   google_maps_flutter: ^2.0.3
   loading_indicator: ^2.0.1

@@ -1,13 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/map_branches.dart';
-import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/size_config.dart';
 import 'package:like_button/like_button.dart';
+import 'package:awesome_dialog/awesome_dialog.dart' as awesome_dialog;
+
 
 class FaveBranchCard extends StatelessWidget {
   const FaveBranchCard({Key key, this.branch, this.value}) : super(key: key);
@@ -62,13 +64,26 @@ class FaveBranchCard extends StatelessWidget {
                   const CircleColor(start: Colors.orange, end: Colors.purple),
               isLiked: branch.isfavorite == 1,
               onTap: (bool loved) async {
-                favFunction("App\\Branch", branch.id);
-                if (!loved) {
-                  value.setFavBraanch(branch.id);
-                } else {
-                  value.setunFavBranch(branch.id);
-                }
+                 print("loved $loved");
+                awesome_dialog.AwesomeDialog(
+                  context: context,
+                  headerAnimationLoop: false,
+                  dialogType: awesome_dialog.DialogType.WARNING,
+                  animType: awesome_dialog.AnimType.BOTTOMSLIDE,
+                  title: trans(context, 'remove_fav'),
+                  desc: trans(context, 'remove_from_fav'),
+                  btnCancelOnPress: () {},
+                  btnCancelColor: Colors.grey[600],
+                  btnOkColor: colors.orange,
+                  btnOkOnPress: () async {
+                    await  favFunction("App\\Branch", branch.id);
+                      value.setunFavBranch(branch.id);
+                    value.pagewiseFavBranchesController.reset();
+                  },
+                ).show();
                 return !loved;
+               
+             
               },
               likeCountPadding: const EdgeInsets.symmetric(vertical: 0),
             ),

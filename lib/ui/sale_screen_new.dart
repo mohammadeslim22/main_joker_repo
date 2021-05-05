@@ -472,10 +472,7 @@ class ShopDetailsPage extends State<SaleLoader>
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
                             width: SizeConfig.blockSizeHorizontal * 10),
-                        // SvgPicture.asset("assets/images/time_left.svg",
-                        //     fit: BoxFit.cover,
-                        //     height: SizeConfig.blockSizeVertical * 5,
-                        //     width: SizeConfig.blockSizeHorizontal * 12),
+                      
                         Text(
                             "  " +
                                 rs.startAt +
@@ -487,7 +484,7 @@ class ShopDetailsPage extends State<SaleLoader>
                             style: styles.moreInfo),
                         Text(rs.status)
                       ]),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[

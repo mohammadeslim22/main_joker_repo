@@ -40,9 +40,9 @@ class TextFormInput extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: TextFormField(
-        readOnly: readOnly??false,
+        readOnly: readOnly ?? false,
         keyboardType: kt,
-        onTap: () => onTab??(){},
+        onTap: () => onTab ?? () {},
         controller: cController,
         style: const TextStyle(
           color: Colors.black,
@@ -75,13 +75,9 @@ class TextFormInput extends StatelessWidget {
             prefixIcon: Icon(prefixIcon),
             suffixIcon: suffixicon),
         focusNode: focusNode,
-        onFieldSubmitted: (String v) {
-          onFieldSubmitted();
-        },
-        validator: (
-          String error
-        ) {
-         return  validator( error);
+        onFieldSubmitted: (String v) => onFieldSubmitted ?? () {},
+        validator: (String error) {
+          return validator(error);
         },
       ),
     );
