@@ -22,7 +22,6 @@ class _ShopListState extends State<ShopList> {
   @override
   void initState() {
     super.initState();
-    print("are we alone ? ");
     getIt<MerchantProvider>().pagewiseBranchesController =
         PagewiseLoadController<dynamic>(
             pageSize: 5,

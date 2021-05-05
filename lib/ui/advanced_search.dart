@@ -96,7 +96,6 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
         _errorController.close();
       });
     }
-    print('CALLBACK: _onDaySelected');
   }
 
   String selectedValue;

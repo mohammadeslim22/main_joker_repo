@@ -39,7 +39,6 @@ class MySettingState extends State<SettingsScreen> {
   Future<void> setStartingLang(MainProvider bolc, Language lang) async {
     await data.getData("lang").then<dynamic>((String value) async {
       if (value.isEmpty) {
-        print("here in settings and this is lang empty");
         await data.getData("initlang").then<dynamic>((String local) {
           if (local == 'en') {
             bolc.changelanguageindex(1);

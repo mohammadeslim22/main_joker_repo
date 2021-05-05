@@ -460,7 +460,6 @@ class MyAccountPage extends State<MyAccount>
                                   setState(() {
                                     _isButtonEnabled = false;
                                   });
-                                  print(" birthDateController.text ${ birthDateController.text}");
                                   await getIt<Auth>()
                                       .updateProfile(
                                           usernameController.text,
@@ -566,7 +565,6 @@ class MyAccountPage extends State<MyAccount>
         imageUplaoding = false;
       });
       getIt<Auth>().changeProfilePic(formData).then((dynamic result) {
-        print(result.data);
         if (result.statusCode == 200) {
           bolc.changeImageUrl(result.data['image'].toString());
           data.setData('profile_pic', result.data['image'].toString());

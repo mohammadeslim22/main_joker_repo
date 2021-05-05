@@ -209,8 +209,6 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                 circleColor: CircleColor(
                                     start: colors.blue, end: Colors.purple),
                                 onTap: (bool loved) async {
-                                  print(
-                                      getIt<MerchantProvider>().branches.data);
                                   favFunction("App\\Branch", widget.branchId);
                                   if (!loved) {
                                     getIt<MerchantProvider>()
@@ -275,7 +273,6 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                     },
                     controller: _tabController,
                     tabs: merchant.mydata.branches.map((MerchantBranches tab) {
-                      print("tabs ids: ${tab.id}");
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius:
@@ -318,18 +315,24 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 6, horizontal: 16),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16.0)),
-                                      onPrimary: Colors.grey[300],
-                                      textStyle:
-                                          const TextStyle(color: Colors.black)),
+                                  style: ButtonStyle(
+                                      padding:
+                                          MaterialStateProperty.resolveWith(
+                                              (Set<MaterialState> state) =>
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 6,
+                                                      horizontal: 16)),
+                                      shape: MaterialStateProperty.resolveWith(
+                                          (Set<MaterialState> state) => RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0))),
+                                      backgroundColor:
+                                          MaterialStateProperty.resolveWith<Color>(
+                                              (Set<MaterialState> state) =>
+                                                  Colors.grey[300]),
+                                      textStyle: MaterialStateProperty.resolveWith((Set<MaterialState> state) => const TextStyle(color: Colors.black))),
                                   onPressed: () {},
-                                  child: Text(trans(context, "send_complaint"),
-                                      style: styles.mystyle)),
+                                  child: Text(trans(context, "send_complaint"), style: styles.mystyle)),
                               Column(
                                 children: <Widget>[
                                   RatingBar(

@@ -224,7 +224,7 @@ class _SalesCardState extends State<SalesCardNoPadding> {
                         id: saledata.merchant.id,
                         logo: saledata.merchant.logo,
                         name: saledata.merchant.name,
-                        ratesAverage: saledata.merchant.ratesAverage,
+                        ratesAverage:double.parse(saledata.merchant.ratesAverage.toString()),
                         salesCount: saledata.merchant.salesCount));
                 getIt<HOMEMAProvider>().setinFocusBranch(m);
                 Navigator.pushNamed(context, "/SaleLoader",

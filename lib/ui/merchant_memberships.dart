@@ -22,7 +22,6 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
   Future<List<MemFromMerchant>> getMemebershipsData(int id) async {
     final Response<dynamic> response =
         await dio.get<dynamic>("memberships?merchant_id=$id");
-    print("here in membership screen, ${response.data}");
     memberShips = MerchantMemberShip.fromJson(response.data);
     return memberShips.data;
   }
@@ -118,7 +117,6 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
                               "membership_id": memFromMerchant.id
                             }).then((Response<dynamic> value) {
                           if (value.statusCode == 200) {
-                            print(value.data);
                             if (value.data.toString() == "true") {
                               showToastWidget(
                                   IconToastWidget.success(

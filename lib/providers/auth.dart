@@ -105,7 +105,6 @@ class Auth with ChangeNotifier {
     //     CountryCodes.detailsForLocale(Locale(dialCodeFav, dialCodeFav));
     // myCountryDialCode = details.dialCode;
     myCountryDialCode = countriesDialCodes[dialCodeFav];
-    print("myCountryDialCode $myCountryDialCode $dialCodeFav");
     notifyListeners();
     // print("numricCode:    ${result.callingCodes}");
   }
@@ -143,7 +142,6 @@ class Auth with ChangeNotifier {
       } else {
         setnotificationdCount(int.parse(res.data.toString()));
       }
-      print("Notification count in splash ${res.data}");
     }
   }
   // TODO(isleem): the application stops at split(" ")[1])
@@ -186,8 +184,6 @@ class Auth with ChangeNotifier {
   // }
 
   Future<bool> login(String username, String pass, BuildContext context) async {
-    print(
-        "loging info:${myCountryDialCode + username.replaceAll(RegExp(r'^0+(?=.)'), '').toString().trim()}");
     bool res;
     final OSPermissionSubscriptionState status =
         await OneSignal.shared.getPermissionSubscriptionState();
@@ -211,13 +207,11 @@ class Auth with ChangeNotifier {
       }
 
       if (value.statusCode == 200) {
-        print("login data ${value.data}");
         if (value.data != "fail") {
           data.setData("username", value.data['data']['name'].toString());
           data.setData("profile_pic", value.data['data']['image'].toString());
           config.profileUrl = value.data['data']['image'].toString();
           setUserPicture(value.data['data']['image'].toString());
-          print("unredNotifications ${value.data['data']['unread_count']}");
           unredNotifications = value.data['data']['unread_count'] as int;
           notifyListeners();
           dio.options.headers['authorization'] =
@@ -289,8 +283,6 @@ class Auth with ChangeNotifier {
     String email,
     String mobile,
   ) async {
-    print(
-        "loging info:${myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')}");
     bool res;
     await dio.post<dynamic>("register", data: <String, dynamic>{
       "name": username,
@@ -312,7 +304,6 @@ class Auth with ChangeNotifier {
         res = false;
       }
       if (value.statusCode == 201) {
-        print(value.data);
 
         Navigator.pushNamed(context, '/pin', arguments: <String, String>{
           'mobileNo':
@@ -332,7 +323,6 @@ class Auth with ChangeNotifier {
       } else {
         res = false;
       }
-   
     });
     notifyListeners();
     return res;
@@ -363,7 +353,7 @@ class Auth with ChangeNotifier {
     isAuthintecated = false;
     setUserPicture(
         "https://png.pngtree.com/png-clipart/20190924/original/pngtree-businessman-user-avatar-free-vector-png-image_4827807.jpg");
-   
+
     getIt<NavigationService>().navigateTo('/login', null);
     changeUsername(trans(c, "login_or_sign_up"));
     notifyListeners();
@@ -418,7 +408,6 @@ class Auth with ChangeNotifier {
           "phone": myCountryDialCode + mobile,
           "verfiy_code": v
         });
-    print(correct.data);
     if (correct.data == "false") {
       showToast('The Code You Enterd Was Not Correct',
           context: context,
@@ -439,10 +428,8 @@ class Auth with ChangeNotifier {
 
   Future<bool> getPinCode(String code) async {
     final String phone = await data.getData("phone");
-    print("phone  $phone");
     final Response<dynamic> correct = await dio.post<dynamic>("verfiy",
         data: <String, dynamic>{"phone": phone, "verfiy_code": code});
-    print("correct data : ${correct.data}");
     if (correct.data == "false") {
       notifyListeners();
       return false;

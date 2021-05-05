@@ -65,7 +65,6 @@ class HOMEMAProvider with ChangeNotifier {
   }
 
   void setunLikeSale(int saleId) {
-    print(saleId);
     try {
       inFocusBranch.lastsales.firstWhere((SaleData element) {
         return element.id == saleId;
@@ -81,19 +80,19 @@ class HOMEMAProvider with ChangeNotifier {
       inFocusBranch.lastsales.firstWhere((SaleData element) {
         return element.id == saleId;
       }).isfavorite = 1;
-      // notifyListeners();
+       notifyListeners();
     } catch (err) {
       print("could not find element $err");
     }
   }
 
   void setunFavSale(int saleId) {
-    print(saleId);
     try {
+      
       inFocusBranch.lastsales.firstWhere((SaleData element) {
         return element.id == saleId;
       }).isfavorite = 0;
-      // notifyListeners();
+       notifyListeners();
     } catch (err) {
       print("orrrrr");
     }
@@ -101,38 +100,32 @@ class HOMEMAProvider with ChangeNotifier {
 
   void toggleShowSlidingPanel() {
     showSlidingPanel = !showSlidingPanel;
-    print("showSlidingPanel $showSlidingPanel");
     notifyListeners();
   }
 
   void toggleSHowSepcializationsPad() {
     showSepcializationsPad = !showSepcializationsPad;
-    print("showSepcializationsPad $showSepcializationsPad");
     notifyListeners();
   }
 
   void makeshowSlidingPanelTrue() {
     showSlidingPanel = true;
-    print("showSlidingPanel $showSlidingPanel");
     notifyListeners();
   }
 
   void makeshowSlidingPanelFalse() {
     showSlidingPanel = false;
 
-    print("showSlidingPanel $showSlidingPanel");
     notifyListeners();
   }
 
   void makeShowSepcializationsPadFalse() {
     showSepcializationsPad = false;
-    print("showSepcializationsPad $showSepcializationsPad");
     notifyListeners();
   }
 
   void makeShowSepcializationsPadTrue() {
     showSepcializationsPad = true;
-    print("showSepcializationsPad $showSepcializationsPad");
     notifyListeners();
   }
 
@@ -140,8 +133,6 @@ class HOMEMAProvider with ChangeNotifier {
     selectedBranch = branches.mapBranches.firstWhere((MapBranch element) {
       return element.id == branchId;
     });
-    print(selectedBranch.latitude);
-    print(selectedBranch.longitude);
     lat = selectedBranch.latitude;
     long = selectedBranch.longitude;
     mapController.animateCamera(CameraUpdate.newCameraPosition(
@@ -170,7 +161,6 @@ class HOMEMAProvider with ChangeNotifier {
     branches = MapBranches.fromJson(response.data);
     markers.clear();
     addUserIcon();
-    print("${branches.mapBranches.length} branches.mapBranches.length");
     for (final MapBranch mapBranch in branches.mapBranches) {
       await _addMarker(mapBranch,
           mapBranch.id == (inFocusBranch != null ? inFocusBranch.id : 99999));
@@ -318,9 +308,7 @@ class HOMEMAProvider with ChangeNotifier {
     markers.clear();
     // await _addMarker(_scaffoldkey, element, true);
     for (final MapBranch mapBranch in branches.mapBranches) {
-      print("${mapBranch.id} ${element.id} ${mapBranch.id == element.id}");
       await _addMarker(mapBranch, mapBranch.id == element.id);
-      print(markers);
     }
     // markers.removeWhere(
     //     (Marker m) => m.markerId == MarkerId(element.id.toString()));

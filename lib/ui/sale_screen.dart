@@ -103,7 +103,6 @@ class ShopDetailsPage extends State<SaleDetailPage>
     index = 0;
     isliked = sale.isliked != 0;
     isloved = sale.isfavorite != 0;
-    print("is fav ${sale.isfavorite}");
     isbottomSheetOpened = false;
     pageIndexx = 1;
     index += merchant.mydata.branches[0].id;
@@ -111,7 +110,6 @@ class ShopDetailsPage extends State<SaleDetailPage>
 
   void getHeight() {
     final State state = key.currentState;
-    print("current state ${key.currentState}");
     final RenderBox box = state.context.findRenderObject() as RenderBox;
     setState(() {
       extededPlus = box.size.height;
@@ -166,7 +164,6 @@ class ShopDetailsPage extends State<SaleDetailPage>
                                         start: Colors.blue, end: Colors.purple),
                                     isLiked: isloved,
                                     onTap: (bool loved) async {
-                                      print(loved);
                                       favFunction("App\\Sale", sale.id);
                                       if (!loved) {
                                         getIt<SalesProvider>()
@@ -865,4 +862,5 @@ class _CurasolSliderState extends State<CurasolSlider> {
     );
   }
   //abu talaat
+
 }

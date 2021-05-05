@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
-import 'package:joker/providers/map_provider.dart';
+import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/size_config.dart';
 import 'package:like_button/like_button.dart';
@@ -11,18 +11,20 @@ import 'package:like_button/like_button.dart';
 class FaveCard extends StatelessWidget {
   const FaveCard({Key key, this.sale, this.value}) : super(key: key);
   final SaleData sale;
-  final HOMEMAProvider value;
+  final SalesProvider value;
 
   @override
   Widget build(BuildContext context) {
     return Card(
         child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start,
-           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
@@ -34,7 +36,7 @@ class FaveCard extends StatelessWidget {
                         },
                         fit: BoxFit.cover,
                         height: SizeConfig.blockSizeVertical * 8,
-                        width: SizeConfig.blockSizeHorizontal * 16,
+                        width: SizeConfig.blockSizeHorizontal * 14,
                       )),
                   const SizedBox(width: 8),
                   Container(
@@ -47,11 +49,10 @@ class FaveCard extends StatelessWidget {
                       children: <Widget>[
                         Text(sale.name, style: styles.saleNameInMapCard),
                         const SizedBox(height: 12),
-                        TextOverflowRapper(mytext: sale.details+"sale.detailssale.details sale.details sale.detailssale.details sale.details"),
+                        TextOverflowRapper(mytext: sale.details ),
                       ],
                     ),
                   ),
-                
                 ]),
             LikeButton(
               circleSize: SizeConfig.blockSizeHorizontal * 12,
@@ -62,6 +63,7 @@ class FaveCard extends StatelessWidget {
                   const CircleColor(start: Colors.blue, end: Colors.purple),
               isLiked: sale.isfavorite == 1,
               onTap: (bool loved) async {
+                print("loved $loved");
                 favFunction("App\\Sale", sale.id);
                 if (!loved) {
                   value.setFavSale(sale.id);

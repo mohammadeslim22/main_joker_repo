@@ -76,8 +76,6 @@ class _NotifcationsState extends State<Notifcations> {
 
   Widget _itemBuilder(BuildContext c, NotificationData nD, MainProvider value) {
     String endsIn = "";
-    print("isread ${nD.isread}");
-    print("image ${nD.image}");
     if (nD.period is! String) {
       final String yearsToEnd = nD.period[0] != 0
           ? nD.period[0].toString() + " " + trans(context, 'y') + ","

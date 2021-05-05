@@ -49,16 +49,16 @@ class _SalesCardState extends State<SalesCard> {
       child: InkWell(
         onTap: () {
           // if (config.loggedin) {
-            if(getIt<Auth>().isAuthintecated){
+          if (getIt<Auth>().isAuthintecated) {
             final MapBranch m = MapBranch(
                 merchant: Merchant(
                     id: saledata.merchant.id,
                     logo: saledata.merchant.logo,
                     name: saledata.merchant.name,
-                    ratesAverage: saledata.merchant.ratesAverage,
+                    ratesAverage:
+                        double.parse(saledata.merchant.ratesAverage.toString()),
                     salesCount: saledata.merchant.salesCount));
             getIt<HOMEMAProvider>().setinFocusBranch(m);
-            print("mmmmmmmmmmmmmmmm $m");
             Navigator.pushNamed(context, "/SaleLoader",
                 arguments: <String, dynamic>{"mapBranch": m, "sale": saledata});
           } else {

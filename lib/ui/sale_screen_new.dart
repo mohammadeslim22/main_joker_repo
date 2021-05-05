@@ -67,7 +67,6 @@ class ShopDetailsPage extends State<SaleLoader>
     myIndex = 0;
     isliked = sale.isliked != 0;
     isloved = sale.isfavorite != 0;
-    print("is fav ${sale.isfavorite}");
     isbottomSheetOpened = false;
     pageIndexx = 1;
     // myIndex += merchant.mydata.branches[0].id;
@@ -75,7 +74,6 @@ class ShopDetailsPage extends State<SaleLoader>
 
   void getHeight() {
     final State state = key.currentState;
-    print("current state ${key.currentState}");
     final RenderBox box = state.context.findRenderObject() as RenderBox;
     setState(() {
       extededPlus = box.size.height + 3;
@@ -531,9 +529,9 @@ class ShopDetailsPage extends State<SaleLoader>
                                 onTap: (bool loved) async {
                                   favFunction("App\\Sale", rs.id);
                                   if (!loved) {
-                                    value.setFavSale(rs.id);
+                                    getIt<SalesProvider>().setFavSale(rs.id);
                                   } else {
-                                    value.setunFavSale(rs.id);
+                                     getIt<SalesProvider>().setunFavSale(rs.id);
                                   }
                                   return !loved;
                                 },
@@ -613,6 +611,7 @@ class ShopDetailsPage extends State<SaleLoader>
                       (Set<MaterialState> states) =>
                           TextStyle(color: colors.white))),
               onPressed: () async {
+                print("hello croods ${ value.inFocusBranch.latitude } ${value.inFocusBranch.longitude}");
                 final map_luncher.Coords crods = map_luncher.Coords(
                     value.inFocusBranch.latitude,
                     value.inFocusBranch.longitude);

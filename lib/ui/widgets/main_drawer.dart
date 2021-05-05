@@ -10,6 +10,7 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/models/notification.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/functions.dart';
@@ -40,15 +41,20 @@ class _MainMenuState extends State<MainMenu> {
     super.initState();
     // if (config.loggedin) {
     if (getIt<Auth>().isAuthintecated) {
-      print("notifications getting in");
       getIt<MainProvider>().pagewiseNotificationsController =
           PagewiseLoadController<dynamic>(
               pageSize: 15,
               pageFuture: (int pageIndex) async {
                 return getIt<MainProvider>().getNotifications(pageIndex);
               });
-      print(getIt<Auth>().userPicture);
     }
+    getIt<SalesProvider>().pagewiseFavSalesController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 10,
+            pageFuture: (int pageIndex) async {
+              return getIt<SalesProvider>().getFavoritData(pageIndex);
+            });
+
     // numberOfNotifications = getIt<Auth>().unredNotifications ?? 0;
   }
 
@@ -79,7 +85,9 @@ class _MainMenuState extends State<MainMenu> {
                           child: CachedNetworkImage(
                             placeholderFadeInDuration:
                                 const Duration(milliseconds: 300),
-                            imageUrl: value.userPicture.replaceFirst('http:', 'https:') ?? config.profileUrl,
+                            imageUrl: value.userPicture
+                                    .replaceFirst('http:', 'https:') ??
+                                config.profileUrl,
                             imageBuilder: (BuildContext context,
                                     ImageProvider imageProvider) =>
                                 Container(

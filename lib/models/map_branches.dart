@@ -147,12 +147,12 @@ class Merchant {
     id = json['id'] as int;
     name = json['name'].toString();
     logo = json['logo'].toString();
-    ratesAverage = json['rates_average'] as int;
+    ratesAverage =double.parse(json['rates_average'].toString());
     salesCount = json['sales_count'] as int;
   }
   int id;
   String name;
   String logo;
-  int ratesAverage;
+  double ratesAverage;
   int salesCount;
 }

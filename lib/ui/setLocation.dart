@@ -84,7 +84,6 @@ class _AutoLocateState extends State<AutoLocate> {
           await Geocoder.local.findAddressesFromCoordinates(coordinates);
 
       setState(() => address = addresses.first);
-      print('fetched ${address.addressLine}');
     } catch (e) {
       address = null;
     }
@@ -340,7 +339,6 @@ class _AutoLocateState extends State<AutoLocate> {
                     config.lat = lat;
                     config.long = long;
                   });
-                  print("${config.lat},${config.long}");
                   functions[widget.choice].call();
                   Navigator.pop(context);
                 },

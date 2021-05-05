@@ -32,7 +32,6 @@ void dioDefaults() {
   // dio.options.headers['authorization'] = 'Bearer ${config.token}';
   dio.interceptors.add(InterceptorsWrapper(onRequest:
       (RequestOptions options, RequestInterceptorHandler rHandlers) async {
-    print("options.headers['authorization']  ${options.headers['authorization']}");
     options.queryParameters.addAll(<String, String>{
       'latitude':
           getIt<HOMEMAProvider>().lat.toString() ?? config.lat.toString(),
@@ -43,7 +42,7 @@ void dioDefaults() {
   }, onResponse:
       (Response<dynamic> response, ResponseInterceptorHandler rHandlers) async {
     print(
-        "status code: ${response.statusCode}  endpoint : ${response.realUri}");
+        "status code on response: ${response.statusCode}  endpoint : ${response.realUri}");
     // print("error : ${response.realUri.toString()}");
     if (response.statusCode == 200) {
     } else if (response.statusCode == 401) {
@@ -56,9 +55,9 @@ void dioDefaults() {
 
     Navigator.pushNamed(navigatorState.currentContext, "/login");
     print(
-        "status code: ${response.statusCode}  endpoint : ${response.realUri}");
+        "status code: on error${response.statusCode}  endpoint : ${response.realUri}");
     Fluttertoast.showToast(msg: "Retry later");
-    print(e.message);
+   
     eHandler.next(e);
   }));
 

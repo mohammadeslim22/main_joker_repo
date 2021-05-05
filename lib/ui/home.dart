@@ -67,7 +67,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 350),
     );
     _hide.forward();
-    getIt<SalesProvider>().pagewiseSalesController =
+    // getIt<SalesProvider>().pagewiseSalesController =
         // PagewiseLoadController<dynamic>(
         //     pageSize: config.loggedin ? 15 : 6,
         //     pageFuture: (int pageIndex) async {
@@ -353,7 +353,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             // TODO(iSLEEM): CHECK IF ITS WORKING WITHOUT SETSTATE
             final List<String> loglat = await getLocation();
             if (loglat.isEmpty) {
-              print("no location found");
             } else {
               setState(() {
                 config.lat = double.parse(loglat.elementAt(0));

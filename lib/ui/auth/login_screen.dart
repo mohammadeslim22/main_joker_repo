@@ -170,8 +170,6 @@ class _MyLoginScreenState extends State<LoginScreen>
                                   (Set<MaterialState> states) =>
                                       TextStyle(color: colors.white))),
                       onPressed: () async {
-                        print(
-                            "_usernameController.text : ${_usernameController.text}");
                         if (_isButtonEnabled) {
                           if (_formKey.currentState.validate()) {
                             mainProvider.togelfLogin(true);

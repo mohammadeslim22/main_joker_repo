@@ -38,7 +38,6 @@ class _SplashScreenState extends State<SplashScreen>
     // });
     data.getData("lang").then((String value) async {
       if (value.isEmpty) {
-        print("lang storage is empty");
       } else {
         const String arabicBaseUrl =
             "https://joker.altariq.ps/api/ar/v1/customer/";
@@ -50,10 +49,8 @@ class _SplashScreenState extends State<SplashScreen>
         if (baseUrl == "" || baseUrl.isEmpty || baseUrl == null) {
           baseUrl = config.baseUrl;
         }
-        print("1: $value");
         config.userLnag = Locale(value);
         await lang.setLanguage(Locale(value));
-        print("config.userLnag.countryCode  $value  $baseUrl");
         if (value == "en") {
           dio.options.baseUrl = englishBaseUrl;
         } else if (value == "ar") {
@@ -61,9 +58,7 @@ class _SplashScreenState extends State<SplashScreen>
         } else {
           dio.options.baseUrl = turkishBaseUrl;
         }
-        print("dio.options.baseUrl ${dio.options.baseUrl}");
         await data.setData("baseUrl", dio.options.baseUrl);
-        print("2: ${lang.currentLanguage}");
       }
     });
 
@@ -83,7 +78,6 @@ class _SplashScreenState extends State<SplashScreen>
       platformVersion = await FlutterSimCountryCode.simCountryCode;
       auth.dialCodeFav = platformVersion.toUpperCase();
       platformVersion = platformVersion.toUpperCase();
-      print("platform country code : $platformVersion");
 
       auth.getCountry(platformVersion);
     } on PlatformException {
@@ -159,7 +153,6 @@ class _SplashScreenState extends State<SplashScreen>
     // if (config.loggedin) {
     if (config.loggedin) {
       auth.changeIsAuthToTrue();
-      print("auth.changeIsAuthToTrue()  ${auth.isAuthintecated}");
       data.getData("username").then((String name) {
         if (name.isEmpty || name == null) {
           config.username = trans(context, 'username');

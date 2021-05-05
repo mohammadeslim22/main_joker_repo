@@ -19,6 +19,8 @@ class SalesProvider with ChangeNotifier {
   Sales tempSales;
   Sales merchantSales;
   PagewiseLoadController<dynamic> pagewiseSalesController;
+  PagewiseLoadController<dynamic> pagewiseFavSalesController;
+
   // Sales favSales ;
   List<SaleData> favSales = <SaleData>[];
   Future<void> getSale(int saleId) async {
@@ -46,9 +48,11 @@ class SalesProvider with ChangeNotifier {
       'page': pageIndex + 1,
       'model': 'App\\Sale',
     });
+    favSales.clear();
     response.data['data'].forEach((dynamic v) {
       favSales.add(SaleData.fromJson(v));
     });
+    notifyListeners();
     // favSales = Sales.fromJson(response.data);
     return favSales;
   }
@@ -67,37 +71,56 @@ class SalesProvider with ChangeNotifier {
   void setFavSale(int saleId, {int bId}) {
     try {
       if (bId != null) {
-        print("bId $bId");
         getIt<HOMEMAProvider>()
             .branches
             .mapBranches
             .firstWhere((MapBranch element) {
-              print(" element.id  ${element.id}  bId $bId");
               return element.id == bId;
             })
             .lastsales
             .firstWhere((SaleData element) {
-              print(" element.id  ${element.id}  saleId $saleId");
               return element.id == saleId;
             })
             .isfavorite = 1;
       }
-
-      sales.data.firstWhere((SaleData element) {
+      favSales.add(sales.data.firstWhere((SaleData element) {
         return element.id == saleId;
-      }).isfavorite = 1;
+      }));
+      if (sales != null)
+        sales.data.firstWhere((SaleData element) {
+          return element.id == saleId;
+        }).isfavorite = 1;
       notifyListeners();
     } catch (err) {
       print("could not find element");
     }
   }
 
-  void setunFavSale(int saleId) {
-    print(saleId);
+  void setunFavSale(int saleId, {int bId}) {
     try {
-      sales.data.firstWhere((SaleData element) {
-        return element.id == saleId;
-      }).isfavorite = 0;
+       if (bId != null) {
+        getIt<HOMEMAProvider>()
+            .branches
+            .mapBranches
+            .firstWhere((MapBranch element) {
+              return element.id == bId;
+            })
+            .lastsales
+            .firstWhere((SaleData element) {
+              return element.id == saleId;
+            })
+            .isfavorite = 1;
+      }
+      print("step in");
+      if (sales != null) {
+        sales.data.firstWhere((SaleData element) {
+          return element.id == saleId;
+        }).isfavorite = 0;
+        print("step in try");
+      }
+
+      favSales.removeWhere((SaleData element) => element.id == saleId);
+      print("step out ");
       notifyListeners();
     } catch (err) {
       print("orrrrr");
@@ -106,9 +129,10 @@ class SalesProvider with ChangeNotifier {
 
   void setLikeSale(int saleId) {
     try {
-      sales.data.firstWhere((SaleData element) {
-        return element.id == saleId;
-      }).isliked = 1;
+      if (sales != null)
+        sales.data.firstWhere((SaleData element) {
+          return element.id == saleId;
+        }).isliked = 1;
       notifyListeners();
     } catch (err) {
       print("could not find element");
@@ -116,11 +140,11 @@ class SalesProvider with ChangeNotifier {
   }
 
   void setunLikeSale(int saleId) {
-    print(saleId);
     try {
-      sales.data.firstWhere((SaleData element) {
-        return element.id == saleId;
-      }).isliked = 0;
+      if (sales != null)
+        sales.data.firstWhere((SaleData element) {
+          return element.id == saleId;
+        }).isliked = 0;
       notifyListeners();
     } catch (err) {
       print("orrrrr");
@@ -128,7 +152,6 @@ class SalesProvider with ChangeNotifier {
   }
 
   Future<List<SaleData>> getSalesData(int pageIndex) async {
-    print("here is p-sales page index $pageIndex");
     final Response<dynamic> response =
         await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
@@ -137,7 +160,7 @@ class SalesProvider with ChangeNotifier {
     });
     sales = Sales.fromJson(response.data);
     tempSales = sales;
-
+    notifyListeners();
     return sales.data;
   }
 
@@ -151,7 +174,7 @@ class SalesProvider with ChangeNotifier {
     });
     sales = Sales.fromJson(response.data);
     tempSales = sales;
-
+    notifyListeners();
     return sales.data;
   }
 
@@ -171,6 +194,7 @@ class SalesProvider with ChangeNotifier {
       'specifications': filterData.specifications
     });
     sales = Sales.fromJson(response.data);
+    notifyListeners();
     return sales.data;
   }
 
@@ -190,6 +214,7 @@ class SalesProvider with ChangeNotifier {
       'specifications': filterData.specifications
     });
     sales = Sales.fromJson(response.data);
+    notifyListeners();
     return sales.data;
   }
 }

@@ -233,10 +233,10 @@
     "day": "gün",
     "hour": "saat",
     "minute": "dakika",
-    "more_info_map_card":"Daha fazla bilgi",
-    "login_or_sign_up":"Giriş veya kayıt olun",
-    "joker_app":"Joker Uygulaması",
-    "am_sure":"eminim",
-    "help_to_get_better_feed_back":"Daha iyi olmamıza yardımcı olun, lütfen biraz geri bildirim yazın "
-
+    "more_info_map_card": "Daha fazla bilgi",
+    "login_or_sign_up": "Giriş veya kayıt olun",
+    "joker_app": "Joker Uygulaması",
+    "am_sure": "eminim",
+    "help_to_get_better_feed_back": "Daha iyi olmamıza yardımcı olun, lütfen biraz geri bildirim yazın ",
+    "no_fav_saved": "favori kaydedilmedi "
 }

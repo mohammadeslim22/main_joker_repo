@@ -4,15 +4,15 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/providers/map_provider.dart';
+import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/size_config.dart';
 import 'package:like_button/like_button.dart';
 
 class FaveBranchCard extends StatelessWidget {
-  const FaveBranchCard({Key key, this.branch, this.value})
-      : super(key: key);
+  const FaveBranchCard({Key key, this.branch, this.value}) : super(key: key);
   final MapBranch branch;
-  final HOMEMAProvider value;
+  final MerchantProvider value;
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +22,12 @@ class FaveBranchCard extends StatelessWidget {
       child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ClipRRect(
                       borderRadius: BorderRadius.circular(80),
@@ -37,24 +39,20 @@ class FaveBranchCard extends StatelessWidget {
                         },
                         fit: BoxFit.cover,
                         height: SizeConfig.blockSizeVertical * 8,
-                        width: SizeConfig.blockSizeHorizontal * 16,
+                        width: SizeConfig.blockSizeHorizontal * 14,
                       )),
                   const SizedBox(width: 8),
-                  Container(
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 1.7),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(branch.name, style: styles.saleNameInMapCard),
-                        const SizedBox(height: 12),
-                        BottomWidgetForSliver(mytext: branch.address),
-                      ],
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text(branch.name, style: styles.saleNameInMapCard),
+                      const SizedBox(height: 12),
+                      BottomWidgetForSliver(mytext: branch.address),
+                    ],
                   ),
                 ]),
+            const Spacer(),
             LikeButton(
               circleSize: SizeConfig.blockSizeHorizontal * 12,
               size: SizeConfig.blockSizeHorizontal * 7,
@@ -64,11 +62,11 @@ class FaveBranchCard extends StatelessWidget {
                   const CircleColor(start: Colors.orange, end: Colors.purple),
               isLiked: branch.isfavorite == 1,
               onTap: (bool loved) async {
-                favFunction("App\\Sale", branch.id);
+                favFunction("App\\Branch", branch.id);
                 if (!loved) {
-                  value.setFavSale(branch.id);
+                  value.setFavBraanch(branch.id);
                 } else {
-                  value.setunFavSale(branch.id);
+                  value.setunFavBranch(branch.id);
                 }
                 return !loved;
               },
@@ -117,7 +115,7 @@ class BottomWidgetForSliverState extends State<BottomWidgetForSliver> {
                         alignment: isRTL
                             ? Alignment.centerLeft
                             : Alignment.centerRight,
-                        height: SizeConfig.blockSizeVertical *2,
+                        height: SizeConfig.blockSizeVertical * 2,
                         child: Text(trans(context, "show_more"),
                             style: styles.showMore)),
                     visible: exceeded,

@@ -40,12 +40,10 @@ class NotificationCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(sale.name, style: styles.saleNameInMapCard),
-                        const Text("time since kickoff")
+                        const Text("time since kick off")
                       ],
                     ),
-                    TextOverflowRapper(
-                        mytext: sale.details +
-                            "sale.detailssale.details sale.details sale.detailssale.details sale.details")
+                    TextOverflowRapper(mytext: sale.details)
                   ],
                 ),
               ]),
