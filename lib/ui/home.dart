@@ -87,7 +87,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     //                   pageIndex, getIt<GlobalVars>().filterData)
     //               : getIt<SalesProvider>().getSalesData(pageIndex);
     //     });
-    getIt<SalesProvider>().pagewiseSalesController =
+    getIt<SalesProvider>().pagewiseHomeSalesController =
         PagewiseLoadController<dynamic>(
             pageSize: getIt<Auth>().isAuthintecated ? 15 : 6,
             pageFuture: (int pageIndex) async {
@@ -96,11 +96,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
                           pageIndex, widget.filterData)
                       : getIt<SalesProvider>()
-                          .getSalesDataAuthenticated(pageIndex)
+                          .getSalesDataAuthenticatedAllSpec(pageIndex)
                   : salesDataFilter
                       ? getIt<SalesProvider>()
                           .getSalesDataFilterd(pageIndex, widget.filterData)
-                      : getIt<SalesProvider>().getSalesData(pageIndex);
+                      : getIt<SalesProvider>().getSalesDataAllSpec(pageIndex);
             });
     // getIt<MerchantProvider>().pagewiseBranchesController =
     //     PagewiseLoadController<dynamic>(
@@ -237,7 +237,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               salesDataFilter = false;
                             });
                             getIt<SalesProvider>()
-                                .pagewiseSalesController
+                                .pagewiseHomeSalesController
                                 .reset();
                           },
                         ).show();
@@ -375,8 +375,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 getIt<MerchantProvider>().pagewiseBranchesController.reset();
               }
 
-              if (getIt<SalesProvider>().pagewiseSalesController != null) {
-                getIt<SalesProvider>().pagewiseSalesController.reset();
+              if (getIt<SalesProvider>().pagewiseHomeSalesController != null) {
+                getIt<SalesProvider>().pagewiseHomeSalesController.reset();
               }
             }
           }

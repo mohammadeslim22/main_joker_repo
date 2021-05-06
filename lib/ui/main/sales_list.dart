@@ -55,7 +55,7 @@ class _DiscountsListState extends State<DiscountsList> {
       ),
       controller: _refreshController,
       onRefresh: () async {
-        getIt<SalesProvider>().pagewiseSalesController.reset();
+        getIt<SalesProvider>().pagewiseHomeSalesController.reset();
         _refreshController.refreshCompleted();
       },
       onLoading: () async {
@@ -73,7 +73,7 @@ class _DiscountsListState extends State<DiscountsList> {
               child: CircularProgressIndicator(
                   backgroundColor: Colors.transparent));
         },
-        pageLoadController: getIt<SalesProvider>().pagewiseSalesController,
+        pageLoadController: getIt<SalesProvider>().pagewiseHomeSalesController,
         padding: const EdgeInsets.all(15.0),
         itemBuilder: (BuildContext context, dynamic entry, int index) {
           return FadeIn(child: SalesCard(sale: entry as SaleData));

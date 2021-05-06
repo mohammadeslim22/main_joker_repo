@@ -202,8 +202,8 @@ class AddressListState extends State<AddressList> {
                   getIt<MerchantProvider>().pagewiseBranchesController.reset();
                 }
 
-                if (getIt<SalesProvider>().pagewiseSalesController != null) {
-                  getIt<SalesProvider>().pagewiseSalesController.reset();
+                if (getIt<SalesProvider>().pagewiseHomeSalesController != null) {
+                  getIt<SalesProvider>().pagewiseHomeSalesController.reset();
                 }
 
                 Navigator.pop(context);

@@ -19,6 +19,8 @@ class SalesProvider with ChangeNotifier {
   Sales tempSales;
   Sales merchantSales;
   PagewiseLoadController<dynamic> pagewiseSalesController;
+    PagewiseLoadController<dynamic> pagewiseHomeSalesController;
+
   PagewiseLoadController<dynamic> pagewiseFavSalesController;
 
   // Sales favSales ;
@@ -180,6 +182,16 @@ class SalesProvider with ChangeNotifier {
 
   Future<List<SaleData>> getSalesDataFilterd(
       int pageIndex, FilterData filterData) async {
+    // String spec = "";
+    // filterData.specifications.forEach((int element) {
+    //   if (element == filterData.specifications.last) {
+    //     spec = spec + element.toString();
+    //   } else {
+    //     spec = spec + element.toString() + ",";
+    //   }
+    //   print("spec $spec");
+    // });
+
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String startDate = formatter.format(filterData.startingdate);
     final String endDate = formatter.format(filterData.endingdate);
@@ -191,7 +203,7 @@ class SalesProvider with ChangeNotifier {
       'from_date': startDate,
       'to_date': endDate,
       'rate': filterData.rating,
-      'specifications': filterData.specifications
+      'specifications': jsonEncode(filterData.specifications)
     });
     sales = Sales.fromJson(response.data);
     notifyListeners();
@@ -200,6 +212,16 @@ class SalesProvider with ChangeNotifier {
 
   Future<List<SaleData>> getSalesDataFilterdAuthenticated(
       int pageIndex, FilterData filterData) async {
+    // String spec = "";
+    // filterData.specifications.forEach((int element) {
+    //   if (element == filterData.specifications.last) {
+    //     spec = spec + element.toString();
+    //   } else {
+    //     spec = spec + element.toString() + ",";
+    //   }
+    //   print("spec $spec");
+    // });
+    print(jsonEncode(filterData.specifications));
     print(
         "filterData  ${filterData.merchantNameOrPartOfit} ${filterData.saleNameOrPartOfit} ${filterData.fromPrice} ${filterData.specifications} ${filterData.startingdate}");
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -214,13 +236,40 @@ class SalesProvider with ChangeNotifier {
       'name': filterData.saleNameOrPartOfit.isNotEmpty
           ? filterData.saleNameOrPartOfit
           : "",
-      // 'from_date': startDate,
-      // 'to_date': endDate,
-      'specifications': filterData.specifications.isEmpty
-          ? <int>[1, 2]
-          : filterData.specifications
+      'from_date': startDate,
+      'to_date': endDate,
+      'from_price': filterData.fromPrice,
+      'to_price': filterData.toPrice,
+      'specialization': jsonEncode(filterData.specifications)
+    });
+
+    // print(response.data);
+    sales = Sales.fromJson(response.data);
+    notifyListeners();
+    return sales.data;
+  }
+
+  Future<List<SaleData>> getSalesDataAllSpec(int pageIndex) async {
+    final Response<dynamic> response =
+        await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'specialization': jsonEncode(<int>[1, 2, 3, 4, 5])
     });
     sales = Sales.fromJson(response.data);
+    tempSales = sales;
+    notifyListeners();
+    return sales.data;
+  }
+
+  Future<List<SaleData>> getSalesDataAuthenticatedAllSpec(int pageIndex) async {
+    print("page index $pageIndex");
+    final Response<dynamic> response =
+        await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'specialization': jsonEncode(<int>[1, 2, 3, 4, 5])
+    });
+    sales = Sales.fromJson(response.data);
+    tempSales = sales;
     notifyListeners();
     return sales.data;
   }
