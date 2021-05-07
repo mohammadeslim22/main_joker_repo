@@ -17,7 +17,7 @@ import 'localization/localization_delegate.dart';
 import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
 import 'util/service_locator.dart';
-import 'package:joker/providers/globalVars.dart';
+// import 'package:joker/providers/globalVars.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 Future<void> main() async {
@@ -79,7 +79,7 @@ Future<void> main() async {
             value: getIt<MerchantProvider>()),
         ChangeNotifierProvider<SalesProvider>.value(
             value: getIt<SalesProvider>()),
-        ChangeNotifierProvider<GlobalVars>.value(value: getIt<GlobalVars>()),
+        // ChangeNotifierProvider<GlobalVars>.value(value: getIt<GlobalVars>()),
       ],
       child: MyApp(),
     ),

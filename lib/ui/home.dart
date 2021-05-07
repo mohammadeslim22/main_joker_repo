@@ -24,7 +24,7 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
-import 'package:joker/providers/globalVars.dart';
+// import 'package:joker/providers/globalVars.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'main/sales_list_stateless.dart';
 
@@ -232,7 +232,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           desc: 'Clearing Filter Data',
                           btnCancelOnPress: () {},
                           btnOkOnPress: () {
-                            getIt<GlobalVars>().clearilterDate();
+                            getIt<SalesProvider>().clearilterDate();
                             setState(() {
                               salesDataFilter = false;
                             });

@@ -15,7 +15,7 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/providers/auth.dart';
-import 'package:joker/providers/globalVars.dart';
+// import 'package:joker/providers/globalVars.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/services/navigationService.dart';
@@ -111,14 +111,14 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
             pageSize: getIt<Auth>().isAuthintecated ? 15 : 6,
             pageFuture: (int pageIndex) async {
               return getIt<Auth>().isAuthintecated
-                  ? (getIt<GlobalVars>().filterData != null)
+                  ? (getIt<SalesProvider>().filterData != null)
                       ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
-                          pageIndex, getIt<GlobalVars>().filterData)
+                          pageIndex, getIt<SalesProvider>().filterData)
                       : getIt<SalesProvider>()
                           .getSalesDataAuthenticated(pageIndex)
-                  : (getIt<GlobalVars>().filterData != null)
+                  : (getIt<SalesProvider>().filterData != null)
                       ? getIt<SalesProvider>().getSalesDataFilterd(
-                          pageIndex, getIt<GlobalVars>().filterData)
+                          pageIndex, getIt<SalesProvider>().filterData)
                       : getIt<SalesProvider>().getSalesData(pageIndex);
             });
     // PagewiseLoadController<dynamic>(

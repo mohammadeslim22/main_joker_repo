@@ -6,7 +6,7 @@ import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/providers/locationProvider.dart';
-import 'package:joker/providers/globalVars.dart';
+// import 'package:joker/providers/globalVars.dart';
 
 GetIt getIt = GetIt.instance;
 void setupLocator() {
@@ -17,6 +17,6 @@ void setupLocator() {
   getIt.registerLazySingleton(() => SalesProvider());
   getIt.registerLazySingleton(() => Auth());
   getIt.registerLazySingleton(() => LocationProvider());
-  getIt.registerLazySingleton(() => GlobalVars());
+  // getIt.registerLazySingleton(() => GlobalVars());
   
 }

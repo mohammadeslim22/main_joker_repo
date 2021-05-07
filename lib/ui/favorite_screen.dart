@@ -14,14 +14,10 @@ import 'package:flutter/rendering.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/models/sales.dart';
 import 'package:joker/ui/cards/favSaleCard.dart';
-import 'package:joker/util/functions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:like_button/like_button.dart';
-import 'package:awesome_dialog/awesome_dialog.dart' as awesome_dialog;
 
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/providers/merchantsProvider.dart';

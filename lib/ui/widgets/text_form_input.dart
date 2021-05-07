@@ -42,7 +42,7 @@ class TextFormInput extends StatelessWidget {
       child: TextFormField(
         readOnly: readOnly ?? false,
         keyboardType: kt,
-        onTap: () => onTab ?? () {},
+        onTap: () => onTab(),
         controller: cController,
         style: const TextStyle(
           color: Colors.black,

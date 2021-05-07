@@ -7,9 +7,10 @@ import 'package:joker/constants/config.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/models/specializations.dart';
 import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
-import 'package:rating_bar/rating_bar.dart';
+// import 'package:rating_bar/rating_bar.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../localization/trans.dart';
 import '../constants/styles.dart';
@@ -17,7 +18,7 @@ import 'widgets/text_form_input.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/util/functions.dart';
 import 'package:flutter/services.dart';
-import 'package:joker/providers/globalVars.dart';
+// import 'package:joker/providers/globalVars.dart';
 
 class AdvancedSearch extends StatefulWidget {
   const AdvancedSearch({Key key, this.scaffoldkey, this.specializations})
@@ -408,7 +409,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                 //     RatingBar(
                 //       onRatingChanged: (double rating) {
                 //         setState(() => _ratingStar = rating);
-                //         // TODO(mislem): use this var to send raiting to API
+              
                 //       },
                 //       filledIcon: Icons.star,
                 //       emptyIcon: Icons.star_border,
@@ -470,7 +471,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                                     side: const BorderSide(color: Colors.grey)),
                           )),
                       onPressed: () {
-                        getIt<GlobalVars>().setFilterDate(FilterData(
+                        getIt<SalesProvider>().setFilterDate(FilterData(
                           merchantNameOrPartOfit: merchantName.text??"",
                           saleNameOrPartOfit: saleName.text??"",
                           startingdate: starttoday??DateTime(2020,0,0),
@@ -485,7 +486,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                         Navigator.popAndPushNamed(context, "/Home",
                             arguments: <String, dynamic>{
                               "salesDataFilter": true,
-                              "filterDate":getIt<GlobalVars>().filterData
+                              "filterDate":getIt<SalesProvider>().filterData
                             });
                       },
 

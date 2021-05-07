@@ -17,7 +17,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 class Auth with ChangeNotifier {
   bool isAuthintecated = false;
   // Auth() {
-  //   // TODO(ahmed): do login by dio library
+
   // }
   String myCountryCode;
   String myCountryDialCode = "+90";

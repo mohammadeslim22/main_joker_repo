@@ -172,6 +172,7 @@ class _MyRegistrationState extends State<Registration>
                   obscureText: false,
                   readOnly: true,
                   onTab: () {
+                    print("date hello ?? ");
                     _selectDate(context);
                   },
                   suffixicon: Icon(
