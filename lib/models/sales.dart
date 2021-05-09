@@ -105,10 +105,18 @@ class BranchesMini {
   BranchesMini.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'].toString();
+    if (json['latitude'] != null) {
+      latitude = double.parse(json['latitude'].toString());
+    }
+    if (json['longitude'] != null) {
+      longitude = double.parse(json['longitude'].toString());
+    }
   }
 
   int id;
   String name;
+  double latitude;
+  double longitude;
 }
 
 class MerchantForSale {

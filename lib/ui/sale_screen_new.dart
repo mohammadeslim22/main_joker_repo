@@ -21,6 +21,7 @@ import 'dart:math';
 import 'dart:async';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:map_launcher/map_launcher.dart' as map_luncher;
+import 'package:smart_select/smart_select.dart';
 
 class SaleLoader extends StatefulWidget {
   const SaleLoader({Key key, this.saleData, this.merchant}) : super(key: key);
@@ -69,6 +70,11 @@ class ShopDetailsPage extends State<SaleLoader>
     isloved = sale.isfavorite != 0;
     isbottomSheetOpened = false;
     pageIndexx = 1;
+
+    sale.branches.forEach((BranchesMini element) {
+      options.add(S2Choice<String>(value: element.name, title: element.name));
+    });
+
     // myIndex += merchant.mydata.branches[0].id;
   }
 
@@ -80,6 +86,7 @@ class ShopDetailsPage extends State<SaleLoader>
     });
   }
 
+  List<S2Choice<String>> options = <S2Choice<String>>[];
   Widget circleBar(bool isActive) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 350),
@@ -472,7 +479,6 @@ class ShopDetailsPage extends State<SaleLoader>
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
                             width: SizeConfig.blockSizeHorizontal * 10),
-                      
                         Text(
                             "  " +
                                 rs.startAt +
@@ -528,7 +534,7 @@ class ShopDetailsPage extends State<SaleLoader>
                                   if (!loved) {
                                     getIt<SalesProvider>().setFavSale(rs.id);
                                   } else {
-                                     getIt<SalesProvider>().setunFavSale(rs.id);
+                                    getIt<SalesProvider>().setunFavSale(rs.id);
                                   }
                                   return !loved;
                                 },
@@ -593,6 +599,79 @@ class ShopDetailsPage extends State<SaleLoader>
               ),
             ),
             const SizedBox(height: 24),
+            // Container(
+            //   child: SmartSelect<String>.single(
+            //       tileBuilder: (BuildContext c, S2SingleState<String> s) {
+            //         return Row(
+            //             mainAxisSize: MainAxisSize.min,
+            //             children: <Widget>[
+            //               Text("G", style: styles.googlemapsG),
+            //               const Text("  "),
+            //               Text(trans(context, 'maps'), style: styles.maps)
+            //             ]);
+            //       },
+            //       title: trans(context, 'pick_branch'),
+            //       value: "",
+            //       choiceItems: options,
+            //       modalType: S2ModalType.bottomSheet,
+            //       onChange: (S2SingleState<String> state) {
+            //         print("state ${state.value} ");
+            //         if (state.value == null ||
+            //             state.value.isEmpty ||
+            //             state.value == "") {
+            //         } else {
+            //           final BranchesMini mb = rs.branches.firstWhere(
+            //               (BranchesMini element) =>
+            //                   element.name == state.value);
+            //           final map_luncher.Coords crods =
+            //               map_luncher.Coords(mb.latitude, mb.longitude);
+            //           openMapsSheet(context, crods);
+            //         }
+            //       }),
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(10),
+            //     color: Colors.white,
+            //   ),
+            // ),
+            // Container(
+            //   alignment: Alignment.center,
+            //   decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(12),
+            //       color: colors.orange,
+            //       shape: BoxShape.rectangle),
+            //   child: SmartSelect<String>.single(
+
+            //       //  modalTitle: "Signle choice",
+            //       // tileBuilder: (BuildContext c, S2SingleState<String> s) {
+            //       //   return Row(
+            //       //       mainAxisSize: MainAxisSize.min,
+            //       //       children: <Widget>[
+            //       //         Text("G", style: styles.googlemapsG),
+            //       //         const Text("  "),
+            //       //         Text(trans(context, 'maps'), style: styles.maps)
+            //       //       ]);
+            //       // },
+
+            //       title: "",
+            //       value: "",
+            //       modalConfirm: true,
+            //       choiceItems: options,
+            //       modalType: S2ModalType.bottomSheet,
+            //       onChange: (S2SingleState<String> state) {
+            //         print("state ${state.value} ");
+            //         if (state.value == null ||
+            //             state.value.isEmpty ||
+            //             state.value == "") {
+            //         } else {
+            //           final BranchesMini mb = rs.branches.firstWhere(
+            //               (BranchesMini element) =>
+            //                   element.name == state.value);
+            //           final map_luncher.Coords crods =
+            //               map_luncher.Coords(mb.latitude, mb.longitude);
+            //           openMapsSheet(context, crods);
+            //         }
+            //       }),
+            // ),
             ElevatedButton(
               style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
@@ -601,24 +680,61 @@ class ShopDetailsPage extends State<SaleLoader>
                           side: BorderSide(color: colors.orange))),
                   padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
                       (Set<MaterialState> stets) =>
-                          const EdgeInsets.symmetric(horizontal: 24)),
+                          const EdgeInsets.symmetric(horizontal: 0)),
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) => colors.orange),
                   textStyle: MaterialStateProperty.resolveWith<TextStyle>(
                       (Set<MaterialState> states) =>
                           TextStyle(color: colors.white))),
               onPressed: () async {
-                print("hello croods ${ value.inFocusBranch.latitude } ${value.inFocusBranch.longitude}");
-                final map_luncher.Coords crods = map_luncher.Coords(
-                    value.inFocusBranch.latitude,
-                    value.inFocusBranch.longitude);
-                openMapsSheet(context, crods);
+                print(
+                    "hello croods ${value.inFocusBranch.latitude} ${value.inFocusBranch.longitude}");
               },
-              child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                Text("G", style: styles.googlemapsG),
-                const Text("  "),
-                Text(trans(context, 'maps'), style: styles.maps)
-              ]),
+              child: SmartSelect<String>.single(
+                  // builder: const S2SingleBuilder<String>(),
+                  title: trans(context, 'pick_branch'),
+                  tileBuilder: (BuildContext c, S2SingleState<String> s) {
+                    return S2Tile<dynamic>.fromState(
+                      s,
+                      hideValue: true,
+                      trailing: Icon(Icons.arrow_forward, color: colors.trans),
+                      dense: true,
+                  title: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("G", style: styles.googlemapsG),
+                            const Text("  "),
+                            Text(trans(context, 'maps'), style: styles.maps)
+                          ]),
+                     
+                    );
+                
+                  },
+
+                
+                  value: "",
+                  choiceHeaderStyle:
+                      S2ChoiceHeaderStyle(textStyle: styles.maps),
+                  placeholder: "",
+                  choiceItems: options,
+
+               
+                  modalType: S2ModalType.bottomSheet,
+                  onChange: (S2SingleState<String> state) {
+                    print("state ${state.value} ");
+                    if (state.value == null ||
+                        state.value.isEmpty ||
+                        state.value == "") {
+                    } else {
+                      final BranchesMini mb = rs.branches.firstWhere(
+                          (BranchesMini element) =>
+                              element.name == state.value);
+                      final map_luncher.Coords crods =
+                          map_luncher.Coords(mb.latitude, mb.longitude);
+                      openMapsSheet(context, crods);
+                    }
+                  }),
             ),
             const SizedBox(height: 16),
             Row(

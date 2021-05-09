@@ -75,7 +75,7 @@ class TextFormInput extends StatelessWidget {
             prefixIcon: Icon(prefixIcon),
             suffixIcon: suffixicon),
         focusNode: focusNode,
-        onFieldSubmitted: (String v) => onFieldSubmitted ?? () {},
+        onFieldSubmitted: (String v) => onFieldSubmitted() ?? () {},
         validator: (String error) {
           return validator(error);
         },
