@@ -4,7 +4,7 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
-import 'package:joker/ui/widgets/countryCodePicker.dart';
+import 'package:joker/ui/widgets/country_code_picker.dart';
 import '../widgets/buttonTouse.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';

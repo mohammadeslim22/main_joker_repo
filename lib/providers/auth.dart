@@ -215,9 +215,16 @@ class Auth with ChangeNotifier {
           unredNotifications = value.data['data']['unread_count'] as int;
           notifyListeners();
           dio.options.headers['authorization'] =
-              'Bearer ${value.data['data']['api_token']}';
+              "Bearer ";
+              print(
+              "dio.options.headers['authorization']  ${dio.options.headers['authorization']}");
+          dio.options.headers['authorization'] =
+              "Bearer ${value.data['data']['api_token']}";
           await data.setData(
               "authorization", "Bearer ${value.data['data']['api_token']}");
+
+          print(
+              "dio.options.headers['authorization']  ${value.data['data']['api_token']}");
           config.username = value.data['data']['name'].toString();
           changeUsername(value.data['data']['name'].toString());
           config.loggedin = true;
@@ -297,14 +304,13 @@ class Auth with ChangeNotifier {
       "longitude": config.long,
       "latitude": config.lat
     }).then((Response<dynamic> value) async {
-      if (value.statusCode == 422) {
+      if (value.statusCode == 200) {
         value.data['errors'].forEach((String k, dynamic vv) {
           regValidationMap[k] = vv[0].toString();
         });
         res = false;
       }
       if (value.statusCode == 201) {
-
         Navigator.pushNamed(context, '/pin', arguments: <String, String>{
           'mobileNo':
               myCountryDialCode + mobile.replaceAll(RegExp(r'^0+(?=.)'), '')

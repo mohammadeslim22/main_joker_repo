@@ -7,7 +7,7 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:joker/util/data.dart';
-import 'package:joker/providers/locationProvider.dart';
+import 'package:joker/providers/location_provider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/constants/config.dart';

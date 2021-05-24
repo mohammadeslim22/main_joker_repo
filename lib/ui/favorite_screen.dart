@@ -13,7 +13,7 @@ import '../constants/styles.dart';
 import 'package:flutter/rendering.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/models/sales.dart';
-import 'package:joker/ui/cards/favSaleCard.dart';
+import 'package:joker/ui/cards/fav_sale_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
@@ -22,7 +22,7 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 
-import 'package:joker/ui/cards/favBranchCard.dart';
+import 'package:joker/ui/cards/fav_branch_card.dart';
 
 class Favorite extends StatefulWidget {
   @override

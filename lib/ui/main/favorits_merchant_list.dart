@@ -8,7 +8,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/ui/cards/favBranchCard.dart';
+import 'package:joker/ui/cards/fav_branch_card.dart';
 import 'package:provider/provider.dart';
 
 class FavoritMerchantsList extends StatelessWidget {

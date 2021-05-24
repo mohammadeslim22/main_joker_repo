@@ -351,10 +351,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         title: Text("${trans(context, 'use_current_location')}"),
-        trailing: const Icon(
-          Icons.my_location,
-          color: Colors.black,
-        ),
+        trailing: const Icon(Icons.my_location, color: Colors.black),
         onTap: () async {
           final bool t = await updateLocation;
           if (t) {

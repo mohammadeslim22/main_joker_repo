@@ -15,7 +15,7 @@ import 'package:joker/ui/auth/registration_screen.dart';
 import 'package:joker/ui/membership_details.dart';
 import 'package:joker/ui/my_membership.dart';
 import 'package:joker/ui/auth/pin_code.dart';
-import 'package:joker/ui/auth/pinCode_for_profile.dart';
+import 'package:joker/ui/auth/pincode_for_profile.dart';
 import 'package:joker/ui/auth/reset_password.dart';
 import 'package:joker/ui/auth/change_password.dart';
 import 'package:joker/ui/auth/forget_password.dart';

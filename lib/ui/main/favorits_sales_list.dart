@@ -5,7 +5,7 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
 import 'package:flutter/material.dart';
 import 'package:joker/providers/salesProvider.dart';
-import 'package:joker/ui/cards/favSaleCard.dart';
+import 'package:joker/ui/cards/fav_sale_card.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/size_config.dart';
 import 'package:provider/provider.dart';

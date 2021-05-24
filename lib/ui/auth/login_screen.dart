@@ -13,7 +13,7 @@ import '../widgets/text_form_input.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
 import '../widgets/buttonTouse.dart';
-import 'package:joker/ui/widgets/countryCodePicker.dart';
+import 'package:joker/ui/widgets/country_code_picker.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

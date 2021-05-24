@@ -6,7 +6,7 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/auth.dart';
-import 'package:joker/ui/widgets/countryCodePicker.dart';
+import 'package:joker/ui/widgets/country_code_picker.dart';
 import '../widgets/buttonTouse.dart';
 import '../widgets/text_form_input.dart';
 import 'package:flutter/services.dart';

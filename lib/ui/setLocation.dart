@@ -15,7 +15,7 @@ import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
 import 'package:joker/util/data.dart';
-import 'package:joker/providers/locationProvider.dart';
+import 'package:joker/providers/location_provider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/util/functions.dart';

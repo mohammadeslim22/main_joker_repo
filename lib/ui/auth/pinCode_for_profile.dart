@@ -15,7 +15,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/ui/widgets/countryCodePicker.dart';
+import 'package:joker/ui/widgets/country_code_picker.dart';
 
 class PinCodeForProfile extends StatefulWidget {
   const PinCodeForProfile({Key key, this.mobileNo}) : super(key: key);
