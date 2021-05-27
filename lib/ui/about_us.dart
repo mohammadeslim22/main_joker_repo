@@ -74,12 +74,12 @@ class AboutUs extends StatelessWidget {
             //     height: 120.0,
             //   ),
             // ),
-             const SizedBox(height:36),
+            const SizedBox(height: 36),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  trans(context, 'update_app'),
+                  "",
                   style: TextStyle(color: colors.red),
                 ),
                 Text(appVersion)

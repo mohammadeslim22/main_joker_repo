@@ -48,7 +48,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
     return SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
         decoration: BoxDecoration(
           color: colors.white,
           border: Border.all(
@@ -62,7 +62,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              width: 140,
+              width: 170,
               child: PinCodeTextField(
                 enabled: enabeld,
                 length: 4,

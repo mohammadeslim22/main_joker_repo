@@ -199,7 +199,7 @@ class MainProvider extends ChangeNotifier {
     loginbase = login;
     if (!loadingpinCoDeProfile) {
       return Padding(
-          padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+          padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
           child: Text(loginbase,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,

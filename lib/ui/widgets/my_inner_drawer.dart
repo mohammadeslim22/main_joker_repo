@@ -217,6 +217,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 },
               ),
               ListTile(
+                  enabled: /*config.loggedin*/ auth.isAuthintecated,
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'account')}"),
                 leading: SvgPicture.asset("assets/images/account.svg"),
@@ -226,6 +227,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                 },
               ),
               ListTile(
+                 enabled: /*config.loggedin*/ auth.isAuthintecated,
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text("${trans(context, 'membership')}"),
                 leading: SvgPicture.asset("assets/images/vip.svg"),
@@ -295,7 +297,9 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
             ],
           ),
           const SizedBox(height: 36.0),
-          ListTile(
+          Visibility(
+              visible: auth.isAuthintecated,
+              child: ListTile(
             contentPadding: const EdgeInsets.only(left: 0),
             title: Text("${trans(context, 'logout')}"),
             leading: SvgPicture.asset("assets/images/logout.svg"),
@@ -305,7 +309,7 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
               // Navigator.pushNamedAndRemoveUntil(
               //     context, '/login', (_) => false);
             },
-          ),
+          )),
         ],
       ),
     );
