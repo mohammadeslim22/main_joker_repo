@@ -69,7 +69,7 @@ class _MyLoginScreenState extends State<LoginScreen>
         false;
   }
 
-  bool _obscureText = false;
+  bool _obscureText = true;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
