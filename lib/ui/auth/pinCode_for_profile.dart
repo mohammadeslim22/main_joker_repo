@@ -82,7 +82,8 @@ class _MyHomePageState extends State<PinCodeForProfile>
                     setState(() {
                       config.prifleNoVerfiyDone = true;
                     });
-                    Navigator.pushNamed(context, '/Profile');
+                    Navigator.pop(context);
+                    Navigator.popAndPushNamed(context, '/Profile');
                   }
                   bolc.togelfPinCodeProfile(false);
                 },
@@ -169,7 +170,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                             },
                             validator: (String value) {
                               if (passwordController.text.length < 6) {
-                                return "password must be more than 6 letters";
+                                return trans(context, "pass_must_more_6");
                               }
                               return auth
                                   .pinCodeProfileValidationMap['password'];
@@ -206,8 +207,8 @@ class _MyHomePageState extends State<PinCodeForProfile>
                                   color: Colors.deepPurpleAccent)),
                           onPrimary: Colors.deepPurpleAccent,
                           textStyle: TextStyle(color: colors.white)),
-                      onPressed: () {
-                        verifyanewPhone();
+                      onPressed: () async{
+                      await  verifyanewPhone();
                       },
                       child: bolc.returnchildPinforProfile(trans(context, 'send_code')))),
               pinCode(bolc),
@@ -274,10 +275,9 @@ class _MyHomePageState extends State<PinCodeForProfile>
             ])));
   }
 
-  void verifyanewPhone() {
+  Future<void> verifyanewPhone() async {
     if (_formKey.currentState.validate()) {
-    } else {
-      getIt<Auth>()
+        await  getIt<Auth>()
           .verifyNewPhone(passwordController.text, mobileNoController.text)
           .then((bool value) {
         _formKey.currentState.validate();
@@ -292,6 +292,8 @@ class _MyHomePageState extends State<PinCodeForProfile>
           .updateAll((String key, String value) {
         return null;
       });
+    } else {
+  
     }
   }
 }

@@ -44,23 +44,15 @@ class TextFormInput extends StatelessWidget {
         keyboardType: kt,
         onTap: () => onTab(),
         controller: cController,
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 15,
-        ),
+        style: const TextStyle(color: Colors.black, fontSize: 15),
         obscureText: obscureText,
         decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-              color: colors.ggrey,
-            )),
+            enabledBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: colors.ggrey)),
             filled: true,
             fillColor: Colors.white70,
             hintText: text,
-            hintStyle: TextStyle(
-              color: colors.ggrey,
-              fontSize: 15,
-            ),
+            hintStyle: TextStyle(color: colors.ggrey, fontSize: 15),
             disabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(
               color: Colors.grey,

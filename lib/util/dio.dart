@@ -53,9 +53,9 @@ void dioDefaults() {
     rHandlers.next(response);
   }, onError: (DioError e, ErrorInterceptorHandler eHandler) async {
 
-    Navigator.pushNamed(navigatorState.currentContext, "/login");
-    print(
-        "status code: on error${response.statusCode}  endpoint : ${response.realUri}");
+    getIt<NavigationService>().navigateTo('/login', null);
+    // print(
+    //     "status code: on error${response.statusCode}  endpoint : ${response.realUri}");
     Fluttertoast.showToast(msg: "Retry later");
    
     eHandler.next(e);

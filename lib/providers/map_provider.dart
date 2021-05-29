@@ -80,7 +80,7 @@ class HOMEMAProvider with ChangeNotifier {
       inFocusBranch.lastsales.firstWhere((SaleData element) {
         return element.id == saleId;
       }).isfavorite = 1;
-       notifyListeners();
+      notifyListeners();
     } catch (err) {
       print("could not find element $err");
     }
@@ -88,11 +88,10 @@ class HOMEMAProvider with ChangeNotifier {
 
   void setunFavSale(int saleId) {
     try {
-      
       inFocusBranch.lastsales.firstWhere((SaleData element) {
         return element.id == saleId;
       }).isfavorite = 0;
-       notifyListeners();
+      notifyListeners();
     } catch (err) {
       print("orrrrr");
     }
@@ -143,14 +142,13 @@ class HOMEMAProvider with ChangeNotifier {
   Future<void> getBranchesData(int specId) async {
     Response<dynamic> response;
     // if (config.loggedin) {
-       if (getIt<Auth>().isAuthintecated) {
+    if (getIt<Auth>().isAuthintecated) {
       response =
           await dio.get<dynamic>("map2", queryParameters: <String, dynamic>{
         'specialization': jsonEncode(<int>[specId ?? selectedSpecialize]),
         'limit': 20
       });
-    }
-     else {
+    } else {
       response =
           await dio.get<dynamic>("map", queryParameters: <String, dynamic>{
         'specialization': jsonEncode(<int>[specId ?? selectedSpecialize]),
@@ -221,17 +219,18 @@ class HOMEMAProvider with ChangeNotifier {
         position: LatLng(element.latitude, element.longitude),
         icon: BitmapDescriptor.fromBytes(markerIcon),
         onTap: () async {
-          inFocusBranch = element;
-          editMarkersIcons(element);
-          await mapController
-              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-            target: LatLng(element.latitude, element.longitude),
-            zoom: 17,
-          )));
-          lastSales = element.lastsales;
-          showOffersHorizontalCards(element.id);
-          selectedBranchId = element.id;
-          swipController.move(0);
+          await onClickMarker(element);
+          // inFocusBranch = element;
+          // editMarkersIcons(element);
+          // await mapController
+          //     .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          //   target: LatLng(element.latitude, element.longitude),
+          //   zoom: 17,
+          // )));
+          // lastSales = element.lastsales;
+          // showOffersHorizontalCards(element.id);
+          // selectedBranchId = element.id;
+          // swipController.move(0);
           // element.lastsales.forEach((SaleData element) {
           //   print("is favorite ${element.id} ${element.isfavorite}");
           // });
@@ -251,6 +250,30 @@ class HOMEMAProvider with ChangeNotifier {
         infoWindow: InfoWindow(title: element.merchant.name.toString()));
 
     markers.add(marker);
+  }
+
+  Future<void> onClickMarker(
+    MapBranch element,
+  ) async {
+    inFocusBranch = element;
+    editMarkersIcons(element);
+    await mapController
+        .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: LatLng(element.latitude, element.longitude),
+      zoom: 17,
+    )));
+    lastSales = element.lastsales;
+    showOffersHorizontalCards(element.id);
+    selectedBranchId = element.id;
+    swipController.move(0);
+  }
+
+  Future<void> onClickCloseMarker(
+ 
+  ) async {
+    showOffersHorizontalCards(inFocusBranch.id);
+
+    swipController.move(0);
   }
 
   void showOffersHorizontalCards(int selId) {

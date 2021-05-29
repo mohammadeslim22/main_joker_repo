@@ -49,7 +49,7 @@ class LoadWhereToGo extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     SvgPicture.asset("assets/images/joker_indirim.svg",
-                        fit: BoxFit.cover,width:200),
+                        fit: BoxFit.cover, width: 200),
                     const SizedBox(height: 12),
                     const CupertinoActivityIndicator(radius: 24)
                   ],
@@ -588,7 +588,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                               style: styles.moreInfoWhite),
                           onPressed: () {
                             // if (config.loggedin) {
-                            if(getIt<Auth>().isAuthintecated){
+                            if (getIt<Auth>().isAuthintecated) {
                               Navigator.pushNamed(context, "/SaleLoader",
                                   arguments: <String, dynamic>{
                                     "mapBranch": value.inFocusBranch,
@@ -760,39 +760,63 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
   }
 
   Widget _body(HOMEMAProvider value) {
-    return GoogleMap(
-      // myLocationEnabled: true,
-      myLocationButtonEnabled: true,
-      indoorViewEnabled: false,
-      zoomControlsEnabled: false,
-      onMapCreated: (GoogleMapController controller) async {
-        serviceEnabled = await location.serviceEnabled();
-        permissionGranted = await location.hasPermission();
-        value.mapController = controller;
-        if (permissionGranted == PermissionStatus.denied) {
-        } else {
-          if (!serviceEnabled) {
-          } else {
-            //  _animateToUser();
-          }
-        }
-      },
-      onTap: (LatLng ll) {
-        //   value.showOffersHorizontalCards();
-      },
-      padding: const EdgeInsets.only(bottom: 60),
-      mapType: MapType.normal,
-      markers: Set<Marker>.of(value.markers),
-      initialCameraPosition:
-          CameraPosition(target: LatLng(config.lat, config.long), zoom: 13),
-      onCameraMove: (CameraPosition pos) {
-        value.setLatLomg(pos.target.latitude, pos.target.longitude);
-        value.lat = pos.target.latitude;
-        value.long = pos.target.longitude;
-      },
-      onCameraIdle: () {
-        value.getBranchesData(value.selectedSpecialize);
-      },
+    return Stack(
+      children: <Widget>[
+        GoogleMap(
+          // myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          indoorViewEnabled: false,
+          zoomControlsEnabled: false,
+          onMapCreated: (GoogleMapController controller) async {
+            serviceEnabled = await location.serviceEnabled();
+            permissionGranted = await location.hasPermission();
+            value.mapController = controller;
+            if (permissionGranted == PermissionStatus.denied) {
+            } else {
+              if (!serviceEnabled) {
+              } else {
+                //  _animateToUser();
+              }
+            }
+          },
+          onTap: (LatLng ll) {
+            //   value.showOffersHorizontalCards();
+          },
+          padding: const EdgeInsets.only(bottom: 60),
+          mapType: MapType.normal,
+          markers: Set<Marker>.of(value.markers),
+          initialCameraPosition:
+              CameraPosition(target: LatLng(config.lat, config.long), zoom: 13),
+          onCameraMove: (CameraPosition pos) {
+            value.setLatLomg(pos.target.latitude, pos.target.longitude);
+            value.lat = pos.target.latitude;
+            value.long = pos.target.longitude;
+          },
+          onCameraIdle: () {
+            value.getBranchesData(value.selectedSpecialize);
+          },
+        ),
+        Visibility(
+          visible: value.offersHorizontalCardsList,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 80),
+            child: Align(
+              alignment: Alignment.center,
+              child: FloatingActionButton(
+                isExtended: false,
+                mini: true,
+                child: AnimatedIcon(
+                    icon: AnimatedIcons.close_menu,
+                    progress: _animationController,
+                    color: colors.orange),
+                onPressed: () => value.onClickCloseMarker(),
+                backgroundColor: colors.white,
+              ),
+            ),
+          ),
+        ),
+        // Container(color: colors.red, height: 15, width: 15)
+      ],
     );
   }
 

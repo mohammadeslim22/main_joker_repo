@@ -18,22 +18,25 @@ class LoadAboutUs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String>(
-      future: getAboutUs(),
-      builder: (BuildContext ctx, AsyncSnapshot<String> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return AboutUs(
-              appName: appName, appVersion: appVersion, about: snapshot.data);
-        } else {
-          return Container(
-            color: colors.white,
-            child: const Align(
-              alignment: Alignment.center,
-              child: CupertinoActivityIndicator(radius: 24),
-            ),
-          );
-        }
-      },
+    return Scaffold(
+      appBar: AppBar(),
+      body: FutureBuilder<String>(
+        future: getAboutUs(),
+        builder: (BuildContext ctx, AsyncSnapshot<String> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return AboutUs(
+                appName: appName, appVersion: appVersion, about: snapshot.data);
+          } else {
+            return Container(
+              color: colors.white,
+              child: const Align(
+                alignment: Alignment.center,
+                child: CupertinoActivityIndicator(radius: 24),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }

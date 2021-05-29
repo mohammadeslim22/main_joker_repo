@@ -132,13 +132,13 @@ class ContactUs extends StatelessWidget {
                 },
                 child: Text(trans(context, 'send'))),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              techSupport(trans(context, "direct_contact"), "+9956878529"),
-              techSupport(trans(context, "email"), "joker@gmail.com")
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: <Widget>[
+          //     techSupport(trans(context, "direct_contact"), "+9956878529"),
+          //     techSupport(trans(context, "email"), "joker@gmail.com")
+          //   ],
+          // ),
           const SizedBox(height: 12)
         ],
       ),
