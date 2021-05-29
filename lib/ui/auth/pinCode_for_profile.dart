@@ -104,7 +104,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
   final TextEditingController passwordController = TextEditingController();
 
   final TextEditingController mobileNoController = TextEditingController();
-  bool _obscureText = false;
+  bool _obscureText = true;
   final FocusNode focus = FocusNode();
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
@@ -115,7 +115,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
 
     final MainProvider bolc = Provider.of<MainProvider>(context);
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(title: Text(trans(context,"change_mobile_no")),centerTitle: true),
         body: GestureDetector(
             onTap: () {
               FocusScope.of(context).requestFocus(FocusNode());
@@ -125,7 +125,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
               Text(trans(context, 'pin_code'),
                   textAlign: TextAlign.center, style: styles.mystyle2),
               const SizedBox(height: 15),
-              Text(trans(context, 'pin_has_been_sent'),
+              Text(trans(context, 'current_mobile_no'),
                   textAlign: TextAlign.center, style: styles.underHead),
               const SizedBox(height: 15),
               Text("${widget.mobileNo}",

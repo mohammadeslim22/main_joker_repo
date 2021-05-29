@@ -50,7 +50,7 @@ class MyMemberShipState extends State<MyMemberShip>
               initDelay: const Duration(milliseconds: 0),
               duration: const Duration(seconds: 1),
               curve: Curves.ease,
-              child: _itemBuilder(context, entry as MembershipData),
+              child: MemberShip(memberShip: entry as MembershipData),
             );
           },
           noItemsFoundBuilder: (BuildContext context) {
@@ -62,7 +62,81 @@ class MyMemberShipState extends State<MyMemberShip>
     );
   }
 
-  Widget _itemBuilder(BuildContext context, MembershipData memberShip) {
+  // Widget _itemBuilder(BuildContext context, MembershipData memberShip) {
+  //   return Card(
+  //       shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(12)),
+  //       ),
+  //       child: InkWell(
+  //         onTap: () {},
+  //         child: Container(
+  //           padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: <Widget>[
+  //               Row(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: <Widget>[
+  //                   Column(
+  //                     children: <Widget>[
+  //                       FloatingActionButton(
+  //                         mini: true,
+  //                         heroTag: memberShip.membership.merchant,
+  //                         elevation: 0,
+  //                         backgroundColor: colors.trans,
+  //                         onPressed: () {},
+  //                         child: SvgPicture.asset("assets/images/vip.svg"),
+  //                       ),
+  //                       Text(
+  //                         memberShip.membership.type,
+  //                         textAlign: TextAlign.center,
+  //                       )
+  //                     ],
+  //                   ),
+  //                   Column(
+  //                     children: <Widget>[
+  //                       Text(trans(context, "age"), style: styles.agestaged),
+  //                       const SizedBox(height: 12),
+  //                       Text(memberShip.membership.ageStage,
+  //                           style: styles.underHead),
+  //                     ],
+  //                   ),
+  //                 ],
+  //               ),
+  //               Expanded(
+  //                 child: Row(
+  //                   children: <Widget>[
+  //                     Container(
+  //                         child: const VerticalDivider(
+  //                             color: Colors.grey, thickness: 1),
+  //                         height: 45),
+  //                     Expanded(
+  //                       child: Column(
+  //                         children: <Widget>[
+  //                           Text(
+  //                             memberShip.membership.title,
+  //                             style: styles.underHead,
+  //                           ),
+  //                           const SizedBox(height: 10),
+  //                           Text(memberShip.membership.meesage),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ));
+  // }
+}
+
+class MemberShip extends StatelessWidget {
+  const MemberShip({Key key, this.memberShip}) : super(key: key);
+  final MembershipData memberShip;
+  @override
+  Widget build(BuildContext context) {
     return Card(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -70,7 +144,7 @@ class MyMemberShipState extends State<MyMemberShip>
         child: InkWell(
           onTap: () {},
           child: Container(
-            padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -95,8 +169,7 @@ class MyMemberShipState extends State<MyMemberShip>
                     ),
                     Column(
                       children: <Widget>[
-                        Text(trans(context, "age_staged"),
-                            style: styles.agestaged),
+                        Text(trans(context, "age"), style: styles.agestaged),
                         const SizedBox(height: 12),
                         Text(memberShip.membership.ageStage,
                             style: styles.underHead),
@@ -120,53 +193,12 @@ class MyMemberShipState extends State<MyMemberShip>
                             ),
                             const SizedBox(height: 10),
                             Text(memberShip.membership.meesage),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   children: <Widget>[
-                            //     Text("${memberShip.startAt}".split(' ')[0],
-                            //         style: styles.mysmall),
-                            //     Icon(Icons.arrow_forward, color: colors.blue, size: 12),
-                            //     Text("${memberShip.endAt}".split(' ')[0],
-                            //         style: styles.mysmall)
-                            //   ],
-                            // )
                           ],
                         ),
                       ),
                     ],
                   ),
                 ),
-
-                /* Flexible(
-                  child: CachedNetworkImage(
-                    placeholderFadeInDuration:
-                        const Duration(milliseconds: 300),
-                    imageUrl: "",
-                    fit: BoxFit.cover,
-
-                    // imageBuilder:
-                    //     (BuildContext context, ImageProvider imageProvider) =>
-                    //         Container(
-                    //   decoration: BoxDecoration(
-                    //     shape: BoxShape.circle,
-                    //     image: DecorationImage(
-                    //         image: imageProvider,
-                    //         fit: BoxFit.cover,
-                    //         colorFilter: const ColorFilter.mode(
-                    //             Colors.white, BlendMode.colorBurn)),
-                    //   ),
-                    // ),
-                    placeholder: (BuildContext context, String url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget:
-                        (BuildContext context, String url, dynamic error) =>
-                            const Icon(Icons.error),
-                  ),
-                  //     Image.asset(
-                  //   "assets/images/qrcode.png",
-                  //   scale: 2,
-                  // )
-                ) */
               ],
             ),
           ),

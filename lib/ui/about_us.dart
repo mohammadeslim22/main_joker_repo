@@ -19,7 +19,10 @@ class LoadAboutUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(trans(context, 'about_us'), style: styles.appBars),
+        centerTitle: true,
+      ),
       body: FutureBuilder<String>(
         future: getAboutUs(),
         builder: (BuildContext ctx, AsyncSnapshot<String> snapshot) {
@@ -49,48 +52,42 @@ class AboutUs extends StatelessWidget {
   final String about;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(trans(context, 'about_us'), style: styles.appBars),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28),
-        child: ListView(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(appName, style: styles.mystyle2),
-            const SizedBox(height: 10),
-            Text(
-              about,
-              softWrap: true,
-              style: styles.mystyle,
-            ),
-            Center(
-              child: SvgPicture.asset("assets/images/joker_indirim.svg",
-                  width: 120.0, height: 120.0),
-            ),
-            // Center(
-            //   child: SvgPicture.asset(
-            //     'assets/images/logo.svg',
-            //     width: 120.0,
-            //     height: 120.0,
-            //   ),
-            // ),
-            const SizedBox(height: 36),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "",
-                  style: TextStyle(color: colors.red),
-                ),
-                Text(appVersion)
-              ],
-            ),
-            const SizedBox(height: 12)
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28),
+      child: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(appName, style: styles.mystyle2),
+          const SizedBox(height: 10),
+          Text(
+            about,
+            softWrap: true,
+            style: styles.mystyle,
+          ),
+          Center(
+            child: SvgPicture.asset("assets/images/joker_indirim.svg",
+                width: 120.0, height: 120.0),
+          ),
+          // Center(
+          //   child: SvgPicture.asset(
+          //     'assets/images/logo.svg',
+          //     width: 120.0,
+          //     height: 120.0,
+          //   ),
+          // ),
+          const SizedBox(height: 36),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "",
+                style: TextStyle(color: colors.red),
+              ),
+              Text(appVersion)
+            ],
+          ),
+          const SizedBox(height: 12)
+        ],
       ),
     );
   }

@@ -23,7 +23,7 @@ class LoginScreen extends StatefulWidget {
 class _MyLoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   bool _isButtonEnabled = true;
-  bool _obscureText = false;
+  bool _obscureText = true;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

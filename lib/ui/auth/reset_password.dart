@@ -23,23 +23,23 @@ class _MyResetPasswordState extends State<ResetPassword>
     return (await showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-            title: const Text('Are you sure?'),
-            content: const Text('Do you want to exit the App'),
+            title: Text(trans(context, "are_you_sure")),
+            content: Text(trans(context, "do_u_want_to_exit")),
             actionsOverflowButtonSpacing: 50,
             actions: <Widget>[
               TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('Cancel')),
+                  child: Text(trans(context, "cancel"))),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text('Yes')),
+                  child: Text(trans(context, "yes"))),
             ],
           ),
         )) ??
         false;
   }
 
-  bool _obscureText = false;
+  bool _obscureText = true;
   final TextEditingController newpasswordController = TextEditingController();
   final TextEditingController newpasswordController2 = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -153,7 +153,7 @@ class _MyResetPasswordState extends State<ResetPassword>
                               borderRadius: BorderRadius.circular(18.0),
                               side: BorderSide(color: colors.orange)),
                           onPrimary: Colors.deepPurpleAccent,
-                          textStyle:const TextStyle(color: Colors.white)),
+                          textStyle: const TextStyle(color: Colors.white)),
                       onPressed: () async {
                         if (_isButtonEnabled) {
                           if (newpasswordController.text.trim() !=
@@ -206,7 +206,8 @@ class _MyResetPasswordState extends State<ResetPassword>
                           }
                         }
                       },
-                      child: bolc.returnchildResetPass(trans(context, 'restore'))),
+                      child:
+                          bolc.returnchildResetPass(trans(context, 'restore'))),
                 ),
               ],
             ),

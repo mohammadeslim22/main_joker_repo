@@ -20,23 +20,23 @@ class _MyChangePasswordState extends State<ChangePassword>
     return (await showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-            title: const Text('Are you sure?'),
-            content: const Text('Do you want to exit the App'),
+            title: Text(trans(context, "are_you_sure")),
+            content: Text(trans(context, "do_u_want_to_exit")),
             actionsOverflowButtonSpacing: 50,
             actions: <Widget>[
               TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('Cancel')),
+                  child: Text(trans(context, "cancel"))),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text('Yes')),
+                  child: Text(trans(context, "yes"))),
             ],
           ),
         )) ??
         false;
   }
 
-  bool _obscureText = false;
+  bool _obscureText = true;
   final TextEditingController oldpasswordController = TextEditingController();
   final TextEditingController newpasswordController = TextEditingController();
   final TextEditingController newpassword2Controller = TextEditingController();
@@ -192,8 +192,8 @@ class _MyChangePasswordState extends State<ChangePassword>
                           }
                         }
                       },
-                      child: bolc
-                          .returnchildChangePass(trans(context, 'change_my_password'))),
+                      child: bolc.returnchildChangePass(
+                          trans(context, 'change_my_password'))),
                 ),
               ],
             ),

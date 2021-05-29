@@ -25,7 +25,7 @@ class _MyRegistrationState extends State<Registration>
     with TickerProviderStateMixin {
   List<String> location2;
   bool _isButtonEnabled;
-  bool _obscureText = false;
+  bool _obscureText = true;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileNoController = TextEditingController();

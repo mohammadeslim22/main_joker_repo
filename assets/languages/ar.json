@@ -237,6 +237,10 @@
     "no_fav_saved":"لا يوجد مفضلة",
     "am_sure":"أنا متأكد",
     "help_to_get_better_feed_back":"ساعدنا للحصول على خدمة أفضل",
-    "pick_branch":"اختارالفرع"
+    "pick_branch":"اختارالفرع",
+    "new_mobile_no":"رقم الهاتف الجديد",
+    "change_mobile_no":"تغيير رقم الهاتف",
+    "current_mobile_no":"رقم الهاتف الحالي"
+    
     
 }
