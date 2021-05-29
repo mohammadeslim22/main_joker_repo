@@ -4,8 +4,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/language.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'widgets/setting_bottombar.dart';
@@ -175,14 +177,18 @@ class MySettingState extends State<SettingsScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/ChangePassword");
-                  },
-                  child: Text(trans(context, "change_password"),
-                style: TextStyle(color: colors.black))))
+          Visibility(
+            visible: getIt<Auth>().isAuthintecated,
+            child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                child: TextButton(
+                  
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/ChangePassword");
+                    },
+                    child: Text(trans(context, "change_password"),
+                  style: TextStyle(color: colors.black)))),
+          )
         ],
       ),
       bottomNavigationBar: SettingBottom(),

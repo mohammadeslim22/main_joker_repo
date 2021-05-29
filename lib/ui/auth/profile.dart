@@ -289,7 +289,7 @@ class MyAccountPage extends State<MyAccount>
                                       prefixIcon: Icons.mail_outline,
                                       kt: TextInputType.emailAddress,
                                       obscureText: false,
-                                      readOnly: true,
+                                      readOnly: false,
                                       focusNode: focus,
                                       suffixicon: IconButton(
                                         icon: Icon(Icons.edit,

@@ -292,8 +292,6 @@ class _MyHomePageState extends State<PinCodeForProfile>
           .updateAll((String key, String value) {
         return null;
       });
-    } else {
-  
-    }
+    } 
   }
 }

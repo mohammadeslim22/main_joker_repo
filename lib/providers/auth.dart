@@ -375,7 +375,7 @@ class Auth with ChangeNotifier {
     if (response.statusCode == 200) {
       notifyListeners();
       data.setData("password", newpassword.trim());
-      Navigator.pushNamed(context, '/login');
+      Navigator.pushNamedAndRemoveUntil(context, '/login',(_) => false);
       return true;
     } else {
       if (response.statusCode == 422) {
