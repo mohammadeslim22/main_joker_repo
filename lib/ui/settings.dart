@@ -38,7 +38,7 @@ class MySettingState extends State<SettingsScreen> {
     super.initState();
   }
 
-  Future<void> setStartingLang(MainProvider bolc, Language lang) async {
+  Future<void> setStartingLang(MainProvider bolc) async {
     await data.getData("lang").then<dynamic>((String value) async {
       if (value.isEmpty) {
         await data.getData("initlang").then<dynamic>((String local) {
@@ -81,10 +81,10 @@ class MySettingState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final MainProvider bolc = Provider.of<MainProvider>(context);
-    final Language lang = Provider.of<Language>(context);
+    // final Language lang = Provider.of<Language>(context);
 
     if (doOnce) {
-      setStartingLang(bolc, lang);
+      setStartingLang(bolc);
       setNotifcationSound(bolc);
       setState(() {
         doOnce = false;
