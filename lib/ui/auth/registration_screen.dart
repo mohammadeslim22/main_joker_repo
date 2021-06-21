@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:joker/constants/config.dart';
+import 'package:joker/base_widget.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/mainprovider.dart';
-import 'package:joker/providers/auth.dart';
+import 'package:joker/ui/view_models/auth_view_models/registration_model.dart';
 import 'package:joker/ui/widgets/country_code_picker.dart';
+import 'package:joker/util/service_locator.dart';
 import '../widgets/buttonTouse.dart';
 import '../widgets/text_form_input.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
 
 class Registration extends StatefulWidget {
@@ -24,13 +22,14 @@ class Registration extends StatefulWidget {
 class _MyRegistrationState extends State<Registration>
     with TickerProviderStateMixin {
   List<String> location2;
-  bool _isButtonEnabled;
   bool _obscureText = true;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileNoController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+
   static DateTime today = DateTime.now();
   DateTime firstDate = DateTime(today.year - 90, today.month, today.day);
   DateTime lastDate = DateTime(today.year - 18, today.month, today.day);
@@ -39,8 +38,6 @@ class _MyRegistrationState extends State<Registration>
   @override
   void initState() {
     super.initState();
-    _isButtonEnabled = true;
-    data.getData("countryDialCodeTemp").then((String value) {});
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -59,8 +56,7 @@ class _MyRegistrationState extends State<Registration>
       FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  Widget customcard(
-      BuildContext context, MainProvider mainProvider, Auth auth) {
+  Widget customcard(BuildContext context, RegistrationModel modle) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     final FocusNode focus = FocusNode();
     final FocusNode focusminus1 = FocusNode();
@@ -72,9 +68,6 @@ class _MyRegistrationState extends State<Registration>
         padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
         child: Form(
             key: _formKey,
-            // onWillPop: () {
-            //   return onWillPop(context);
-            // },
             child: Column(children: <Widget>[
               TextFormInput(
                   text: trans(context, 'name'),
@@ -94,9 +87,8 @@ class _MyRegistrationState extends State<Registration>
                     if (value.length < 3) {
                       return trans(context, 'username_more_than_3');
                     }
-                    return auth.regValidationMap['name'];
+                    return modle.regValidationMap['name'];
                   }),
-              // 0595388810
               TextFormInput(
                   text: trans(context, 'email'),
                   cController: emailController,
@@ -115,7 +107,7 @@ class _MyRegistrationState extends State<Registration>
                     if (value.isEmpty) {
                       return trans(context, 'plz_enter_valid_email');
                     }
-                    return auth.regValidationMap['email'];
+                    return modle.regValidationMap['email'];
                   }),
               TextFormInput(
                   text: trans(context, 'mobile_no'),
@@ -134,7 +126,7 @@ class _MyRegistrationState extends State<Registration>
                     if (value.isEmpty) {
                       return trans(context, 'plz_enter_valid_email');
                     }
-                    return auth.regValidationMap['phone'];
+                    return modle.regValidationMap['phone'];
                   }),
               TextFormInput(
                   text: trans(context, 'password'),
@@ -162,7 +154,7 @@ class _MyRegistrationState extends State<Registration>
                     if (passwordController.text.length < 6) {
                       return trans(context, 'pass_must_more_6');
                     }
-                    return auth.regValidationMap['password'];
+                    return modle.regValidationMap['password'];
                   }),
               TextFormInput(
                   text: trans(context, 'birth_date'),
@@ -172,7 +164,6 @@ class _MyRegistrationState extends State<Registration>
                   obscureText: false,
                   readOnly: true,
                   onTab: () {
-                    print("date hello ?? ");
                     _selectDate(context);
                   },
                   suffixicon: Icon(
@@ -184,36 +175,40 @@ class _MyRegistrationState extends State<Registration>
                     if (value.isEmpty) {
                       return trans(context, 'plz_enter_birthdate');
                     }
-                    return auth.regValidationMap['birthdate'];
+                    return modle.regValidationMap['birthdate'];
                   }),
               TextFormInput(
                   text: trans(context, 'get_location'),
-                  cController: config.locationController,
+                  cController: locationController,
                   prefixIcon: Icons.my_location,
                   kt: TextInputType.visiblePassword,
                   readOnly: true,
                   onTab: () async {
                     try {
-                      mainProvider.togelocationloading(true);
-                      if (await updateLocation) {
-                        await getLocationName();
-                        mainProvider.togelocationloading(false);
+                      modle.togelocationloading(true);
+                      final Map<String, dynamic> location =
+                          await updateLocation;
+                      if (location["res"] as bool) {
+                        setState(() {
+                          locationController.text =
+                              location["address"].toString();
+                        });
                       } else {
                         Vibration.vibrate(duration: 400);
-                        mainProvider.togelocationloading(false);
+                        modle.togelocationloading(false);
 
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         setState(() {
-                          config.locationController.text =
+                          locationController.text =
                               trans(context, 'tab_set_ur_location');
                         });
                       }
                     } catch (e) {
                       Vibration.vibrate(duration: 400);
-                      mainProvider.togelocationloading(false);
+                      modle.togelocationloading(false);
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       setState(() {
-                        config.locationController.text =
+                        locationController.text =
                             trans(context, 'tab_set_ur_location');
                       });
                     }
@@ -235,11 +230,11 @@ class _MyRegistrationState extends State<Registration>
                     if (value.isEmpty) {
                       return trans(context, 'plz_set_ur_location');
                     }
-                    return auth.regValidationMap['location'];
+                    return modle.regValidationMap['location'];
                   }),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
-                child: mainProvider.visibilityObs
+                child: modle.visibilityObs
                     ? Row(
                         children: <Widget>[
                           Expanded(
@@ -254,99 +249,86 @@ class _MyRegistrationState extends State<Registration>
 
   @override
   Widget build(BuildContext context) {
-    final MainProvider mainProvider = Provider.of<MainProvider>(context);
-    return Scaffold(
-        appBar: AppBar(),
-        body: Builder(
-          builder: (BuildContext context) => GestureDetector(
-            onTap: () {
-              SystemChannels.textInput.invokeMethod<String>('TextInput.hide');
-            },
-            child: Consumer<Auth>(
-                builder: (BuildContext context, Auth auth, Widget child) {
-              return ListView(
-                children: <Widget>[
-                  const SizedBox(height: 16),
-                  Text(trans(context, 'account_creation'),
-                      textAlign: TextAlign.center, style: styles.mystyle2),
-                  const SizedBox(height: 8),
-                  Text(trans(context, 'please_check'),
-                      textAlign: TextAlign.center, style: styles.pleazeCheck),
-                  customcard(context, mainProvider, auth),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 16),
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) => colors.orange),
-                            shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
-                                (Set<MaterialState> states) => RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: colors.orange))),
-                            textStyle:
-                                MaterialStateProperty.resolveWith<TextStyle>(
-                                    (Set<MaterialState> states) =>
-                                        TextStyle(color: colors.white))),
-                        onPressed: !_isButtonEnabled
-                            ? null
-                            : () async {
-                                // if (_isButtonEnabled) {
-                                if (_formKey.currentState.validate()) {
-                                  mainProvider.togelfRegister(true);
-                                  setState(() {
-                                    _isButtonEnabled = false;
-                                  });
-                                  if (await auth.register(
-                                    context,
-                                    mainProvider,
-                                    usernameController.text,
-                                    passwordController.text,
-                                    birthDateController.text,
-                                    emailController.text,
-                                    mobileNoController.text,
-                                  )) {
-                                  } else {
-                                    _formKey.currentState.validate();
-                                  }
-
-                                  auth.regValidationMap
-                                      .updateAll((String key, String value) {
-                                    return null;
-                                  });
-                                }
-                                setState(() {
-                                  _isButtonEnabled = true;
-                                });
-                                mainProvider.togelfRegister(false);
-                                // }
-                              },
-                        child: mainProvider.changechildforRegister(
-                            trans(context, 'regisration'))),
-                  ),
-                  const Padding(
-                      padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
-                      child: Divider(color: Colors.black)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Flexible(
-                        child: Text(
-                          trans(context, 'problem_in_regisration'),
-                          style: styles.mystyle,
-                        ),
-                      ),
-                      ButtonToUse(
-                        trans(context, 'tech_support'),
-                        fontWait: FontWeight.bold,
-                        fontColors: Colors.green,
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            }),
-          ),
-        ));
+    return BaseWidget<RegistrationModel>(
+        model: getIt<RegistrationModel>(),
+        builder: (BuildContext context, RegistrationModel modle,
+                Widget child) =>
+            Scaffold(
+                appBar: AppBar(),
+                body: Builder(
+                  builder: (BuildContext context) => GestureDetector(
+                      onTap: () {
+                        SystemChannels.textInput
+                            .invokeMethod<String>('TextInput.hide');
+                      },
+                      child: ListView(
+                        children: <Widget>[
+                          const SizedBox(height: 16),
+                          Text(trans(context, 'account_creation'),
+                              textAlign: TextAlign.center,
+                              style: styles.mystyle2),
+                          const SizedBox(height: 8),
+                          Text(trans(context, 'please_check'),
+                              textAlign: TextAlign.center,
+                              style: styles.pleazeCheck),
+                          customcard(context, modle),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 32, vertical: 16),
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                        (Set<MaterialState> states) =>
+                                            colors.orange),
+                                    shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+                                        (Set<MaterialState> states) => RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: BorderSide(
+                                                color: colors.orange))),
+                                    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                                        (Set<MaterialState> states) => TextStyle(color: colors.white))),
+                                onPressed: modle.state == ViewState.Busy
+                                    ? null
+                                    : () async {
+                                        if (_formKey.currentState.validate()) {
+                                          if (await modle.register(
+                                              context,
+                                              usernameController.text,
+                                              passwordController.text,
+                                              birthDateController.text,
+                                              emailController.text,
+                                              mobileNoController.text,
+                                              locationController.text)) {
+                                          } else {
+                                            _formKey.currentState.validate();
+                                          }
+                                          modle.regValidationMap.updateAll(
+                                              (String key, String value) {
+                                            return null;
+                                          });
+                                        }
+                                      },
+                                child: modle.changechildforRegister(trans(context, 'regisration'))),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
+                              child: Divider(color: Colors.black)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                    trans(context, 'problem_in_regisration'),
+                                    style: styles.mystyle),
+                              ),
+                              ButtonToUse(trans(context, 'tech_support'),
+                                  fontWait: FontWeight.bold,
+                                  fontColors: Colors.green),
+                            ],
+                          ),
+                        ],
+                      )),
+                )));
   }
 }

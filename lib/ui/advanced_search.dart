@@ -6,19 +6,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/models/specializations.dart';
-import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/service_locator.dart';
-import 'package:provider/provider.dart';
-// import 'package:rating_bar/rating_bar.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../localization/trans.dart';
 import '../constants/styles.dart';
 import 'widgets/text_form_input.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/util/functions.dart';
 import 'package:flutter/services.dart';
-// import 'package:joker/providers/globalVars.dart';
 
 class AdvancedSearch extends StatefulWidget {
   const AdvancedSearch({Key key, this.scaffoldkey, this.specializations})
@@ -78,35 +73,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
       ),
       onDaySelected: _onDaySelected,
     );
-    // t = TableCalendar<dynamic>(
-    //   firstDay: DateTime.now().subtract(const Duration(days: 500)),
-    //   lastDay: DateTime.now().add(const Duration(days: 500)),
-    //   focusedDay: focusDay,
-
-    //   // calendarController: _calendarController,
-    //   startingDayOfWeek: StartingDayOfWeek.monday,
-    //   selectedDayPredicate: (DateTime dt) {
-
-    //     return dt == focusDay;
-    //   },
-    //   calendarStyle: CalendarStyle(
-    //       selectedDecoration: BoxDecoration(
-    //         color: colors.orange,
-    //       ),
-    //       // selectedColor: Colors.orange[400],
-    //       // todayColor: Colors.orange[200],
-    //       // markersColor: Colors.brown[700],
-    //       outsideDaysVisible: true),
-    //   headerStyle: HeaderStyle(
-    //     formatButtonTextStyle:
-    //         const TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
-    //     formatButtonDecoration: BoxDecoration(
-    //       color: Colors.orange[400],
-    //       borderRadius: BorderRadius.circular(16.0),
-    //     ),
-    //   ),
-    //   onDaySelected: _onDaySelected,
-    // );
+  
     ttt = Container(child: t);
     tt = t;
   }
@@ -126,33 +93,17 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
       });
     }
   }
-  // void _onDaySelected(DateTime day, DateTime events) {
-  //   if (showingStartingDateCalendar) {
-  //     setState(() {
-  //       focusDay = day;
-  //       print("focusDay $focusDay");
 
-  //       starttoday = day;
-  //       startDate = "${starttoday.toLocal()}".split(' ')[0];
-  //     });
-  //   } else {
-  //     setState(() {
-  //       endtoday = day;
-  //       endDate = "${endtoday.toLocal()}".split(' ')[0];
-  //       showingStartingDateCalendar = true;
-  //       _errorController.close();
-  //     });
-  //   }
-  // }
 
   String selectedValue;
   final TextEditingController merchantName = TextEditingController();
   final TextEditingController saleName = TextEditingController();
+    final TextEditingController locationController = TextEditingController();
+
   final FocusNode globalFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
     return GestureDetector(
         onTap: () {
           SystemChannels.textInput.invokeMethod<String>('TextInput.hide');
@@ -248,7 +199,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                 const SizedBox(height: 15),
                 TextFormInput(
                   text: trans(context, 'get_location'),
-                  cController: config.locationController,
+                  cController: locationController,
                   prefixIcon: Icons.my_location,
                   kt: TextInputType.visiblePassword,
                   readOnly: true,
@@ -262,16 +213,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                   },
                   obscureText: false,
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: bolc.visibilityObs
-                      ? Row(
-                          children: <Widget>[
-                            Expanded(child: spinkit),
-                          ],
-                        )
-                      : Container(),
-                ),
+            
                 Row(
                   children: <Widget>[
                     Text(startingPrive.toString()),

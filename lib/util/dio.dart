@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/constants/config.dart';
-import 'package:joker/main.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/providers/map_provider.dart';
@@ -29,7 +27,6 @@ Response<dynamic> response;
 Dio dio = Dio(options);
 
 void dioDefaults() {
-  // dio.options.headers['authorization'] = 'Bearer ${config.token}';
   dio.interceptors.add(InterceptorsWrapper(onRequest:
       (RequestOptions options, RequestInterceptorHandler rHandlers) async {
     options.queryParameters.addAll(<String, String>{

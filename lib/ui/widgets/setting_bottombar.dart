@@ -26,11 +26,6 @@ class SettingBottom extends StatelessWidget {
                 backgroundColor: MaterialStateProperty.resolveWith(
                     (Set<MaterialState> states) => colors.trans)),
 
-            // splashColor: Colors.transparent,
-            // highlightElevation: 0,
-            // highlightColor: Colors.transparent,
-            // elevation: 0,
-
             onPressed: () {
               AwesomeDialog(
                 context: context,

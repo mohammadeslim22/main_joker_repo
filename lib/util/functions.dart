@@ -5,6 +5,7 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/service_locator.dart';
@@ -45,12 +46,12 @@ Future<List<String>> getLocation() async {
   return locaion;
 }
 
-Future<bool> get updateLocation async {
+Future<Map<String, dynamic>> get updateLocation async {
   bool res;
   Address first;
   Coordinates coordinates;
   List<Address> addresses;
-  config.locationController.text = "getting your location...";
+  getIt<Auth>().changeAddress("getting your location...");
 
   final List<String> loglat = await getLocation();
   if (loglat.isEmpty) {
@@ -68,31 +69,37 @@ Future<bool> get updateLocation async {
         double.parse(loglat.elementAt(0)), double.parse(loglat.elementAt(1)));
     // addresses = await Geocoder.google("AIzaSyDeUxKyBfZ1rlInBG6f0G4RT0tzgUstoes")
     //     .findAddressesFromCoordinates(coordinates);
-    addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    first = addresses.first;
+    // addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    // first = addresses.first;
+    // getIt<Auth>().changeAddress(first.toString());
     data.setData('address', first.toString());
   } catch (e) {
     data.setData('address', "Unkown Location");
   }
-
-  return res;
+  final Map<String, dynamic> ress = <String, dynamic>{
+    "res": true,
+    "address": "first.addressLine",
+    "location": loglat
+  };
+  return ress;
 }
 
-Future<void> getLocationName() async {
-  try {
-    config.coordinates = Coordinates(config.lat, config.long);
-    config.addresses =
-        await Geocoder.local.findAddressesFromCoordinates(config.coordinates);
-    config.first = config.addresses.first;
-    config.first = config.addresses.first;
-    config.locationController.text = (config.first == null)
-        ? "loading"
-        : config.first.addressLine ?? "loading";
-  } catch (e) {
-    config.locationController.text =
-        "Unkown latitude: ${config.lat.round().toString()} , longitud: ${config.long.round().toString()}";
-  }
-}
+// Future<String> getLocationName() async {
+//   try {
+//     config.coordinates = Coordinates(config.lat, config.long);
+//     config.addresses =
+//         await Geocoder.local.findAddressesFromCoordinates(config.coordinates);
+//     config.first = config.addresses.first;
+//     config.first = config.addresses.first;
+//     getIt<Auth>().changeAddress((config.first == null)
+//         ? "loading"
+//         : config.first.addressLine ?? "loading");
+//         return
+//   } catch (e) {
+//     getIt<Auth>().changeAddress(
+//         "Unkown latitude: ${config.lat.round().toString()} , longitud: ${config.long.round().toString()}");
+//   }
+// }
 
 SnackBar snackBar = SnackBar(
     content: const Text("Location Service was not alowed  !"),
@@ -159,6 +166,7 @@ void goToMap(BuildContext context) {
     getIt<HOMEMAProvider>().makeshowSlidingPanelFalse();
     getIt<HOMEMAProvider>().makeShowSepcializationsPadTrue();
     getIt<HOMEMAProvider>().hideOffersHorizontalCards();
+    // Navigator.pop(context);
     Navigator.pushNamedAndRemoveUntil(context, "/MapAsHome", (_) => false,
         arguments: <String, dynamic>{
           "home_map_lat": config.lat,

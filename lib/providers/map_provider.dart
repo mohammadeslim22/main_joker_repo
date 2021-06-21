@@ -9,14 +9,20 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/sales.dart';
+import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/auth.dart';
+import 'package:joker/ui/view_models/base_model.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/models/specializations.dart';
 import 'package:joker/models/location_images.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/util/size_config.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
+import 'package:intl/intl.dart';
 
-class HOMEMAProvider with ChangeNotifier {
+import 'salesProvider.dart';
+
+class HOMEMAProvider extends BaseModel {
   bool dataloaded = false;
   MapBranches branches;
   MapBranch selectedBranch;
@@ -26,22 +32,23 @@ class HOMEMAProvider with ChangeNotifier {
   List<Marker> markers = <Marker>[];
   List<Specialization> specializations = <Specialization>[];
   List<LocationImages> locationPics = <LocationImages>[];
-
+  PagewiseLoadController<dynamic> pagewiseSalesController;
   int selectedSpecialize = 1;
-
+  Sales sales;
+  Sales tempSales;
   double lat = config.lat ?? 0.0;
   double long = config.long ?? 0.0;
 
   GoogleMapController mapController;
   List<SaleData> lastSales = <SaleData>[];
   bool offersHorizontalCardsList = false;
-  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   bool specSelected = false;
   int selectedBranchId;
   bool showSlidingPanel = false;
   bool showSepcializationsPad = true;
   SwiperController swipController = SwiperController();
   AnimationController controller;
+  
   void setinFocusBranch(MapBranch toBeInFocus) {
     inFocusBranch = toBeInFocus;
     notifyListeners();
@@ -59,6 +66,7 @@ class HOMEMAProvider with ChangeNotifier {
         return element.id == saleId;
       }).isliked = 1;
       notifyListeners();
+      getIt<SalesProvider>().setLikeSale(saleId);
     } catch (err) {
       print("could not find element");
     }
@@ -70,6 +78,7 @@ class HOMEMAProvider with ChangeNotifier {
         return element.id == saleId;
       }).isliked = 0;
       notifyListeners();
+      getIt<SalesProvider>().setunLikeSale(saleId);
     } catch (err) {
       print("orrrrr");
     }
@@ -81,6 +90,7 @@ class HOMEMAProvider with ChangeNotifier {
         return element.id == saleId;
       }).isfavorite = 1;
       notifyListeners();
+      getIt<SalesProvider>().setFavSale(saleId);
     } catch (err) {
       print("could not find element $err");
     }
@@ -92,6 +102,7 @@ class HOMEMAProvider with ChangeNotifier {
         return element.id == saleId;
       }).isfavorite = 0;
       notifyListeners();
+      getIt<SalesProvider>().setunFavSale(saleId);
     } catch (err) {
       print("orrrrr");
     }
@@ -141,7 +152,6 @@ class HOMEMAProvider with ChangeNotifier {
 
   Future<void> getBranchesData(int specId) async {
     Response<dynamic> response;
-    // if (config.loggedin) {
     if (getIt<Auth>().isAuthintecated) {
       response =
           await dio.get<dynamic>("map2", queryParameters: <String, dynamic>{
@@ -220,32 +230,6 @@ class HOMEMAProvider with ChangeNotifier {
         icon: BitmapDescriptor.fromBytes(markerIcon),
         onTap: () async {
           await onClickMarker(element);
-          // inFocusBranch = element;
-          // editMarkersIcons(element);
-          // await mapController
-          //     .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          //   target: LatLng(element.latitude, element.longitude),
-          //   zoom: 17,
-          // )));
-          // lastSales = element.lastsales;
-          // showOffersHorizontalCards(element.id);
-          // selectedBranchId = element.id;
-          // swipController.move(0);
-          // element.lastsales.forEach((SaleData element) {
-          //   print("is favorite ${element.id} ${element.isfavorite}");
-          // });
-
-          // getIt<HOMEMAProvider>().errorController = getIt<HOMEMAProvider>()
-          //     .scaffoldkey
-          //     .currentState
-          //     .showBottomSheet<dynamic>(
-          //       (BuildContext context) => Container(
-          //           height: SizeConfig.screenHeight / 2,
-          //           // width: SizeConfig.screenWidth,
-          //           margin: const EdgeInsets.symmetric(
-          //               horizontal: 12, vertical: 16),
-          //           child: _buildCarousel(context)),
-          //     );
         },
         infoWindow: InfoWindow(title: element.merchant.name.toString()));
 
@@ -268,9 +252,7 @@ class HOMEMAProvider with ChangeNotifier {
     swipController.move(0);
   }
 
-  Future<void> onClickCloseMarker(
- 
-  ) async {
+  Future<void> onClickCloseMarker() async {
     showOffersHorizontalCards(inFocusBranch.id);
 
     swipController.move(0);
@@ -282,7 +264,6 @@ class HOMEMAProvider with ChangeNotifier {
       controller.forward();
 
       makeShowSepcializationsPadFalse();
-      // makeshowSlidingPanelTrue();
     } else {
       if (selId == selectedBranchId) {
         offersHorizontalCardsList = !offersHorizontalCardsList;
@@ -294,25 +275,11 @@ class HOMEMAProvider with ChangeNotifier {
         if (!showSlidingPanel) {
           toggleSHowSepcializationsPad();
         } else {}
-
-        // makeShowSepcializationsPadTrue();
-        // makeshowSlidingPanelFalse();
-        // if (shoOffersButton) {
-        //   //
-        // } else {
-        //   makeshoOffersButtonfalse();
-        // }
-        // toggleshoOffersButton();
       } else {
         offersHorizontalCardsList = true;
         controller.forward();
         makeShowSepcializationsPadFalse();
-        // makeshowSlidingPanelTrue();
-        // makeshowSlidingPanelTrue();
       }
-      // if (offersHorizontalCardsList) {
-      //   makeshoOffersButtonTrue();
-      // }
     }
 
     notifyListeners();
@@ -329,18 +296,9 @@ class HOMEMAProvider with ChangeNotifier {
 
   Future<void> editMarkersIcons(MapBranch element) async {
     markers.clear();
-    // await _addMarker(_scaffoldkey, element, true);
     for (final MapBranch mapBranch in branches.mapBranches) {
       await _addMarker(mapBranch, mapBranch.id == element.id);
     }
-    // markers.removeWhere(
-    //     (Marker m) => m.markerId == MarkerId(element.id.toString()));
-    // await _addMarker(_scaffoldkey, element, true);
-    // markers.removeWhere(
-    //     (Marker m) => m.markerId != MarkerId(element.id.toString()));
-    // for (final MapBranch mapBranch in branches.mapBranches) {
-    //   await _addMarker(_scaffoldkey, mapBranch, mapBranch.id == element.id);
-    // }
     addUserIcon();
   }
 
@@ -358,24 +316,12 @@ class HOMEMAProvider with ChangeNotifier {
     final dynamic response = await dio.get<dynamic>("specializations");
     specializations.clear();
     specializations = Specializations.fromJson(response.data).data;
-    // await getLocationPics();
     specesLoaded = true;
     notifyListeners();
   }
 
-  // Future<void> getLocationPics() async {
-  //   final dynamic response = await dio.get<dynamic>("images");
-  //   locationPics.clear();
-  //   response.data.forEach((dynamic v) {
-  //     locationPics.add(LocationImages.fromJson(v));
-  //   });
-
-  //   notifyListeners();
-  // }
-
   void setSlelectedSpec(int id) {
     if (id == selectedSpecialize) {
-      // selectedSpecialize = null;
     } else {
       selectedSpecialize = id;
       getBranchesData(selectedSpecialize);
@@ -391,5 +337,89 @@ class HOMEMAProvider with ChangeNotifier {
     return specializations.firstWhere((Specialization element) {
       return element.id == (selectedSpecialize ?? 1);
     }).name;
+  }
+
+  Future<List<SaleData>> getSalesDataFilterdAuthenticated(
+      int pageIndex, FilterData filterData) async {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String startDate = formatter.format(filterData.startingdate);
+    final String endDate = formatter.format(filterData.endingdate);
+    final Response<dynamic> response =
+        await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'merchant_name': filterData.merchantNameOrPartOfit.isEmpty
+          ? ""
+          : filterData.merchantNameOrPartOfit,
+      'name': filterData.saleNameOrPartOfit.isNotEmpty
+          ? filterData.saleNameOrPartOfit
+          : "",
+      'from_date': startDate,
+      'to_date': endDate,
+      'from_price': filterData.fromPrice,
+      'to_price': filterData.toPrice,
+      'specialization': jsonEncode(filterData.specifications)
+    });
+
+    sales = Sales.fromJson(response.data);
+    notifyListeners();
+    return sales.data;
+  }
+
+  Future<List<SaleData>> getSalesDataAuthenticated(int pageIndex) async {
+    print("page index $pageIndex");
+    final Response<dynamic> response =
+        await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'specialization':
+          jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize])
+    });
+    sales = Sales.fromJson(response.data);
+    tempSales = sales;
+    notifyListeners();
+    return sales.data;
+  }
+
+  Future<List<SaleData>> getSalesDataFilterd(
+      int pageIndex, FilterData filterData) async {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String startDate = formatter.format(filterData.startingdate);
+    final String endDate = formatter.format(filterData.endingdate);
+    final Response<dynamic> response =
+        await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'merchant_name': filterData.merchantNameOrPartOfit,
+      'name': filterData.saleNameOrPartOfit,
+      'from_date': startDate,
+      'to_date': endDate,
+      'rate': filterData.rating,
+      'specifications': jsonEncode(filterData.specifications)
+    });
+    sales = Sales.fromJson(response.data);
+    notifyListeners();
+    return sales.data;
+  }
+
+  Future<List<SaleData>> getSalesData(int pageIndex) async {
+    final Response<dynamic> response =
+        await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
+      'page': pageIndex + 1,
+      'specialization':
+          jsonEncode(<int>[getIt<HOMEMAProvider>().selectedSpecialize ?? 1])
+    });
+    sales = Sales.fromJson(response.data);
+    tempSales = sales;
+    notifyListeners();
+    return sales.data;
+  }
+
+  Future<List<dynamic>> getSales(int pageIndex) {
+    return getIt<Auth>().isAuthintecated
+        ? (getIt<SalesProvider>().filterData != null)
+            ? getSalesDataFilterdAuthenticated(
+                pageIndex, getIt<SalesProvider>().filterData)
+            : getSalesDataAuthenticated(pageIndex)
+        : (getIt<SalesProvider>().filterData != null)
+            ? getSalesDataFilterd(pageIndex, getIt<SalesProvider>().filterData)
+            : getSalesData(pageIndex);
   }
 }

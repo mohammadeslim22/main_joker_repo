@@ -1,16 +1,17 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/merchant.dart' as merchant_main_model;
+import 'package:joker/ui/view_models/base_model.dart';
+import 'package:joker/ui/view_models/fav_merchants_modle.dart';
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:joker/util/service_locator.dart';
 import 'map_provider.dart';
 
-class MerchantProvider with ChangeNotifier {
+class MerchantProvider extends BaseModel{
   merchant_main_model.Merchant merchant;
   Branches branches;
   Branches tempbBranches;
@@ -38,9 +39,7 @@ class MerchantProvider with ChangeNotifier {
 
     branches = Branches.fromJson(response.data);
     tempbBranches = branches;
-    // branches.data.forEach((BranchData element) {
-    //   print("branch no auth ${element.id}");
-    // });
+
     notifyListeners();
     return branches.data;
   }
@@ -54,9 +53,6 @@ class MerchantProvider with ChangeNotifier {
     });
     branches = Branches.fromJson(response.data);
     tempbBranches = branches;
-    // branches.data.forEach((BranchData element) {
-    //   print("branch auth -- ${element.id}");
-    // });
     notifyListeners();
 
     return branches.data;
@@ -72,8 +68,6 @@ class MerchantProvider with ChangeNotifier {
     response.data['data'].forEach((dynamic v) {
       favbranches.add(MapBranch.fromJson(v));
     });
-
-    // MapBranch.fromJson(response.data);
     notifyListeners();
     return favbranches;
   }
@@ -85,31 +79,46 @@ class MerchantProvider with ChangeNotifier {
 
   void setFavBraanch(int branchId) {
     try {
-      if (branches != null&& branches.data.isNotEmpty){
+      if (branches != null && branches.data.isNotEmpty) {
         branches.data.firstWhere((BranchData element) {
           return element.id == branchId;
         }).isfavorite = 1;
-      final BranchData temp = branches.data.firstWhere((BranchData element) {
-        return element.id == branchId;
-      });
-      favbranches.add(MapBranch(
-          name: temp.name,
-          id: temp.id,
-          address: temp.address,
-          isfavorite: temp.isfavorite,
-          isliked: temp.isliked,
-          latitude: temp.latitude,
-          longitude: temp.longitude,
-          phone: temp.phone,
-          merchant: Merchant(
-              id: temp.merchant.id,
-              name: temp.merchant.name,
-              logo: temp.merchant.logo,
-              ratesAverage: temp.merchant.rateAverage,
-              salesCount: temp.sales)));
+        final BranchData temp = branches.data.firstWhere((BranchData element) {
+          return element.id == branchId;
+        });
+        getIt<FavoriteMerchantsModle>().setFavBraanch(MapBranch(
+            name: temp.name,
+            id: temp.id,
+            address: temp.address,
+            isfavorite: temp.isfavorite,
+            isliked: temp.isliked,
+            latitude: temp.latitude,
+            longitude: temp.longitude,
+            phone: temp.phone,
+            merchant: Merchant(
+                id: temp.merchant.id,
+                name: temp.merchant.name,
+                logo: temp.merchant.logo,
+                ratesAverage: temp.merchant.rateAverage,
+                salesCount: temp.sales)));
+
+        favbranches.add(MapBranch(
+            name: temp.name,
+            id: temp.id,
+            address: temp.address,
+            isfavorite: temp.isfavorite,
+            isliked: temp.isliked,
+            latitude: temp.latitude,
+            longitude: temp.longitude,
+            phone: temp.phone,
+            merchant: Merchant(
+                id: temp.merchant.id,
+                name: temp.merchant.name,
+                logo: temp.merchant.logo,
+                ratesAverage: temp.merchant.rateAverage,
+                salesCount: temp.sales)));
       }
-        
-      
+
       notifyListeners();
     } catch (err) {
       print("error in branch fitch $err");
@@ -119,10 +128,11 @@ class MerchantProvider with ChangeNotifier {
 
   void setunFavBranch(int branchId) {
     try {
-      if (branches != null&& branches.data.isNotEmpty)
+      if (branches != null && branches.data.isNotEmpty)
         branches.data.firstWhere((BranchData element) {
           return element.id == branchId;
         }).isfavorite = 1;
+      getIt<FavoriteMerchantsModle>().setunFavBranch(branchId);
       favbranches.removeWhere((MapBranch element) => element.id == branchId);
       notifyListeners();
     } catch (err) {

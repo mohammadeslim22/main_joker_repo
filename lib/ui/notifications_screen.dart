@@ -1,14 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
+import 'package:joker/base_widget.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/models/notification.dart';
-import 'package:joker/providers/mainprovider.dart';
-import 'package:provider/provider.dart';
+import 'package:joker/util/service_locator.dart';
+
 import '../localization/trans.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/constants/styles.dart';
+import 'view_models/notifications_modle.dart';
 
 class Notifcations extends StatefulWidget {
   const Notifcations({Key key}) : super(key: key);
@@ -17,6 +19,8 @@ class Notifcations extends StatefulWidget {
 }
 
 class _NotifcationsState extends State<Notifcations> {
+  _NotifcationsState();
+
   @override
   void initState() {
     super.initState();
@@ -25,56 +29,35 @@ class _NotifcationsState extends State<Notifcations> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colors.white,
-      appBar: AppBar(
-          title: Text(trans(context, 'notifications'), style: styles.appBars),
-          centerTitle: true),
-      body: Consumer<MainProvider>(
-        builder: (BuildContext context, MainProvider value, Widget child) {
-          return PagewiseListView<dynamic>(
-            physics: const ScrollPhysics(),
-            shrinkWrap: true,
-            loadingBuilder: (BuildContext context) {
-              return const Center(
-                  child: CircularProgressIndicator(
-                      backgroundColor: Colors.transparent));
-            },
-            pageLoadController: value.pagewiseNotificationsController,
-            padding: const EdgeInsets.all(15.0),
-            itemBuilder: (BuildContext context, dynamic entry, int index) {
-              return _itemBuilder(context, entry as NotificationData, value);
-            },
-            noItemsFoundBuilder: (BuildContext context) {
-              return const NoNotificationsToday();
-            },
-          );
-
-          // ListView.builder(
-          //   padding: const EdgeInsets.symmetric(vertical: 0),
-          //   shrinkWrap: true,
-
-          //   itemCount: value.n.data.length,
-          //   addRepaintBoundaries: true,
-          //   itemBuilder: (BuildContext context, int index) {
-
-          //     return Container(
-          //       margin: const EdgeInsets.symmetric(vertical: 2,horizontal: 4),
-          //       child: AnimatedCard(
-          //         direction: AnimatedCardDirection.left,
-          //         initDelay: const Duration(milliseconds: 0),
-          //         duration: const Duration(seconds: 1),
-          //         curve: Curves.ease,
-          //         child: _itemBuilder(context, value.n.data[index], value),
-          //       ),
-          //     );
-          //   },
-          // );
-        },
-      ),
-    );
+        backgroundColor: colors.white,
+        appBar: AppBar(
+            title: Text(trans(context, 'notifications'), style: styles.appBars),
+            centerTitle: true),
+        body: BaseWidget<NotificationsModel>(
+            model: getIt<NotificationsModel>(),
+            builder: (BuildContext context, NotificationsModel modle,
+                    Widget child) =>
+                PagewiseListView<dynamic>(
+                  physics: const ScrollPhysics(),
+                  shrinkWrap: true,
+                  loadingBuilder: (BuildContext context) {
+                    return const Center(
+                        child: CircularProgressIndicator(
+                            backgroundColor: Colors.transparent));
+                  },
+                  pageLoadController: modle.pagewiseNotificationsController,
+                  padding: const EdgeInsets.all(15.0),
+                  itemBuilder:
+                      (BuildContext context, dynamic entry, int index) {
+                    return _itemBuilder(context, entry as NotificationData);
+                  },
+                  noItemsFoundBuilder: (BuildContext context) {
+                    return const NoNotificationsToday();
+                  },
+                )));
   }
 
-  Widget _itemBuilder(BuildContext c, NotificationData nD, MainProvider value) {
+  Widget _itemBuilder(BuildContext c, NotificationData nD) {
     String endsIn = "";
     if (nD.period is! String) {
       final String yearsToEnd = nD.period[0] != 0
@@ -98,8 +81,8 @@ class _NotifcationsState extends State<Notifcations> {
     }
     return Dismissible(
       onDismissed: (DismissDirection dDirection) async {
-        if (nD.isread == 0){
-           await value.openNotifications(nD.id);
+        if (nD.isread == 0) {
+          // await value.openNotifications(nD.id);
         }
       },
       key: const Key("c"),

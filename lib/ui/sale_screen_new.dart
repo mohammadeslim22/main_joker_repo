@@ -74,8 +74,6 @@ class ShopDetailsPage extends State<SaleLoader>
     sale.branches.forEach((BranchesMini element) {
       options.add(S2Choice<String>(value: element.name, title: element.name));
     });
-
-    // myIndex += merchant.mydata.branches[0].id;
   }
 
   void getHeight() {
@@ -500,10 +498,7 @@ class ShopDetailsPage extends State<SaleLoader>
                                 fit: BoxFit.cover,
                                 height: SizeConfig.blockSizeVertical * 5,
                                 width: SizeConfig.blockSizeHorizontal * 10),
-                            // SvgPicture.asset("assets/images/ends_in.svg",
-                            //     fit: BoxFit.cover,
-                            //     height: SizeConfig.blockSizeVertical * 5,
-                            //     width: SizeConfig.blockSizeHorizontal * 12),
+                      
                             Text("  " + trans(context, 'ends_in') + "  ",
                                 style: styles.moreInfo),
                             Container(
@@ -599,79 +594,7 @@ class ShopDetailsPage extends State<SaleLoader>
               ),
             ),
             const SizedBox(height: 24),
-            // Container(
-            //   child: SmartSelect<String>.single(
-            //       tileBuilder: (BuildContext c, S2SingleState<String> s) {
-            //         return Row(
-            //             mainAxisSize: MainAxisSize.min,
-            //             children: <Widget>[
-            //               Text("G", style: styles.googlemapsG),
-            //               const Text("  "),
-            //               Text(trans(context, 'maps'), style: styles.maps)
-            //             ]);
-            //       },
-            //       title: trans(context, 'pick_branch'),
-            //       value: "",
-            //       choiceItems: options,
-            //       modalType: S2ModalType.bottomSheet,
-            //       onChange: (S2SingleState<String> state) {
-            //         print("state ${state.value} ");
-            //         if (state.value == null ||
-            //             state.value.isEmpty ||
-            //             state.value == "") {
-            //         } else {
-            //           final BranchesMini mb = rs.branches.firstWhere(
-            //               (BranchesMini element) =>
-            //                   element.name == state.value);
-            //           final map_luncher.Coords crods =
-            //               map_luncher.Coords(mb.latitude, mb.longitude);
-            //           openMapsSheet(context, crods);
-            //         }
-            //       }),
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(10),
-            //     color: Colors.white,
-            //   ),
-            // ),
-            // Container(
-            //   alignment: Alignment.center,
-            //   decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(12),
-            //       color: colors.orange,
-            //       shape: BoxShape.rectangle),
-            //   child: SmartSelect<String>.single(
-
-            //       //  modalTitle: "Signle choice",
-            //       // tileBuilder: (BuildContext c, S2SingleState<String> s) {
-            //       //   return Row(
-            //       //       mainAxisSize: MainAxisSize.min,
-            //       //       children: <Widget>[
-            //       //         Text("G", style: styles.googlemapsG),
-            //       //         const Text("  "),
-            //       //         Text(trans(context, 'maps'), style: styles.maps)
-            //       //       ]);
-            //       // },
-
-            //       title: "",
-            //       value: "",
-            //       modalConfirm: true,
-            //       choiceItems: options,
-            //       modalType: S2ModalType.bottomSheet,
-            //       onChange: (S2SingleState<String> state) {
-            //         print("state ${state.value} ");
-            //         if (state.value == null ||
-            //             state.value.isEmpty ||
-            //             state.value == "") {
-            //         } else {
-            //           final BranchesMini mb = rs.branches.firstWhere(
-            //               (BranchesMini element) =>
-            //                   element.name == state.value);
-            //           final map_luncher.Coords crods =
-            //               map_luncher.Coords(mb.latitude, mb.longitude);
-            //           openMapsSheet(context, crods);
-            //         }
-            //       }),
-            // ),
+         
             ElevatedButton(
               style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith<OutlinedBorder>(

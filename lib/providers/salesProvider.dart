@@ -198,16 +198,6 @@ class SalesProvider with ChangeNotifier {
 
   Future<List<SaleData>> getSalesDataFilterd(
       int pageIndex, FilterData filterData) async {
-    // String spec = "";
-    // filterData.specifications.forEach((int element) {
-    //   if (element == filterData.specifications.last) {
-    //     spec = spec + element.toString();
-    //   } else {
-    //     spec = spec + element.toString() + ",";
-    //   }
-    //   print("spec $spec");
-    // });
-
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String startDate = formatter.format(filterData.startingdate);
     final String endDate = formatter.format(filterData.endingdate);
@@ -228,18 +218,6 @@ class SalesProvider with ChangeNotifier {
 
   Future<List<SaleData>> getSalesDataFilterdAuthenticated(
       int pageIndex, FilterData filterData) async {
-    // String spec = "";
-    // filterData.specifications.forEach((int element) {
-    //   if (element == filterData.specifications.last) {
-    //     spec = spec + element.toString();
-    //   } else {
-    //     spec = spec + element.toString() + ",";
-    //   }
-    //   print("spec $spec");
-    // });
-    print(jsonEncode(filterData.specifications));
-    print(
-        "filterData  ${filterData.merchantNameOrPartOfit} ${filterData.saleNameOrPartOfit} ${filterData.fromPrice} ${filterData.specifications} ${filterData.startingdate}");
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String startDate = formatter.format(filterData.startingdate);
     final String endDate = formatter.format(filterData.endingdate);
@@ -259,7 +237,6 @@ class SalesProvider with ChangeNotifier {
       'specialization': jsonEncode(filterData.specifications)
     });
 
-    // print(response.data);
     sales = Sales.fromJson(response.data);
     notifyListeners();
     return sales.data;

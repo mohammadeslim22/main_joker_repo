@@ -9,13 +9,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/util/dio.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
 import 'package:joker/util/data.dart';
-import 'package:joker/providers/location_provider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/util/functions.dart';
@@ -40,9 +40,7 @@ class _AutoLocateState extends State<AutoLocate> {
   PermissionStatus permissionGranted;
   LocationData locationData;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
-
   Future<void> _onMapCreated(GoogleMapController controller) async {
     mapController = controller;
 
@@ -55,6 +53,14 @@ class _AutoLocateState extends State<AutoLocate> {
         _animateToUser();
       }
     }
+  }
+
+  void saveLocation(String address, double lat, double long) {
+    dio.post<dynamic>("locations", data: <String, dynamic>{
+      'address': address ?? "Unknown",
+      'latitude': lat,
+      'longitude': long
+    });
   }
 
   Coordinates coordinates;
@@ -90,8 +96,6 @@ class _AutoLocateState extends State<AutoLocate> {
   }
 
   Future<bool> _willPopCallback() async {
-    Provider.of<MainProvider>(context, listen: false)
-        .togelocationloading(false);
     Navigator.pop(context);
     return true;
   }
@@ -205,10 +209,8 @@ class _AutoLocateState extends State<AutoLocate> {
                                 ),
                                 trailing: IconButton(
                                   onPressed: () {
-                                    getIt<LocationProvider>().saveLocation(
-                                        address.addressLine.toString(),
-                                        lat,
-                                        long);
+                                    saveLocation(address.addressLine.toString(),
+                                        lat, long);
                                   },
                                   icon: const Icon(Icons.bookmark),
                                 ),
@@ -219,16 +221,7 @@ class _AutoLocateState extends State<AutoLocate> {
                       ),
                     ),
                   ),
-                  // Align(
-                  //   alignment: Alignment.center,
-                  //   child: Container(
-                  //     child: Icon(
-                  //       FontAwesomeIcons.mapMarkerAlt,
-                  //       color: colors.blue,
-                  //       size: 32,
-                  //     ),
-                  //   ),
-                  // ),
+             
 
                   accesptDeclineButtons(),
                 ],
@@ -248,19 +241,10 @@ class _AutoLocateState extends State<AutoLocate> {
         ));
   }
 
-  // void _addMarker(Marker marker) {
-  //   final MarkerId markerId = MarkerId('current_location');
-
-  //   setState(() {
-  //     markers[markerId] = marker;
-  //   });
-  // }
-
   Future<void> _animateToUser() async {
     try {
       if (mounted) {}
-      // final Uint8List markerIcon =
-      //     await getBytesFromAsset('assets/images/logo.jpg', 100);
+
       await location.getLocation().then((LocationData value) {
         mapController
             .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -269,14 +253,7 @@ class _AutoLocateState extends State<AutoLocate> {
         )));
         getPositionSubscription =
             location.onLocationChanged.listen((LocationData value) {
-          // final Marker marker = Marker(
-          //   markerId: MarkerId('current_location'),
-          //   position: LatLng(value.latitude, value.longitude),
-          //   icon: BitmapDescriptor.fromBytes(markerIcon),
-          //   flat: true,
-          //   anchor: const Offset(0.5, 0.5),
-          // );
-          // _addMarker(marker);
+
         });
         setState(() {
           lat = value.latitude;
@@ -317,13 +294,9 @@ class _AutoLocateState extends State<AutoLocate> {
                       color: colors.orange,
                     )),
                 onPressed: () {
-                  config.locationController.text =
-                      "Tap to get your Location...";
                   Navigator.pop(context);
-                  Provider.of<MainProvider>(context, listen: false)
-                      .togelocationloading(false);
+
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  // Scaffold.of(context).hideCurrentSnackBar();
                 },
                 child: Text(trans(context, 'cancel'))),
             const SizedBox(width: 30),
@@ -351,10 +324,7 @@ class _AutoLocateState extends State<AutoLocate> {
 
   final List<Function> functions = <Function>[];
   void setFromAddLocation() {
-    getIt<LocationProvider>()
-        .saveLocation(address.addressLine.toString(), lat, long);
-    if (getIt<LocationProvider>().pagewiseLocationController != null)
-      getIt<LocationProvider>().pagewiseLocationController.reset();
+    saveLocation(address.addressLine.toString(), lat, long);
   }
 
   void setFromSetFromMap() {
@@ -374,9 +344,7 @@ class _AutoLocateState extends State<AutoLocate> {
   void setFromRegister() {
     data.setData("lat", lat.toString());
     data.setData("long", long.toString());
-    config.locationController.text =
-        address == null ? "unkown" : address.addressLine ?? "unkown";
-    Provider.of<MainProvider>(context, listen: false)
-        .togelocationloading(false);
+    Provider.of<Auth>(context, listen: false)
+        .changeAddress(address.addressLine ?? "unkown");
   }
 }

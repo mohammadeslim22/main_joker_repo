@@ -3,17 +3,15 @@ import 'package:flutter/rendering.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
 import 'package:flutter/material.dart';
-import 'package:joker/util/service_locator.dart';
 import '../../ui/cards/map_sale_card.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
-import 'package:joker/providers/salesProvider.dart';
 
 class MapSalesListState extends StatelessWidget {
-  const MapSalesListState({Key key, this.sc, this.close}) : super(key: key);
+  const MapSalesListState({Key key, this.sc, this.close, this.pagewiseSalesController}) : super(key: key);
   final ScrollController sc;
   final Function close;
-
+  final PagewiseLoadController<dynamic> pagewiseSalesController;
   @override
   Widget build(BuildContext context) {
     return PagewiseListView<dynamic>(
@@ -25,11 +23,10 @@ class MapSalesListState extends StatelessWidget {
             child:
                 CircularProgressIndicator(backgroundColor: Colors.transparent));
       },
-      pageLoadController: getIt<SalesProvider>().pagewiseSalesController,
+      pageLoadController:pagewiseSalesController,
       padding: const EdgeInsets.all(6.0),
       itemBuilder: (BuildContext context, dynamic entry, int index) {
         if (index == 0) {
-         
           return Padding(
             padding: const EdgeInsets.only(top: 75),
             child: FadeIn(child: MapSalesCard(sale: entry as SaleData)),

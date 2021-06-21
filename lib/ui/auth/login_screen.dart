@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:joker/base_widget.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/auth.dart';
-import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/ui/view_models/auth_view_models/login_model.dart';
 import 'package:joker/util/functions.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/text_form_input.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
 import '../widgets/buttonTouse.dart';
 import 'package:joker/ui/widgets/country_code_picker.dart';
@@ -22,7 +22,6 @@ class LoginScreen extends StatefulWidget {
 
 class _MyLoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
-  bool _isButtonEnabled = true;
   bool _obscureText = true;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -34,16 +33,11 @@ class _MyLoginScreenState extends State<LoginScreen>
     super.initState();
   }
 
-  Widget customcard(BuildContext context,
-      {MainProvider mainProvider, Auth auht, bool isRTL}) {
+  Widget customcard(BuildContext context, {LoginModel auht, bool isRTL}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
       child: Form(
         key: _formKey,
-        // onWillPop: () {
-        //   return null;
-        //   //onWillPop(context);
-        // },
         child: Column(
           children: <Widget>[
             TextFormInput(
@@ -103,7 +97,6 @@ class _MyLoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    final MainProvider mainProvider = Provider.of<MainProvider>(context);
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
     return Scaffold(
@@ -120,94 +113,86 @@ class _MyLoginScreenState extends State<LoginScreen>
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(trans(context, 'back_to_map')),
+                Icon(!isRTL?Icons.keyboard_tab_outlined:Icons.keyboard_return, color: colors.orange),
                 const SizedBox(width: 16),
-                Icon(Icons.keyboard_return, color: colors.orange)
+                Text(trans(context, 'back_to_map')),
               ],
             ),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16),
-          child: SvgPicture.asset("assets/images/joker_indirim.svg",
-              width: 120.0, height: 120.0),
-        ),
-        Consumer<Auth>(
-          builder: (BuildContext context, Auth auth, Widget child) {
-            return Column(
-              children: <Widget>[
-                customcard(context,
-                    mainProvider: mainProvider, isRTL: isRTL, auht: auth),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  alignment:
-                      isRTL ? Alignment.centerLeft : Alignment.centerRight,
-                  child: ButtonToUse(
-                    trans(context, 'forget_password'),
-                    fontWait: FontWeight.w500,
-                    fontColors: colors.black,
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/forget_pass');
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) => colors.orange),
-                          shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
-                              (Set<MaterialState> states) =>
-                                  RoundedRectangleBorder(
+            padding: const EdgeInsets.all(16),
+            child: SvgPicture.asset("assets/images/joker_indirim.svg",
+                width: 120.0, height: 120.0)),
+        BaseWidget<LoginModel>(
+            model: getIt<LoginModel>(),
+            builder: (BuildContext context, LoginModel modle, Widget child) =>
+                Column(
+                  children: <Widget>[
+                    customcard(context, isRTL: isRTL, auht: modle),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      alignment:
+                          isRTL ? Alignment.centerLeft : Alignment.centerRight,
+                      child: ButtonToUse(
+                        trans(context, 'forget_password'),
+                        fontWait: FontWeight.w500,
+                        fontColors: colors.black,
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/forget_pass');
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                      (Set<MaterialState> states) =>
+                                          colors.orange),
+                              shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+                                  (Set<MaterialState> states) => RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
                                       side: BorderSide(color: colors.orange))),
-                          textStyle:
-                              MaterialStateProperty.resolveWith<TextStyle>(
-                                  (Set<MaterialState> states) =>
-                                      TextStyle(color: colors.white))),
-                      onPressed: () async {
-                        if (_isButtonEnabled) {
-                          if (_formKey.currentState.validate()) {
-                            mainProvider.togelfLogin(true);
-                            setState(() {
-                              _isButtonEnabled = false;
-                            });
-                            if (await auth.login(_usernameController.text,
-                                _passwordController.text, context)) {
-                            } else {
-                              _formKey.currentState.validate();
-                            }
-                            auth.loginValidationMap
-                                .updateAll((String key, String value) {
-                              return null;
-                            });
-                            setState(() {
-                              _isButtonEnabled = true;
-                            });
-                            mainProvider.togelfLogin(false);
-                          }
-                        }
-                      },
-                      child: mainProvider
-                          .changechildLogin(trans(context, 'login'))),
-                ),
-                const SizedBox(height: 40),
-                Text(trans(context, 'dont_have_account'),
-                    style: styles.mystyle),
-                ButtonToUse(trans(context, 'create_account'),
-                    fontWait: FontWeight.bold,
-                    fontColors: Colors.black,
-                    width: MediaQuery.of(context).size.width, onPressed: () {
-                  Navigator.pushNamed(context, '/Registration');
-                }),
-              ],
-            );
-          },
-        ),
+                              textStyle:
+                                  MaterialStateProperty.resolveWith<TextStyle>(
+                                      (Set<MaterialState> states) =>
+                                          TextStyle(color: colors.white))),
+                          onPressed: modle.state == ViewState.Busy
+                              ? null
+                              : () async {
+                                  if (_formKey.currentState.validate()) {
+                                    if (await modle.login(
+                                        _usernameController.text,
+                                        _passwordController.text,
+                                        context)) {
+                                    } else {
+                                      _formKey.currentState.validate();
+                                    }
+                                    modle.loginValidationMap
+                                        .updateAll((String key, String value) {
+                                      return null;
+                                    });
+                                  }
+                                },
+                          child: modle.changechildLogin(trans(context, 'login'))),
+                    ),
+                    const SizedBox(height: 40),
+                    Text(trans(context, 'dont_have_account'),
+                        style: styles.mystyle),
+                    ButtonToUse(trans(context, 'create_account'),
+                        fontWait: FontWeight.bold,
+                        fontColors: Colors.black,
+                        width: MediaQuery.of(context).size.width,
+                        onPressed: () {
+                      Navigator.pushNamed(context, '/Registration');
+                    }),
+                  ],
+                )),
+
         // Expanded(
         //   child: Container()
         // ),

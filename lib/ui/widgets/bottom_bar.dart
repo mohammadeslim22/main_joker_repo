@@ -4,114 +4,121 @@ import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/home_modle.dart';
+import 'package:joker/util/service_locator.dart';
 import 'package:provider/provider.dart';
 
 class BottomContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
-
-    return Container(
-      color: Colors.black,
-      height: 60,
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) => colors.black),
-                textStyle: MaterialStateProperty.resolveWith<TextStyle>(
-                    (Set<MaterialState> states) =>
-                        TextStyle(color: colors.white))),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+    return ChangeNotifierProvider<HomeModle>.value(
+        value: getIt<HomeModle>(),
+        child: Consumer<HomeModle>(
+            builder: (BuildContext context, HomeModle bolc, Widget child) {
+          return Container(
+            color: Colors.black,
+            height: 60,
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                const SizedBox(
-                  height: 2,
-                ),
-                Container(
-                  color: colors.trans,
-                  child: SvgPicture.asset(
-                    'assets/images/sales.svg',
-                    color: bolc.bottomNavIndex == 0
-                        ? colors.orange
-                        : colors.orange.withOpacity(0.6),
-                    height: bolc.bottomNavIndex == 1 ? 20 : 25,
-                    width: bolc.bottomNavIndex == 1 ? 25 : 35,
+                ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) => colors.black),
+                      textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                          (Set<MaterialState> states) =>
+                              TextStyle(color: colors.white))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      Container(
+                        color: colors.trans,
+                        child: SvgPicture.asset(
+                          'assets/images/sales.svg',
+                          color: bolc.bottomNavIndex == 0
+                              ? colors.orange
+                              : colors.orange.withOpacity(0.6),
+                          height: bolc.bottomNavIndex == 1 ? 20 : 25,
+                          width: bolc.bottomNavIndex == 1 ? 25 : 35,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${trans(context, 'sales')}',
+                        style: styles.mylight,
+                      ),
+                      const SizedBox(height: 5),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        height: 2,
+                        width: MediaQuery.of(context).size.width * .4,
+                        color: bolc.bottomNavIndex == 0
+                            ? colors.orange
+                            : colors.trans,
+                      )
+                    ],
                   ),
+                  onPressed: () {
+                    if (bolc.bottomNavIndex == 0) {
+                    } else {
+                      bolc.changebottomNavIndex(0);
+                    }
+                  },
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  '${trans(context, 'sales')}',
-                  style: styles.mylight,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: VerticalDivider(color: colors.orange, width: 1),
                 ),
-                const SizedBox(height: 5),
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  height: 2,
-                  width: MediaQuery.of(context).size.width * .4,
-                  color:
-                      bolc.bottomNavIndex == 0 ? colors.orange : colors.trans,
-                )
+                ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) => colors.black),
+                      textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                          (Set<MaterialState> states) =>
+                              TextStyle(color: colors.white))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      const SizedBox(height: 5),
+                      Container(
+                        color: colors.trans,
+                        child: SvgPicture.asset(
+                          'assets/images/merchants.svg',
+                          color: bolc.bottomNavIndex == 1
+                              ? colors.orange
+                              : colors.orange.withOpacity(0.6),
+                          height: bolc.bottomNavIndex == 0 ? 20 : 25,
+                          width: bolc.bottomNavIndex == 0 ? 25 : 35,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text('${trans(context, 'merchants')}',
+                          style: styles.mylight),
+                      const SizedBox(height: 5),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        height: 2,
+                        width: MediaQuery.of(context).size.width * .4,
+                        color: bolc.bottomNavIndex == 1
+                            ? colors.orange
+                            : colors.trans,
+                      )
+                    ],
+                  ),
+                  onPressed: () {
+                    if (bolc.bottomNavIndex == 1) {
+                    } else {
+                      bolc.changebottomNavIndex(1);
+                    }
+                  },
+                ),
               ],
             ),
-            onPressed: () {
-              if (bolc.bottomNavIndex == 0) {
-              } else {
-                bolc.changebottomNavIndex(0);
-              }
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: VerticalDivider(color: colors.orange, width: 1),
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) => colors.black),
-                textStyle: MaterialStateProperty.resolveWith<TextStyle>(
-                    (Set<MaterialState> states) =>
-                        TextStyle(color: colors.white))),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                const SizedBox(height: 5),
-                Container(
-                  color: colors.trans,
-                  child: SvgPicture.asset(
-                    'assets/images/merchants.svg',
-                    color: bolc.bottomNavIndex == 1
-                        ? colors.orange
-                        : colors.orange.withOpacity(0.6),
-                    height: bolc.bottomNavIndex == 0 ? 20 : 25,
-                    width: bolc.bottomNavIndex == 0 ? 25 : 35,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text('${trans(context, 'merchants')}', style: styles.mylight),
-                const SizedBox(height: 5),
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  height: 2,
-                  width: MediaQuery.of(context).size.width * .4,
-                  color:
-                      bolc.bottomNavIndex == 1 ? colors.orange : colors.trans,
-                )
-              ],
-            ),
-            onPressed: () {
-              if (bolc.bottomNavIndex == 1) {
-              } else {
-                bolc.changebottomNavIndex(1);
-              }
-            },
-          ),
-        ],
-      ),
-    );
+          );
+        }));
   }
 }

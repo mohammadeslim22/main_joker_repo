@@ -4,13 +4,14 @@ import 'package:joker/localization/trans.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/models/locations.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
+import 'package:joker/providers/auth.dart';
+import 'package:joker/providers/map_provider.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:joker/util/data.dart';
-import 'package:joker/providers/location_provider.dart';
+import 'package:joker/util/dio.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/providers/salesProvider.dart';
-import 'package:joker/constants/config.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 
 class AddressList extends StatefulWidget {
@@ -35,32 +36,39 @@ class AddressListState extends State<AddressList> {
       onTap: () {},
     ),
   ];
+  PagewiseLoadController<dynamic> pagewiseLocationController;
+
+  Future<List<LocationsData>> getAddressData(int page) async {
+    final dynamic response =
+        await dio.get<dynamic>("locations", queryParameters: <String, dynamic>{
+      'page': page + 1,
+    });
+    locations = Locations.fromJson(response.data);
+    return locations.data;
+  }
+
+  void saveLocation(String address, double lat, double long) {
+    dio.post<dynamic>("locations", data: <String, dynamic>{
+      'address': address ?? "Unknown",
+      'latitude': lat,
+      'longitude': long
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    data.getData("address").then((String value) {
-      setState(() {
-        currentAddress = value;
-      });
-    });
-    data.getData("lat").then((String value) {
-      setState(() {
-        lat = value;
-      });
-    });
-    data.getData("long").then((String value) {
-      setState(() {
-        long = value;
-      });
-    });
-    getIt<LocationProvider>().pagewiseLocationController =
-        PagewiseLoadController<dynamic>(
-            pageSize: 15,
-            pageFuture: (int pageIndex) async {
-              return getIt<LocationProvider>().getAddressData(
-                pageIndex,
-              );
-            });
+    currentAddress = getIt<Auth>().address;
+
+    lat = getIt<HOMEMAProvider>().lat.toString();
+
+    long = getIt<HOMEMAProvider>().long.toString();
+
+    pagewiseLocationController = PagewiseLoadController<dynamic>(
+        pageSize: 15,
+        pageFuture: (int pageIndex) async {
+          return getAddressData(pageIndex);
+        });
   }
 
   @override
@@ -150,20 +158,29 @@ class AddressListState extends State<AddressList> {
                 },
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 itemBuilder: (BuildContext context, dynamic entry, int index) {
-                  return FadeIn(child: showItem(entry as LocationsData));
+                  return FadeIn(
+                      child: AddressItem(
+                          actions: actions,
+                          locationData: entry as LocationsData));
                 },
                 noItemsFoundBuilder: (BuildContext context) {
                   return Text(trans(context, "nothing_to_show"));
                 },
-                pageLoadController:
-                    getIt<LocationProvider>().pagewiseLocationController,
+                pageLoadController: pagewiseLocationController,
               ),
             ),
           ]),
         ));
   }
+}
 
-  Widget showItem(LocationsData locationData) {
+class AddressItem extends StatelessWidget {
+  const AddressItem({Key key, this.actions, this.locationData})
+      : super(key: key);
+  final List<Widget> actions;
+  final LocationsData locationData;
+  @override
+  Widget build(BuildContext context) {
     return Slidable(
       actionPane: const SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
@@ -173,14 +190,9 @@ class AddressListState extends State<AddressList> {
         duration: const Duration(milliseconds: 1000),
         child: Card(
           child: InkWell(
-            onTap: () {
-              setState(() {
-                currentId = locationData.id;
-              });
-            },
+            onTap: () {},
             child: ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-              selected: locationData.id == currentId,
               title: Text(locationData.address, style: styles.underHeadblack),
               subtitle: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -192,17 +204,13 @@ class AddressListState extends State<AddressList> {
                 ],
               ),
               onTap: () {
-                setState(() {
-                  config.lat = locationData.latitude;
-                  config.long = locationData.longitude;
-                  currentId = locationData.id;
-                });
                 if (getIt<MerchantProvider>().pagewiseBranchesController !=
                     null) {
                   getIt<MerchantProvider>().pagewiseBranchesController.reset();
                 }
 
-                if (getIt<SalesProvider>().pagewiseHomeSalesController != null) {
+                if (getIt<SalesProvider>().pagewiseHomeSalesController !=
+                    null) {
                   getIt<SalesProvider>().pagewiseHomeSalesController.reset();
                 }
 

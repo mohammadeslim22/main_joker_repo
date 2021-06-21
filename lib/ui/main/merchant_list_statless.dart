@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:joker/base_widget.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/ui/widgets/fadein.dart';
 import 'package:joker/util/service_locator.dart';
@@ -20,7 +22,20 @@ class _ShopListStaelessState extends State<ShopListStaeless> {
 
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
+    return
+        // BaseWidget<MerchantProvider>(
+        //     onModelReady: (MerchantProvider modle) {
+        //       modle.pagewiseBranchesController = PagewiseLoadController<dynamic>(
+        //           pageSize: 5,
+        //           pageFuture: (int pageIndex) async {
+        //             return getIt<Auth>().isAuthintecated
+        //                 ? modle.getBranchesDataAuthintecated(pageIndex)
+        //                 : modle.getBranchesData(pageIndex);
+        //           });
+        //     },
+        //     model: getIt<MerchantProvider>(),
+        //     builder: (BuildContext context, MerchantProvider modle, Widget child) =>
+        SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
       header: const WaterDropMaterialHeader(color: Colors.white, offset: 00),
@@ -28,7 +43,7 @@ class _ShopListStaelessState extends State<ShopListStaeless> {
         builder: (BuildContext context, LoadStatus mode) {
           Widget body;
           if (mode == LoadStatus.idle) {
-            body = const Text("pull up load");
+            body = Text(trans(context, "pull_up_load"));
           } else if (mode == LoadStatus.loading) {
             body = const CupertinoActivityIndicator();
           } else if (mode == LoadStatus.failed) {
@@ -54,8 +69,7 @@ class _ShopListStaelessState extends State<ShopListStaeless> {
       child: PagewiseListView<dynamic>(
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        pageLoadController:
-            getIt<MerchantProvider>().pagewiseBranchesController,
+        pageLoadController: getIt<MerchantProvider>().pagewiseBranchesController,
         loadingBuilder: (BuildContext context) {
           return const Center(
               child: CircularProgressIndicator(
@@ -71,5 +85,6 @@ class _ShopListStaelessState extends State<ShopListStaeless> {
         },
       ),
     );
+    //);
   }
 }

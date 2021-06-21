@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:convert';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
-import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:joker/base_widget.dart';
 import 'package:joker/models/search_filter_data.dart';
 import 'package:joker/providers/auth.dart';
-import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/providers/home_modle.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/functions.dart';
-import 'package:provider/provider.dart';
 import '../constants/colors.dart';
 import '../constants/styles.dart';
 import '../localization/trans.dart';
@@ -20,13 +19,12 @@ import '../ui/widgets/my_inner_drawer.dart';
 import 'main/merchant_list_statless.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:joker/constants/config.dart';
-// import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
-// import 'package:joker/providers/globalVars.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'main/sales_list_stateless.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key, this.salesDataFilter, this.filterData})
@@ -72,59 +70,33 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 350),
     );
     _hide.forward();
-    // getIt<SalesProvider>().pagewiseSalesController =
-    // PagewiseLoadController<dynamic>(
-    //     pageSize: config.loggedin ? 15 : 6,
-    //     pageFuture: (int pageIndex) async {
-    //       return config.loggedin
-    //           ? (getIt<GlobalVars>().filterData != null)
-    //               ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
-    //                   pageIndex, getIt<GlobalVars>().filterData)
-    //               : getIt<SalesProvider>()
-    //                   .getSalesDataAuthenticated(pageIndex)
-    //           : (getIt<GlobalVars>().filterData != null)
-    //               ? getIt<SalesProvider>().getSalesDataFilterd(
-    //                   pageIndex, getIt<GlobalVars>().filterData)
-    //               : getIt<SalesProvider>().getSalesData(pageIndex);
-    //     });
-    getIt<SalesProvider>().pagewiseHomeSalesController =
-        PagewiseLoadController<dynamic>(
-            pageSize: getIt<Auth>().isAuthintecated ? 15 : 6,
-            pageFuture: (int pageIndex) async {
-              return getIt<Auth>().isAuthintecated
-                  ? salesDataFilter
-                      ? getIt<SalesProvider>().getSalesDataFilterdAuthenticated(
-                          pageIndex, widget.filterData)
-                      : getIt<SalesProvider>()
-                          .getSalesDataAuthenticatedAllSpec(pageIndex)
-                  : salesDataFilter
-                      ? getIt<SalesProvider>()
-                          .getSalesDataFilterd(pageIndex, widget.filterData)
-                      : getIt<SalesProvider>().getSalesDataAllSpec(pageIndex);
-            });
-    // getIt<MerchantProvider>().pagewiseBranchesController =
-    //     PagewiseLoadController<dynamic>(
-    //         pageSize: 5,
-    //         pageFuture: (int pageIndex) async {
-    //           return config.loggedin
-    //               ? getIt<MerchantProvider>()
-    //                   .getBranchesDataAuthintecated(pageIndex)
-    //               : getIt<MerchantProvider>().getBranchesData(pageIndex);
-    //         });
-    getIt<MerchantProvider>().pagewiseBranchesController =
-        PagewiseLoadController<dynamic>(
-            pageSize: 5,
-            pageFuture: (int pageIndex) async {
-              return getIt<Auth>().isAuthintecated
-                  ? getIt<MerchantProvider>()
-                      .getBranchesDataAuthintecated(pageIndex)
-                  : getIt<MerchantProvider>().getBranchesData(pageIndex);
-            });
+    final SalesProvider sModle = getIt<SalesProvider>();
+    final MerchantProvider mModle = getIt<MerchantProvider>();
+
+    mModle.pagewiseBranchesController = PagewiseLoadController<dynamic>(
+        pageSize: 5,
+        pageFuture: (int pageIndex) async {
+          return getIt<Auth>().isAuthintecated
+              ? mModle.getBranchesDataAuthintecated(pageIndex)
+              : mModle.getBranchesData(pageIndex);
+        });
+
+    sModle.pagewiseHomeSalesController = PagewiseLoadController<dynamic>(
+        pageSize: getIt<Auth>().isAuthintecated ? 15 : 6,
+        pageFuture: (int pageIndex) async {
+          return getIt<Auth>().isAuthintecated
+              ? salesDataFilter
+                  ? sModle.getSalesDataFilterdAuthenticated(
+                      pageIndex, widget.filterData)
+                  : sModle.getSalesDataAuthenticatedAllSpec(pageIndex)
+              : salesDataFilter
+                  ? sModle.getSalesDataFilterd(pageIndex, widget.filterData)
+                  : sModle.getSalesDataAllSpec(pageIndex);
+        });
   }
 
   @override
   Widget build(BuildContext context) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
     return MyInnerDrawer(
       drawerKey: key,
       scaffold: Scaffold(
@@ -163,7 +135,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             children: <Widget>[
                               Flexible(
                                 child: Text(
-                                  bolc.bottomNavIndex == 0
+                                  getIt<HomeModle>().bottomNavIndex == 0
                                       ? '${trans(context, 'sales')}'
                                       : '${trans(context, 'merchants')}',
                                   style: styles.saleTitle,
@@ -209,17 +181,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                   automaticallyImplyLeading: true,
                   actions: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.map, color: colors.orange),
-                      onPressed: () {
-                        if (_errorController != null) {
-                          Navigator.pop(context);
-                          goToMap(context);
-                        } else {
-                          goToMap(context);
-                        }
-                      },
-                    ),
+                    // IconButton(
+                    //   icon: Icon(Icons.map, color: colors.orange),
+                    //   onPressed: () {
+                    //     if (_errorController != null) {
+                    //       Navigator.pop(context);
+                    //       goToMap(context);
+                    //     } else {
+                    //       goToMap(context);
+                    //     }
+                    //   },
+                    // ),
                     IconButton(
                       icon: Icon(Icons.clear, color: colors.orange),
                       onPressed: () {
@@ -253,17 +225,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             });
                       },
                     ),
-                    // Badge(
-                    //   position: BadgePosition.topRight(top: 16, right: 10),
-                    //   badgeColor: colors.yellow,
-                    //   child: IconButton(
-                    //     icon: Icon(Icons.notifications_none,
-                    //         color: colors.orange),
-                    //     onPressed: () {
-                    //       Navigator.pushNamed(context, "/Notifications");
-                    //     },
-                    //   ),
-                    // ),
+
                     IconButton(
                       icon: Icon(Icons.camera, color: colors.orange),
                       onPressed: () async {
@@ -301,13 +263,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               ];
             },
             body: NotificationListener<ScrollNotification>(
-              onNotification: _handleScrollNotification,
-              child: Container(
-                  color: colors.grey,
-                  child: (bolc.bottomNavIndex == 0)
-                      ? DiscountsListStateless()
-                      : ShopListStaeless()),
-            )),
+                onNotification: _handleScrollNotification,
+                child: BaseWidget<HomeModle>(
+                  model: getIt<HomeModle>(),
+                  builder:
+                      (BuildContext context, HomeModle modle, Widget child) =>
+                          Container(
+                              color: colors.grey,
+                              child: (modle.bottomNavIndex == 0)
+                                  ? DiscountsListStateless(
+                                      filterData: widget.filterData,
+                                      salesDataFilter: salesDataFilter)
+                                  : ShopListStaeless()),
+                ))),
         bottomNavigationBar: SizeTransition(
           sizeFactor: _hide,
           child: BottomContent(),
@@ -353,19 +321,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         title: Text("${trans(context, 'use_current_location')}"),
         trailing: const Icon(Icons.my_location, color: Colors.black),
         onTap: () async {
-          final bool t = await updateLocation;
+          final Map<String, dynamic> location = await updateLocation;
+
+          final bool t = location["res"] as bool;
           if (t) {
             Navigator.pop(context);
           } else {
-            // should not be used
-            // TODO(iSLEEM): CHECK IF ITS WORKING WITHOUT SETSTATE
             final List<String> loglat = await getLocation();
             if (loglat.isEmpty) {
             } else {
-              setState(() {
-                config.lat = double.parse(loglat.elementAt(0));
-                config.long = double.parse(loglat.elementAt(1));
-              });
+              getIt<HOMEMAProvider>().setLatLomg(
+                  double.parse(loglat.elementAt(0)),
+                  double.parse(loglat.elementAt(1)));
+
               Navigator.pop(context);
               if (getIt<MerchantProvider>().pagewiseBranchesController !=
                   null) {

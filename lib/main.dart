@@ -6,7 +6,6 @@ import 'package:joker/splash_screen.dart';
 import 'constants/config.dart';
 import 'services/navigationService.dart';
 import 'util/dio.dart';
-import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:provider/provider.dart';
@@ -14,15 +13,13 @@ import 'constants/route.dart';
 import 'constants/themes.dart';
 import 'providers/language.dart';
 import 'localization/localization_delegate.dart';
-import 'providers/auth.dart';
 import 'package:joker/util/data.dart';
 import 'util/service_locator.dart';
-// import 'package:joker/providers/globalVars.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 Future<void> main() async {
-  // ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>
-  //     errorScreen(flutterErrorDetails.exception);
+  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>
+      errorScreen(flutterErrorDetails.exception);
 
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
@@ -36,7 +33,7 @@ Future<void> main() async {
     } else {
       config.loggedin = true;
     }
-    print("loggedIn: ${config.loggedin}");
+
     dio.options.headers['authorization'] = '$auth';
   });
 
@@ -68,20 +65,15 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
-        ChangeNotifierProvider<Auth>.value(value: getIt<Auth>()),
         ChangeNotifierProvider<Language>(create: (_) => Language()),
-        // ChangeNotifierProvider<MainProvider>(create: (_) => MainProvider()),
-        ChangeNotifierProvider<MainProvider>.value(
-            value: getIt<MainProvider>()),
-        ChangeNotifierProvider<HOMEMAProvider>.value(
-            value: getIt<HOMEMAProvider>()),
+        // ChangeNotifierProvider<HOMEMAProvider>.value(
+        //     value: getIt<HOMEMAProvider>()),
         ChangeNotifierProvider<MerchantProvider>.value(
             value: getIt<MerchantProvider>()),
         ChangeNotifierProvider<SalesProvider>.value(
             value: getIt<SalesProvider>()),
-        // ChangeNotifierProvider<GlobalVars>.value(value: getIt<GlobalVars>()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -89,12 +81,19 @@ Future<void> main() async {
 GlobalKey<NavigatorState> navigatorState = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
+  const MyApp({
+    Key key,
+  }) : super(key: key);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  _MyAppState();
+
   bool doOnce = true;
+
   @override
   Widget build(BuildContext context) {
     final Language lang = Provider.of<Language>(context);
@@ -117,18 +116,15 @@ class _MyAppState extends State<MyApp> {
       localeResolutionCallback:
           (Locale locale, Iterable<Locale> supportedLocales) {
         if (locale == null) {
-          data.setData("initlang", supportedLocales.first.countryCode);
           return supportedLocales.first;
         }
 
         for (final Locale supportedLocale in supportedLocales) {
           if (supportedLocale.languageCode == locale.languageCode) {
-            data.setData("initlang", supportedLocale.languageCode);
             return supportedLocale;
           }
         }
 
-        data.setData("initlang", supportedLocales.first.countryCode);
         return supportedLocales.first;
       },
       theme: mainThemeData(),

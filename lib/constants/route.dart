@@ -194,12 +194,12 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
-    case "/WhereToGo":
-      page = PageTransition<PageController>(
-        child: const LoadWhereToGo(),
-        type: PageTransitionType.rightToLeftWithFade,
-      );
-      break;
+    // case "/WhereToGo":
+    //   page = PageTransition<PageController>(
+    //     child: const LoadWhereToGo(),
+    //     type: PageTransitionType.rightToLeftWithFade,
+    //   );
+    //   break;
     case "/MapAsHome":
       page = PageTransition<PageController>(
         child: MapAsHome(

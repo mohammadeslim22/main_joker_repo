@@ -51,7 +51,7 @@ class Profile {
   String emailVerifiedAt;
   String countryId;
   String cityId;
-  String address= config.locationController.text;
+  String address;
   String longitude;
   String latitude;
   String phone;

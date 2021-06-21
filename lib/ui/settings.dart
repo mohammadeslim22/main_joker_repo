@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:joker/base_widget.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/auth.dart';
-import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/providers/language.dart';
+import 'package:joker/ui/view_models/settings_modle.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
@@ -38,167 +39,122 @@ class MySettingState extends State<SettingsScreen> {
     super.initState();
   }
 
-  Future<void> setStartingLang(MainProvider bolc) async {
-    await data.getData("lang").then<dynamic>((String value) async {
-      if (value.isEmpty) {
-        await data.getData("initlang").then<dynamic>((String local) {
-          if (local == 'en') {
-            bolc.changelanguageindex(1);
-          } else if (local == 'ar') {
-            bolc.changelanguageindex(0);
-          } else {
-            bolc.changelanguageindex(2);
-          }
-        });
-      } else {
-        if (value == 'en') {
-          bolc.changelanguageindex(1);
-        } else if (value == 'ar') {
-          bolc.changelanguageindex(0);
-        } else {
-          bolc.changelanguageindex(2);
-        }
-      }
-    });
-  }
-
-  Future<void> setNotifcationSound(MainProvider bolc) async {
-    data.getData("notification_sound").then<dynamic>((String value) async {
-      if (value.isEmpty || value == "" || value == null || value == "on") {
-        OneSignal.shared
-            .setInFocusDisplayType(OSNotificationDisplayType.notification);
-        bolc.changenotificationSit(0);
-      } else {
-        if (value == "off") {
-          OneSignal.shared
-              .setInFocusDisplayType(OSNotificationDisplayType.none);
-          bolc.changenotificationSit(1);
-        }
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
-    // final Language lang = Provider.of<Language>(context);
-
-    if (doOnce) {
-      setStartingLang(bolc);
-      setNotifcationSound(bolc);
-      setState(() {
-        doOnce = false;
-      });
-    }
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
           title: Text(trans(context, "settings"), style: styles.mystyle)),
-      body: ListView(
-        shrinkWrap: true,
-        children: <Widget>[
-          SvgPicture.asset('assets/images/settingsvg.svg',
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * .35),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            color: colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(trans(context, "notification_sound"),
-                    style: styles.mystyle),
-                Container(
-                  height: 46,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: ToggleButtons(
-                    color: Colors.grey,
-                    fillColor: Colors.orange[100],
-                    selectedColor: colors.orange,
-                    children: const <Widget>[
-                      Icon(Icons.notifications_active),
-                      Icon(Icons.notifications_paused),
-                    ],
-                    onPressed: (int index) async {
-                      dio.post<dynamic>("settings", data: <String, dynamic>{
-                        'notify_sound': index == 0 ? "on" : "off"
-                      });
-                      if (index == 0) {
-                        bolc.changenotificationSit(0);
-                        await data.setData("notification_sound", "on");
-                        OneSignal.shared.setInFocusDisplayType(
-                            OSNotificationDisplayType.notification);
-                      } else {
-                        bolc.changenotificationSit(1);
-                        await data.setData("notification_sound", "off");
-                        OneSignal.shared.setInFocusDisplayType(
-                            OSNotificationDisplayType.none);
-                      }
-                    },
-                    isSelected: bolc.notificationSit,
+      body: BaseWidget<SettingsModle>(
+          onModelReady: (SettingsModle modle) async {
+            modle.getSettingsReady();
+          },
+          model: getIt<SettingsModle>(),
+          builder: (BuildContext context, SettingsModle modle, Widget child) =>
+              ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  SvgPicture.asset('assets/images/settingsvg.svg',
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * .35),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    color: colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(trans(context, "notification_sound"),
+                            style: styles.mystyle),
+                        Container(
+                          height: 46,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: ToggleButtons(
+                            color: Colors.grey,
+                            fillColor: Colors.orange[100],
+                            selectedColor: colors.orange,
+                            children: const <Widget>[
+                              Icon(Icons.notifications_active),
+                              Icon(Icons.notifications_paused),
+                            ],
+                            onPressed: (int index) async {
+                              modle.changenotificationSit(index);
+                              dio.post<dynamic>("settings",
+                                  data: <String, dynamic>{
+                                    'notify_sound': index == 0 ? "on" : "off"
+                                  });
+
+                              if (index == 0) {
+                                await data.setData("notification_sound", "on");
+                                OneSignal.shared.setInFocusDisplayType(
+                                    OSNotificationDisplayType.notification);
+                              } else {
+                                await data.setData("notification_sound", "off");
+                                OneSignal.shared.setInFocusDisplayType(
+                                    OSNotificationDisplayType.none);
+                              }
+                            },
+                            isSelected: modle.notificationSit,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            color: colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  trans(context, "recieving_offers_notifies"),
-                  style: styles.mystyle,
-                ),
-                Switch(
-                  activeColor: colors.orange,
-                  onChanged: (bool value) {
-                    dio.post<dynamic>("settings", data: <String, dynamic>{
-                      'recieve_notify': value ? "on" : "off"
-                    });
-                  },
-                  value: true,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            color: colors.white,
-            child: Row(
-              children: <Widget>[
-                Text(trans(context, "language"), style: styles.mystyle),
-                Flexible(child: Container(child: languagBar(context)))
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Visibility(
-            visible: getIt<Auth>().isAuthintecated,
-            child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                child: TextButton(
-                  
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/ChangePassword");
-                    },
-                    child: Text(trans(context, "change_password"),
-                  style: TextStyle(color: colors.black)))),
-          )
-        ],
-      ),
-      bottomNavigationBar: SettingBottom(),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    color: colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(trans(context, "recieving_offers_notifies"),
+                            style: styles.mystyle),
+                        Switch(
+                          activeColor: colors.orange,
+                          onChanged: (bool value) {
+                            modle.toggleNotificationSound(value);
+                          },
+                          value: modle.notificationSound,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    color: colors.white,
+                    child: Row(
+                      children: <Widget>[
+                        Text(trans(context, "language"), style: styles.mystyle),
+                        Flexible(
+                            child: Container(child: languagBar(context, modle)))
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Visibility(
+                    visible: getIt<Auth>().isAuthintecated,
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 12),
+                        child: TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/ChangePassword");
+                            },
+                            child: Text(trans(context, "change_password"),
+                                style: TextStyle(color: colors.black)))),
+                  )
+                ],
+              )),
+      bottomNavigationBar: Visibility(
+          visible: getIt<Auth>().isAuthintecated, child: SettingBottom()),
     );
   }
 }
 
-Widget fontBarChoice(BuildContext context, String choice, int index,
-    List<bool> list, String category, Function func) {
-  final MainProvider bolc = Provider.of<MainProvider>(context);
+Widget fontBarChoice(BuildContext context, String choice, int index, bool list,
+    String category, Function func, SettingsModle modle) {
   return Flexible(
       fit: FlexFit.tight,
       child: TextButton(
@@ -207,21 +163,19 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
             onSurface: Colors.grey,
             padding: const EdgeInsets.all(0),
           ),
-          onPressed: () {
-            if (category == "font")
-              bolc.changefontindex(index);
-            else {
-              if (choice == "arabic") {
-                data.setData("lang", "ar");
-              } else if (choice == 'english') {
-                data.setData("lang", "en");
-              } else {
-                data.setData("lang", "tr");
-              }
-
-              bolc.changelanguageindex(index);
-              func();
+          onPressed: () async {
+            print("choice $choice");
+            if (choice == "arabic") {
+              await data.setData("ilang", "ar");
+              print("await data.getData('lang') ${await data.getData("ilang")}");
+            } else if (choice == 'english') {
+              await data.setData("ilang", "en");
+            } else {
+              await data.setData("ilang", "tr");
             }
+
+            modle.changelanguageindex(index);
+            func();
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -233,7 +187,7 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
               ),
               const SizedBox(height: 3),
               AnimatedOpacity(
-                  opacity: list[index] ? 1.0 : 0.0,
+                  opacity: list ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 800),
                   child: Container(
                     decoration: BoxDecoration(
@@ -249,66 +203,37 @@ Widget fontBarChoice(BuildContext context, String choice, int index,
           )));
 }
 
-Widget languagBar(BuildContext context) {
-  final MainProvider bolc = Provider.of<MainProvider>(context);
+Widget languagBar(BuildContext context, SettingsModle modle) {
   final Language lang = Provider.of<Language>(context);
   return Container(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        fontBarChoice(context, "arabic", 0, bolc.language, "language", () {
+        fontBarChoice(
+            context, "arabic", 0, modle.language.indexOf(true) == 0, "language",
+            () {
           lang.setLanguage(const Locale('ar'));
-          changeLanguage("ar");
           config.userLnag = const Locale('ar');
-        }),
+        }, modle),
         verticalDiv(),
-        fontBarChoice(context, "english", 1, bolc.language, "language", () {
+        fontBarChoice(context, "english", 1, modle.language.indexOf(true) == 1,
+            "language", () {
           lang.setLanguage(const Locale('en'));
-          changeLanguage("en");
           config.userLnag = const Locale('en');
-        }),
+        }, modle),
         verticalDiv(),
-        fontBarChoice(context, "turkish", 2, bolc.language, "language", () {
+        fontBarChoice(context, "turkish", 2, modle.language.indexOf(true) == 2,
+            "language", () {
           lang.setLanguage(const Locale('tr'));
-          changeLanguage("tr");
           config.userLnag = const Locale('tr');
-        }),
+        }, modle),
       ],
     ),
   );
 }
 
-Function changeLanguage(String value) {
-  return () async {
-    if (value.isEmpty) {
-    } else {
-      const String arabicBaseUrl =
-          "https://joker.altariq.ps/api/ar/v1/customer/";
-      const String englishBaseUrl =
-          "https://joker.altariq.ps/api/en/v1/customer/";
-      const String turkishBaseUrl =
-          "https://joker.altariq.ps/api/tr/v1/customer/";
-      String baseUrl = await data.getData("baseUrl");
-      if (baseUrl == "" || baseUrl.isEmpty || baseUrl == null) {
-        baseUrl = config.baseUrl;
-      }
-      if (value == "en") {
-        dio.options.baseUrl = englishBaseUrl;
-      } else if (value == "ar") {
-        dio.options.baseUrl = arabicBaseUrl;
-      } else {
-        dio.options.baseUrl = turkishBaseUrl;
-      }
-      await data.setData("baseUrl", dio.options.baseUrl);
-    }
-  };
-}
-
 Widget verticalDiv() {
   return Container(
-      child: const VerticalDivider(
-        color: Colors.grey,
-        thickness: 1,
-      ),
+      child: const VerticalDivider(color: Colors.grey, thickness: 1),
       height: 18);
 }

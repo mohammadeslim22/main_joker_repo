@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:joker/base_widget.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/providers/auth.dart';
-import 'package:joker/providers/mainprovider.dart';
+import 'package:joker/ui/view_models/auth_view_models/change_password_modle.dart';
 import 'package:joker/util/service_locator.dart';
 import '../widgets/text_form_input.dart';
-import 'package:provider/provider.dart';
-
 class ChangePassword extends StatefulWidget {
   @override
   _MyChangePasswordState createState() => _MyChangePasswordState();
@@ -43,7 +41,7 @@ class _MyChangePasswordState extends State<ChangePassword>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
-  Widget customcard(BuildContext context) {
+  Widget customcard(BuildContext context, ChangePasswordModle modle) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
       child: Form(
@@ -66,7 +64,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                   focus1.requestFocus();
                 },
                 validator: (String value) {
-                  return getIt<Auth>().changePassValidationMap['old_passwoed'];
+                  return modle.changePassValidationMap['old_passwoed'];
                 }),
             TextFormInput(
                 text: trans(context, 'new_password'),
@@ -96,7 +94,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                   if (value.length < 6) {
                     return "password must be more than 5 letters";
                   }
-                  return getIt<Auth>().changePassValidationMap['new_password'];
+                  return modle.changePassValidationMap['new_password'];
                 }),
             TextFormInput(
                 text: trans(context, 'new_password'),
@@ -124,7 +122,7 @@ class _MyChangePasswordState extends State<ChangePassword>
                   if (value.length < 6) {
                     return "password must be more than 5 letters";
                   }
-                  return getIt<Auth>().changePassValidationMap['newpassword2'];
+                  return modle.changePassValidationMap['newpassword2'];
                 }),
           ],
         ),
@@ -132,72 +130,64 @@ class _MyChangePasswordState extends State<ChangePassword>
     );
   }
 
-  bool _isButtonEnabled;
-  @override
-  void initState() {
-    super.initState();
-    _isButtonEnabled = true;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final MainProvider bolc = Provider.of<MainProvider>(context);
+    return BaseWidget<ChangePasswordModle>(
+        model: getIt<ChangePasswordModle>(),
+        builder: (BuildContext context, ChangePasswordModle modle,
+                Widget child) =>
+            Scaffold(
+                appBar: AppBar(),
+                body: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  },
+                  child: ListView(children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Text(trans(context, 'hello'), style: styles.mystyle2),
+                        const SizedBox(height: 10),
+                        Text(trans(context, 'enter_old_new_password'),
+                            style: styles.mystyle),
+                        customcard(context, modle),
+                        const Divider(),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(color: colors.orange)),
+                                  onPrimary: colors.orange,
+                                  textStyle: TextStyle(color: colors.white)),
+                              onPressed: modle.busy
+                                  ? null
+                                  : () async {
+                                      if (_formKey.currentState.validate()) {
+                                        await modle
+                                            .changePassword(
+                                                oldpasswordController.text,
+                                                newpasswordController.text,
+                                                context)
+                                            .then((bool value) {
+                                          if (!value) {
+                                            _formKey.currentState.validate();
+                                          }
+                                          modle.changePassValidationMap
+                                              .updateAll(
+                                                  (String key, String value) {
+                                            return null;
+                                          });
+                                        });
 
-    return Scaffold(
-        appBar: AppBar(),
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: ListView(children: <Widget>[
-            Column(
-              children: <Widget>[
-                Text(trans(context, 'hello'), style: styles.mystyle2),
-                const SizedBox(height: 10),
-                Text(trans(context, 'enter_old_new_password'),
-                    style: styles.mystyle),
-                customcard(context),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: colors.orange)),
-                          onPrimary: colors.orange,
-                          textStyle: TextStyle(color: colors.white)),
-                      onPressed: () async {
-                        if (_isButtonEnabled) {
-                          if (_formKey.currentState.validate()) {
-                            bolc.togelfChangePass(true);
-                            setState(() {
-                              _isButtonEnabled = false;
-                            });
-                            await getIt<Auth>()
-                                .changePassword(oldpasswordController.text,
-                                    newpasswordController.text, context)
-                                .then((bool value) {
-                              if (!value) {
-                                _formKey.currentState.validate();
-                              }
-                              getIt<Auth>()
-                                  .changePassValidationMap
-                                  .updateAll((String key, String value) {
-                                return null;
-                              });
-                            });
-
-                            bolc.togelfChangePass(false);
-                          }
-                        }
-                      },
-                      child: bolc.returnchildChangePass(
-                          trans(context, 'change_my_password'))),
-                ),
-              ],
-            ),
-          ]),
-        ));
+                                      }
+                                    },
+                              child: modle.returnchildChangePass(
+                                  trans(context, 'change_my_password'))),
+                        ),
+                      ],
+                    ),
+                  ]),
+                )));
   }
 }
