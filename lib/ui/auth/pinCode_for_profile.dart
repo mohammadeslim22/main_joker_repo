@@ -36,9 +36,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
       vsync: this,
       duration: const Duration(seconds: 30),
     );
-    // setState(() {
-    //   config.prifleNoVerfiyVisit = true;
-    // });
+  
   }
 
   bool enabeld = false;
