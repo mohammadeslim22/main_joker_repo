@@ -18,13 +18,15 @@ class SalesProvider with ChangeNotifier {
   Sales sales;
   Sales tempSales;
   Sales merchantSales;
-  PagewiseLoadController<dynamic> pagewiseSalesController;
-    PagewiseLoadController<dynamic> pagewiseHomeSalesController;
-
-  PagewiseLoadController<dynamic> pagewiseFavSalesController;
+  List<SaleData> favSales = <SaleData>[];
+  // PagewiseLoadController<dynamic> pagewiseSalesController;
+  PagewiseLoadController<dynamic> pagewiseHomeSalesController;
+  bool salesDataFilter = false;
+  // PagewiseLoadController<dynamic> pagewiseFavSalesController;
   FilterData filterData;
   void setFilterDate(FilterData data) {
     filterData = data;
+    salesDataFilter = true;
     notifyListeners();
   }
 
@@ -37,12 +39,11 @@ class SalesProvider with ChangeNotifier {
         endingdate: DateTime(2900),
         fromPrice: 0,
         toPrice: 99999);
+    salesDataFilter = false;
     notifyListeners();
   }
-  // Sales favSales ;
-  List<SaleData> favSales = <SaleData>[];
+
   Future<void> getSale(int saleId) async {
-    // if (config.loggedin)
     if (getIt<Auth>().isAuthintecated)
       dio.get<dynamic>("sales/$saleId").then((Response<dynamic> value) {});
   }
@@ -183,7 +184,6 @@ class SalesProvider with ChangeNotifier {
   }
 
   Future<List<SaleData>> getSalesDataAuthenticated(int pageIndex) async {
-    print("page index $pageIndex");
     final Response<dynamic> response =
         await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
@@ -198,17 +198,24 @@ class SalesProvider with ChangeNotifier {
 
   Future<List<SaleData>> getSalesDataFilterd(
       int pageIndex, FilterData filterData) async {
+    print("sales method 3");
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String startDate = formatter.format(filterData.startingdate);
     final String endDate = formatter.format(filterData.endingdate);
     final Response<dynamic> response =
         await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
-      'page': pageIndex + 1,
-      'merchant_name': filterData.merchantNameOrPartOfit,
-      'name': filterData.saleNameOrPartOfit,
+      'merchant_name': filterData.merchantNameOrPartOfit.isEmpty
+          ? ""
+          : filterData.merchantNameOrPartOfit,
+      'name': filterData.saleNameOrPartOfit.isNotEmpty
+          ? filterData.saleNameOrPartOfit
+          : "",
       'from_date': startDate,
       'to_date': endDate,
-      'rate': filterData.rating,
+      'from_price': filterData.fromPrice,
+      'to_price': filterData.toPrice,
+      'specialization': jsonEncode(filterData.specifications),
+      'page': pageIndex + 1,
       'specifications': jsonEncode(filterData.specifications)
     });
     sales = Sales.fromJson(response.data);
@@ -218,6 +225,7 @@ class SalesProvider with ChangeNotifier {
 
   Future<List<SaleData>> getSalesDataFilterdAuthenticated(
       int pageIndex, FilterData filterData) async {
+    print("sales method 1");
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String startDate = formatter.format(filterData.startingdate);
     final String endDate = formatter.format(filterData.endingdate);
@@ -243,6 +251,7 @@ class SalesProvider with ChangeNotifier {
   }
 
   Future<List<SaleData>> getSalesDataAllSpec(int pageIndex) async {
+    print("sales method 4");
     final Response<dynamic> response =
         await dio.get<dynamic>("psales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,
@@ -255,7 +264,7 @@ class SalesProvider with ChangeNotifier {
   }
 
   Future<List<SaleData>> getSalesDataAuthenticatedAllSpec(int pageIndex) async {
-    print("page index $pageIndex");
+    print("sales method 2");
     final Response<dynamic> response =
         await dio.get<dynamic>("sales", queryParameters: <String, dynamic>{
       'page': pageIndex + 1,

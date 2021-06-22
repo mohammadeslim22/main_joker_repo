@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
+import 'package:joker/providers/auth.dart';
 import 'package:joker/util/data.dart';
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:joker/util/service_locator.dart';
 
 import '../base_model.dart';
 
-enum ViewState { Idle, Busy }
-
 class ProfileModle extends BaseModel {
-  ViewState state = ViewState.Idle;
-  static AnimationController _controller;
   bool visibilityObs = false;
   void togelocationloading(bool state) {
     visibilityObs = state;
@@ -61,6 +57,7 @@ class ProfileModle extends BaseModel {
 
   Future<bool> updateProfile(
       String username, String birthDate, String email, String address) async {
+    setBusy(true);
     final Response<dynamic> response =
         await dio.post<dynamic>("update", data: <String, dynamic>{
       "name": username,
@@ -78,28 +75,27 @@ class ProfileModle extends BaseModel {
       });
 
       notifyListeners();
+      setBusy(false);
       return false;
     } else {
       if (response.statusCode == 200) {
-        data.setData("email", email);
-        data.setData("username", username);
-        data.setData("lat", config.lat.toString());
-        data.setData("long", config.long.toString());
-        data.setData("address", address);
+        data.setData("user_data",
+            "$username::${getIt<Auth>().userPicture.toString()}::$email::${getIt<Auth>().mobile}::$birthDate::$address");
+        getIt<Auth>()
+            .setUserData(null, email, username, null, birthDate, address);
         notifyListeners();
+        setBusy(false);
         return true;
       } else {
+        setBusy(false);
         notifyListeners();
         return false;
       }
     }
   }
 
-  final SpinKitDoubleBounce spinkit = SpinKitDoubleBounce(
-      color: colors.white, size: 50.0, controller: _controller);
-
   Widget returnchildforProfile(String login) {
-    if (state == ViewState.Idle) {
+    if (!busy) {
       return Padding(
           padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
           child: Text(login,
@@ -109,7 +105,7 @@ class ProfileModle extends BaseModel {
                 fontSize: 25,
               )));
     } else {
-      return spinkit;
+      return config.spinkit;
     }
   }
 }

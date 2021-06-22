@@ -14,15 +14,8 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../base_model.dart';
 
-enum ViewState { Idle, Busy }
-
 class LoginModel extends BaseModel {
   ViewState state = ViewState.Idle;
-  // static AnimationController _controller;
-  void setState(ViewState viewState) {
-    state = viewState;
-    notifyListeners();
-  }
 
   static List<String> validators = <String>[null, null];
   static List<String> keys = <String>[
@@ -33,7 +26,7 @@ class LoginModel extends BaseModel {
       Map<String, String>.fromIterables(keys, validators);
 
   Future<bool> login(String username, String pass, BuildContext context) async {
-    setState(ViewState.Busy);
+    setBusy(true);
     bool res;
     final OSPermissionSubscriptionState status =
         await OneSignal.shared.getPermissionSubscriptionState();
@@ -114,13 +107,13 @@ class LoginModel extends BaseModel {
         res = false;
       }
     });
-    setState(ViewState.Idle);
+    setBusy(false);
     notifyListeners();
     return res;
   }
 
   Widget changechildLogin(String login) {
-    if (state == ViewState.Idle) {
+    if (!busy) {
       return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Text(login,

@@ -12,10 +12,8 @@ import 'package:joker/constants/colors.dart';
 import '../base_model.dart';
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-enum ViewState { Idle, Busy }
 
 class ForgetPassModle extends BaseModel {
-  ViewState state = ViewState.Idle;
   bool loading = false;
   // bool loadingforgetPass = false;
   bool codeArrived = false;
@@ -27,10 +25,7 @@ class ForgetPassModle extends BaseModel {
   ];
   Map<String, String> forgetPassValidationMap =
       Map<String, String>.fromIterables(forgetPasskeys, forgetPassValidators);
-  void setState(ViewState viewState) {
-    state = viewState;
-    notifyListeners();
-  }
+
 
   // final SpinKitDoubleBounce spinkit = SpinKitDoubleBounce(
   //     color: colors.white, size: 50.0, controller: _controller);
@@ -80,7 +75,7 @@ class ForgetPassModle extends BaseModel {
   Future<bool> resendCode(String mobile) async {
     print(
         "getIt<Auth>().myCountryDialCode + mobile.toString() ${getIt<Auth>().myCountryDialCode + mobile.toString()}");
-    setState(ViewState.Busy);
+    setBusy(true);
     final Response<dynamic> response = await dio.post<dynamic>("resend",
         data: <String, dynamic>{
           "phone": getIt<Auth>().myCountryDialCode + mobile.toString()
@@ -91,14 +86,14 @@ class ForgetPassModle extends BaseModel {
           "phone", getIt<Auth>().myCountryDialCode + mobile.toString());
       codeArrived = true;
       mainButtonkey = 'submet';
-      setState(ViewState.Idle);
+       setBusy(false);
       notifyListeners();
       return true;
     } else {
       response.data['errors'].forEach((String k, dynamic vv) {
         forgetPassValidationMap[k] = vv[0].toString();
       });
-      setState(ViewState.Idle);
+       setBusy(false);
 
       notifyListeners();
       return false;

@@ -55,7 +55,6 @@ class AboutUs extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 28),
       child: ListView(
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(appName, style: styles.mystyle2),
           const SizedBox(height: 10),
@@ -65,16 +64,8 @@ class AboutUs extends StatelessWidget {
             style: styles.mystyle,
           ),
           Center(
-            child: SvgPicture.asset("assets/images/joker_indirim.svg",
-                width: 120.0, height: 120.0),
-          ),
-          // Center(
-          //   child: SvgPicture.asset(
-          //     'assets/images/logo.svg',
-          //     width: 120.0,
-          //     height: 120.0,
-          //   ),
-          // ),
+              child: SvgPicture.asset("assets/images/joker_indirim.svg",
+                  width: 120.0, height: 120.0)),
           const SizedBox(height: 36),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

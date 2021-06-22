@@ -9,7 +9,6 @@ class HomeModle extends BaseModel {
 
   void changebottomNavIndex(int id) {
     _currentIndex = id;
-
     notifyListeners();
   }
 

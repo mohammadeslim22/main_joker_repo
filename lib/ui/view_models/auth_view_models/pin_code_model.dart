@@ -11,11 +11,7 @@ import 'package:joker/constants/styles.dart';
 
 import '../base_model.dart';
 
-enum ViewState { Idle, Busy }
-
 class PinCodeModle extends BaseModel {
-  ViewState state = ViewState.Idle;
-
   Future<bool> getPinCode(String code) async {
     setBusy(true);
     final String phone = await data.getData("phone");
@@ -73,7 +69,7 @@ class PinCodeModle extends BaseModel {
   }
 
   Widget returnchildforPinCode(String login) {
-    if (state == ViewState.Idle) {
+    if (!busy) {
       return Padding(
           padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
           child: Text(login,

@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:joker/base_widget.dart';
-// import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'dart:ui';
 import 'package:flutter/services.dart';
-// import 'package:joker/providers/auth.dart';
-// import 'package:joker/providers/mainprovider.dart';
 import 'package:joker/ui/view_models/auth_view_models/profile_pin_code_model.dart';
 import 'package:joker/ui/widgets/text_form_input.dart';
 import 'package:joker/util/service_locator.dart';
-// import 'package:joker/util/service_locator.dart';
 import '../widgets/buttonTouse.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';

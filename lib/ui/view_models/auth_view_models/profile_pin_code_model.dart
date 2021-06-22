@@ -10,7 +10,6 @@ import '../base_model.dart';
 // enum ViewState { Idle, Busy }
 
 class PinCodeProfileModle extends BaseModel {
-  
   static List<String> pinCodeProfileValidators = <String>[null, null];
   static List<String> pinCodeProfilekeys = <String>[
     'phone',
@@ -70,6 +69,8 @@ class PinCodeProfileModle extends BaseModel {
       notifyListeners();
       return false;
     } else {
+      getIt<Auth>().setUserData(null, null, null,
+          getIt<Auth>().myCountryDialCode + mobile, null, null);
       setBusy(false);
       notifyListeners();
       return true;

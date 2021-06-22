@@ -5,8 +5,6 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:joker/base_widget.dart';
-import 'package:joker/models/search_filter_data.dart';
-import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/home_modle.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/ui/widgets/bottom_bar.dart';
@@ -24,13 +22,10 @@ import 'package:joker/providers/merchantsProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'main/sales_list_stateless.dart';
-import 'package:flutter_pagewise/flutter_pagewise.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key, this.salesDataFilter, this.filterData})
-      : super(key: key);
-  final bool salesDataFilter;
-  final FilterData filterData;
+  const Home({Key key}) : super(key: key);
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -40,7 +35,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   AnimationController _hide;
   GlobalKey<ScaffoldState> _scaffoldkey;
   PersistentBottomSheetController<dynamic> _errorController;
-  bool salesDataFilter;
+
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification.depth == 0) {
       if (notification is UserScrollNotification) {
@@ -63,36 +58,35 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    salesDataFilter = widget.salesDataFilter;
     _scaffoldkey = GlobalKey<ScaffoldState>();
     _hide = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 350),
     );
     _hide.forward();
-    final SalesProvider sModle = getIt<SalesProvider>();
-    final MerchantProvider mModle = getIt<MerchantProvider>();
+    // final SalesProvider sModle = getIt<SalesProvider>();
+    // final MerchantProvider mModle = getIt<MerchantProvider>();
 
-    mModle.pagewiseBranchesController = PagewiseLoadController<dynamic>(
-        pageSize: 5,
-        pageFuture: (int pageIndex) async {
-          return getIt<Auth>().isAuthintecated
-              ? mModle.getBranchesDataAuthintecated(pageIndex)
-              : mModle.getBranchesData(pageIndex);
-        });
+    // mModle.pagewiseBranchesController = PagewiseLoadController<dynamic>(
+    //     pageSize: 5,
+    //     pageFuture: (int pageIndex) async {
+    //       return getIt<Auth>().isAuthintecated
+    //           ? mModle.getBranchesDataAuthintecated(pageIndex)
+    //           : mModle.getBranchesData(pageIndex);
+    //     });
 
-    sModle.pagewiseHomeSalesController = PagewiseLoadController<dynamic>(
-        pageSize: getIt<Auth>().isAuthintecated ? 15 : 6,
-        pageFuture: (int pageIndex) async {
-          return getIt<Auth>().isAuthintecated
-              ? salesDataFilter
-                  ? sModle.getSalesDataFilterdAuthenticated(
-                      pageIndex, widget.filterData)
-                  : sModle.getSalesDataAuthenticatedAllSpec(pageIndex)
-              : salesDataFilter
-                  ? sModle.getSalesDataFilterd(pageIndex, widget.filterData)
-                  : sModle.getSalesDataAllSpec(pageIndex);
-        });
+    // sModle.pagewiseHomeSalesController = PagewiseLoadController<dynamic>(
+    //     pageSize: getIt<Auth>().isAuthintecated ? 15 : 6,
+    //     pageFuture: (int pageIndex) async {
+    //       return getIt<Auth>().isAuthintecated
+    //           ? salesDataFilter
+    //               ? sModle.getSalesDataFilterdAuthenticated(
+    //                   pageIndex, widget.filterData)
+    //               : sModle.getSalesDataAuthenticatedAllSpec(pageIndex)
+    //           : salesDataFilter
+    //               ? sModle.getSalesDataFilterd(pageIndex, widget.filterData)
+    //               : sModle.getSalesDataAllSpec(pageIndex);
+    //     });
   }
 
   @override
@@ -205,9 +199,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           btnCancelOnPress: () {},
                           btnOkOnPress: () {
                             getIt<SalesProvider>().clearilterDate();
-                            setState(() {
-                              salesDataFilter = false;
-                            });
                             getIt<SalesProvider>()
                                 .pagewiseHomeSalesController
                                 .reset();
@@ -271,9 +262,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Container(
                               color: colors.grey,
                               child: (modle.bottomNavIndex == 0)
-                                  ? DiscountsListStateless(
-                                      filterData: widget.filterData,
-                                      salesDataFilter: salesDataFilter)
+                                  ? DiscountsListStateless()
                                   : ShopListStaeless()),
                 ))),
         bottomNavigationBar: SizeTransition(
@@ -324,26 +313,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           final Map<String, dynamic> location = await updateLocation;
 
           final bool t = location["res"] as bool;
+          final List<String> loglat = location["location"] as List<String>;
           if (t) {
+            getIt<HOMEMAProvider>().setLatLomg(
+                double.parse(loglat.elementAt(0)),
+                double.parse(loglat.elementAt(1)));
+
             Navigator.pop(context);
+            getIt<MerchantProvider>().pagewiseBranchesController.reset();
+            getIt<SalesProvider>().pagewiseHomeSalesController.reset();
           } else {
-            final List<String> loglat = await getLocation();
-            if (loglat.isEmpty) {
-            } else {
-              getIt<HOMEMAProvider>().setLatLomg(
-                  double.parse(loglat.elementAt(0)),
-                  double.parse(loglat.elementAt(1)));
-
-              Navigator.pop(context);
-              if (getIt<MerchantProvider>().pagewiseBranchesController !=
-                  null) {
-                getIt<MerchantProvider>().pagewiseBranchesController.reset();
-              }
-
-              if (getIt<SalesProvider>().pagewiseHomeSalesController != null) {
-                getIt<SalesProvider>().pagewiseHomeSalesController.reset();
-              }
-            }
+            Fluttertoast.showToast(
+                msg: trans(context, "unable_to_get_location"));
+            Navigator.pop(context);
           }
         },
       ),

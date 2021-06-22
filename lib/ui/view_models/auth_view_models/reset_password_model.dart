@@ -5,10 +5,7 @@ import '../base_model.dart';
 import 'package:joker/util/dio.dart';
 import 'package:dio/dio.dart';
 
-enum ViewState { Idle, Busy }
-
 class ResetPasswordModle extends BaseModel {
-  ViewState state = ViewState.Idle;
   static List<String> resetPassValidators = <String>[null];
   static List<String> resetPasskeys = <String>[
     'password',

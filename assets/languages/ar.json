@@ -240,7 +240,9 @@
     "pick_branch":"اختارالفرع",
     "new_mobile_no":"رقم الهاتف الجديد",
     "change_mobile_no":"تغيير رقم الهاتف",
-    "current_mobile_no":"رقم الهاتف الحالي"
+    "current_mobile_no":"رقم الهاتف الحالي",
+    "unable_to_get_location":"لا يمكن الوصول للموقع",
+    "are_you_sure":"هل أنت متأكد"
     
     
 }

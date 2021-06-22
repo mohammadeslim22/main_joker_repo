@@ -1,3 +1,7 @@
+import 'package:joker/ui/view_models/fav_merchants_modle.dart';
+import 'package:joker/ui/view_models/fav_sales_modle.dart';
+import 'package:joker/util/service_locator.dart';
+
 import 'base_model.dart';
 
 class FavoriteModle extends BaseModel {
@@ -12,4 +16,7 @@ class FavoriteModle extends BaseModel {
     __visible = !__visible;
     notifyListeners();
   }
+
+  FavoriteSalesModle favSalesModle = getIt<FavoriteSalesModle>();
+  FavoriteMerchantsModle favMerchantssModle = getIt<FavoriteMerchantsModle>();
 }

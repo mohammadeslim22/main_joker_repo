@@ -11,9 +11,9 @@ import 'package:like_button/like_button.dart';
 import 'package:awesome_dialog/awesome_dialog.dart' as awesome_dialog;
 
 class FaveCard extends StatelessWidget {
-  const FaveCard( {Key key, this.sale, this.value}) : super(key: key);
+  const FaveCard({Key key, this.sale, this.resetForunFav}) : super(key: key);
   final SaleData sale;
-  final SalesProvider value;
+  final Function resetForunFav;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class FaveCard extends StatelessWidget {
                       children: <Widget>[
                         Text(sale.name, style: styles.saleNameInMapCard),
                         const SizedBox(height: 12),
-                        TextOverflowRapper(mytext: sale.details ),
+                        TextOverflowRapper(mytext: sale.details),
                       ],
                     ),
                   ),
@@ -65,7 +65,7 @@ class FaveCard extends StatelessWidget {
                   const CircleColor(start: Colors.blue, end: Colors.purple),
               isLiked: sale.isfavorite == 1,
               onTap: (bool loved) async {
-               print("loved $loved");
+                print("loved $loved");
                 awesome_dialog.AwesomeDialog(
                   context: context,
                   headerAnimationLoop: false,
@@ -78,8 +78,9 @@ class FaveCard extends StatelessWidget {
                   btnOkColor: colors.orange,
                   btnOkOnPress: () async {
                     await favFunction("App\\Sale", sale.id);
-                    value.setunFavSale(sale.id);
-                    value.pagewiseFavSalesController.reset();
+                    resetForunFav();
+                    // salesProvider.setunFavSale(sale.id);
+                    // salesProvider.pagewiseFavSalesController.reset();
                   },
                 ).show();
                 return !loved;

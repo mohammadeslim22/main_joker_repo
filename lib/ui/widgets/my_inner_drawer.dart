@@ -70,8 +70,8 @@ class _MyInnerDrawerState extends State<MyInnerDrawer> {
                             TopMenu(isRTL: isRTL, modle: modle),
                             const SizedBox(height: 32),
                             ListTile(
-                              enabled: /*config.loggedin*/ modle
-                                  .isAuthintecated,
+                             
+                                
                               contentPadding: const EdgeInsets.only(left: 0),
                               title: Text("${trans(context, 'back_to_map')}"),
                               leading: IconButton(

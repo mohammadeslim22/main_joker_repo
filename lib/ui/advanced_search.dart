@@ -28,7 +28,8 @@ class AdvancedSearch extends StatefulWidget {
 class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
   Set<int> selectedOptions = <int>{};
   PersistentBottomSheetController<dynamic> _errorController;
-  static DateTime starttoday = DateTime.now().subtract(const Duration(days: 1500));
+  static DateTime starttoday =
+      DateTime.now().subtract(const Duration(days: 1500));
   static DateTime endtoday = DateTime.now().add(const Duration(days: 1500));
   String startDate = "${starttoday.toLocal()}".split(' ')[0];
   String endDate = "${endtoday.toLocal()}".split(' ')[0];
@@ -73,7 +74,7 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
       ),
       onDaySelected: _onDaySelected,
     );
-  
+
     ttt = Container(child: t);
     tt = t;
   }
@@ -94,11 +95,10 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
     }
   }
 
-
   String selectedValue;
   final TextEditingController merchantName = TextEditingController();
   final TextEditingController saleName = TextEditingController();
-    final TextEditingController locationController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
 
   final FocusNode globalFocus = FocusNode();
 
@@ -127,7 +127,10 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                     readOnly: false,
                     obscureText: false,
                     onTab: () {
-                      _errorController.close();
+                      _errorController?.close();
+                    },
+                    onFieldSubmitted: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
                     },
                   ),
                   TextFormInput(
@@ -136,7 +139,10 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                     readOnly: false,
                     obscureText: false,
                     onTab: () {
-                      _errorController.close();
+                      _errorController?.close();
+                    },
+                    onFieldSubmitted: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
                     },
                   )
                 ]),
@@ -167,14 +173,6 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                                     : colors.ggrey,
                               ),
                             ),
-                            // textStyle:
-                            //     MaterialStateProperty.resolveWith<TextStyle>(
-                            //   (Set<MaterialState> states) => TextStyle(
-                            //       color: selectedOptions.contains(item.id)
-                            //           ? colors.orange
-                            //           : colors.black,
-                            //       fontSize: 16),
-                            // )
                           ),
                           onPressed: () {
                             setState(() {
@@ -213,7 +211,6 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                   },
                   obscureText: false,
                 ),
-            
                 Row(
                   children: <Widget>[
                     Text(startingPrive.toString()),
@@ -343,28 +340,6 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                   ),
                 ),
                 const SizedBox(height: 5),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: <Widget>[
-                //     Text(trans(context, "accourding_to_rating"),
-                //         style: styles.mystyle),
-                //     RatingBar(
-                //       onRatingChanged: (double rating) {
-                //         setState(() => _ratingStar = rating);
-              
-                //       },
-                //       filledIcon: Icons.star,
-                //       emptyIcon: Icons.star_border,
-                //       halfFilledIcon: Icons.star_half,
-                //       isHalfAllowed: true,
-                //       filledColor: Colors.amberAccent,
-                //       emptyColor: colors.grey,
-                //       halfFilledColor: Colors.orange[300],
-                //       size: 30,
-                //     ),
-                //   ],
-                // ),
-                // const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -414,25 +389,18 @@ class _PageState extends State<AdvancedSearch> with TickerProviderStateMixin {
                           )),
                       onPressed: () {
                         getIt<SalesProvider>().setFilterDate(FilterData(
-                          merchantNameOrPartOfit: merchantName.text??"",
-                          saleNameOrPartOfit: saleName.text??"",
-                          startingdate: starttoday??DateTime(2020,0,0),
-                          endingdate: endtoday?? DateTime(2900,0,0),
-                          // _ratingStar,
-                          specifications: List<int>.from(selectedOptions)??<int>[1, 2],
-                          fromPrice: startingPrive??0,
-                          toPrice: endingPrive??9999,
+                          merchantNameOrPartOfit: merchantName.text ?? "",
+                          saleNameOrPartOfit: saleName.text ?? "",
+                          startingdate: starttoday ?? DateTime(2020, 0, 0),
+                          endingdate: endtoday ?? DateTime(2900, 0, 0),
+                          specifications:
+                              List<int>.from(selectedOptions) ?? <int>[1, 2],
+                          fromPrice: startingPrive ?? 0,
+                          toPrice: endingPrive ?? 9999,
                         ));
 
-                        // .filterData =;
-                        Navigator.popAndPushNamed(context, "/Home",
-                            arguments: <String, dynamic>{
-                              "salesDataFilter": true,
-                              "filterDate":getIt<SalesProvider>().filterData
-                            });
+                        Navigator.popAndPushNamed(context, "/Home");
                       },
-
-                      // textColor: colors.white,
                       child: Text(trans(context, "search"),
                           style: styles.notificationNO),
                     ),

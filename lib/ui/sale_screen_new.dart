@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:joker/base_widget.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/providers/map_provider.dart';
 import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:joker/util/size_config.dart';
-import 'package:provider/provider.dart';
 import '../constants/styles.dart';
 import '../localization/trans.dart';
 import 'package:like_button/like_button.dart';
@@ -22,6 +22,7 @@ import 'dart:async';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:map_launcher/map_launcher.dart' as map_luncher;
 import 'package:smart_select/smart_select.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart' as blusher;
 
 class SaleLoader extends StatefulWidget {
   const SaleLoader({Key key, this.saleData, this.merchant}) : super(key: key);
@@ -59,7 +60,7 @@ class ShopDetailsPage extends State<SaleLoader>
   @override
   void initState() {
     super.initState();
-    getIt<SalesProvider>().getSale(widget.saleData.id);
+
     sale = widget.saleData;
     merchant = widget.merchant;
     rotationController = AnimationController(
@@ -101,176 +102,198 @@ class ShopDetailsPage extends State<SaleLoader>
 
   @override
   Widget build(BuildContext context) {
-    final HOMEMAProvider value =
-        Provider.of<HOMEMAProvider>(context, listen: true);
-
-    return Scaffold(
-      key: scaffoldkey,
-      backgroundColor: colors.white,
-      body: NestedScrollView(
-          physics: const ScrollPhysics(),
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                centerTitle: true,
-                expandedHeight: SizeConfig.screenHeight * .45 + extededPlus,
-                elevation: 0,
-                backgroundColor: colors.white,
-                stretch: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {
-                          if (isbottomSheetOpened)
-                            Future<dynamic>.delayed(Duration.zero, () {
-                              Navigator.pop(context);
-                            });
-                        },
-                        child: CarouselSlider(
-                          options: CarouselOptions(
-                              height: SizeConfig.screenHeight * .45,
-                              viewportFraction: 1,
-                              initialPage: 0,
-                              enableInfiniteScroll: true,
-                              reverse: true,
-                              autoPlay: true,
-                              autoPlayInterval: const Duration(seconds: 3),
-                              autoPlayAnimationDuration:
-                                  const Duration(milliseconds: 800),
-                              autoPlayCurve: Curves.fastOutSlowIn,
-                              scrollDirection: Axis.horizontal,
-                              onPageChanged: (int index,
-                                  CarouselPageChangedReason reason) {
-                                setState(() {
-                                  myIndex = index;
-                                });
-                              },
-                              pageViewKey: const PageStorageKey<dynamic>(
-                                  'carousel_slider')),
-                          items: sale.images.map((Images image) {
-                            return Builder(
-                              builder: (BuildContext context) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(image.imageTitle),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Container(
-                          alignment: Alignment.center,
-                          child: Row(
+    return BaseWidget<SalesProvider>(
+        onModelReady: (SalesProvider modle) {
+          modle.getSale(widget.saleData.id);
+        },
+        model: getIt<SalesProvider>(),
+        builder: (BuildContext context, SalesProvider modle, Widget child) =>
+            Scaffold(
+              key: scaffoldkey,
+              backgroundColor: colors.white,
+              body: NestedScrollView(
+                  physics: const ScrollPhysics(),
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxIsScrolled) {
+                    return <Widget>[
+                      SliverAppBar(
+                        centerTitle: true,
+                        expandedHeight:
+                            SizeConfig.screenHeight * .45 + extededPlus,
+                        elevation: 0,
+                        backgroundColor: colors.white,
+                        stretch: true,
+                        flexibleSpace: FlexibleSpaceBar(
+                          background: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              for (int i = 0; i < sale.images.length; i++)
-                                if (i == myIndex) ...<Widget>[
-                                  const SizedBox(height: 3),
-                                  circleBar(true),
-                                ] else ...<Widget>[
-                                  const SizedBox(height: 3),
-                                  circleBar(false),
-                                ]
+                              InkWell(
+                                onTap: () {
+                                  if (isbottomSheetOpened)
+                                    Future<dynamic>.delayed(Duration.zero, () {
+                                      Navigator.pop(context);
+                                    });
+                                },
+                                child: CarouselSlider(
+                                  options: CarouselOptions(
+                                      height: SizeConfig.screenHeight * .45,
+                                      viewportFraction: 1,
+                                      initialPage: 0,
+                                      enableInfiniteScroll: true,
+                                      reverse: true,
+                                      autoPlay: true,
+                                      autoPlayInterval:
+                                          const Duration(seconds: 3),
+                                      autoPlayAnimationDuration:
+                                          const Duration(milliseconds: 800),
+                                      autoPlayCurve: Curves.fastOutSlowIn,
+                                      scrollDirection: Axis.horizontal,
+                                      onPageChanged: (int index,
+                                          CarouselPageChangedReason reason) {
+                                        setState(() {
+                                          myIndex = index;
+                                        });
+                                      },
+                                      pageViewKey:
+                                          const PageStorageKey<dynamic>(
+                                              'carousel_slider')),
+                                  items: sale.images.isNotEmpty
+                                      ? sale.images.map((Images image) {
+                                          return Builder(
+                                            key: Key(image.id.toString()),
+                                            builder: (BuildContext context) {
+                                              return CachedNetworkImage(
+                                                
+                                                imageUrl: image.imageTitle,
+                                                fit: BoxFit.fill,
+                                                placeholder:
+                                                    (BuildContext context,
+                                                        String s) {
+                                                  return const blusher.BlurHash(
+                                                      hash:
+                                                          "L5H2EC=PM+yV0g-mq.wG9c010J}I");
+                                                },
+                                              );
+                                            },
+                                          );
+                                        }).toList()
+                                      : <Widget>[
+                                          SvgPicture.asset(
+                                              "assets/images/joker_indirim.svg",
+                                              fit: BoxFit.contain
+                                             )
+                                        ],
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Container(
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      for (int i = 0;
+                                          i < sale.images.length;
+                                          i++)
+                                        if (i == myIndex) ...<Widget>[
+                                          const SizedBox(height: 3),
+                                          circleBar(true),
+                                        ] else ...<Widget>[
+                                          const SizedBox(height: 3),
+                                          circleBar(false),
+                                        ]
+                                    ],
+                                  )),
+                              const SizedBox(height: 12),
+                              BottomWidgetForSliver(key: key, mytext: mytext),
                             ],
-                          )),
-                      const SizedBox(height: 12),
-                      BottomWidgetForSliver(key: key, mytext: mytext),
+                          ),
+                        ),
+                      )
+                    ];
+                  },
+                  body: mapCard(sale, context, modle)),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endDocked,
+              resizeToAvoidBottomInset: true,
+              bottomNavigationBar: Container(
+                height: 40,
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                color: colors.black,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(sale.merchant.salesCount.toString(),
+                          style: styles.saleScreenBottomBar),
+                      const SizedBox(width: 12),
+                      Text(trans(context, "available_merchant_sales"),
+                          style: styles.underHeadwhite),
                     ],
                   ),
                 ),
-              )
-            ];
-          },
-          body: mapCard(sale, context, value)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      resizeToAvoidBottomInset: true,
-      bottomNavigationBar: Container(
-        height: 40,
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-        color: colors.black,
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Text(sale.merchant.salesCount.toString(),
-                  style: styles.saleScreenBottomBar),
-              const SizedBox(width: 12),
-              Text(trans(context, "available_merchant_sales"),
-                  style: styles.underHeadwhite),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: CircleAvatar(
-        backgroundColor: colors.grey,
-        radius: 24,
-        child: AnimatedBuilder(
-          animation: rotationController,
-          builder: (_, Widget child) {
-            return Transform.rotate(
-              angle: rotationController.value * 2 * pi / 2,
-              child: child,
-            );
-          },
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset("assets/images/arrowup.svg",
-                color: colors.yellow),
-            color: colors.white,
-            onPressed: () async {
-              if (isbottomSheetOpened) {
-                rotationController.reverse(from: pi / 2);
-                _errorController = null;
-                Future<dynamic>.delayed(Duration.zero, () {
-                  Navigator.pop(context);
-                });
-                setState(() {
-                  isbottomSheetOpened = false;
-                });
-              } else {
-                setState(() {
-                  isbottomSheetOpened = true;
-                });
+              ),
+              floatingActionButton: CircleAvatar(
+                backgroundColor: colors.grey,
+                radius: 24,
+                child: AnimatedBuilder(
+                  key: const Key("i_wish_unique"),
+                  animation: rotationController,
+                  builder: (_, Widget child) {
+                    return Transform.rotate(
+                        angle: rotationController.value * 2 * pi / 2,
+                        child: child);
+                  },
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: SvgPicture.asset("assets/images/arrowup.svg",
+                        color: colors.yellow),
+                    color: colors.white,
+                    onPressed: () async {
+                      if (isbottomSheetOpened) {
+                        rotationController.reverse(from: pi / 2);
+                        _errorController = null;
+                        Future<dynamic>.delayed(Duration.zero, () {
+                          Navigator.pop(context);
+                        });
+                        setState(() {
+                          isbottomSheetOpened = false;
+                        });
+                      } else {
+                        setState(() {
+                          isbottomSheetOpened = true;
+                        });
 
-                rotationController.forward(from: 0.0);
-                _errorController =
-                    scaffoldkey.currentState.showBottomSheet<dynamic>(
-                  (BuildContext context) => DraggableScrollableSheet(
-                    initialChildSize: 0.4,
-                    maxChildSize: 0.6,
-                    minChildSize: 0.0,
-                    expand: false,
-                    builder: (BuildContext context,
-                        ScrollController scrollController) {
-                      scrollController.addListener(() {});
-                      return salesRELATED(scrollController);
+                        rotationController.forward(from: 0.0);
+                        _errorController =
+                            scaffoldkey.currentState.showBottomSheet<dynamic>(
+                          (BuildContext context) => DraggableScrollableSheet(
+                            initialChildSize: 0.4,
+                            maxChildSize: 0.6,
+                            minChildSize: 0.0,
+                            expand: false,
+                            builder: (BuildContext context,
+                                ScrollController scrollController) {
+                              scrollController.addListener(() {});
+                              return salesRELATED(scrollController, modle);
+                            },
+                          ),
+                        );
+                        _errorController.closed.then((dynamic value) {
+                          rotationController.reverse(from: pi / 2);
+                          isbottomSheetOpened = false;
+                          _errorController = null;
+                        });
+                      }
                     },
                   ),
-                );
-                _errorController.closed.then((dynamic value) {
-                  rotationController.reverse(from: pi / 2);
-                  isbottomSheetOpened = false;
-                  _errorController = null;
-                });
-              }
-            },
-          ),
-        ),
-      ),
-    );
+                ),
+              ),
+            ));
   }
 
-  Widget salesRELATED(ScrollController scrollController) {
+  Widget salesRELATED(ScrollController scrollController, SalesProvider modle) {
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -345,13 +368,12 @@ class ShopDetailsPage extends State<SaleLoader>
             );
           },
           pageFuture: (int pageIndex) {
-            return getIt<SalesProvider>()
-                .getSimpleSalesData(pageIndexx, merchant.merchant.id);
+            return modle.getSimpleSalesData(pageIndexx, merchant.merchant.id);
           }),
     );
   }
 
-  Widget mapCard(SaleData rs, BuildContext context, HOMEMAProvider value) {
+  Widget mapCard(SaleData rs, BuildContext context, SalesProvider modle) {
     String endsIn = "";
     String ln = "";
     String lnn = "";
@@ -428,7 +450,10 @@ class ShopDetailsPage extends State<SaleLoader>
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Icon(Icons.star, color: colors.orange),
-                        Text(value.inFocusBranch.merchant.ratesAverage
+                        Text(getIt<HOMEMAProvider>()
+                            .inFocusBranch
+                            .merchant
+                            .ratesAverage
                             .toString())
                       ],
                     ),
@@ -446,10 +471,6 @@ class ShopDetailsPage extends State<SaleLoader>
                             fit: BoxFit.cover,
                             height: SizeConfig.blockSizeVertical * 5,
                             width: SizeConfig.blockSizeHorizontal * 10),
-                        // SvgPicture.asset("assets/images/discount.svg",
-                        //     fit: BoxFit.cover,
-                        //     height: SizeConfig.blockSizeVertical * 5,
-                        //     width: SizeConfig.blockSizeHorizontal * 12),
                         Text("  " + trans(context, 'discount') + "  ",
                             style: styles.moreInfo),
                         Text(rs.discount)
@@ -498,7 +519,6 @@ class ShopDetailsPage extends State<SaleLoader>
                                 fit: BoxFit.cover,
                                 height: SizeConfig.blockSizeVertical * 5,
                                 width: SizeConfig.blockSizeHorizontal * 10),
-                      
                             Text("  " + trans(context, 'ends_in') + "  ",
                                 style: styles.moreInfo),
                             Container(
@@ -527,9 +547,9 @@ class ShopDetailsPage extends State<SaleLoader>
                                 onTap: (bool loved) async {
                                   favFunction("App\\Sale", rs.id);
                                   if (!loved) {
-                                    getIt<SalesProvider>().setFavSale(rs.id);
+                                    modle.setFavSale(rs.id);
                                   } else {
-                                    getIt<SalesProvider>().setunFavSale(rs.id);
+                                    modle.setunFavSale(rs.id);
                                   }
                                   return !loved;
                                 },
@@ -594,7 +614,6 @@ class ShopDetailsPage extends State<SaleLoader>
               ),
             ),
             const SizedBox(height: 24),
-         
             ElevatedButton(
               style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
@@ -609,12 +628,8 @@ class ShopDetailsPage extends State<SaleLoader>
                   textStyle: MaterialStateProperty.resolveWith<TextStyle>(
                       (Set<MaterialState> states) =>
                           TextStyle(color: colors.white))),
-              onPressed: () async {
-                print(
-                    "hello croods ${value.inFocusBranch.latitude} ${value.inFocusBranch.longitude}");
-              },
+              onPressed: () async {},
               child: SmartSelect<String>.single(
-                  // builder: const S2SingleBuilder<String>(),
                   title: trans(context, 'pick_branch'),
                   tileBuilder: (BuildContext c, S2SingleState<String> s) {
                     return S2Tile<dynamic>.fromState(
@@ -622,7 +637,7 @@ class ShopDetailsPage extends State<SaleLoader>
                       hideValue: true,
                       trailing: Icon(Icons.arrow_forward, color: colors.trans),
                       dense: true,
-                  title: Row(
+                      title: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -630,19 +645,13 @@ class ShopDetailsPage extends State<SaleLoader>
                             const Text("  "),
                             Text(trans(context, 'maps'), style: styles.maps)
                           ]),
-                     
                     );
-                
                   },
-
-                
                   value: "",
                   choiceHeaderStyle:
                       S2ChoiceHeaderStyle(textStyle: styles.maps),
                   placeholder: "",
                   choiceItems: options,
-
-               
                   modalType: S2ModalType.bottomSheet,
                   onChange: (S2SingleState<String> state) {
                     print("state ${state.value} ");

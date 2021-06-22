@@ -54,7 +54,7 @@ Future<Map<String, dynamic>> get updateLocation async {
   getIt<Auth>().changeAddress("getting your location...");
 
   final List<String> loglat = await getLocation();
-  if (loglat.isEmpty) {
+  if (loglat.isEmpty || loglat == null) {
     res = false;
   } else {
     config.lat = double.parse(loglat.elementAt(0));
@@ -63,7 +63,7 @@ Future<Map<String, dynamic>> get updateLocation async {
     config.long = double.parse(loglat.elementAt(1));
     res = true;
   }
-
+  print("res = $res");
   try {
     coordinates = Coordinates(
         double.parse(loglat.elementAt(0)), double.parse(loglat.elementAt(1)));
@@ -76,8 +76,9 @@ Future<Map<String, dynamic>> get updateLocation async {
   } catch (e) {
     data.setData('address', "Unkown Location");
   }
+
   final Map<String, dynamic> ress = <String, dynamic>{
-    "res": true,
+    "res": res,
     "address": "first.addressLine",
     "location": loglat
   };

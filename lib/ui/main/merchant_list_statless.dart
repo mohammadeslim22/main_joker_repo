@@ -22,69 +22,69 @@ class _ShopListStaelessState extends State<ShopListStaeless> {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // BaseWidget<MerchantProvider>(
-        //     onModelReady: (MerchantProvider modle) {
-        //       modle.pagewiseBranchesController = PagewiseLoadController<dynamic>(
-        //           pageSize: 5,
-        //           pageFuture: (int pageIndex) async {
-        //             return getIt<Auth>().isAuthintecated
-        //                 ? modle.getBranchesDataAuthintecated(pageIndex)
-        //                 : modle.getBranchesData(pageIndex);
-        //           });
-        //     },
-        //     model: getIt<MerchantProvider>(),
-        //     builder: (BuildContext context, MerchantProvider modle, Widget child) =>
-        SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: true,
-      header: const WaterDropMaterialHeader(color: Colors.white, offset: 00),
-      footer: CustomFooter(
-        builder: (BuildContext context, LoadStatus mode) {
-          Widget body;
-          if (mode == LoadStatus.idle) {
-            body = Text(trans(context, "pull_up_load"));
-          } else if (mode == LoadStatus.loading) {
-            body = const CupertinoActivityIndicator();
-          } else if (mode == LoadStatus.failed) {
-            body = const Text("Load Failed!Click retry!");
-          } else if (mode == LoadStatus.canLoading) {
-            body = const Text("release to load more");
-          } else {
-            body = const Text("No more Data");
-          }
-          return Container(height: 55.0, child: Center(child: body));
+    return BaseWidget<MerchantProvider>(
+        onModelReady: (MerchantProvider modle) {
+          modle.pagewiseBranchesController = PagewiseLoadController<dynamic>(
+              pageSize: 5,
+              pageFuture: (int pageIndex) async {
+                return getIt<Auth>().isAuthintecated
+                    ? modle.getBranchesDataAuthintecated(pageIndex)
+                    : modle.getBranchesData(pageIndex);
+              });
         },
-      ),
-      controller: _refreshController,
-      onRefresh: () async {
-        getIt<MerchantProvider>().pagewiseBranchesController.reset();
-        _refreshController.refreshCompleted();
-      },
-      onLoading: () async {
-        await Future<void>.delayed(const Duration(milliseconds: 1000));
+        model: getIt<MerchantProvider>(),
+        builder: (BuildContext context, MerchantProvider modle, Widget child) =>
+            SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: true,
+              header: const WaterDropMaterialHeader(
+                  color: Colors.white, offset: 00),
+              footer: CustomFooter(
+                builder: (BuildContext context, LoadStatus mode) {
+                  Widget body;
+                  if (mode == LoadStatus.idle) {
+                    body = Text(trans(context, "pull_up_load"));
+                  } else if (mode == LoadStatus.loading) {
+                    body = const CupertinoActivityIndicator();
+                  } else if (mode == LoadStatus.failed) {
+                    body = const Text("Load Failed!Click retry!");
+                  } else if (mode == LoadStatus.canLoading) {
+                    body = const Text("release to load more");
+                  } else {
+                    body = const Text("No more Data");
+                  }
+                  return Container(height: 55.0, child: Center(child: body));
+                },
+              ),
+              controller: _refreshController,
+              onRefresh: () async {
+                modle.pagewiseBranchesController.reset();
+                _refreshController.refreshCompleted();
+              },
+              onLoading: () async {
+                await Future<void>.delayed(const Duration(milliseconds: 1000));
 
-        _refreshController.loadComplete();
-      },
-      child: PagewiseListView<dynamic>(
-        physics: const ScrollPhysics(),
-        shrinkWrap: true,
-        pageLoadController: getIt<MerchantProvider>().pagewiseBranchesController,
-        loadingBuilder: (BuildContext context) {
-          return const Center(
-              child: CircularProgressIndicator(
-            backgroundColor: Colors.transparent,
-          ));
-        },
-        padding: const EdgeInsets.all(15.0),
-        itemBuilder: (BuildContext context, dynamic entry, int index) {
-          return FadeIn(child: MerchantCard(branchData: entry as BranchData));
-        },
-        noItemsFoundBuilder: (BuildContext context) {
-          return Text(trans(context, "nothing_to_show"));
-        },
-      ),
-    );
-    //);
+                _refreshController.loadComplete();
+              },
+              child: PagewiseListView<dynamic>(
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                pageLoadController: modle.pagewiseBranchesController,
+                loadingBuilder: (BuildContext context) {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    backgroundColor: Colors.transparent,
+                  ));
+                },
+                padding: const EdgeInsets.all(15.0),
+                itemBuilder: (BuildContext context, dynamic entry, int index) {
+                  return FadeIn(
+                      child: MerchantCard(branchData: entry as BranchData));
+                },
+                noItemsFoundBuilder: (BuildContext context) {
+                  return Text(trans(context, "nothing_to_show"));
+                },
+              ),
+            ));
   }
 }

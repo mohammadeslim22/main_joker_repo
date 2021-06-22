@@ -29,12 +29,14 @@ Dio dio = Dio(options);
 void dioDefaults() {
   dio.interceptors.add(InterceptorsWrapper(onRequest:
       (RequestOptions options, RequestInterceptorHandler rHandlers) async {
+  
     options.queryParameters.addAll(<String, String>{
       'latitude':
           getIt<HOMEMAProvider>().lat.toString() ?? config.lat.toString(),
       'longitude':
           getIt<HOMEMAProvider>().long.toString() ?? config.long.toString()
-    });
+    });  print(
+        "request going to ${options.path} request data ${options.queryParameters}");
     rHandlers.next(options);
   }, onResponse:
       (Response<dynamic> response, ResponseInterceptorHandler rHandlers) async {
@@ -49,12 +51,11 @@ void dioDefaults() {
     }
     rHandlers.next(response);
   }, onError: (DioError e, ErrorInterceptorHandler eHandler) async {
-
     getIt<NavigationService>().navigateTo('/login', null);
     // print(
     //     "status code: on error${response.statusCode}  endpoint : ${response.realUri}");
     Fluttertoast.showToast(msg: "Retry later");
-   
+
     eHandler.next(e);
   }));
 

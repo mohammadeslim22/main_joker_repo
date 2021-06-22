@@ -161,7 +161,7 @@ class _MyLoginScreenState extends State<LoginScreen>
                                   MaterialStateProperty.resolveWith<TextStyle>(
                                       (Set<MaterialState> states) =>
                                           TextStyle(color: colors.white))),
-                          onPressed: modle.state == ViewState.Busy
+                          onPressed: modle.busy
                               ? null
                               : () async {
                                   if (_formKey.currentState.validate()) {

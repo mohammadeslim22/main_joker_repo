@@ -10,11 +10,11 @@ import 'package:joker/util/size_config.dart';
 import 'package:like_button/like_button.dart';
 import 'package:awesome_dialog/awesome_dialog.dart' as awesome_dialog;
 
-
 class FaveBranchCard extends StatelessWidget {
-  const FaveBranchCard({Key key, this.branch, this.value}) : super(key: key);
+  const FaveBranchCard({Key key, this.branch, this.resetForUnFav})
+      : super(key: key);
   final MapBranch branch;
-  final MerchantProvider value;
+  final Function resetForUnFav;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class FaveBranchCard extends StatelessWidget {
                   const CircleColor(start: Colors.orange, end: Colors.purple),
               isLiked: branch.isfavorite == 1,
               onTap: (bool loved) async {
-                 print("loved $loved");
+                print("loved $loved");
                 awesome_dialog.AwesomeDialog(
                   context: context,
                   headerAnimationLoop: false,
@@ -76,14 +76,13 @@ class FaveBranchCard extends StatelessWidget {
                   btnCancelColor: Colors.grey[600],
                   btnOkColor: colors.orange,
                   btnOkOnPress: () async {
-                    await  favFunction("App\\Branch", branch.id);
-                      value.setunFavBranch(branch.id);
-                    value.pagewiseFavBranchesController.reset();
+                    await favFunction("App\\Branch", branch.id);
+                    resetForUnFav();
+                    //   value.setunFavBranch(branch.id);
+                    // value.pagewiseFavBranchesController.reset();
                   },
                 ).show();
                 return !loved;
-               
-             
               },
               likeCountPadding: const EdgeInsets.symmetric(vertical: 0),
             ),

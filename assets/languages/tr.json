@@ -239,7 +239,9 @@
     "am_sure": "eminim",
     "help_to_get_better_feed_back": "Daha iyi olmamıza yardımcı olun, lütfen biraz geri bildirim yazın ",
     "no_fav_saved": "favori kaydedilmedi ",
-    "pick_branch":"şube seç",
-    "change_mobile_no":"cep numarasını değiştir",
-    "current_mobile_no":"mevcut cep telefonu numarası "
+    "pick_branch": "şube seç",
+    "change_mobile_no": "cep numarasını değiştir",
+    "current_mobile_no": "mevcut cep telefonu numarası ",
+    "unable_to_get_location": "Konum'a erişilemiyor",
+    "are_you_sure":"Emin misiniz"
 }

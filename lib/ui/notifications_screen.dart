@@ -5,7 +5,6 @@ import 'package:joker/base_widget.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/models/notification.dart';
 import 'package:joker/util/service_locator.dart';
-
 import '../localization/trans.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:joker/localization/trans.dart';
@@ -34,6 +33,15 @@ class _NotifcationsState extends State<Notifcations> {
             title: Text(trans(context, 'notifications'), style: styles.appBars),
             centerTitle: true),
         body: BaseWidget<NotificationsModel>(
+            onModelReady: (NotificationsModel modle) {
+              modle.pagewiseNotificationsController =
+                  PagewiseLoadController<dynamic>(
+                      pageSize: 15,
+                      pageFuture: (int pageIndex) async {
+                        return getIt<NotificationsModel>()
+                            .getNotifications(pageIndex);
+                      });
+            },
             model: getIt<NotificationsModel>(),
             builder: (BuildContext context, NotificationsModel modle,
                     Widget child) =>
@@ -49,15 +57,20 @@ class _NotifcationsState extends State<Notifcations> {
                   padding: const EdgeInsets.all(15.0),
                   itemBuilder:
                       (BuildContext context, dynamic entry, int index) {
-                    return _itemBuilder(context, entry as NotificationData);
+                    return NoticiationCard(nD: entry as NotificationData);
                   },
                   noItemsFoundBuilder: (BuildContext context) {
                     return const NoNotificationsToday();
                   },
                 )));
   }
+}
 
-  Widget _itemBuilder(BuildContext c, NotificationData nD) {
+class NoticiationCard extends StatelessWidget {
+  const NoticiationCard({Key key, this.nD}) : super(key: key);
+  final NotificationData nD;
+  @override
+  Widget build(BuildContext context) {
     String endsIn = "";
     if (nD.period is! String) {
       final String yearsToEnd = nD.period[0] != 0

@@ -1,14 +1,11 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/providers/auth.dart';
-import 'package:joker/providers/merchantsProvider.dart';
-import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/services/navigationService.dart';
 import 'package:joker/ui/view_models/notifications_modle.dart';
 import 'package:joker/util/service_locator.dart';
@@ -29,26 +26,26 @@ class _MainMenuState extends State<MainMenu> {
   void initState() {
     super.initState();
 
-    if (getIt<Auth>().isAuthintecated) {
-      getIt<NotificationsModel>().pagewiseNotificationsController =
-          PagewiseLoadController<dynamic>(
-              pageSize: 15,
-              pageFuture: (int pageIndex) async {
-                return getIt<NotificationsModel>().getNotifications(pageIndex);
-              });
-    }
-    getIt<SalesProvider>().pagewiseFavSalesController =
-        PagewiseLoadController<dynamic>(
-            pageSize: 10,
-            pageFuture: (int pageIndex) async {
-              return getIt<SalesProvider>().getFavoritData(pageIndex);
-            });
-    getIt<MerchantProvider>().pagewiseFavBranchesController =
-        PagewiseLoadController<dynamic>(
-            pageSize: 10,
-            pageFuture: (int pageIndex) async {
-              return getIt<MerchantProvider>().getFavoritData(pageIndex);
-            });
+    // if (getIt<Auth>().isAuthintecated) {
+    //   getIt<NotificationsModel>().pagewiseNotificationsController =
+    //       PagewiseLoadController<dynamic>(
+    //           pageSize: 15,
+    //           pageFuture: (int pageIndex) async {
+    //             return getIt<NotificationsModel>().getNotifications(pageIndex);
+    //           });
+    // }
+    // getIt<SalesProvider>().pagewiseFavSalesController =
+    //     PagewiseLoadController<dynamic>(
+    //         pageSize: 10,
+    //         pageFuture: (int pageIndex) async {
+    //           return getIt<SalesProvider>().getFavoritData(pageIndex);
+    //         });
+    // getIt<MerchantProvider>().pagewiseFavBranchesController =
+    //     PagewiseLoadController<dynamic>(
+    //         pageSize: 10,
+    //         pageFuture: (int pageIndex) async {
+    //           return getIt<MerchantProvider>().getFavoritData(pageIndex);
+    //         });
     numberOfNotifications = getIt<NotificationsModel>().unredNotifications ?? 0;
   }
 
@@ -80,10 +77,8 @@ class _MainMenuState extends State<MainMenu> {
                                 Image.asset("assets/images/menu_logout.png"),
                             onTap: () async {
                               await modle.signOut(context);
-                           
                             },
                           ),
-                    
                         ),
                       ],
                     ))));
@@ -146,7 +141,11 @@ class MenuContent extends StatelessWidget {
                       getIt<NavigationService>().navigateTo('/login', null);
                     }
                   },
-                  child: Text(modle.isAuthintecated?modle.username:trans(context, "login_or_sign_up") ?? config.username,
+                  child: Text(
+                      modle.isAuthintecated
+                          ? modle.username
+                          : trans(context, "login_or_sign_up") ??
+                              config.username,
                       style: styles.username),
                 ),
               ],
@@ -182,8 +181,7 @@ class MenuContent extends StatelessWidget {
           ),
           leading: Image.asset("assets/images/menu_home.png"),
           onTap: () {
-            Navigator.popAndPushNamed(context, '/Home',
-                arguments: <String, dynamic>{"salesDataFilter": false});
+            Navigator.popAndPushNamed(context, '/Home');
           },
         ),
         const SizedBox(height: 8),

@@ -236,6 +236,8 @@
     "no_fav_saved": "No favorites saved",
     "pick_branch":"pick branch",
     "change_mobile_no":"Change Mobile Number",
-    "current_mobile_no":"Current Mobile Number"
+    "current_mobile_no":"Current Mobile Number",
+    "unable_to_get_location":"Unable to access Location",
+    "are_you_sure":"Are you sure"
    
 }

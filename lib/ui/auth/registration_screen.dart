@@ -288,7 +288,7 @@ class _MyRegistrationState extends State<Registration>
                                                 color: colors.orange))),
                                     textStyle: MaterialStateProperty.resolveWith<TextStyle>(
                                         (Set<MaterialState> states) => TextStyle(color: colors.white))),
-                                onPressed: modle.state == ViewState.Busy
+                                onPressed: modle.busy
                                     ? null
                                     : () async {
                                         if (_formKey.currentState.validate()) {

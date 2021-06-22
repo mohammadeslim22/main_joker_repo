@@ -41,7 +41,6 @@ class Auth with ChangeNotifier {
 
   Future<void> setUserPicture(String pic) async {
     userPicture = pic;
-    print("userPicture $userPicture");
     notifyListeners();
     await data.setData("user_data",
         "$username::$userPicture::$email::$mobile::$dateOfBirth::$address");
@@ -49,12 +48,13 @@ class Auth with ChangeNotifier {
 
   void setUserData(String pic, String useremail, String name, String mpbile,
       String dob, String adres) {
-    email = useremail;
-    username = name;
-    mobile = mobile;
-    userPicture = pic;
-    dateOfBirth = dob;
-    address = adres;
+
+    email = useremail??email;
+    username = name??username;
+    mobile = mpbile??mobile;
+    userPicture = pic??userPicture;
+    dateOfBirth = dob??dateOfBirth;
+    address = adres??address;
     notifyListeners();
   }
 

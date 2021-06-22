@@ -10,19 +10,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../base_model.dart';
 
-enum ViewState { Idle, Busy }
-
 class RegistrationModel extends BaseModel {
-  ViewState state = ViewState.Idle;
   bool loading = false;
 
   static AnimationController _controller;
   bool visibilityObs = false;
-
-  void setState(ViewState viewState) {
-    state = viewState;
-    notifyListeners();
-  }
 
   static List<String> registervalidators = <String>[
     null,
@@ -45,7 +37,7 @@ class RegistrationModel extends BaseModel {
 
   Future<bool> register(BuildContext context, String username, String pass,
       String birth, String email, String mobile, String address) async {
-    setState(ViewState.Busy);
+    setBusy(true);
     bool res;
     await dio.post<dynamic>("register", data: <String, dynamic>{
       "name": username,
@@ -90,7 +82,7 @@ class RegistrationModel extends BaseModel {
         res = false;
       }
     });
-    setState(ViewState.Idle);
+    setBusy(false);
     notifyListeners();
     return res;
   }
@@ -103,7 +95,7 @@ class RegistrationModel extends BaseModel {
   final SpinKitDoubleBounce spinkit = SpinKitDoubleBounce(
       color: colors.white, size: 50.0, controller: _controller);
   Widget changechildforRegister(String login) {
-    if (state == ViewState.Idle) {
+    if (!busy) {
       return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Text(login,

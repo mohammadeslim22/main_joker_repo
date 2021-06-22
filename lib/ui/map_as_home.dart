@@ -42,6 +42,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
 
   AnimationController rotationController;
   AnimationController _animationController;
+  AnimationController unUsedController;
   bool isPlaying = false;
 
   Animation<Offset> _offsetAnimation;
@@ -52,7 +53,8 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
         duration: const Duration(milliseconds: 700), vsync: this);
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
-
+    unUsedController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 450));
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await pc.hide();
     });
@@ -87,7 +89,6 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                 locationStreamController.stream;
             getPositionSubscription =
                 stream.listen((Map<String, double> event) {
-              print("hello from strem $event");
               modle.setLatLomg(event["lat"], event["long"]);
             });
             modle.controller = AnimationController(
@@ -438,10 +439,6 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
               "lat": pos.target.latitude,
               "long": pos.target.longitude
             });
-            // getPositionSubscription.
-            // value.setLatLomg(pos.target.latitude, pos.target.longitude);
-            // value.lat = pos.target.latitude;
-            // value.long = pos.target.longitude;
           },
           onCameraIdle: () {
             value.getBranchesData(value.selectedSpecialize);
@@ -457,8 +454,9 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                 isExtended: false,
                 mini: true,
                 child: AnimatedIcon(
+                    key: const Key("unique_key"),
                     icon: AnimatedIcons.close_menu,
-                    progress: _animationController,
+                    progress: unUsedController,
                     color: colors.orange),
                 onPressed: () => value.onClickCloseMarker(),
                 backgroundColor: colors.white,

@@ -26,8 +26,6 @@ import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:dio/dio.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
-// import '../base_widget.dart';
-
 class MyAccount extends StatefulWidget {
   @override
   MyAccountPage createState() => MyAccountPage();
@@ -108,7 +106,7 @@ class MyAccountPage extends State<MyAccount>
   Widget build(BuildContext context) {
     return BaseWidget<ProfileModle>(
         onModelReady: (ProfileModle model) async {
-          
+          print("Profile modle state ${model.busy}");
           final Map<String, String> user = await model.getUserData();
           setState(() {
             usernameController.text =
@@ -116,7 +114,8 @@ class MyAccountPage extends State<MyAccount>
             emailController.text = user["email"] != "null" ? user["email"] : "";
             mobileNoController.text =
                 user["phone"] != "null" ? user["phone"] : "";
-            imageUrl = user["image"] != "null" ? user["image"] : config.imageUrl;
+            imageUrl =
+                user["image"] != "null" ? user["image"] : config.imageUrl;
             birthDateController.text =
                 user["birthdate"] != "null" ? user["birthdate"] : "";
             locationController.text =
@@ -451,7 +450,7 @@ class MyAccountPage extends State<MyAccount>
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 70),
+                                    const EdgeInsets.symmetric(horizontal: 70,vertical: 30),
                                 child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         padding: const EdgeInsets.symmetric(

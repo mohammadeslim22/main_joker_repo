@@ -57,7 +57,7 @@ class HOMEMAProvider extends BaseModel {
   void setLatLomg(double newLat, double newLong) {
     lat = newLat;
     long = newLong;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void setLikeSale(int saleId) {
@@ -66,7 +66,7 @@ class HOMEMAProvider extends BaseModel {
         return element.id == saleId;
       }).isliked = 1;
       notifyListeners();
-      getIt<SalesProvider>().setLikeSale(saleId);
+      // getIt<SalesProvider>().setLikeSale(saleId);
     } catch (err) {
       print("could not find element");
     }
@@ -78,7 +78,7 @@ class HOMEMAProvider extends BaseModel {
         return element.id == saleId;
       }).isliked = 0;
       notifyListeners();
-      getIt<SalesProvider>().setunLikeSale(saleId);
+      // getIt<SalesProvider>().setunLikeSale(saleId);
     } catch (err) {
       print("orrrrr");
     }
@@ -90,7 +90,7 @@ class HOMEMAProvider extends BaseModel {
         return element.id == saleId;
       }).isfavorite = 1;
       notifyListeners();
-      getIt<SalesProvider>().setFavSale(saleId);
+      // getIt<SalesProvider>().setFavSale(saleId);
     } catch (err) {
       print("could not find element $err");
     }
@@ -102,7 +102,7 @@ class HOMEMAProvider extends BaseModel {
         return element.id == saleId;
       }).isfavorite = 0;
       notifyListeners();
-      getIt<SalesProvider>().setunFavSale(saleId);
+      // getIt<SalesProvider>().setunFavSale(saleId);
     } catch (err) {
       print("orrrrr");
     }
@@ -254,7 +254,6 @@ class HOMEMAProvider extends BaseModel {
 
   Future<void> onClickCloseMarker() async {
     showOffersHorizontalCards(inFocusBranch.id);
-
     swipController.move(0);
   }
 
