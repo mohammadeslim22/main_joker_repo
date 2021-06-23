@@ -57,7 +57,6 @@ class HOMEMAProvider extends BaseModel {
   void setLatLomg(double newLat, double newLong) {
     lat = newLat;
     long = newLong;
-    // notifyListeners();
   }
 
   void setLikeSale(int saleId) {

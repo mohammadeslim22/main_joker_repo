@@ -83,7 +83,6 @@ class RegistrationModel extends BaseModel {
       }
     });
     setBusy(false);
-    notifyListeners();
     return res;
   }
 

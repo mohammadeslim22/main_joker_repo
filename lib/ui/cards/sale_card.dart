@@ -5,12 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
-import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/sales.dart';
-import 'package:joker/providers/auth.dart';
-import 'package:joker/providers/map_provider.dart';
-import 'package:joker/services/navigationService.dart';
-import 'package:joker/util/service_locator.dart';
+import 'package:joker/util/functions.dart';
 
 class SalesCard extends StatefulWidget {
   const SalesCard({Key key, this.sale}) : super(key: key);
@@ -48,22 +44,7 @@ class _SalesCardState extends State<SalesCard> {
       ),
       child: InkWell(
         onTap: () {
-          // if (config.loggedin) {
-          if (getIt<Auth>().isAuthintecated) {
-            final MapBranch m = MapBranch(
-                merchant: Merchant(
-                    id: saledata.merchant.id,
-                    logo: saledata.merchant.logo,
-                    name: saledata.merchant.name,
-                    ratesAverage:
-                        double.parse(saledata.merchant.ratesAverage.toString()),
-                    salesCount: saledata.merchant.salesCount));
-            getIt<HOMEMAProvider>().setinFocusBranch(m);
-            Navigator.pushNamed(context, "/SaleLoader",
-                arguments: <String, dynamic>{"mapBranch": m, "sale": saledata});
-          } else {
-            getIt<NavigationService>().navigateToNamed('/login', null);
-          }
+          clickOnSaleCard(context, saledata);
         },
         child: Column(
           children: <Widget>[

@@ -1,4 +1,4 @@
-import 'package:joker/constants/config.dart';
+// import 'package:joker/constants/config.dart';
 
 class Profile {
   Profile(

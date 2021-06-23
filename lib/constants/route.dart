@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:joker/constants/config.dart';
+import 'package:joker/models/branches_model.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/membership.dart';
 import 'package:joker/models/sales.dart';
@@ -41,7 +42,9 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case "/Home":
       page = PageTransition<PageController>(
-          child: const Home(/*salesDataFilter: args["salesDataFilter"]as bool??false,filterData: args["filterDate"]as FilterData*/), type: PageTransitionType.rightToLeftWithFade);
+          child: const Home(
+              /*salesDataFilter: args["salesDataFilter"]as bool??false,filterData: args["filterDate"]as FilterData*/),
+          type: PageTransitionType.rightToLeftWithFade);
       break;
     // case "/HomeMap":
     //   page = PageTransition<PageController>(
@@ -99,7 +102,8 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
         child: ShopDetails(
             merchantId: args['merchantId'] as int,
             branchId: args['branchId'] as int,
-            source: args['source'].toString()),
+            source: args['source'].toString(),
+            branch: args['branch'] as BranchData),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;
@@ -190,7 +194,10 @@ Route<PageController> onGenerateRoute(RouteSettings settings) {
       break;
     case "/AboutUs":
       page = PageTransition<PageController>(
-        child: LoadAboutUs(appName:args["appName"].toString(),appVersion: args["appVersion"].toString(),),
+        child: LoadAboutUs(
+          appName: args["appName"].toString(),
+          appVersion: args["appVersion"].toString(),
+        ),
         type: PageTransitionType.rightToLeftWithFade,
       );
       break;

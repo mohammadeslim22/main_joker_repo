@@ -14,7 +14,8 @@ import 'package:like_button/like_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MapCard extends StatelessWidget {
-  const MapCard({Key key, this.rs, this.value, this.isAuthintecated}) : super(key: key);
+  const MapCard({Key key, this.rs, this.value, this.isAuthintecated})
+      : super(key: key);
   final SaleData rs;
   final HOMEMAProvider value;
   final bool isAuthintecated;
@@ -105,27 +106,28 @@ class MapCard extends StatelessWidget {
                         width: SizeConfig.blockSizeHorizontal * 16,
                       )),
                   const SizedBox(width: 8),
-                  Container(
-                    padding: EdgeInsets.zero,
+                  Expanded(
+                    
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(rs.name, style: styles.saleNameInMapCard),
                         const SizedBox(height: 12),
-                        Text(rs.details, style: styles.saledescInMapCard)
+                        Container(
+                            margin: const EdgeInsets.only(top: 5.0),
+                            child: Text(rs.details,
+                                style: styles.saledescInMapCard))
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Icon(Icons.star, color: colors.orange),
-                        Text(value.inFocusBranch.merchant.ratesAverage
-                            .toString())
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Icon(Icons.star, color: colors.orange),
+                      Text(value.inFocusBranch.merchant.ratesAverage
+                          .toString())
+                    ],
                   )
                 ]),
             Padding(

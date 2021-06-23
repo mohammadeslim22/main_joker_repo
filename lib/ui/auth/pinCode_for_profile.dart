@@ -36,7 +36,6 @@ class _MyHomePageState extends State<PinCodeForProfile>
       vsync: this,
       duration: const Duration(seconds: 30),
     );
-  
   }
 
   bool enabeld = false;
@@ -112,9 +111,9 @@ class _MyHomePageState extends State<PinCodeForProfile>
         appBar: AppBar(
             title: Text(trans(context, "change_mobile_no")), centerTitle: true),
         body: BaseWidget<PinCodeProfileModle>(
-          onModelReady: (PinCodeProfileModle modle){
-            print("Model state ${modle.busy}");
-          },
+            onModelReady: (PinCodeProfileModle modle) {
+              print("Model state ${modle.busy}");
+            },
             model: getIt<PinCodeProfileModle>(),
             builder: (BuildContext context, PinCodeProfileModle modle,
                     Widget child) =>
@@ -169,7 +168,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                                   obscureText: _obscureText,
                                   focusNode: focus,
                                   onFieldSubmitted: () async {
-                                    focus2.requestFocus();
+                                    focus1.requestFocus();
                                   },
                                   validator: (String value) {
                                     if (passwordController.text.length < 6) {
@@ -183,6 +182,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                                 cController: mobileNoController,
                                 prefixIcon: Icons.phone,
                                 kt: TextInputType.phone,
+                                focusNode: focus1,
                                 onTab: () {},
                                 obscureText: false,
                                 readOnly: false,
@@ -195,6 +195,7 @@ class _MyHomePageState extends State<PinCodeForProfile>
                                     return modle
                                         .pinCodeProfileValidationMap['phone'];
                                 },
+                                onFieldSubmitted: () async {},
                               ),
                             ],
                           )),

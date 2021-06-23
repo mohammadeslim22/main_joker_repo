@@ -6,32 +6,15 @@ import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/branches_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:joker/providers/auth.dart';
-import 'package:joker/providers/merchantsProvider.dart';
-import 'package:joker/services/navigationService.dart';
-import 'package:joker/util/service_locator.dart';
-import 'package:joker/util/size_config.dart';
-import 'package:rating_bar/rating_bar.dart';
+import 'package:joker/util/functions.dart';
 
-class MerchantCard extends StatefulWidget {
+class MerchantCard extends StatelessWidget {
   const MerchantCard({Key key, this.branchData}) : super(key: key);
   final BranchData branchData;
 
   @override
-  _MerchantCardState createState() => _MerchantCardState();
-}
-
-class _MerchantCardState extends State<MerchantCard> {
-  BranchData branchData;
-
-  @override
-  void initState() {
-    super.initState();
-    branchData = widget.branchData;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    print("rating average ${branchData.ratesAverage}");
     return Card(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -39,18 +22,7 @@ class _MerchantCardState extends State<MerchantCard> {
       ),
       child: InkWell(
         onTap: () async {
-          // if (config.loggedin) {
-            if(getIt<Auth>().isAuthintecated){
-            getIt<MerchantProvider>().vistBranch(branchData.id);
-            Navigator.pushNamed(context, "/MerchantDetails",
-                arguments: <String, dynamic>{
-                  "merchantId": branchData.merchant.id,
-                  "branchId": branchData.id,
-                  "source": "click"
-                });
-          } else {
-            getIt<NavigationService>().navigateToNamed('/login', null);
-          }
+          clickONBranchCrd(context, branchData);
         },
         child: Column(
           children: <Widget>[
@@ -94,19 +66,23 @@ class _MerchantCardState extends State<MerchantCard> {
                         child: Text(branchData.merchant.name,
                             softWrap: true, style: styles.underHead),
                       ),
-                      RatingBar(
-                        initialRating: double.parse(
-                            branchData.merchant.rateAverage.toString()),
-                        filledIcon: Icons.star,
-                        emptyIcon: Icons.star_border,
-                        halfFilledIcon: Icons.star_half,
-                        isHalfAllowed: true,
-                        filledColor: Colors.amberAccent,
-                        emptyColor: Colors.grey,
-                        halfFilledColor: Colors.orange[300],
-                        size: SizeConfig.blockSizeHorizontal * 5,
-                        onRatingChanged: (double rating) {},
+                       IconTheme(
+                        data:const IconThemeData(color: Colors.amber, size: 32),
+                        child: StarDisplay(value: branchData.ratesAverage.toInt()),
                       ),
+                      // RatingBar(
+                      //   initialRating:
+                      //       double.parse(branchData.ratesAverage.toString()),
+                      //   filledIcon: Icons.star,
+                      //   emptyIcon: Icons.star_border,
+                      //   halfFilledIcon: Icons.star_half,
+                      //   isHalfAllowed: true,
+                      //   filledColor: Colors.amberAccent,
+                      //   emptyColor: Colors.grey,
+                      //   halfFilledColor: Colors.orange[300],
+                      //   size: SizeConfig.blockSizeHorizontal * 5,
+                      //   onRatingChanged: (double rating) {},
+                      // ),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -144,7 +120,7 @@ class _MerchantCardState extends State<MerchantCard> {
                                 style: styles.mylight,
                                 textAlign: TextAlign.center),
                             const SizedBox(height: 4),
-                            Text(branchData.salesCount.toString(),
+                            Text(branchData.sales.toString(),
                                 style: styles.mystyle)
                           ],
                         ),
@@ -157,6 +133,24 @@ class _MerchantCardState extends State<MerchantCard> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class StarDisplay extends StatelessWidget {
+  const StarDisplay({Key key, this.value = 0})
+      : assert(value != null),
+        super(key: key);
+  final int value;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List<Widget>.generate(5, (int index) {
+        return Icon(
+          index < value ? Icons.star : Icons.star_border,
+        );
+      }),
     );
   }
 }

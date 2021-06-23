@@ -64,7 +64,6 @@ class ForgetPassModle extends BaseModel {
           backgroundColor: colors.white,
           reverseCurve: Curves.decelerate);
       setBusy(false);
-      notifyListeners();
     } else {
       setBusy(false);
       Navigator.pushNamedAndRemoveUntil(context, '/Reset_pass', (_) => false);
@@ -87,7 +86,6 @@ class ForgetPassModle extends BaseModel {
       codeArrived = true;
       mainButtonkey = 'submet';
        setBusy(false);
-      notifyListeners();
       return true;
     } else {
       response.data['errors'].forEach((String k, dynamic vv) {
@@ -95,7 +93,6 @@ class ForgetPassModle extends BaseModel {
       });
        setBusy(false);
 
-      notifyListeners();
       return false;
     }
   }

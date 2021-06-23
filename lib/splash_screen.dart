@@ -16,6 +16,7 @@ import 'constants/colors.dart';
 import 'providers/language.dart';
 import 'package:provider/provider.dart';
 import 'package:joker/util/size_config.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
@@ -28,7 +29,6 @@ class _SplashScreenState extends State<SplashScreen>
     with AfterLayoutMixin<SplashScreen> {
   _SplashScreenState();
 
-  bool locationTurnOn;
   bool showLoading = false;
   Future<void> askUser(Language lang) async {
     data.getData("ilang").then((String value) async {
@@ -40,11 +40,14 @@ class _SplashScreenState extends State<SplashScreen>
 
     final Map<String, dynamic> loc = await updateLocation;
     final List<String> loglat = loc["location"] as List<String>;
-    locationTurnOn = loc["res"] as bool;
+
     location.onLocationChanged.listen((LocationData event) {
       getIt<HOMEMAProvider>().setLatLomg(event.latitude, event.longitude);
       config.lat = event.latitude;
       config.long = event.longitude;
+      // Fluttertoast.showToast(
+      //     msg: "does it really changes when change my location from splash ? ");
+      // print("does it really changes when change my location from splash ? ");
       getIt<HOMEMAProvider>().setRotation(event.heading);
     });
     setState(() {
@@ -56,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen>
     });
     Navigator.pushNamedAndRemoveUntil(context, "/MapAsHome", (_) => false,
         arguments: <String, double>{
-          "home_map_lat":double.parse(loglat.elementAt(0)) ?? 0.0,
+          "home_map_lat": double.parse(loglat.elementAt(0)) ?? 0.0,
           "home_map_long": double.parse(loglat.elementAt(1)) ?? 0.0
         });
   }
@@ -100,7 +103,7 @@ class _SplashScreenState extends State<SplashScreen>
                 fit: BoxFit.cover, width: 200),
             const SizedBox(height: 12),
             Visibility(
-              replacement:  const SizedBox(height: 48),
+                replacement: const SizedBox(height: 48),
                 visible: showLoading,
                 child: const CupertinoActivityIndicator(radius: 24))
           ],

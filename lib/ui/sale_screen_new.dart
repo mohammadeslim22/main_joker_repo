@@ -31,10 +31,10 @@ class SaleLoader extends StatefulWidget {
   final SaleData saleData;
 
   @override
-  ShopDetailsPage createState() => ShopDetailsPage();
+  SaleDetailsPage createState() => SaleDetailsPage();
 }
 
-class ShopDetailsPage extends State<SaleLoader>
+class SaleDetailsPage extends State<SaleLoader>
     with AfterLayoutMixin<SaleLoader>, TickerProviderStateMixin {
   MapBranch merchant;
   SaleData sale;

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:joker/constants/colors.dart';
-import 'package:joker/providers/map_provider.dart';
+// import 'package:joker/providers/map_provider.dart';
 import 'package:joker/splash_screen.dart';
 import 'constants/config.dart';
 import 'services/navigationService.dart';
 import 'util/dio.dart';
-import 'package:joker/providers/merchantsProvider.dart';
-import 'package:joker/providers/salesProvider.dart';
+// import 'package:joker/providers/merchantsProvider.dart';
+// import 'package:joker/providers/salesProvider.dart';
 import 'package:provider/provider.dart';
 import 'constants/route.dart';
 import 'constants/themes.dart';

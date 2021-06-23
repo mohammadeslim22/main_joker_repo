@@ -19,11 +19,9 @@ class PinCodeModle extends BaseModel {
         data: <String, dynamic>{"phone": phone, "verfiy_code": code});
     if (correct.data == "false") {
       setBusy(false);
-      notifyListeners();
       return false;
     } else {
       setBusy(false);
-      notifyListeners();
       return true;
     }
   }
@@ -56,14 +54,12 @@ class PinCodeModle extends BaseModel {
       return false;
     } else if (correct.statusCode == 200) {
       setBusy(false);
-      notifyListeners();
       data.setData("phone", correct.data['phone'].toString());
       Navigator.pop(context);
 
       return true;
     } else {
       setBusy(false);
-      notifyListeners();
       return false;
     }
   }

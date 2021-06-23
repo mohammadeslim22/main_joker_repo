@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:joker/models/map_branches.dart';
 import 'package:joker/models/merchant.dart' as merchant_main_model;

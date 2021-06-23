@@ -74,7 +74,6 @@ class ProfileModle extends BaseModel {
         profileValidationMap[k] = vv[0].toString();
       });
 
-      notifyListeners();
       setBusy(false);
       return false;
     } else {
@@ -83,12 +82,10 @@ class ProfileModle extends BaseModel {
             "$username::${getIt<Auth>().userPicture.toString()}::$email::${getIt<Auth>().mobile}::$birthDate::$address");
         getIt<Auth>()
             .setUserData(null, email, username, null, birthDate, address);
-        notifyListeners();
         setBusy(false);
         return true;
       } else {
         setBusy(false);
-        notifyListeners();
         return false;
       }
     }

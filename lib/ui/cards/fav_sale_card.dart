@@ -4,7 +4,7 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
 import 'package:joker/models/sales.dart';
-import 'package:joker/providers/salesProvider.dart';
+// import 'package:joker/providers/salesProvider.dart';
 import 'package:joker/util/functions.dart';
 import 'package:joker/util/size_config.dart';
 import 'package:like_button/like_button.dart';

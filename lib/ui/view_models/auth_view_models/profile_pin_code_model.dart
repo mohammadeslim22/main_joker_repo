@@ -20,6 +20,7 @@ class PinCodeProfileModle extends BaseModel {
           pinCodeProfilekeys, pinCodeProfileValidators);
 
   Future<bool> verifyNewPhone(String password, String mobile) async {
+    setBusy(true);
     final Response<dynamic> response = await dio.put<dynamic>("update_phone",
         queryParameters: <String, dynamic>{
           "password": password,
@@ -30,14 +31,15 @@ class PinCodeProfileModle extends BaseModel {
       response.data['errors'].forEach((String k, dynamic vv) {
         pinCodeProfileValidationMap[k] = vv[0].toString();
       });
+      setBusy(false);
       return false;
     }
     if (response.statusCode == 200) {
       data.setData("phone", getIt<Auth>().myCountryDialCode + mobile);
-      notifyListeners();
+      setBusy(false);
       return true;
     } else {
-      notifyListeners();
+      setBusy(false);
       return false;
     }
   }
@@ -66,13 +68,11 @@ class PinCodeProfileModle extends BaseModel {
         });
     if (correct.data == "false") {
       setBusy(false);
-      notifyListeners();
       return false;
     } else {
       getIt<Auth>().setUserData(null, null, null,
           getIt<Auth>().myCountryDialCode + mobile, null, null);
       setBusy(false);
-      notifyListeners();
       return true;
     }
   }

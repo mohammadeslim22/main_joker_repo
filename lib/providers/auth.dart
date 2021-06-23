@@ -46,16 +46,18 @@ class Auth with ChangeNotifier {
         "$username::$userPicture::$email::$mobile::$dateOfBirth::$address");
   }
 
-  void setUserData(String pic, String useremail, String name, String mpbile,
-      String dob, String adres) {
-
-    email = useremail??email;
-    username = name??username;
-    mobile = mpbile??mobile;
-    userPicture = pic??userPicture;
-    dateOfBirth = dob??dateOfBirth;
-    address = adres??address;
+  Future<void> setUserData(String pic, String useremail, String name,
+      String mpbile, String dob, String adres) async {
+    email = useremail ?? email;
+    username = name ?? username;
+    mobile = mpbile ?? mobile;
+    userPicture = pic ?? userPicture;
+    dateOfBirth = dob ?? dateOfBirth;
+    address = adres ?? address;
+    print("user data $email  $username  $mobile  $userPicture  $dateOfBirth  $address  ");
     notifyListeners();
+    await data.setData("user_data",
+        "$username::$userPicture::$email::$mobile::$dateOfBirth::$address");
   }
 
   void changeUsername(String name) {

@@ -5,8 +5,13 @@ import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/config.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/models/branches_model.dart';
+import 'package:joker/models/map_branches.dart';
+import 'package:joker/models/sales.dart';
 import 'package:joker/providers/auth.dart';
 import 'package:joker/providers/map_provider.dart';
+import 'package:joker/providers/merchantsProvider.dart';
+import 'package:joker/services/navigationService.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/service_locator.dart';
 import 'package:location/location.dart';
@@ -284,4 +289,37 @@ void ifUpdateTur(BuildContext context, String text) {
       );
     },
   );
+}
+
+void clickOnSaleCard(BuildContext context, SaleData saledata) {
+  if (getIt<Auth>().isAuthintecated) {
+    final MapBranch m = MapBranch(
+        merchant: Merchant(
+            id: saledata.merchant.id,
+            logo: saledata.merchant.logo,
+            name: saledata.merchant.name,
+            ratesAverage:
+                double.parse(saledata.merchant.ratesAverage.toString()),
+            salesCount: saledata.merchant.salesCount));
+    getIt<HOMEMAProvider>().setinFocusBranch(m);
+    Navigator.pushNamed(context, "/SaleLoader",
+        arguments: <String, dynamic>{"mapBranch": m, "sale": saledata});
+  } else {
+    getIt<NavigationService>().navigateToNamed('/login', null);
+  }
+}
+
+void clickONBranchCrd(BuildContext context, BranchData branchData) {
+  if (getIt<Auth>().isAuthintecated) {
+    getIt<MerchantProvider>().vistBranch(branchData.id);
+    Navigator.pushNamed(context, "/MerchantDetails",
+        arguments: <String, dynamic>{
+          "merchantId": branchData.merchant.id,
+          "branchId": branchData.id,
+          "source": "click",
+          "branch": branchData
+        });
+  } else {
+    getIt<NavigationService>().navigateToNamed('/login', null);
+  }
 }

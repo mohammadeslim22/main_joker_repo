@@ -19,7 +19,6 @@ class ChangePasswordModle extends BaseModel {
           'new_password': newpassword.trim()
         });
     if (response.statusCode == 200) {
-      notifyListeners();
       data.setData("password", newpassword.trim());
       Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
       setBusy(false);
@@ -31,7 +30,6 @@ class ChangePasswordModle extends BaseModel {
         });
       }
       setBusy(false);
-      notifyListeners();
       return false;
     }
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:joker/constants/colors.dart';
 import 'package:joker/constants/styles.dart';
 import 'package:joker/localization/trans.dart';
+import 'package:joker/models/branches_model.dart';
 import 'package:joker/models/merchant.dart';
 import 'package:joker/util/dio.dart';
 import 'package:joker/util/functions.dart';
@@ -14,11 +15,13 @@ import '../util/service_locator.dart';
 import 'package:joker/providers/merchantsProvider.dart';
 
 class ShopDetails extends StatelessWidget {
-  const ShopDetails({Key key, this.merchantId, this.branchId, this.source})
+  const ShopDetails(
+      {Key key, this.merchantId, this.branchId, this.source, this.branch})
       : super(key: key);
   final int merchantId;
   final int branchId;
   final String source;
+  final BranchData branch;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +31,8 @@ class ShopDetails extends StatelessWidget {
             getIt<MerchantProvider>().getMerchantData(merchantId, source, 0),
         builder: (BuildContext ctx, AsyncSnapshot<Merchant> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Page(merchant: snapshot.data, branchId: branchId);
+            return Page(
+                merchant: snapshot.data, branchId: branchId, branch: branch);
           } else {
             return Shimmer.fromColors(
                 baseColor: Colors.grey[300],
@@ -47,10 +51,11 @@ class ShopDetails extends StatelessWidget {
 }
 
 class Page extends StatefulWidget {
-  const Page({Key key, this.merchant, this.branchId}) : super(key: key);
+  const Page({Key key, this.merchant, this.branchId, this.branch})
+      : super(key: key);
   final Merchant merchant;
   final int branchId;
-
+  final BranchData branch;
   @override
   _PageState createState() => _PageState();
 }
@@ -66,6 +71,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
   int salesNo;
   bool isliked;
   bool isloved;
+  BranchData brnch;
   @override
   void initState() {
     super.initState();
@@ -73,6 +79,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
     merchant = widget.merchant;
     salesNo = merchant.mydata.salesCount;
     index = merchant.mydata.branches[0].id;
+    brnch = widget.branch;
     _tabController =
         TabController(vsync: this, length: merchant.mydata.branches.length);
     _tabController.addListener(() {
@@ -84,13 +91,10 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
       } else if (_tabController.index != _tabController.previousIndex) {}
     });
 
-    likecount = merchant.mydata.likesCount;
-    isliked = merchant.mydata.isfavorite != 0;
-    ratingStar =
-        merchant.mydata.branches.firstWhere((MerchantBranches element) {
-      return element.id == widget.branchId;
-    }).rateAverage;
-    isloved = merchant.mydata.isfavorite != 0;
+    likecount = brnch.likesCount;
+    isliked = brnch.isfavorite != 0;
+    ratingStar = brnch.ratesAverage??0;
+    isloved = brnch.isfavorite != 0;
   }
 
   @override
@@ -185,7 +189,8 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                 start: Colors.white, end: Colors.purple),
                             onTap: (bool loved) async {
                               likeFunction("App\\Merchant", merchant.mydata.id);
-                              likeFunction("App\\Branch", merchant.mydata.branches.first.id);
+                              likeFunction("App\\Branch",
+                                  merchant.mydata.branches.first.id);
                               isliked = !isliked;
                               return isliked;
                             },
@@ -211,7 +216,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                     start: colors.blue, end: Colors.purple),
                                 onTap: (bool loved) async {
                                   favFunction("App\\Branch", widget.branchId);
-                                  
+
                                   if (!loved) {
                                     getIt<MerchantProvider>()
                                         .setFavBraanch(widget.branchId);
@@ -342,7 +347,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                                         await dio.post<dynamic>("rates",
                                             data: <String, dynamic>{
                                               'rateable_type': "App\\Branch",
-                                              'rateable_id': index,
+                                              'rateable_id': widget.branchId,
                                               'rate_value': rating
                                             });
                                       },
@@ -502,10 +507,7 @@ class ShimmerLoader extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
-              ),
+              const Divider(color: Colors.grey, thickness: 1),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
@@ -526,19 +528,15 @@ class ShimmerLoader extends StatelessWidget {
                 height: 120,
                 width: 600),
             Container(
-              color: Colors.red,
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-              width: MediaQuery.of(context).size.width,
-              height: 96,
-            ),
+                color: Colors.red,
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                width: MediaQuery.of(context).size.width,
+                height: 96),
           ],
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 1,
-          ),
+          child: Container(width: MediaQuery.of(context).size.width, height: 1),
         ),
         Container(
           height: 400,

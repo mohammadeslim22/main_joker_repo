@@ -29,16 +29,13 @@ class ResetPasswordModle extends BaseModel {
       if (response.statusCode == 200) {
         if (response.data == "true") {
           setBusy(false);
-          notifyListeners();
           return true;
         } else {
           setBusy(false);
-          notifyListeners();
           return false;
         }
       } else {
         setBusy(false);
-        notifyListeners();
         return false;
       }
     }
