@@ -29,6 +29,7 @@ class MapCard extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return SafeArea(
+
             child: SingleChildScrollView(
               child: Container(
                 child: Wrap(
@@ -107,7 +108,6 @@ class MapCard extends StatelessWidget {
                       )),
                   const SizedBox(width: 8),
                   Expanded(
-                    
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -125,8 +125,7 @@ class MapCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Icon(Icons.star, color: colors.orange),
-                      Text(value.inFocusBranch.merchant.ratesAverage
-                          .toString())
+                      Text(value.inFocusBranch.merchant.ratesAverage.toString())
                     ],
                   )
                 ]),
@@ -162,13 +161,17 @@ class MapCard extends StatelessWidget {
                           child: Text(trans(context, 'more_info_map_card'),
                               style: styles.moreInfoWhite),
                           onPressed: () {
+                            print("is before auth ? ");
                             if (isAuthintecated) {
+                              print("is going to sale loader ? ");
                               Navigator.pushNamed(context, "/SaleLoader",
                                   arguments: <String, dynamic>{
                                     "mapBranch": value.inFocusBranch,
                                     "sale": rs
                                   });
                             } else {
+                              
+                              // Navigator.pushNamed(context,'/login');
                               getIt<NavigationService>()
                                   .navigateTo('/login', null);
                             }
@@ -241,6 +244,7 @@ class MapCard extends StatelessWidget {
                           ],
                         ),
                         LikeButton(
+                          key:Key(rs.name) ,
                           circleSize: SizeConfig.blockSizeHorizontal * 12,
                           size: SizeConfig.blockSizeHorizontal * 7,
                           padding: const EdgeInsets.symmetric(horizontal: 3),
@@ -266,6 +270,7 @@ class MapCard extends StatelessWidget {
             ),
             const Spacer(),
             ElevatedButton(
+
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.resolveWith(
                     (Set<MaterialState> states) => colors.orange),

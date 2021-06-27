@@ -261,9 +261,11 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                   ),
                   Visibility(
                       child: Positioned(
+
                         right: 8,
                         bottom: 120,
                         child: SlideTransition(
+                          key:const Key("mIsleem") ,
                           position: _offsetAnimation,
                           child: Align(
                             alignment: Alignment.bottomRight,
@@ -337,6 +339,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                               _animationController.forward();
                             },
                             child: CircleAvatar(
+
                               backgroundColor: colors.orange,
                               radius: 10,
                               child: AnimatedBuilder(
@@ -369,6 +372,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
                           margin: const EdgeInsets.symmetric(
                               vertical: 16, horizontal: 0),
                           child: Swiper(
+                            
                             itemBuilder: (BuildContext context, int index) {
                               final SaleData rs = value.lastSales[index];
                               return MapCard(
@@ -420,6 +424,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
     return Stack(
       children: <Widget>[
         GoogleMap(
+          
           // myLocationEnabled: true,
           myLocationButtonEnabled: true,
           indoorViewEnabled: false,
@@ -451,6 +456,7 @@ class _MapAsHomeState extends State<MapAsHome> with TickerProviderStateMixin {
             child: Align(
               alignment: Alignment.center,
               child: FloatingActionButton(
+                heroTag: value.inFocusBranch!=null?value.inFocusBranch.id:"this_is_unique",
                 isExtended: false,
                 mini: true,
                 child: AnimatedIcon(
