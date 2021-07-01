@@ -196,13 +196,13 @@ class _MyRegistrationState extends State<Registration>
                       } else {
                         Vibration.vibrate(duration: 400);
                         modle.togelocationloading(false);
-
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         setState(() {
                           locationController.text =
                               trans(context, 'tab_set_ur_location');
                         });
                       }
+                      modle.togelocationloading(false);
                     } catch (e) {
                       Vibration.vibrate(duration: 400);
                       modle.togelocationloading(false);

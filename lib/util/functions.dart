@@ -70,12 +70,12 @@ Future<Map<String, dynamic>> get updateLocation async {
   }
 
   try {
-    // coordinates = Coordinates(
-    //     double.parse(loglat.elementAt(0)), double.parse(loglat.elementAt(1)));
-    // addresses = await Geocoder.google("AIzaSyDeUxKyBfZ1rlInBG6f0G4RT0tzgUstoes")
-    //     .findAddressesFromCoordinates(coordinates);
-    // addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    // first = addresses.first;
+    coordinates = Coordinates(
+        double.parse(loglat.elementAt(0)), double.parse(loglat.elementAt(1)));
+    addresses = await Geocoder.google("AIzaSyDeUxKyBfZ1rlInBG6f0G4RT0tzgUstoes")
+        .findAddressesFromCoordinates(coordinates);
+    addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    first = addresses.first;
     getIt<Auth>().changeAddress(first.toString());
   } catch (e) {
     print("error getting location");
@@ -83,7 +83,7 @@ Future<Map<String, dynamic>> get updateLocation async {
 
   final Map<String, dynamic> ress = <String, dynamic>{
     "res": res,
-    "address": "first.addressLine",
+    "address": first.addressLine,
     "location": loglat
   };
   return ress;

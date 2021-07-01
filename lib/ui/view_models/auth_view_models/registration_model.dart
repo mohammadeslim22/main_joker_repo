@@ -91,8 +91,6 @@ class RegistrationModel extends BaseModel {
     notifyListeners();
   }
 
-  final SpinKitDoubleBounce spinkit = SpinKitDoubleBounce(
-      color: colors.white, size: 50.0, controller: _controller);
   Widget changechildforRegister(String login) {
     if (!busy) {
       return Padding(
@@ -104,7 +102,7 @@ class RegistrationModel extends BaseModel {
                 fontSize: 25,
               )));
     } else {
-      return spinkit;
+      return config.spinkit;
     }
   }
 }

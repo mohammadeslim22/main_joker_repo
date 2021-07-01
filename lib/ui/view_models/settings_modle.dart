@@ -20,10 +20,10 @@ class SettingsModle extends BaseModel {
         await data.getData("notification_receive");
     final String lang = await data.getData("ilang");
     final int langIndex = lang == "ar"
-        ? 0
+        ? 2
         : lang == "en"
             ? 1
-            : 2;
+            : 1;
     changenotificationSit(notificationAlowed == "on" ? 0 : 1);
     changelanguageindex(langIndex);
   }
