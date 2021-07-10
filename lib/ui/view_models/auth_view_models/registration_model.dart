@@ -55,8 +55,8 @@ class RegistrationModel extends BaseModel {
     }).then((Response<dynamic> value) async {
       if (value.statusCode == 200) {
         print("errors ${value.data}");
-        value.data['errors'].forEach((String k, dynamic vv) {
-          regValidationMap[k] = vv[0].toString();
+        value.data['errors'].forEach((dynamic v) {
+          regValidationMap[v.keys.first.toString()] = v.values.first.toString();
         });
         res = false;
       }

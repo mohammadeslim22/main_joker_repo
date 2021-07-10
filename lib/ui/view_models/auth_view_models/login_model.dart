@@ -38,10 +38,9 @@ class LoginModel extends BaseModel {
       "onesignal_player_id": playerId
     }).then((Response<dynamic> value) async {
       if (value.statusCode == 422) {
-        value.data['errors'].forEach((String k, dynamic vv) {
-          loginValidationMap[k] = vv[0].toString();
+          value.data['errors'].forEach((dynamic v) {
+          loginValidationMap[v.keys.first.toString()] = v.values.first.toString();
         });
-
         res = false;
         notifyListeners();
       }

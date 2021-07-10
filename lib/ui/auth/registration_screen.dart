@@ -199,7 +199,7 @@ class _MyRegistrationState extends State<Registration>
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         setState(() {
                           locationController.text =
-                              trans(context, 'tab_set_ur_location');
+                              trans(context, 'address_can_not_be_found');
                         });
                       }
                       modle.togelocationloading(false);

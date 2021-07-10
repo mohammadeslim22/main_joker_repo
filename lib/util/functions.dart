@@ -83,8 +83,8 @@ Future<Map<String, dynamic>> get updateLocation async {
   }
 
   final Map<String, dynamic> ress = <String, dynamic>{
-    "res": res,
-    "address": first !=null?first.addressLine:"",
+    "res": true,
+    "address":first !=null?first.addressLine:"Address can not be found",
     "location": loglat??<String>["0","0"]
   };
   return ress;

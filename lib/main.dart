@@ -66,12 +66,6 @@ Future<void> main() async {
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
         ChangeNotifierProvider<Language>(create: (_) => Language()),
-        // ChangeNotifierProvider<HOMEMAProvider>.value(
-        //     value: getIt<HOMEMAProvider>()),
-        // ChangeNotifierProvider<MerchantProvider>.value(
-        //     value: getIt<MerchantProvider>()),
-        // ChangeNotifierProvider<SalesProvider>.value(
-        //     value: getIt<SalesProvider>()),
       ],
       child: const MyApp(),
     ),

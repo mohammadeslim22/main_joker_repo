@@ -68,120 +68,6 @@ class _MemberShipsForMerchantState extends State<MemberShipsForMerchant> {
           }),
     );
   }
-
-//   Widget _itemBuilder(MemFromMerchant memFromMerchant) {
-//     final ExpandableController exp = ExpandableController();
-//     return Card(
-//         margin: const EdgeInsets.symmetric(vertical: 12),
-//         child: ExpandableNotifier(
-//             controller: exp,
-//             child: ExpandablePanel(
-//               theme: ExpandableThemeData(iconColor: colors.orange),
-//               controller: exp,
-//               header: Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: <Widget>[
-//                     Text(memFromMerchant.merchant),
-//                     const SizedBox(height: 6),
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                       children: <Widget>[
-//                         Text(memFromMerchant.title),
-//                         Column(
-//                           children: <Widget>[
-//                             Text(trans(context, 'age') +
-//                                 ": " +
-//                                 memFromMerchant.ageStage),
-//                             const SizedBox(height: 6),
-//                             Text(trans(context, 'type') +
-//                                 ": " +
-//                                 memFromMerchant.type),
-//                           ],
-//                         )
-//                       ],
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               expanded: Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.stretch,
-//                   children: <Widget>[
-//                     Text(memFromMerchant.message),
-//                     Visibility(
-//                       child: TextButton(
-//                         style: ButtonStyle(
-//                           backgroundColor: MaterialStateProperty.resolveWith(
-//                               (Set<MaterialState> states) => colors.orange),
-//                         ),
-//                         onPressed: () {
-//                           // exp.toggle();
-//                           setState(() {
-//                             sendReq = false;
-//                           });
-//                           dio.post<dynamic>("usermemberships",
-//                               queryParameters: <String, dynamic>{
-//                                 "membership_id": memFromMerchant.id
-//                               }).then((Response<dynamic> value) {
-//                             if (value.statusCode == 200) {
-//                               if (value.data.toString() == "true") {
-//                                 showToastWidget(
-//                                     IconToastWidget.success(
-//                                         msg: trans(context,
-//                                             'request_sent_successfully')),
-//                                     context: context,
-//                                     position: StyledToastPosition.center,
-//                                     animation:
-//                                         StyledToastAnimation.slideFromTop,
-//                                     reverseAnimation: StyledToastAnimation.fade,
-//                                     duration: const Duration(seconds: 4),
-//                                     animDuration: const Duration(seconds: 1),
-//                                     curve: Curves.elasticOut,
-//                                     reverseCurve: Curves.linear);
-//                               } else if (value.data.toString().trim() ==
-//                                   "already exist") {
-//                                 showToastWidget(
-//                                     IconToastWidget.fail(
-//                                         msg: trans(
-//                                             context, 'u_subscribed_already')),
-//                                     context: context,
-//                                     position: StyledToastPosition.center,
-//                                     animation:
-//                                         StyledToastAnimation.slideFromTop,
-//                                     reverseAnimation: StyledToastAnimation.fade,
-//                                     duration: const Duration(seconds: 4),
-//                                     animDuration: const Duration(seconds: 1),
-//                                     curve: Curves.elasticOut,
-//                                     reverseCurve: Curves.linear);
-//                               }
-//                             }
-//                             exp.toggle();
-//                             setState(() {
-//                               sendReq = true;
-//                             });
-//                           });
-//                         },
-//                         child: Text(trans(context, 'join'),
-//                             style: styles.mywhitestyle),
-//                       ),
-//                       visible: sendReq,
-//                       replacement: const CircularProgressIndicator(
-//                           backgroundColor: Colors.transparent),
-//                     )
-//                   ],
-//                 ),
-//               ),
-
-//               // ignore: deprecated_member_use
-
-//               // ignore: deprecated_member_use
-
-//               collapsed: null,
-//             )));
-//   }
 }
 
 class MemberShipItem extends StatelessWidget {
@@ -283,11 +169,6 @@ class MemberShipItem extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // ignore: deprecated_member_use
-
-              // ignore: deprecated_member_use
-
               collapsed: null,
             )));
   }

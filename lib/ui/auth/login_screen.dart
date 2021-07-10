@@ -28,11 +28,7 @@ class _MyLoginScreenState extends State<LoginScreen>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _focus1 = FocusNode();
   final FocusNode _focus2 = FocusNode();
-  @override
-  void initState() {
-    super.initState();
-  }
-
+  
   Widget customcard(BuildContext context, {LoginModel auht, bool isRTL}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
